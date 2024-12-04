@@ -18,8 +18,15 @@ MonoBehaviour:
     type: 3}
   _scenePrefab: {fileID: 8457444051872364791, guid: 4ea8fc71d0d33aa4794e860bd8a9318a,
     type: 3}
-  _hideVirtualPlayerScenes: 1
+  _uiFactory: {fileID: -2017830929143987780, guid: a0f8abd7c402f8942b77e937265ec3ba,
+    type: 3}
+  _localizationDatabase: {fileID: 0}
   _scenes:
   - Name: Room
     Scene: {fileID: 102900000, guid: 3d97b014f52721147ba461f2a8133078, type: 3}
     LoadingImage: {fileID: 2800000, guid: 6f9235fd7c31aea498918ab44c186b79, type: 3}
+  _highQualityAvatars: 0
+  _hideVirtualPlayerScenes: 1
+  _defaultPlayerProfileId: 0
+  _useRemoteServer: 0
+  _remoteServerUserIds: []
