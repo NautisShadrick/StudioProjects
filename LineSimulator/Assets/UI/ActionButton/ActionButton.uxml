@@ -7,7 +7,7 @@
     xsi:noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd"
 >
 
-  <hr:UILuaView class="action-button">
+  <hr:UILuaView class="action-button" picking-mode="Ignore">
 
     <VisualElement name="wallet_container" class="wallet-container">
       <Label name="wallet_label" class="wallet-label" text="$0" />

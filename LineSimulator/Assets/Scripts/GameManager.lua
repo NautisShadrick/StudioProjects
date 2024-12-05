@@ -1,5 +1,8 @@
 --!Type(Module)
 
+local moveRequest = Event.new("MOVE_REQUEST")
+local moveEvent = Event.new("MOVE_EVENT")
+
 local playerQueue = TableValue.new("PLAYER_QUEUE", {})
 skipRequest = Event.new("SKIP_REQUEST")
 
@@ -18,6 +21,8 @@ local _hardCodedQueue =
     {personName = "Herbertnininjer"}
 }
 --]]
+
+local characterController = require("LineSimPlayerController")
 
 --local uiManager = require("UIManager")
 players = {}
@@ -98,10 +103,12 @@ function PrintQueueNames(table)
         print(tostring(key), tostring(value.personName))
     end
 end
- 
+
 ------------- CLIENT -------------
 
 function self:ClientAwake()
+
+    characterController.options.enabled = false
 
     function OnCharacterInstantiate(playerinfo)
         local player = playerinfo.player
@@ -120,18 +127,44 @@ function self:ClientAwake()
     PrintQueueNames(_hardCodedQueue)
     --]]
 
-    playerQueue.Changed:Connect(function(queue, oldQueue)
-        print("Queue has changed!")
-        if client.localPlayer.name == "NautisShadrick" then
-            PrintQueueNames(queue)
-        end
+    HandleQueueChange(playerQueue.value)
+    playerQueue.Changed:Connect(HandleQueueChange)
 
-        GetPlace(queue, client.localPlayer.name, function(place)
-            UpdatePlaceEvent:Fire(client.localPlayer, place)
-        end)
-        
+    moveEvent:Connect(function(player, pos)
+        player.character:MoveTo(pos, 1)
     end)
-    print(client.localPlayer.name)
+
+end
+
+function MovePlayer(player, place)
+    local _char = player.character
+    moveRequest:FireServer(place)
+end
+
+function HandleQueueChange(queue, oldQueue)
+    print("Queue has changed!")
+    if client.localPlayer.name == "NautisShadrick" then
+        PrintQueueNames(queue)
+    end
+
+    GetPlace(queue, client.localPlayer.name, function(place)
+        UpdatePlaceEvent:Fire(client.localPlayer, place)
+    end)
+    MoveToPlace(queue)
+end
+
+function MoveToPlace(queue)
+    print("TEST")
+    local _playerPlace = 0
+    for key, value in ipairs(queue) do
+        print(value.personName .. client.localPlayer.name)
+        if value.personName == client.localPlayer.name then
+            _playerPlace = key
+            print(_playerPlace)
+            MovePlayer(client.localPlayer, Vector3.new(_playerPlace * 1.5,0,0))
+            --characterController.LocalMoveTo(client.localPlayer.character, Vector3.new(_playerPlace * 1.5,0,0), 1, 0)
+        end
+    end
 end
 
 ------------- SERVER -------------
@@ -156,6 +189,11 @@ function self:ServerAwake()
         local _tempQueue = playerQueue.value
         SkipXPlaces(_tempQueue, player.name, 1)
         playerQueue.value = _tempQueue
+    end)
+
+    moveRequest:Connect(function(player, pos)
+        player.character.transform.position = pos
+        moveEvent:FireAllClients(player, pos)
     end)
 end
 

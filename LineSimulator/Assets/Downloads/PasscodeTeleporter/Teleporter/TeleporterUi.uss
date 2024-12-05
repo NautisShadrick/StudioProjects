@@ -1,0 +1,16 @@
+.teleporter-ui {
+    margin-top: auto;
+    align-items: center;
+}
+
+.my-button {
+    background-color: rgba(0,0,0,0.25);
+    border-radius: 12px;
+    background-image: url("project://database/Assets/Teleporter/d_Button@4x.png");
+    width: 50px; /* Adjust as needed to make the button square */
+    height: 50px; /* Adjust as needed to make the button square */
+}
+
+.hide {
+    display: none;
+}

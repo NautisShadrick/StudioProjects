@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &1
+MonoBehaviour:
+  m_ObjectHideFlags: 53
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 258248712, guid: a215bd465061e3c4abe0b86c7c8c3d14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _assetMappings:
+  - Guid: 47b7a04c2b8b7ef418b6e7bb982fc9ee
+    StoreId: 669565915ae2a68e1b812ae5
+    Name: PasscodeTeleporter
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/63f1befa566d3f603482bcd6/669565915ae2a68e1b812ae5/190b79723b0_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/63f1befa566d3f603482bcd6/669565915ae2a68e1b812ae5/190b7970858_0.jpg
+    AdditionalAssetGUIDs:
+    - 2ee5e6834ac1c8e47889a1dd18bec569
+    - adfb05b985c60f4429f5225b109214ac
+    - 5ee3adb5e4be20749b0b98bb5fa4a29a
+    - b3afdbf4d1362c443b111e9b138c7336
+    - 9caa1e8a27a5d2d4cbae74d5eddc73e1
+    - e98dcab54b5401743bedf2acd2459fa0
+    - 384c8f172e81ae440b51533271950e59
+    - 3545bee4c4ead584e83bc3d61782721a
+    - 497f52b2505212c44a80a49020ed9304
+    - ffd126db2dfe41a458a22efdf7e9dcca
+    - dc78e34b837e629439d4f6351b62d21e
+    - 14491e217aaf1d345ab217c4f6dd4565
+    - 8ab979920fcc1e14e9f06210dac3eb64
+    - 2a512e28064da844f85d48271005161b
+    - ce2e1faf9c25c924e8bb461e82bf80b0
+    - 27163c2b984a6134595cb6ab72683dc1
+    - d428da8b537b83a4dabe96f4dbcc22dd
+    - 1c6943c052c66954fa38c8e816ff5800
+    - ccd94794bb2c3014db299927c7b40ad9
+    - 6feb51e39459fb346bf045400e5f66a5
+    - 53690cf2b54234e48b3e1d12d6b13ecb
+    - 41136ebfd0af0bd4385c5da33487e2f5
+    - a319f521a32ad6f46982eadcb92c92c0
+    - 63229a2dadb3d8d4c848bf58d77a7854
+    - 7b05d697925c64840ab04c94df41fef5
+    - 347725964b90d6145873f3df252d18d3
+    - b51fdbb78ec31f34c91ad25d91e70f91
+    - f65d63e30fe7c4343b20969ca3383dc5
+    - 4a902ffb63449384f987d99ee1d07fce
+    - 624e29ecc6af65a4a9b390fa0aecc57a
+    - 472475dae6511004faf7598dfbff4812
+    - 1f44e3af0452b854ba550b80de259e3f
+    - d4dee8066ef75b44ebb2337a0c2ea229
+    IsBundle: 0

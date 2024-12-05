@@ -1,0 +1,45 @@
+.pass-code-u-i {
+    margin-top: auto;
+    align-items: center;
+}
+
+#inputLabel {
+    width: 360px;
+    -unity-text-align: middle-center;
+	margin-top: auto;
+    background-color: rgba(0,0,0,.75);
+	border-radius: 12px;
+    font-size: 60;
+    color: rgba(255,255,255, .75);
+}
+
+/* Style for the grid container */
+.buttonRow {
+    flex-direction: row;
+    /* flex-wrap: wrap; */
+    justify-content: center;
+    margin-top: 10px;
+}
+
+/* Style for each button within the grid */
+.buttonStyle  {
+    width: 80px;
+    height: 80px;
+    margin: 10px;
+    background-color: rgba(0,0,0,.75);
+    font-size: 60px;
+}
+
+#enterButton  {
+    width: 280px;
+    height: 80px;
+    margin: 10px;
+    background-color: rgba(0,0,0,.75);
+    font-size: 60px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.hide {
+    display: none;
+}

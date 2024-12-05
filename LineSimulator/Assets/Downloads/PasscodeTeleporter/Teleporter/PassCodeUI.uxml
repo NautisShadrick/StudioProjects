@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UXML
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="UnityEngine.UIElements"
+    xmlns:hr="Highrise.UI"
+    xmlns:editor="UnityEditor.UIElements"
+    xsi:noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd"
+>
+
+  <hr:UILuaView class="pass-code-u-i">
+    <VisualElement name="NumpadElement">
+    
+      <!-- Input Label -->
+      <hr:UILabel name="inputLabel"/>
+
+      <!-- Grid for Buttons -->
+      <VisualElement class="buttonRows">
+        <VisualElement class="buttonRow">
+            <hr:UIButton class="buttonStyle" name="button1"><hr:UILabel class="buttonLabel" name="label1"/></hr:UIButton>
+            <hr:UIButton class="buttonStyle" name="button2"><hr:UILabel class="buttonLabel" name="label2"/></hr:UIButton>
+            <hr:UIButton class="buttonStyle" name="button3"><hr:UILabel class="buttonLabel" name="label3"/></hr:UIButton>
+        </VisualElement>
+        <VisualElement class="buttonRow">
+            <hr:UIButton class="buttonStyle" name="button4"><hr:UILabel class="buttonLabel" name="label4"/></hr:UIButton>
+            <hr:UIButton class="buttonStyle" name="button5"><hr:UILabel class="buttonLabel" name="label5"/></hr:UIButton>
+            <hr:UIButton class="buttonStyle" name="button6"><hr:UILabel class="buttonLabel" name="label6"/></hr:UIButton>
+        </VisualElement>
+        <VisualElement class="buttonRow">
+            <hr:UIButton class="buttonStyle" name="button7"><hr:UILabel class="buttonLabel" name="label7"/></hr:UIButton>
+            <hr:UIButton class="buttonStyle" name="button8"><hr:UILabel class="buttonLabel" name="label8"/></hr:UIButton>
+            <hr:UIButton class="buttonStyle" name="button9"><hr:UILabel class="buttonLabel" name="label9"/></hr:UIButton>
+        </VisualElement>
+      </VisualElement>
+
+      <!-- Enter Button -->
+      <hr:UIButton name="enterButton"><hr:UILabel name="labelenter"/></hr:UIButton>
+
+    </VisualElement>
+  </hr:UILuaView>
+
+</UXML>
