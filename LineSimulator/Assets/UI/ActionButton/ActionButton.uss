@@ -24,6 +24,10 @@
     background-color: #8558e2;
 }
 
+.disabled {
+    opacity: 0.5;
+}
+
 .button-label {
     color: white;
     font-size: 18px;

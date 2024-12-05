@@ -89,13 +89,17 @@ function SkipXPlaces(queue, personName, x)
 end
 
 ------------ Utility Functions ------------
-function GetPlace(queue, playerName, cb)
+function GetPlace(queue, playerName)
     for i, person in ipairs(queue) do
         if person.personName == playerName then
-            cb(i)
-            return
+            return i
         end
     end
+    return 0
+end
+
+function GetSkipCost(player)
+    return math.floor(100/GetPlace(playerQueue.value, player.name))
 end
 
 function PrintQueueNames(table)
@@ -121,12 +125,6 @@ function self:ClientAwake()
 
     TrackPlayers(client, OnCharacterInstantiate)
 
-    --[[
-    PrintQueueNames(_hardCodedQueue)
-    SkipXPlaces(_hardCodedQueue, "Jack", 5)
-    PrintQueueNames(_hardCodedQueue)
-    --]]
-
     HandleQueueChange(playerQueue.value)
     playerQueue.Changed:Connect(HandleQueueChange)
 
@@ -142,29 +140,28 @@ function MovePlayer(player, place)
 end
 
 function HandleQueueChange(queue, oldQueue)
-    print("Queue has changed!")
     if client.localPlayer.name == "NautisShadrick" then
         PrintQueueNames(queue)
     end
 
-    GetPlace(queue, client.localPlayer.name, function(place)
-        UpdatePlaceEvent:Fire(client.localPlayer, place)
-    end)
+    UpdatePlaceEvent:Fire(client.localPlayer, GetPlace(queue, client.localPlayer.name))
+
     MoveToPlace(queue)
 end
 
 function MoveToPlace(queue)
-    print("TEST")
+
     local _playerPlace = 0
     for key, value in ipairs(queue) do
-        print(value.personName .. client.localPlayer.name)
         if value.personName == client.localPlayer.name then
             _playerPlace = key
-            print(_playerPlace)
             MovePlayer(client.localPlayer, Vector3.new(_playerPlace * 1.5,0,0))
-            --characterController.LocalMoveTo(client.localPlayer.character, Vector3.new(_playerPlace * 1.5,0,0), 1, 0)
         end
     end
+end
+
+function GetMoney()
+    return players[client.localPlayer].wallet.value
 end
 
 ------------- SERVER -------------
@@ -186,6 +183,17 @@ function self:ServerAwake()
     TrackPlayers(server, ServerCharacterInstantiate)
 
     skipRequest:Connect(function(player)
+        -- Check if the player has enough money to skip
+        local _playerMoney = players[player].wallet.value
+        local _costToSkip = GetSkipCost(player)
+        if _playerMoney < _costToSkip then
+            return
+        end
+
+        --Take The cost from the wallet
+        players[player].wallet.value = _playerMoney - _costToSkip
+
+        --Move the player up the queue
         local _tempQueue = playerQueue.value
         SkipXPlaces(_tempQueue, player.name, 1)
         playerQueue.value = _tempQueue
@@ -199,5 +207,5 @@ end
 
 function IncrementMoney(player)
     local playerinfo = players[player]
-    playerinfo.wallet.value = playerinfo.wallet.value + playerinfo.incomeRate.value
+    playerinfo.wallet.value = playerinfo.wallet.value + (playerinfo.incomeRate.value * 10)
 end

@@ -230,7 +230,7 @@ end
 -- @param distance Optional distance away from the point that character should move
 -- @param callback Callback to call when the move is finished
 -- @return True if a path was found and the character is moving
-function LocalMoveTo(
+local function LocalMoveTo(
 	character : Character,
 	point : Vector3,
 	areaMask : number,
