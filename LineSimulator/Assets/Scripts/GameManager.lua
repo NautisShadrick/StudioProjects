@@ -1,5 +1,9 @@
 --!Type(Module)
 
+local ReEnableEvent = Event.new("RE_ENABLE")
+local ToiletTimer = IntValue.new("SERVER_TIMER", 5)
+local baseTime = 120
+
 local moveRequest = Event.new("MOVE_REQUEST")
 local moveEvent = Event.new("MOVE_EVENT")
 
@@ -132,6 +136,10 @@ function self:ClientAwake()
         player.character:MoveTo(pos, 1)
     end)
 
+    ReEnableEvent:Connect(function()
+        characterController.options.enabled = true
+    end)
+
 end
 
 function MovePlayer(player, place)
@@ -167,6 +175,27 @@ end
 ------------- SERVER -------------
 
 function self:ServerAwake()
+
+    function FinishTimer()
+        ToiletTimer.value = baseTime
+        local _tempQueue = playerQueue.value
+        if #_tempQueue > 0 then
+            local _tempPlayer = _tempQueue[1]
+            table.remove(_tempQueue, 1)
+            playerQueue.value = _tempQueue
+    
+            --Enable the Player Controller
+            ReEnableEvent:FireClient(_tempPlayer)
+        end
+    end
+
+    Timer.Every(1, function()
+        ToiletTimer.value = ToiletTimer.value - 1
+        print(ToiletTimer.value)
+        if ToiletTimer.value < 1 then
+            FinishTimer()
+        end
+    end)
 
     function ServerCharacterInstantiate(playerinfo)
         local player = playerinfo.player
