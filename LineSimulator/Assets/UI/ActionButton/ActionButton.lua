@@ -20,7 +20,7 @@ function CheckWallet()
 end
 
 action_button_main:RegisterPressCallback(function()
-    if not CheckWallet() then return end
+    if not CheckWallet() or GameManager.GetPlace() == 1 then return end
     print("Requesting to Skip the sucker infront of me")
     GameManager.skipRequest:FireServer()
 end)
@@ -36,6 +36,11 @@ function self:Awake()
         myPlace = place
         button_label.text = "Skip for $" .. GameManager.GetSkipCost(client.localPlayer)
         UpdateButton()
+    end)
+
+    GameManager.HideButtonEvent:Connect(function()
+        action_button_main:RemoveFromHierarchy()
+        wallet_label:RemoveFromHierarchy()
     end)
 
 end

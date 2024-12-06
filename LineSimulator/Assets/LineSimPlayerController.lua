@@ -257,8 +257,6 @@ local function LocalMoveTo(
 	elseif distance > 0 then
 		moved = character:MoveWithinRangeOf(point, distance, areaMask, callback :: (any) -> (any))
 	else
-		print("TEST")
-
 		moved = character:MoveTo(point, areaMask, callback :: (any) -> (any))
 	end
 

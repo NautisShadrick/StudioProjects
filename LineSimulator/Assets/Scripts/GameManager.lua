@@ -12,6 +12,7 @@ skipRequest = Event.new("SKIP_REQUEST")
 
 UpdateWalletEvent = Event.new("UPDATE_WALLET")
 UpdatePlaceEvent = Event.new("UPDATE_PLACE")
+HideButtonEvent = Event.new("HIDE_BUTTON")
 
 --[[
 local _hardCodedQueue = 
@@ -74,7 +75,6 @@ function TrackPlayers(game, characterCallback)
                 end
             end
         end
-
     end)
 end
 
@@ -94,6 +94,8 @@ end
 
 ------------ Utility Functions ------------
 function GetPlace(queue, player)
+    queue = queue or playerQueue.value
+    player = player or client.localPlayer
     for i, person in ipairs(queue) do
         if person == player then
             return i
@@ -138,6 +140,7 @@ function self:ClientAwake()
 
     ReEnableEvent:Connect(function()
         characterController.options.enabled = true
+        HideButtonEvent:Fire()
     end)
 
 end
@@ -148,24 +151,22 @@ function MovePlayer(player, place)
 end
 
 function HandleQueueChange(queue, oldQueue)
-    if client.localPlayer.name == "NautisShadrick" then
-        PrintQueueNames(queue)
-    end
-
     UpdatePlaceEvent:Fire(client.localPlayer, GetPlace(queue, client.localPlayer.name))
-
-    MoveToPlace(queue)
+    MoveToPlace(queue, oldQueue)
 end
 
-function MoveToPlace(queue)
+function MoveToPlace(queue, oldQueue)
 
-    local _playerPlace = 0
-    for key, value in ipairs(queue) do
-        if value == client.localPlayer then
-            _playerPlace = key
-            MovePlayer(client.localPlayer, Vector3.new(_playerPlace * 1.5,0,0))
-        end
+    oldQueue = oldQueue or {}
+
+    local _previousPlace = GetPlace(oldQueue, client.localPlayer)
+    local _newPlace = GetPlace(queue, client.localPlayer)
+
+    if _previousPlace ~= _newPlace then
+        MovePlayer(client.localPlayer, Vector3.new(_newPlace * 1.5,0,0))
     end
+    
+
 end
 
 function GetMoney()
