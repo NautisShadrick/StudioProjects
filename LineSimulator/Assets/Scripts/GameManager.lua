@@ -68,7 +68,7 @@ function TrackPlayers(game, characterCallback)
         if server then
             local _tempQueue = playerQueue.value
             for key, value in ipairs(_tempQueue) do
-                if value.personName == player.name then
+                if value == player then
                     table.remove(_tempQueue, key)
                     playerQueue.value = _tempQueue
                 end
@@ -79,10 +79,10 @@ function TrackPlayers(game, characterCallback)
 end
 
 ------------ Swapping Positions in Queue ------------
-function SkipXPlaces(queue, personName, x)
+function SkipXPlaces(queue, player, x)
     for i = 1, x do
         for key, value in ipairs(queue) do
-            if value.personName == personName then
+            if value == player then
                 if key == 1 then
                     return
                 end
@@ -93,9 +93,9 @@ function SkipXPlaces(queue, personName, x)
 end
 
 ------------ Utility Functions ------------
-function GetPlace(queue, playerName)
+function GetPlace(queue, player)
     for i, person in ipairs(queue) do
-        if person.personName == playerName then
+        if person == player then
             return i
         end
     end
@@ -103,12 +103,12 @@ function GetPlace(queue, playerName)
 end
 
 function GetSkipCost(player)
-    return math.floor(100/GetPlace(playerQueue.value, player.name))
+    return math.floor(100/GetPlace(playerQueue.value, player))
 end
 
 function PrintQueueNames(table)
     for key, value in ipairs(table) do
-        print(tostring(key), tostring(value.personName))
+        print(tostring(key), tostring(value.name))
     end
 end
 
@@ -161,7 +161,7 @@ function MoveToPlace(queue)
 
     local _playerPlace = 0
     for key, value in ipairs(queue) do
-        if value.personName == client.localPlayer.name then
+        if value == client.localPlayer then
             _playerPlace = key
             MovePlayer(client.localPlayer, Vector3.new(_playerPlace * 1.5,0,0))
         end
@@ -183,7 +183,7 @@ function self:ServerAwake()
             local _tempPlayer = _tempQueue[1]
             table.remove(_tempQueue, 1)
             playerQueue.value = _tempQueue
-    
+
             --Enable the Player Controller
             ReEnableEvent:FireClient(_tempPlayer)
         end
@@ -201,7 +201,7 @@ function self:ServerAwake()
         local player = playerinfo.player
         -- Add the player to the queue
         local _tempQueue = playerQueue.value
-        table.insert(_tempQueue, {personName = player.name})
+        table.insert(_tempQueue, player)
         playerQueue.value = _tempQueue
 
         IncomeTimersByPlayer[player] = Timer.Every(1, function()
@@ -224,7 +224,7 @@ function self:ServerAwake()
 
         --Move the player up the queue
         local _tempQueue = playerQueue.value
-        SkipXPlaces(_tempQueue, player.name, 1)
+        SkipXPlaces(_tempQueue, player, 1)
         playerQueue.value = _tempQueue
     end)
 
