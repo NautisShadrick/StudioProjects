@@ -1,8 +1,11 @@
 --!Type(Module)
 
+--!SerializeField
+local LinePlaces: {Transform} = {}
+
 local ReEnableEvent = Event.new("RE_ENABLE")
-local ToiletTimer = IntValue.new("SERVER_TIMER", 5)
-local baseTime = 120
+local ToiletTimer = IntValue.new("SERVER_TIMER", 10)
+local baseTime = 20
 
 local moveRequest = Event.new("MOVE_REQUEST")
 local moveEvent = Event.new("MOVE_EVENT")
@@ -13,6 +16,7 @@ skipRequest = Event.new("SKIP_REQUEST")
 UpdateWalletEvent = Event.new("UPDATE_WALLET")
 UpdatePlaceEvent = Event.new("UPDATE_PLACE")
 HideButtonEvent = Event.new("HIDE_BUTTON")
+UpdateTimerEvent = Event.new("UPDATE_TIMER")
 
 --[[
 local _hardCodedQueue = 
@@ -143,6 +147,13 @@ function self:ClientAwake()
         HideButtonEvent:Fire()
     end)
 
+    ToiletTimer.Changed:Connect(function(timer)
+        if GetPlace(playerQueue.value, client.localPlayer) == 1 then
+            --SHOW TIMER
+            UpdateTimerEvent:Fire(timer)
+        end
+    end)
+
 end
 
 function MovePlayer(player, place)
@@ -163,7 +174,10 @@ function MoveToPlace(queue, oldQueue)
     local _newPlace = GetPlace(queue, client.localPlayer)
 
     if _previousPlace ~= _newPlace then
-        MovePlayer(client.localPlayer, Vector3.new(_newPlace * 1.5,0,0))
+        if _newPlace == 0 then return end
+        print(_newPlace)
+        local _newplace = LinePlaces[_newPlace].position
+        MovePlayer(client.localPlayer, _newplace)
     end
     
 
@@ -192,7 +206,7 @@ function self:ServerAwake()
 
     Timer.Every(1, function()
         ToiletTimer.value = ToiletTimer.value - 1
-        print(ToiletTimer.value)
+        --print(ToiletTimer.value)
         if ToiletTimer.value < 1 then
             FinishTimer()
         end

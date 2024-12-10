@@ -54,3 +54,126 @@ MonoBehaviour:
     - 1f44e3af0452b854ba550b80de259e3f
     - d4dee8066ef75b44ebb2337a0c2ea229
     IsBundle: 0
+  - Guid: 1c32f93e7f69ae54d8cf947597a0bc74
+    StoreId: 6658f3bc6e9f2ad62c40e918
+    Name: Side Walk 5
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658f3bc6e9f2ad62c40e918/18fcb784540_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658f3bc6e9f2ad62c40e918/18fcb7835a0_0.jpg
+    AdditionalAssetGUIDs:
+    - e4cf45918c68f394c82480b43cf71573
+    - 7cad33aafac861c45ac43bd7b6274dd4
+    - 5f34ab98f76b64b46a21be8918d4691c
+    IsBundle: 0
+  - Guid: 15d7d2608b3ee6c46a56283de84cda3f
+    StoreId: 6658f39d6e9f2ad62c40e916
+    Name: Side Walk 4
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658f39d6e9f2ad62c40e916/18fcb77d010_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658f39d6e9f2ad62c40e916/18fcb77c458_0.jpg
+    AdditionalAssetGUIDs:
+    - 9c09931ffbc2761418d580e41f395160
+    - 7cad33aafac861c45ac43bd7b6274dd4
+    - 5f34ab98f76b64b46a21be8918d4691c
+    IsBundle: 0
+  - Guid: 2d6d64efedd14654bb74d2666ee47b26
+    StoreId: 6658f3766e9f2ad62c40e914
+    Name: Side Walk 3
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658f3766e9f2ad62c40e914/18fcb772c00_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658f3766e9f2ad62c40e914/18fcb772048_0.jpg
+    AdditionalAssetGUIDs:
+    - 05d0cbb383d46f346b2c82b28afdd46c
+    - 7cad33aafac861c45ac43bd7b6274dd4
+    - 5f34ab98f76b64b46a21be8918d4691c
+    IsBundle: 0
+  - Guid: 063cf9be441dde24594cedd20675d325
+    StoreId: 6658f3526e9f2ad62c40e912
+    Name: Side Walk 2
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658f3526e9f2ad62c40e912/18fcb76af00_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658f3526e9f2ad62c40e912/18fcb769b78_0.jpg
+    AdditionalAssetGUIDs:
+    - 7cad33aafac861c45ac43bd7b6274dd4
+    - 12e01975d37ef1c41a92c638798b9875
+    - 5f34ab98f76b64b46a21be8918d4691c
+    IsBundle: 0
+  - Guid: b599ccb926abc314fa087ce34f75f22e
+    StoreId: 6658f2386e9f2ad62c40e910
+    Name: Side Walk 1
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658f2386e9f2ad62c40e910/18fcb75fb50_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658f2386e9f2ad62c40e910/18fcb75e7c8_0.jpg
+    AdditionalAssetGUIDs:
+    - 3d289ff352ce45444b9301db5b6b288b
+    - 7cad33aafac861c45ac43bd7b6274dd4
+    - 5f34ab98f76b64b46a21be8918d4691c
+    IsBundle: 0
+  - Guid: 49dd36a490d685a48bdcf2af82177b86
+    StoreId: 6658ed096e9f2ad62c40e8df
+    Name: Road 0
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658ed096e9f2ad62c40e8df/18fcb5e1620_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658ed096e9f2ad62c40e8df/18fcb5e0a68_0.jpg
+    AdditionalAssetGUIDs:
+    - 3a66a42b283cbb343b58049bfa18e32f
+    - 7cad33aafac861c45ac43bd7b6274dd4
+    - 5f34ab98f76b64b46a21be8918d4691c
+    IsBundle: 0
+  - Guid: 291fe53be93a2c648bc0ca3c58ef7e78
+    StoreId: 6658ed1e6e9f2ad62c40e8e1
+    Name: Road 1
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658ed1e6e9f2ad62c40e8e1/18fcb5e6828_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658ed1e6e9f2ad62c40e8e1/18fcb5e5c70_0.jpg
+    AdditionalAssetGUIDs:
+    - 7cad33aafac861c45ac43bd7b6274dd4
+    - 5f34ab98f76b64b46a21be8918d4691c
+    - aa5383316f18fae4dbf9c6540dd575d6
+    IsBundle: 0
+  - Guid: 5ad57f14254981a4b81732b3fdabd449
+    StoreId: 6658e86c6e9f2ad62c40e8b1
+    Name: Brick Wall Rise
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658e86c6e9f2ad62c40e8b1/18fcb4c0cf0_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658e86c6e9f2ad62c40e8b1/18fcb4bfd50_0.jpg
+    AdditionalAssetGUIDs:
+    - 6f7f2a481ad926b42814f4a1f862dfd8
+    - 9d880476009fa2f449c76490cc018594
+    - 833fadc26cc9f014aa562b398cd66308
+    IsBundle: 0
+  - Guid: f9dc1cf658bc9614e93ac9371a70b157
+    StoreId: 6658e8306e9f2ad62c40e8ad
+    Name: Recycle Bin 1
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658e8306e9f2ad62c40e8ad/18fcb4b2290_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658e8306e9f2ad62c40e8ad/18fcb4b16d8_0.jpg
+    AdditionalAssetGUIDs:
+    - 45285cb24792f3048b1a7791830f091f
+    - 7cad33aafac861c45ac43bd7b6274dd4
+    - 5f34ab98f76b64b46a21be8918d4691c
+    IsBundle: 0
+  - Guid: 8db59c4769f904d479813f3e3113585f
+    StoreId: 6658b9e26e9f2ad62c40e743
+    Name: Dumpster
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658b9e26e9f2ad62c40e743/18fca963df8_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658b9e26e9f2ad62c40e743/18fca963240_0.jpg
+    AdditionalAssetGUIDs:
+    - 80dc570b2b8ac9f40858a795efa624ca
+    - 7cad33aafac861c45ac43bd7b6274dd4
+    - 5f34ab98f76b64b46a21be8918d4691c
+    IsBundle: 0
+  - Guid: a3803d58e9da1d845b69f001dabb5f99
+    StoreId: 6658f9e76e9f2ad62c40e944
+    Name: Street Light 1
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658f9e76e9f2ad62c40e944/18fcb905568_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658f9e76e9f2ad62c40e944/18fcb9049b0_0.jpg
+    AdditionalAssetGUIDs:
+    - 7cad33aafac861c45ac43bd7b6274dd4
+    - def2522f117fe024cb8b1310dee637c0
+    - 5f34ab98f76b64b46a21be8918d4691c
+    - 3b8822a605da1c24c9a7d927b17e8b3b
+    - b3c25b05bd2fd8c44927c97a9f1a40c3
+    IsBundle: 0
