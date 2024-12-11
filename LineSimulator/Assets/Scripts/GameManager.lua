@@ -1,11 +1,13 @@
 --!Type(Module)
 
 --!SerializeField
+local camerScript: GameObject = nil
+--!SerializeField
 local LinePlaces: {Transform} = {}
 
 local ReEnableEvent = Event.new("RE_ENABLE")
 local ToiletTimer = IntValue.new("SERVER_TIMER", 10)
-local baseTime = 20
+local baseTime = 120
 
 local moveRequest = Event.new("MOVE_REQUEST")
 local moveEvent = Event.new("MOVE_EVENT")
@@ -32,6 +34,7 @@ local _hardCodedQueue =
 --]]
 
 local characterController = require("LineSimPlayerController")
+local TeleportManager = require("TeleportManager")
 
 --local uiManager = require("UIManager")
 players = {}
@@ -145,6 +148,13 @@ function self:ClientAwake()
     ReEnableEvent:Connect(function()
         characterController.options.enabled = true
         HideButtonEvent:Fire()
+        TeleportManager.TeleortPlayer(client.localPlayer, Vector3.new(0, 0, -100), function()
+            local _newMoveto = Vector3.new(math.random(-2,2), 0, math.random(-2,2))
+            _newMoveto = _newMoveto + client.localPlayer.character.transform.position
+            MovePlayer(client.localPlayer, _newMoveto)
+        end)
+        
+        --camerScript:GetComponent(RTSCamera):CenterOn(client.localPlayer.character.transform.position)
     end)
 
     ToiletTimer.Changed:Connect(function(timer)

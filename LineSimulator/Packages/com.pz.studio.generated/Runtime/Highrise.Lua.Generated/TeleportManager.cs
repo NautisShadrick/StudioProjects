@@ -18,15 +18,13 @@ using Highrise.Lua;
 
 namespace Highrise.Lua.Generated
 {
-    [AddComponentMenu("Lua/GameManager")]
-    [LuaRegisterType(0x64f367123469100e, typeof(LuaBehaviour))]
-    public class GameManager : LuaBehaviourThunk
+    [AddComponentMenu("Lua/TeleportManager")]
+    [LuaRegisterType(0x2e750fb85314114d, typeof(LuaBehaviour))]
+    public class TeleportManager : LuaBehaviourThunk
     {
-        private const string s_scriptGUID = "4a274a46d1bf27d41948f9a8d0005d6b";
+        private const string s_scriptGUID = "56dc4c4e58284b442bfab36289a4b904";
         public override string ScriptGUID => s_scriptGUID;
 
-        [SerializeField] public UnityEngine.GameObject m_camerScript = default;
-        [SerializeField] public System.Collections.Generic.List<UnityEngine.Transform> m_LinePlaces = default;
 
         protected override SerializedPropertyValue[] SerializeProperties()
         {
@@ -35,8 +33,6 @@ namespace Highrise.Lua.Generated
 
             return new SerializedPropertyValue[]
             {
-                CreateSerializedProperty(_script.GetPropertyAt(0), m_camerScript),
-                CreateSerializedProperty(_script.GetPropertyAt(1), m_LinePlaces),
             };
         }
     }

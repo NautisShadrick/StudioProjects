@@ -177,3 +177,14 @@ MonoBehaviour:
     - 3b8822a605da1c24c9a7d927b17e8b3b
     - b3c25b05bd2fd8c44927c97a9f1a40c3
     IsBundle: 0
+  - Guid: 6df9a7e93b4cc2444be198e31136b088
+    StoreId: 6658d5f26e9f2ad62c40e7d4
+    Name: Glass Door 1
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658d5f26e9f2ad62c40e7d4/18fcb03e060_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658d5f26e9f2ad62c40e7d4/18fcb03d4a8_0.jpg
+    AdditionalAssetGUIDs:
+    - 7cad33aafac861c45ac43bd7b6274dd4
+    - dba88da9a1b41924ba3b0aa99da4b22d
+    - 5f34ab98f76b64b46a21be8918d4691c
+    IsBundle: 0
