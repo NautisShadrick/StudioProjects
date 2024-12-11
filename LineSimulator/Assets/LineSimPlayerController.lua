@@ -363,8 +363,6 @@ end
 --- Handles a tap event
 ---
 local function HandleTap(tap : TapEvent)
-	-- If the player controller is disabled then do not handle taps
-	if not options.enabled then return end
 
 	-- If the local player does not have a character then do not handle taps
 	if not client.localPlayer then return end
@@ -386,6 +384,9 @@ local function HandleTap(tap : TapEvent)
 	if hit.collider.gameObject:GetComponentInParent(Character) then return end
 
 	CancelAnchorRequest()
+
+	-- If the player controller is disabled then do not handle taps
+	if not options.enabled then return end
 
 	-- Attempt to move the local character
 	LocalMoveTo(character, hit.point, -1, 0, nil, function() end)	
