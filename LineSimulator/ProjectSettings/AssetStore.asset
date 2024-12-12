@@ -188,3 +188,366 @@ MonoBehaviour:
     - dba88da9a1b41924ba3b0aa99da4b22d
     - 5f34ab98f76b64b46a21be8918d4691c
     IsBundle: 0
+  - Guid: 88eeb5e5ae7b81748a4991e350a350ec
+    StoreId: 665901566e9f2ad62c40e963
+    Name: Tree 5
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/665901566e9f2ad62c40e963/18fcbad66d0_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/665901566e9f2ad62c40e963/18fcbad5b18_0.jpg
+    AdditionalAssetGUIDs:
+    - 4f90e989b28d23349bc4b637cee2f126
+    - aaae4ccd8d43b1046b8ecb68fe4d2710
+    - 7cad33aafac861c45ac43bd7b6274dd4
+    - 5f34ab98f76b64b46a21be8918d4691c
+    - 742146c51f7ee264f846980444faac28
+    IsBundle: 0
+  - Guid: 9e0da7de82ec64b468744c47cf118cbb
+    StoreId: 6659013e6e9f2ad62c40e961
+    Name: Tree 4
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6659013e6e9f2ad62c40e961/18fcbad0910_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6659013e6e9f2ad62c40e961/18fcbacf970_0.jpg
+    AdditionalAssetGUIDs:
+    - 4f90e989b28d23349bc4b637cee2f126
+    - 545690b2fa31fc543a078c3a6319f7db
+    - 7cad33aafac861c45ac43bd7b6274dd4
+    - 5f34ab98f76b64b46a21be8918d4691c
+    - 742146c51f7ee264f846980444faac28
+    IsBundle: 0
+  - Guid: fa4b438306acc5a4585f82f8aab19395
+    StoreId: 665901296e9f2ad62c40e95f
+    Name: Tree 3
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/665901296e9f2ad62c40e95f/18fcbacaf38_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/665901296e9f2ad62c40e95f/18fcbaca380_0.jpg
+    AdditionalAssetGUIDs:
+    - 4f90e989b28d23349bc4b637cee2f126
+    - 7cad33aafac861c45ac43bd7b6274dd4
+    - 5f34ab98f76b64b46a21be8918d4691c
+    - 742146c51f7ee264f846980444faac28
+    - d55ea7a0669ff7643b42bda6556f5ea5
+    IsBundle: 0
+  - Guid: 3a758f81e28bfd241a6f6c1aae225733
+    StoreId: 6658c0ad6e9f2ad62c40e777
+    Name: Potted Tree 2
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658c0ad6e9f2ad62c40e777/18fcab0d690_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658c0ad6e9f2ad62c40e777/18fcab0c6f0_0.jpg
+    AdditionalAssetGUIDs:
+    - 93b383f94aab22c4dab9306e8e4f7082
+    - ef360c22d9dbf7049a0792bd5515f7f9
+    - 4f90e989b28d23349bc4b637cee2f126
+    - d7a5efd7cf61f7b42a2634cf668e48f4
+    - 742146c51f7ee264f846980444faac28
+    IsBundle: 0
+  - Guid: 3742646bbe8d2ec4591af7c2681743ed
+    StoreId: 6658ba076e9f2ad62c40e745
+    Name: Electrical Box
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658ba076e9f2ad62c40e745/18fca96de20_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658ba076e9f2ad62c40e745/18fca96c6b0_0.jpg
+    AdditionalAssetGUIDs:
+    - 7cad33aafac861c45ac43bd7b6274dd4
+    - 5f34ab98f76b64b46a21be8918d4691c
+    - 12f8a6db6c88b98418a41f5e9ee95c59
+    IsBundle: 0
+  - Guid: 42c5c5266dc44da488f10625361e7db6
+    StoreId: 6658b5786e9f2ad62c40e71a
+    Name: Cardboard Box 3
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658b5786e9f2ad62c40e71a/18fca850f88_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658b5786e9f2ad62c40e71a/18fca84f048_0.jpg
+    AdditionalAssetGUIDs:
+    - 8540d5ff75b8a7646b437985319dd6d6
+    - 7cad33aafac861c45ac43bd7b6274dd4
+    - 5f34ab98f76b64b46a21be8918d4691c
+    IsBundle: 0
+  - Guid: d562ca8967fd32b478d10971dabcb6a0
+    StoreId: 6658b5646e9f2ad62c40e718
+    Name: Cardboard Box 2
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658b5646e9f2ad62c40e718/18fca84b5b0_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658b5646e9f2ad62c40e718/18fca84a610_0.jpg
+    AdditionalAssetGUIDs:
+    - 7cad33aafac861c45ac43bd7b6274dd4
+    - 5f34ab98f76b64b46a21be8918d4691c
+    - 992813428f43aeb47bec137c061fb7a4
+    IsBundle: 0
+  - Guid: 8ecca2e503c128c4dbe8079d2463ea50
+    StoreId: 6658b54d6e9f2ad62c40e716
+    Name: Cardboard Box 1
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658b54d6e9f2ad62c40e716/18fca8457f0_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658b54d6e9f2ad62c40e716/18fca844c38_0.jpg
+    AdditionalAssetGUIDs:
+    - 7cad33aafac861c45ac43bd7b6274dd4
+    - 5f34ab98f76b64b46a21be8918d4691c
+    - 542b40c3c8fab8644b4cf6778bfc8775
+    IsBundle: 0
+  - Guid: 9254a49ff2476964b91f4289da59fa38
+    StoreId: 6658b4736e9f2ad62c40e70e
+    Name: Bush 2
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658b4736e9f2ad62c40e70e/18fca82b5f8_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658b4736e9f2ad62c40e70e/18fca82aa40_0.jpg
+    AdditionalAssetGUIDs:
+    - 4f90e989b28d23349bc4b637cee2f126
+    - 742146c51f7ee264f846980444faac28
+    - 2ec509f68eda1c345a025e2ee7865850
+    IsBundle: 0
+  - Guid: d0879a74b7c68af4481c8f3a9855de06
+    StoreId: 66269aa2486f5fbcfabe6630
+    Name: Rocks 05
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/66269aa2486f5fbcfabe6630/18f06ceb468_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/66269aa2486f5fbcfabe6630/18f06cea0e0_0.jpg
+    AdditionalAssetGUIDs:
+    - d0879a74b7c68af4481c8f3a9855de06
+    - 7cad33aafac861c45ac43bd7b6274dd4
+    - 5f34ab98f76b64b46a21be8918d4691c
+    - f8703c1a1d297b9438fe6786e329f91e
+    IsBundle: 0
+  - Guid: 6a220fcffea2a524dbeb82711e6353c8
+    StoreId: 6658bd306e9f2ad62c40e751
+    Name: Fire Hydrant
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658bd306e9f2ad62c40e751/18fcaa32a90_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658bd306e9f2ad62c40e751/18fcaa31ed8_0.jpg
+    AdditionalAssetGUIDs:
+    - 7cad33aafac861c45ac43bd7b6274dd4
+    - 5f34ab98f76b64b46a21be8918d4691c
+    - 6be414368b25a76499fc4d5f8d5288af
+    IsBundle: 0
+  - Guid: fa0cf425ec70bdd4ab6e90468e4f57a8
+    StoreId: 66269a52486f5fbcfabe6628
+    Name: Rocks 01
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/66269a52486f5fbcfabe6628/18f06ccace0_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/66269a52486f5fbcfabe6628/18f06cc9d40_0.jpg
+    AdditionalAssetGUIDs:
+    - fa0cf425ec70bdd4ab6e90468e4f57a8
+    - 7cad33aafac861c45ac43bd7b6274dd4
+    - 9b295625730d37447baec720941b1fec
+    - 5f34ab98f76b64b46a21be8918d4691c
+    IsBundle: 0
+  - Guid: 445e901a89e5726409daee539a3eb297
+    StoreId: 66269b8f486f5fbcfabe6634
+    Name: Rocks 07
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/66269b8f486f5fbcfabe6634/18f06cfcda8_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/66269b8f486f5fbcfabe6634/18f06cfbe08_0.jpg
+    AdditionalAssetGUIDs:
+    - 445e901a89e5726409daee539a3eb297
+    - 7cad33aafac861c45ac43bd7b6274dd4
+    - 4b1ff0ab6387aa04b8e87cbcfc6f0924
+    - 5f34ab98f76b64b46a21be8918d4691c
+    IsBundle: 0
+  - Guid: 120e7fcba9557ec4cb34bfe652c2fcbe
+    StoreId: 6658e84f6e9f2ad62c40e8af
+    Name: Iron Beam
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658e84f6e9f2ad62c40e8af/18fcb4b9ba8_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658e84f6e9f2ad62c40e8af/18fcb4b8c08_0.jpg
+    AdditionalAssetGUIDs:
+    - 49bfc20e774047e459f58d4626014b4a
+    - 627a2b873057c8f45a6222e9332c64f3
+    - 7d0ceb78f5270ab46b17fbe7ccac7fc4
+    IsBundle: 0
+  - Guid: 3159da250995797439b5071e8ebf0e56
+    StoreId: 66269dd6486f5fbcfabe6658
+    Name: Neon DJ Booth
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/66269dd6486f5fbcfabe6658/18f06dabe70_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/66269dd6486f5fbcfabe6658/18f06daaed0_0.jpg
+    AdditionalAssetGUIDs:
+    - 3159da250995797439b5071e8ebf0e56
+    - 7cad33aafac861c45ac43bd7b6274dd4
+    - def2522f117fe024cb8b1310dee637c0
+    - 5f34ab98f76b64b46a21be8918d4691c
+    - 113b388420275a4468f8df7bef95026f
+    - b3c25b05bd2fd8c44927c97a9f1a40c3
+    IsBundle: 0
+  - Guid: 5f3155eda9f0b7548807df4ba563f53e
+    StoreId: 66269ebc486f5fbcfabe6660
+    Name: Stage Light Structure
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/66269ebc486f5fbcfabe6660/18f06dd23b8_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/66269ebc486f5fbcfabe6660/18f06dd1418_0.jpg
+    AdditionalAssetGUIDs:
+    - 5f3155eda9f0b7548807df4ba563f53e
+    - 7cad33aafac861c45ac43bd7b6274dd4
+    - ca9d5fe17362cf448b11b386b1e45297
+    - 5f34ab98f76b64b46a21be8918d4691c
+    IsBundle: 0
+  - Guid: 48f922f75dbb85e4da361793cac9591a
+    StoreId: 66269f42486f5fbcfabe6664
+    Name: Pink Flood Light
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/66269f42486f5fbcfabe6664/18f06df17b8_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/66269f42486f5fbcfabe6664/18f06df0818_0.jpg
+    AdditionalAssetGUIDs:
+    - 48f922f75dbb85e4da361793cac9591a
+    - 0ddcc9b0cf9365045a34007e28564c13
+    - 7cad33aafac861c45ac43bd7b6274dd4
+    - def2522f117fe024cb8b1310dee637c0
+    - 5f34ab98f76b64b46a21be8918d4691c
+    - b3c25b05bd2fd8c44927c97a9f1a40c3
+    IsBundle: 0
+  - Guid: 068da0373073ae5428d5dcd96c3442fc
+    StoreId: 66269e96486f5fbcfabe665c
+    Name: Blue Flood Light
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/66269e96486f5fbcfabe665c/18f06dcc9e0_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/66269e96486f5fbcfabe665c/18f06dcba40_0.jpg
+    AdditionalAssetGUIDs:
+    - 068da0373073ae5428d5dcd96c3442fc
+    - 6654b96622c03ec43aaba67287eb3735
+    - 7cad33aafac861c45ac43bd7b6274dd4
+    - def2522f117fe024cb8b1310dee637c0
+    - 5f34ab98f76b64b46a21be8918d4691c
+    - b3c25b05bd2fd8c44927c97a9f1a40c3
+    IsBundle: 0
+  - Guid: 5b73a9e737492984da6378a146223715
+    StoreId: 6657587fe4bc9b8bd2c9a49e
+    Name: Arcade Counter
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6657587fe4bc9b8bd2c9a49e/18fc531e2e0_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6657587fe4bc9b8bd2c9a49e/18fc531d340_0.jpg
+    AdditionalAssetGUIDs:
+    - a83bf1d75b8cc4d46934b50d00d62746
+    - cd137d3c703230b459850d121b33f430
+    - 8b01b525a1bf1ed499f911154d46a498
+    - 85ae7272a1fc9ee478fd879700dc268a
+    IsBundle: 0
+  - Guid: 8a4a08e179fda7648b889c4769fc31e1
+    StoreId: 665758a2e4bc9b8bd2c9a4a0
+    Name: Arcade Stool
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/665758a2e4bc9b8bd2c9a4a0/18fc53267b0_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/665758a2e4bc9b8bd2c9a4a0/18fc5325040_0.jpg
+    AdditionalAssetGUIDs:
+    - 8b01b525a1bf1ed499f911154d46a498
+    - cd137d3c703230b459850d121b33f430
+    - bfdf0594477214640aae32b5c33fd3ba
+    IsBundle: 0
+  - Guid: 23489237cf140ae43865cc16ce466976
+    StoreId: 66269dc7486f5fbcfabe6656
+    Name: Pink Dance Floor
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/66269dc7486f5fbcfabe6656/18f06d9f738_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/66269dc7486f5fbcfabe6656/18f06d99d60_0.jpg
+    AdditionalAssetGUIDs:
+    - 23489237cf140ae43865cc16ce466976
+    - 86a302a939c90b3478dae500a4b330e0
+    - 7cad33aafac861c45ac43bd7b6274dd4
+    - 5f34ab98f76b64b46a21be8918d4691c
+    IsBundle: 0
+  - Guid: c9bc51141e66e4c4394cbbe502796a67
+    StoreId: 66269dbf486f5fbcfabe6653
+    Name: Blue Dance Floor
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/66269dbf486f5fbcfabe6653/18f06d97a38_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/66269dbf486f5fbcfabe6653/18f06d95ee0_0.jpg
+    AdditionalAssetGUIDs:
+    - c9bc51141e66e4c4394cbbe502796a67
+    - 7cad33aafac861c45ac43bd7b6274dd4
+    - 5f34ab98f76b64b46a21be8918d4691c
+    - b98f7b724b09ebc4d89e31d226748f55
+    IsBundle: 0
+  - Guid: adafe82ea50a243458636a204c56d326
+    StoreId: 662a53129c08b75c5c248594
+    Name: World Radio
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/662a53129c08b75c5c248594/18f1554c0b8_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/662a53129c08b75c5c248594/18f1554b118_0.jpg
+    AdditionalAssetGUIDs:
+    - 9a344c014cceed54a9ab2f739014ccda
+    - 8284f68edf0ac904ba617ee0e3b9be8a
+    - 2a36b80227eaa8649aa8fb654ac3c7b5
+    - bdf0c63f04430c0488dda73d552c171e
+    - eb267a1f8e22d5444bdf98e30b6da9be
+    - dbd55daaf8c8d0b41b2ef0aaf144a1a5
+    IsBundle: 0
+  - Guid: 9d1e4913ce5df6f4bb01a75000dcff9b
+    StoreId: 66269ea5486f5fbcfabe665e
+    Name: Neon Night Club Cubes
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/66269ea5486f5fbcfabe665e/18f06dcf8c0_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/66269ea5486f5fbcfabe665e/18f06dce920_0.jpg
+    AdditionalAssetGUIDs:
+    - 9d1e4913ce5df6f4bb01a75000dcff9b
+    - 3755bb9722633a444b4b195b2fbc661c
+    - 7cad33aafac861c45ac43bd7b6274dd4
+    - 5f34ab98f76b64b46a21be8918d4691c
+    IsBundle: 0
+  - Guid: 86857c55b9b98384291f864b24024a0b
+    StoreId: 6626a6fd486f5fbcfabe6686
+    Name: Club Table 01
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6626a6fd486f5fbcfabe6686/18f06ffa7a8_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6626a6fd486f5fbcfabe6686/18f06ff9808_0.jpg
+    AdditionalAssetGUIDs:
+    - 86857c55b9b98384291f864b24024a0b
+    - 7cad33aafac861c45ac43bd7b6274dd4
+    - 4317fd428ec6b6c40956cd60bb68fd90
+    - 5f34ab98f76b64b46a21be8918d4691c
+    IsBundle: 0
+  - Guid: 86ad82f45da8e2341824acdfa0861d77
+    StoreId: 671840d4a02115b1f31c3292
+    Name: Food FREE by ithappy
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/671840d4a02115b1f31c3292/192b6d05aa8_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/671840d4a02115b1f31c3292/192b6cfca20_0.jpg
+    AdditionalAssetGUIDs:
+    - 148f39c355dbcd342a77c5edbfb43792
+    - c7232173ec62a4648bc000bf0b5baf1a
+    - 60568abbed781d643a95fe465ddf7d89
+    - 90eef2986e5621946bc6c49fa7c1bb59
+    - 556e828522c2d664dacf6dde91f68efb
+    - e78c24f1f6682d048beb3ea4986f41bb
+    - 557f13dbb2a6872439b8c75bf3271c5d
+    - b542f155b868c0e40834cb1333522ac2
+    - 51d6319d2b9742640a6b2bb01da1dc59
+    - e3a10d9641710d041a51eb9a528a6e9a
+    - c2004775e0ce89f48af3e88e6f9555a4
+    - 24598e7b217c94e4dbe0f0024ed2125f
+    - 19778a1cec25085409918a09efe96dee
+    - 58ecccecc9dac3849a79803e56ccc86c
+    - 22f70e163a75b0643b7e1dfc8599f1a5
+    - ff395a592fd37a64faade66bb8598f75
+    - 4a4c3090dafff744191822abad106463
+    - 894ad6ec8aaa7f14d8d6cea5f753932b
+    - d1f70b40c48b823429bc0d9adc4c0a09
+    - 33bd3696e4ffca649b47370f28ae1193
+    - 31ec181664c141943b9c7bee2d073cbf
+    - 2a40e4178ccfbc34bbd02a2aa5924c4d
+    - 4be770614820e82428bff74e713e0134
+    - 6012fccf4ebae9e4cb47349aa82f193d
+    - de87f7603a68e544caae20f7f33e77a3
+    - ec6b75d454e7f8f4781f3ce98fea3e7f
+    - 75def7bcd833c6d48b914c8b78f48891
+    - b9e0dc1ab0567274ca3d07fa03c545f0
+    - 2428bc9b446678141b15545e45551790
+    - bfa69215c106c624f9bbd20882758a79
+    - 874cc5bc24933b042abbece65c83575d
+    - 2f8c857b192eb45438fc348d00f0e1dc
+    - 577045aaae10359478868e58bdc87b03
+    - 405951cf51ef9e5449650a260d9c7d7d
+    - 00b8347628af935489c0e2363cf81d0a
+    - a338b4947949ef741aed5ee7b2fb2cb5
+    - 0de433cdd2e4443429aa1ea006d5ed6f
+    - 6337d2f9a4f13df48bbf04e2c5ae8f40
+    - cc9555660233b1f4c8e9da5c66a9dab1
+    - edecf380fec20c842b4edd08d5bec47a
+    - fd20fe41de0b6b145a3a455a612c3662
+    - 63e79004a1b1cbb4ca1a221e8c7d3694
+    - 552087194613fe149b2e55f682d0029d
+    - 8ee5b8ec18f4a1c41b3c9c20412d6670
+    - 1a8ac2d74773764459a79d717ae3ab9f
+    - a290a309ed93f924b8c5e5727f903d00
+    - 0fe214b4718d3fc41aa37c205ae164ec
+    - a85c04d0f7dd0a14e988a543bd46a93d
+    - 3f99848e2dea54c44bd892c8b71bf04e
+    - fcc9a477b25cb8a49a54aeb8fd4e21e5
+    - dcc2448ad07367a4da606a55f93d7b90
+    IsBundle: 1

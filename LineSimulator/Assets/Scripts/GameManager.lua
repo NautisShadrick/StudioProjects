@@ -142,19 +142,21 @@ function self:ClientAwake()
     playerQueue.Changed:Connect(HandleQueueChange)
 
     moveEvent:Connect(function(player, pos)
-        player.character:MoveTo(pos, 1)
+        player.character:MoveTo(pos, 1, function()
+            local _place = GetPlace(playerQueue.value, player)
+            if _place == nil then return end
+            player.character.transform.rotation = LinePlaces[_place].rotation
+        end)
     end)
 
     ReEnableEvent:Connect(function()
         characterController.options.enabled = true
         HideButtonEvent:Fire()
-        TeleportManager.TeleortPlayer(client.localPlayer, Vector3.new(0, 0, -100), function()
+        TeleportManager.TeleortPlayer(client.localPlayer, Vector3.new(12, 6.25, 2), function()
             local _newMoveto = Vector3.new(math.random(-2,2), 0, math.random(-2,2))
             _newMoveto = _newMoveto + client.localPlayer.character.transform.position
             MovePlayer(client.localPlayer, _newMoveto)
         end)
-        
-        --camerScript:GetComponent(RTSCamera):CenterOn(client.localPlayer.character.transform.position)
     end)
 
     ToiletTimer.Changed:Connect(function(timer)
