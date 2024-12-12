@@ -144,7 +144,7 @@ function self:ClientAwake()
     moveEvent:Connect(function(player, pos)
         player.character:MoveTo(pos, 1, function()
             local _place = GetPlace(playerQueue.value, player)
-            if _place == nil then return end
+            if _place == nil or LinePlaces[_place] == nil then return end
             player.character.transform.rotation = LinePlaces[_place].rotation
         end)
     end)
@@ -187,9 +187,14 @@ function MoveToPlace(queue, oldQueue)
 
     if _previousPlace ~= _newPlace then
         if _newPlace == 0 then return end
-        print(_newPlace)
-        local _newplace = LinePlaces[_newPlace].position
-        MovePlayer(client.localPlayer, _newplace)
+        local _newplace = LinePlaces[_newPlace]
+        local _newPos
+        if _newplace then
+            _newPos = _newplace.position
+        else
+            _newPos = LinePlaces[#LinePlaces].position
+        end
+        MovePlayer(client.localPlayer, _newPos)
     end
     
 
