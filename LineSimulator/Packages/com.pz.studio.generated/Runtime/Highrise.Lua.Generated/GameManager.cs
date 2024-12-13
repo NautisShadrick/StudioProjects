@@ -27,6 +27,9 @@ namespace Highrise.Lua.Generated
 
         [SerializeField] public UnityEngine.GameObject m_camerScript = default;
         [SerializeField] public System.Collections.Generic.List<UnityEngine.Transform> m_LinePlaces = default;
+        [Header("Actions")]
+        [SerializeField] public System.Double m_fartCost = 350;
+        [SerializeField] public UnityEngine.GameObject m_fartParticle = default;
 
         protected override SerializedPropertyValue[] SerializeProperties()
         {
@@ -37,6 +40,8 @@ namespace Highrise.Lua.Generated
             {
                 CreateSerializedProperty(_script.GetPropertyAt(0), m_camerScript),
                 CreateSerializedProperty(_script.GetPropertyAt(1), m_LinePlaces),
+                CreateSerializedProperty(_script.GetPropertyAt(2), m_fartCost),
+                CreateSerializedProperty(_script.GetPropertyAt(3), m_fartParticle),
             };
         }
     }

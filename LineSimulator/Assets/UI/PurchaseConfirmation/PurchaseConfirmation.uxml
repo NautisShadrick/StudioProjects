@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UXML
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="UnityEngine.UIElements"
+    xmlns:hr="Highrise.UI"
+    xmlns:editor="UnityEditor.UIElements"
+    xsi:noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd"
+>
+
+  <hr:UILuaView class="purchase-confirmation">
+    <VisualElement name="popup_container" class="popup-container">
+
+      <VisualElement name="exit"/>
+
+      <VisualElement name="Icon" class="item_icon"/>
+      <Label name="Title" class="item_title"/>
+      <Label name="Description" class="item_description"/>
+
+      <VisualElement name="purchase_button_main" class="purchase-button-main">
+        <Label name="button_label" class="button-label" text="$BIGMONEY" />
+      </VisualElement>
+
+    </VisualElement>
+      
+  </hr:UILuaView>
+
+</UXML>

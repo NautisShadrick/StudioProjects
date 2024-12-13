@@ -5,12 +5,21 @@ local camerScript: GameObject = nil
 --!SerializeField
 local LinePlaces: {Transform} = {}
 
+--!Header("Actions")
+--!SerializeField
+local fartCost: number = 350
+--!SerializeField
+local fartParticle: GameObject = nil
+
 local ReEnableEvent = Event.new("RE_ENABLE")
-local ToiletTimer = IntValue.new("SERVER_TIMER", 10)
+local ToiletTimer = IntValue.new("SERVER_TIMER", 120)
 local baseTime = 120
 
 local moveRequest = Event.new("MOVE_REQUEST")
 local moveEvent = Event.new("MOVE_EVENT")
+
+local FartRequest = Event.new("FART_REQUEST")
+local FartEvent = Event.new("FART_EVENT")
 
 local playerQueue = TableValue.new("PLAYER_QUEUE", {})
 skipRequest = Event.new("SKIP_REQUEST")
@@ -166,6 +175,12 @@ function self:ClientAwake()
         end
     end)
 
+    FartEvent:Connect(function(player)
+        local _fart = GameObject.Instantiate(fartParticle)
+        _fart.transform.position = player.character.transform.position
+        _fart.transform.parent = player.character.transform
+    end)
+
 end
 
 function MovePlayer(player, place)
@@ -202,6 +217,11 @@ end
 
 function GetMoney()
     return players[client.localPlayer].wallet.value
+end
+
+--------------- UI ACTIONS ---------------
+function FartBackwards()
+    FartRequest:FireServer()
 end
 
 ------------- SERVER -------------
@@ -264,6 +284,36 @@ function self:ServerAwake()
         player.character.transform.position = pos
         moveEvent:FireAllClients(player, pos)
     end)
+
+    FartRequest:Connect(function(player)
+        print("Farting")
+        local _playerWallet = players[player].wallet.value
+        if _playerWallet < fartCost then
+            return
+        end
+        print("had enough money")
+
+        -- Handle the fart
+        local _myplace = GetPlace(playerQueue.value, player)
+        local _targetPlace = _myplace + 1
+
+        print("Target Place did not exceed the line length")
+        local _victim = playerQueue.value[_targetPlace]
+        if _victim == nil then
+            FartEvent:FireAllClients(player)
+            return
+        end
+        FartEvent:FireAllClients(_victim)
+        print("Victim is not nil")
+        -- Remove Victim from the Queue and Re add
+        local _tempQueue = playerQueue.value
+        table.remove(_tempQueue, _targetPlace)
+        playerQueue.value = _tempQueue
+        _tempQueue = playerQueue.value
+        table.insert(_tempQueue, _victim)
+        playerQueue.value = _tempQueue
+    end)
+
 end
 
 function IncrementMoney(player)

@@ -551,3 +551,26 @@ MonoBehaviour:
     - fcc9a477b25cb8a49a54aeb8fd4e21e5
     - dcc2448ad07367a4da606a55f93d7b90
     IsBundle: 1
+  - Guid: cb847812ac4228e47a2c06601816b8b6
+    StoreId: 661eaaf771d0a0535503a56e
+    Name: Magic Fireplace
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/661eaaf771d0a0535503a56e/18ee7cc1358_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/661eaaf771d0a0535503a56e/18ee7cbffd0_0.jpg
+    AdditionalAssetGUIDs:
+    - a4bdd44989511c548b8ddf470c7fc0bd
+    - 9cea6976d0072314c976447dd9661ff9
+    - 0a5462a6738db6e4c9165773e96718e4
+    - 0d46e890ab406e5409af85030d8b8d79
+    - 41331cad02531f644bc38edaba6d360b
+    - 7ca9e9681a3131c4b80cae6a0cc68a25
+    - f9dcb38375ef29e4a80c5220477c6895
+    - c8bc6a7177c72334bac1f3eef221fbbf
+    - 1c6b08e5bc7744948b4497a19e3f535f
+    - 118b7bbf2b352d24f9bbe734af582b7d
+    - 7073f03f3b40eca4985c65eb62c0a720
+    - e7f699ad1c96f164c836358ffd13e1a2
+    - 1e9629c0a5b26f84b9d4aa5d09991a7c
+    - 17290db69945db94baef775e99b6ac81
+    - 7e21725b180d3624b92e714ba4be96c7
+    IsBundle: 0
