@@ -62,8 +62,7 @@ function self:Start()
 
     CreateHudButton(fartCloudData, "right")
     CreateHudButton(fartBombData, "right")
-    CreateHudButton(poopHeadData, "right")
-
-    CreateHudButton(fireAlarmData, "right")
+    --CreateHudButton(poopHeadData, "right")
+    --CreateHudButton(fireAlarmData, "right")
     CreateHudButton(toiletPartyData, "right")
 end

@@ -16964,6 +16964,54 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: adafe82ea50a243458636a204c56d326, type: 3}
+--- !u!1 &1273065506
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1273065508}
+  - component: {fileID: 1273065507}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!208 &1273065507
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1273065506}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
+--- !u!4 &1273065508
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1273065506}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 12.16, y: 0.55, z: 1.94}
+  m_LocalScale: {x: 20.916372, y: 1, z: 17.104702}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1273606967
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -18942,17 +18990,22 @@ MonoBehaviour:
   - {fileID: 413298314}
   - {fileID: 1654931823}
   - {fileID: 0}
-  m_fartCost: 350
+  m_fartCost: 150
   m_fartParticle: {fileID: 4706965720063940025, guid: 45b78f96527b01a449f3eddf2aeb06c1,
     type: 3}
   m_fartSounds:
   - {fileID: 11400000, guid: 09446ad2df1ca71459d96fc8d368d455, type: 2}
   - {fileID: 11400000, guid: 683101fa43611ea41b215a3f378514c3, type: 2}
-  m_fartBombCost: 10
+  m_fartBombCost: 1000
   m_fartBombParticle: {fileID: 4706965720063940025, guid: fc8ea3fbb65d2394bb1095a3eabec076,
     type: 3}
   m_fartBombSounds:
   - {fileID: 11400000, guid: 37cda37d03305544fbba10112dde0662, type: 2}
+  m_toiletPartyCost: 1000
+  m_toiletPartyParticle: {fileID: 4706965720063940025, guid: 040471fb7d309d2499016bddcc76c565,
+    type: 3}
+  m_toiletPartySounds:
+  - {fileID: 11400000, guid: 0e341f8ce1bee0c48b800beb510418c3, type: 2}
   references:
     version: 2
     RefIds:
@@ -29276,3 +29329,4 @@ SceneRoots:
   - {fileID: 1270437294}
   - {fileID: 383699691}
   - {fileID: 65554724}
+  - {fileID: 1273065508}

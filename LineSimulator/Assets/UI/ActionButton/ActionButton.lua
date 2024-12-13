@@ -46,11 +46,11 @@ function self:Awake()
     end)
 
     GameManager.EnterParty:Connect(function()
-        self.gameObject:SetActive(false)
+        action_button_main:EnableInClassList("hidden", true)
     end)
 
     GameManager.LeaveParty:Connect(function()
-        self.gameObject:SetActive(true)
+        action_button_main:EnableInClassList("hidden", false)
     end)
 
 end

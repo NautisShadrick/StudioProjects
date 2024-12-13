@@ -18,7 +18,7 @@ MonoBehaviour:
   m_Title: Fart Cloud
   m_Description: Fart on the player behind you sending them all the way back in line
     with a stinky cloud of gas.
-  m_Price: 350
+  m_Price: 150
   m_IconID: fart_icon
   m_ActionID: action_fart
   references:

@@ -18,7 +18,7 @@ MonoBehaviour:
   m_Title: Fart Bomb
   m_Description: Release a Fart Bomb in the party! Forcing everyone back into the
     Line!
-  m_Price: 1200
+  m_Price: 1000
   m_IconID: fart_bomb
   m_ActionID: action_bomb
   references:

@@ -66,3 +66,7 @@
     margin-left: 5px;
     padding-right: 5px;
 }
+
+.hidden {
+    display: none;
+}

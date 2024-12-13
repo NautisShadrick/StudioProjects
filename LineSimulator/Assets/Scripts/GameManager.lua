@@ -7,7 +7,7 @@ local LinePlaces: {Transform} = {}
 
 --!Header("Fart")
 --!SerializeField
-local fartCost: number = 350
+local fartCost: number = 150
 --!SerializeField
 local fartParticle: GameObject = nil
 --!SerializeField
@@ -15,15 +15,23 @@ local fartSounds: {AudioShader} = {}
 
 --!Header("FartBomb")
 --!SerializeField
-local fartBombCost: number = 10
+local fartBombCost: number = 1000
 --!SerializeField
 local fartBombParticle: GameObject = nil
 --!SerializeField
 local fartBombSounds: {AudioShader} = {}
 
+--!Header("ToiletParty")
+--!SerializeField
+local toiletPartyCost: number = 1000
+--!SerializeField
+local toiletPartyParticle: GameObject = nil
+--!SerializeField
+local toiletPartySounds: {AudioShader} = {}
+
 local ReEnableEvent = Event.new("RE_ENABLE")
-local ToiletTimer = IntValue.new("SERVER_TIMER", 10)
-local baseTime = 10
+local ToiletTimer = IntValue.new("SERVER_TIMER", 120)
+local baseTime = 120
 
 local moveRequest = Event.new("MOVE_REQUEST")
 local moveEvent = Event.new("MOVE_EVENT")
@@ -213,6 +221,24 @@ function self:ClientAwake()
         Audio:PlayShader(fartBombSounds[math.random(1, #fartBombSounds)])
     end)
 
+    ToiletPartyEvent:Connect(function()
+
+        characterController.options.enabled = true
+        EnterParty:Fire()
+        TeleportManager.TeleortPlayer(client.localPlayer, Vector3.new(12, 6.25, 2), function()
+            local _newMoveto = Vector3.new(math.random(-2,2), 0, math.random(-2,2))
+            _newMoveto = _newMoveto + client.localPlayer.character.transform.position
+            MovePlayer(client.localPlayer, _newMoveto)
+        end)
+
+        local _particle = GameObject.Instantiate(toiletPartyParticle)
+        _particle.transform.position = Vector3.new(12, 6.25, 2)
+        for eaach, sound in ipairs(toiletPartySounds) do
+            Audio:PlayShader(sound)
+        end
+
+    end)
+
 end
 
 function MovePlayer(player, place)
@@ -306,7 +332,7 @@ function self:ServerAwake()
         table.insert(_tempQueue, player)
         playerQueue.value = _tempQueue
 
-        IncomeTimersByPlayer[player] = Timer.Every(1, function()
+        IncomeTimersByPlayer[player] = Timer.Every(0.25, function()
             IncrementMoney(player)
         end)
     end
@@ -397,6 +423,20 @@ function self:ServerAwake()
 
     end)
 
+    -- Remove all players from the queue and teleport them to the party
+    ToiletPartyRequest:Connect(function(player)
+        local _playerWallet = players[player].wallet.value
+        if _playerWallet < toiletPartyCost then
+            return
+        end
+        players[player].wallet.value = _playerWallet - toiletPartyCost
+
+        local _tempQueue = {}
+        playerQueue.value = _tempQueue
+
+        ToiletPartyEvent:FireAllClients()
+    end)
+
 end
 
 function IsInLine(player) : boolean
@@ -411,5 +451,5 @@ end
 function IncrementMoney(player)
     if not IsInLine(player) then return end
     local playerinfo = players[player]
-    playerinfo.wallet.value = playerinfo.wallet.value + (playerinfo.incomeRate.value * 10)
+    playerinfo.wallet.value = playerinfo.wallet.value + (playerinfo.incomeRate.value * 1)
 end

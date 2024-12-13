@@ -17,7 +17,7 @@ MonoBehaviour:
   _properties: []
   m_Title: Toilet Party!
   m_Description: Call a Toilet Party!! Everyone in Line gets into Potty Rise!
-  m_Price: 2000
+  m_Price: 1000
   m_IconID: toilet_party
   m_ActionID: action_toilet
   references:
