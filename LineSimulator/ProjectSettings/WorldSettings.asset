@@ -30,3 +30,4 @@ MonoBehaviour:
   _defaultPlayerProfileId: 0
   _useRemoteServer: 0
   _remoteServerUserIds: []
+  _checkStudioUpdatesOnLaunch: 1

@@ -10,6 +10,8 @@ local LinePlaces: {Transform} = {}
 local fartCost: number = 350
 --!SerializeField
 local fartParticle: GameObject = nil
+--!SerializeField
+local fartSounds: {AudioShader} = {}
 
 local ReEnableEvent = Event.new("RE_ENABLE")
 local ToiletTimer = IntValue.new("SERVER_TIMER", 120)
@@ -44,6 +46,7 @@ local _hardCodedQueue =
 
 local characterController = require("LineSimPlayerController")
 local TeleportManager = require("TeleportManager")
+local musicManager = require("MusicManager")
 
 --local uiManager = require("UIManager")
 players = {}
@@ -166,6 +169,7 @@ function self:ClientAwake()
             _newMoveto = _newMoveto + client.localPlayer.character.transform.position
             MovePlayer(client.localPlayer, _newMoveto)
         end)
+        musicManager.SwitchMusic()
     end)
 
     ToiletTimer.Changed:Connect(function(timer)
@@ -179,6 +183,7 @@ function self:ClientAwake()
         local _fart = GameObject.Instantiate(fartParticle)
         _fart.transform.position = player.character.transform.position
         _fart.transform.parent = player.character.transform
+        Audio:PlayShader(fartSounds[math.random(1, #fartSounds)])
     end)
 
 end
@@ -292,6 +297,9 @@ function self:ServerAwake()
             return
         end
         print("had enough money")
+
+        --Take the money
+        players[player].wallet.value = _playerWallet - fartCost
 
         -- Handle the fart
         local _myplace = GetPlace(playerQueue.value, player)
