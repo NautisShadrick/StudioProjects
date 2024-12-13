@@ -9,7 +9,7 @@ function TeleortPlayer(player, destination, cb)
     TeleportResponse:Connect(function(targetPlayer, destination)
         print("Teleporting player")
         targetPlayer.character:Teleport(destination)
-        cb()
+        if targetPlayer == client.localPlayer then cb() end
     end)
 end
 

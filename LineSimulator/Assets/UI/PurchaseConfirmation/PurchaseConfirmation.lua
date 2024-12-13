@@ -21,6 +21,8 @@ function OpenPopup(_Title: string, _Description: string, Price: number, iconID: 
     Title.text = _Title
     Description.text = _Description
     button_label.text = "$" .. tostring(Price)
+    Icon:ClearClassList()
+    Icon:AddToClassList("item_icon")
     Icon:AddToClassList(iconID)
     myAction = actionID
 end

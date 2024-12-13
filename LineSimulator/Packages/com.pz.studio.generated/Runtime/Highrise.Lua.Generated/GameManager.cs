@@ -27,10 +27,14 @@ namespace Highrise.Lua.Generated
 
         [SerializeField] public UnityEngine.GameObject m_camerScript = default;
         [SerializeField] public System.Collections.Generic.List<UnityEngine.Transform> m_LinePlaces = default;
-        [Header("Actions")]
+        [Header("Fart")]
         [SerializeField] public System.Double m_fartCost = 350;
         [SerializeField] public UnityEngine.GameObject m_fartParticle = default;
         [SerializeField] public System.Collections.Generic.List<Highrise.AudioShader> m_fartSounds = default;
+        [Header("FartBomb")]
+        [SerializeField] public System.Double m_fartBombCost = 10;
+        [SerializeField] public UnityEngine.GameObject m_fartBombParticle = default;
+        [SerializeField] public System.Collections.Generic.List<Highrise.AudioShader> m_fartBombSounds = default;
 
         protected override SerializedPropertyValue[] SerializeProperties()
         {
@@ -44,6 +48,9 @@ namespace Highrise.Lua.Generated
                 CreateSerializedProperty(_script.GetPropertyAt(2), m_fartCost),
                 CreateSerializedProperty(_script.GetPropertyAt(3), m_fartParticle),
                 CreateSerializedProperty(_script.GetPropertyAt(4), m_fartSounds),
+                CreateSerializedProperty(_script.GetPropertyAt(5), m_fartBombCost),
+                CreateSerializedProperty(_script.GetPropertyAt(6), m_fartBombParticle),
+                CreateSerializedProperty(_script.GetPropertyAt(7), m_fartBombSounds),
             };
         }
     }

@@ -7,9 +7,6 @@ local HudButtonsOBJ: GameObject = nil
 --!SerializeField
 local PurchaseConfirmationOBJ: GameObject = nil
 
---!SerializeField
-local testData: ScriptableObject = nil
-
 local actionButtonScript: ActionButton = nil
 local hudButtonsScript: HudButtons = nil
 local purchaseConfirmationScript: PurchaseConfirmation = nil
@@ -46,5 +43,17 @@ end
 function DoAction(actionID: string)
     if actionID == "action_fart" then
         gameManager.FartBackwards()
+    end
+    if actionID == "action_bomb" then
+        gameManager.FartBomb()
+    end
+    if actionID == "action_poop" then
+        gameManager.Poop()
+    end
+    if actionID == "action_toilet" then
+        gameManager.Party()
+    end
+    if actionID == "fire_alarm" then
+        gameManager.FireAlarm()
     end
 end

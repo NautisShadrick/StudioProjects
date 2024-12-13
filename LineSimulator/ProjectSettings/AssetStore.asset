@@ -574,3 +574,14 @@ MonoBehaviour:
     - 17290db69945db94baef775e99b6ac81
     - 7e21725b180d3624b92e714ba4be96c7
     IsBundle: 0
+  - Guid: abd1d5d5064e99340bb1a61074718779
+    StoreId: 6658da356e9f2ad62c40e7ff
+    Name: Roof Ladder
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658da356e9f2ad62c40e7ff/18fcb148de8_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658da356e9f2ad62c40e7ff/18fcb148230_0.jpg
+    AdditionalAssetGUIDs:
+    - 778c67b5ff99976428ede6cebe9714eb
+    - 7cad33aafac861c45ac43bd7b6274dd4
+    - 5f34ab98f76b64b46a21be8918d4691c
+    IsBundle: 0

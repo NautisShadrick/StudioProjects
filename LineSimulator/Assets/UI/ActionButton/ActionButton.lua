@@ -29,28 +29,28 @@ end)
 function self:Awake()
 
     GameManager.UpdateWalletEvent:Connect(function(player, wallet)
-        if free then return end
         if player ~= client.localPlayer then return end
         wallet_label.text = "$" .. wallet
         UpdateButton()
     end)
     GameManager.UpdatePlaceEvent:Connect(function(player, place)
-        if free or GameManager.GetPlace() == 1 then return end
+        if GameManager.GetPlace() == 0 then return end
         myPlace = place
         button_label.text = "Skip for $" .. GameManager.GetSkipCost(client.localPlayer)
         UpdateButton()
     end)
     GameManager.UpdateTimerEvent:Connect(function(timer)
-        if free or GameManager.GetPlace() > 1 then return end
+        if GameManager.GetPlace() > 1 then return end
         button_label.text = "Toilet Time: " .. tostring(timer)
         action_button_main:EnableInClassList("disabled", not CheckWallet())
     end)
 
-    GameManager.HideButtonEvent:Connect(function()
-        --action_button_main:RemoveFromHierarchy()
-        --wallet_label:RemoveFromHierarchy()
-        free = true
-        button_label.text = "PARTY!!"
+    GameManager.EnterParty:Connect(function()
+        self.gameObject:SetActive(false)
+    end)
+
+    GameManager.LeaveParty:Connect(function()
+        self.gameObject:SetActive(true)
     end)
 
 end

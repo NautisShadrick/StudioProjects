@@ -5,7 +5,7 @@ local camerScript: GameObject = nil
 --!SerializeField
 local LinePlaces: {Transform} = {}
 
---!Header("Actions")
+--!Header("Fart")
 --!SerializeField
 local fartCost: number = 350
 --!SerializeField
@@ -13,9 +13,17 @@ local fartParticle: GameObject = nil
 --!SerializeField
 local fartSounds: {AudioShader} = {}
 
+--!Header("FartBomb")
+--!SerializeField
+local fartBombCost: number = 10
+--!SerializeField
+local fartBombParticle: GameObject = nil
+--!SerializeField
+local fartBombSounds: {AudioShader} = {}
+
 local ReEnableEvent = Event.new("RE_ENABLE")
-local ToiletTimer = IntValue.new("SERVER_TIMER", 120)
-local baseTime = 120
+local ToiletTimer = IntValue.new("SERVER_TIMER", 10)
+local baseTime = 10
 
 local moveRequest = Event.new("MOVE_REQUEST")
 local moveEvent = Event.new("MOVE_EVENT")
@@ -23,12 +31,25 @@ local moveEvent = Event.new("MOVE_EVENT")
 local FartRequest = Event.new("FART_REQUEST")
 local FartEvent = Event.new("FART_EVENT")
 
+local FartBombRequest = Event.new("FART_BOMB_REQUEST")
+local FartBombEvent = Event.new("FART_BOMB_EVENT")
+
+local PoopHeadRequest = Event.new("POOP_HEAD_REQUEST")
+local PoopHeadEvent = Event.new("POOP_HEAD_EVENT")
+
+local ToiletPartyRequest = Event.new("TOILET_PARTY_REQUEST")
+local ToiletPartyEvent = Event.new("TOILET_PARTY_EVENT")
+
+local FireAlarmRequest = Event.new("FIRE_ALARM_REQUEST")
+local FireAlarmEvent = Event.new("FIRE_ALARM_EVENT")
+
 local playerQueue = TableValue.new("PLAYER_QUEUE", {})
 skipRequest = Event.new("SKIP_REQUEST")
 
 UpdateWalletEvent = Event.new("UPDATE_WALLET")
 UpdatePlaceEvent = Event.new("UPDATE_PLACE")
-HideButtonEvent = Event.new("HIDE_BUTTON")
+EnterParty = Event.new("HIDE_BUTTON")
+LeaveParty = Event.new("HIDE_BUTTON")
 UpdateTimerEvent = Event.new("UPDATE_TIMER")
 
 --[[
@@ -46,7 +67,6 @@ local _hardCodedQueue =
 
 local characterController = require("LineSimPlayerController")
 local TeleportManager = require("TeleportManager")
-local musicManager = require("MusicManager")
 
 --local uiManager = require("UIManager")
 players = {}
@@ -161,15 +181,16 @@ function self:ClientAwake()
         end)
     end)
 
-    ReEnableEvent:Connect(function()
+    ReEnableEvent:Connect(function(targetPlayer)
+        print(targetPlayer.name .. " is re-enabled")
         characterController.options.enabled = true
-        HideButtonEvent:Fire()
+        EnterParty:Fire()
         TeleportManager.TeleortPlayer(client.localPlayer, Vector3.new(12, 6.25, 2), function()
             local _newMoveto = Vector3.new(math.random(-2,2), 0, math.random(-2,2))
             _newMoveto = _newMoveto + client.localPlayer.character.transform.position
             MovePlayer(client.localPlayer, _newMoveto)
         end)
-        musicManager.SwitchMusic()
+
     end)
 
     ToiletTimer.Changed:Connect(function(timer)
@@ -186,6 +207,12 @@ function self:ClientAwake()
         Audio:PlayShader(fartSounds[math.random(1, #fartSounds)])
     end)
 
+    FartBombEvent:Connect(function()
+        local _fart = GameObject.Instantiate(fartBombParticle)
+        _fart.transform.position = Vector3.new(12, 6.25, 2)
+        Audio:PlayShader(fartBombSounds[math.random(1, #fartBombSounds)])
+    end)
+
 end
 
 function MovePlayer(player, place)
@@ -194,16 +221,22 @@ function MovePlayer(player, place)
 end
 
 function HandleQueueChange(queue, oldQueue)
-    UpdatePlaceEvent:Fire(client.localPlayer, GetPlace(queue, client.localPlayer.name))
-    MoveToPlace(queue, oldQueue)
-end
-
-function MoveToPlace(queue, oldQueue)
-
-    oldQueue = oldQueue or {}
-
     local _previousPlace = GetPlace(oldQueue, client.localPlayer)
     local _newPlace = GetPlace(queue, client.localPlayer)
+
+    UpdatePlaceEvent:Fire(client.localPlayer, GetPlace(queue, client.localPlayer.name))
+
+    if _newPlace == 0 then return end
+    if characterController.options.enabled == true then
+        characterController.options.enabled = false
+        LeaveParty:Fire()
+    end
+
+    MoveToPlace(queue, oldQueue, _previousPlace, _newPlace)
+end
+
+function MoveToPlace(queue, oldQueue, _previousPlace, _newPlace)
+    oldQueue = oldQueue or {}
 
     if _previousPlace ~= _newPlace then
         if _newPlace == 0 then return end
@@ -228,6 +261,18 @@ end
 function FartBackwards()
     FartRequest:FireServer()
 end
+function FartBomb()
+    FartBombRequest:FireServer()
+end
+function Poop()
+    PoopHeadRequest:FireServer()
+end
+function Party()
+    ToiletPartyRequest:FireServer()
+end
+function FireAlarm()
+    FireAlarmRequest:FireServer()
+end
 
 ------------- SERVER -------------
 
@@ -242,7 +287,7 @@ function self:ServerAwake()
             playerQueue.value = _tempQueue
 
             --Enable the Player Controller
-            ReEnableEvent:FireClient(_tempPlayer)
+            ReEnableEvent:FireClient(_tempPlayer, _tempPlayer)
         end
     end
 
@@ -290,6 +335,9 @@ function self:ServerAwake()
         moveEvent:FireAllClients(player, pos)
     end)
 
+    ---- Handle Special Action Requests ----
+
+    ---- Send the person behind you all the back in the queue
     FartRequest:Connect(function(player)
         print("Farting")
         local _playerWallet = players[player].wallet.value
@@ -322,9 +370,46 @@ function self:ServerAwake()
         playerQueue.value = _tempQueue
     end)
 
+    ---- Add all the players not in queue to the back of the queue
+    FartBombRequest:Connect(function(player)
+
+        local _playerWallet = players[player].wallet.value
+        if _playerWallet < fartBombCost then
+            return
+        end
+        players[player].wallet.value = _playerWallet - fartBombCost
+
+        local _tempQueue = playerQueue.value
+
+        for key, value in pairs(players) do
+            if typeof(key) == "Player" then
+                -- If not in queue, add to the back
+                if not IsInLine(key) then
+                    print("Adding " .. key.name .. " to the back of the queue")
+                    table.insert(_tempQueue, key)
+                end
+
+            end
+        end
+
+        playerQueue.value = _tempQueue
+        FartBombEvent:FireAllClients()
+
+    end)
+
+end
+
+function IsInLine(player) : boolean
+    for key, value in ipairs(playerQueue.value) do
+        if value == player then
+            return true
+        end
+    end
+    return false
 end
 
 function IncrementMoney(player)
+    if not IsInLine(player) then return end
     local playerinfo = players[player]
     playerinfo.wallet.value = playerinfo.wallet.value + (playerinfo.incomeRate.value * 10)
 end

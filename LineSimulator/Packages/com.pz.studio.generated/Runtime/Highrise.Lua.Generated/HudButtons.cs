@@ -28,6 +28,14 @@ namespace Highrise.Lua.Generated
         [SerializeField] public System.Collections.Generic.List<UnityEngine.Texture> m_buttonIcons = default;
         [LuaScriptPropertyAttribute("475196c2905476841b34b4cc6e015986")]
         [SerializeField] public UnityEngine.Object m_fartCloudData = default;
+        [LuaScriptPropertyAttribute("475196c2905476841b34b4cc6e015986")]
+        [SerializeField] public UnityEngine.Object m_fartBombData = default;
+        [LuaScriptPropertyAttribute("475196c2905476841b34b4cc6e015986")]
+        [SerializeField] public UnityEngine.Object m_fireAlarmData = default;
+        [LuaScriptPropertyAttribute("475196c2905476841b34b4cc6e015986")]
+        [SerializeField] public UnityEngine.Object m_toiletPartyData = default;
+        [LuaScriptPropertyAttribute("475196c2905476841b34b4cc6e015986")]
+        [SerializeField] public UnityEngine.Object m_poopHeadData = default;
 
         protected override SerializedPropertyValue[] SerializeProperties()
         {
@@ -38,9 +46,13 @@ namespace Highrise.Lua.Generated
             {
                 CreateSerializedProperty(_script.GetPropertyAt(0), m_buttonIcons),
                 CreateSerializedProperty(_script.GetPropertyAt(1), m_fartCloudData),
-                CreateSerializedProperty(_script.GetPropertyAt(2), null),
-                CreateSerializedProperty(_script.GetPropertyAt(3), null),
-                CreateSerializedProperty(_script.GetPropertyAt(4), null),
+                CreateSerializedProperty(_script.GetPropertyAt(2), m_fartBombData),
+                CreateSerializedProperty(_script.GetPropertyAt(3), m_fireAlarmData),
+                CreateSerializedProperty(_script.GetPropertyAt(4), m_toiletPartyData),
+                CreateSerializedProperty(_script.GetPropertyAt(5), m_poopHeadData),
+                CreateSerializedProperty(_script.GetPropertyAt(6), null),
+                CreateSerializedProperty(_script.GetPropertyAt(7), null),
+                CreateSerializedProperty(_script.GetPropertyAt(8), null),
             };
         }
     }

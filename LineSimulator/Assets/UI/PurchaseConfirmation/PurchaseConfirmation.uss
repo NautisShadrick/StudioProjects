@@ -85,6 +85,18 @@
 .fart_icon {
     background-image: url("project://database/Assets/UI/Icons/fart_icon.png");
 }
+.fart_bomb {
+    background-image: url("project://database/Assets/UI/Icons/bomb_icon.png");
+}
+.fire_alarm {
+    background-image: url("project://database/Assets/UI/Icons/fire_icon.png");
+}
+.toilet_party {
+    background-image: url("project://database/Assets/UI/Icons/toilet_icon.png");
+}
+.poop_head {
+    background-image: url("project://database/Assets/UI/Icons/poop_icon.png");
+}
 
 #exit {
     position: absolute;

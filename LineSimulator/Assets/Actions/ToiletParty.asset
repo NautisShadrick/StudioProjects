@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd8e96172a8b7651a1ebb419d4de5953, type: 3}
+  m_Name: ToiletParty
+  m_EditorClassIdentifier: 
+  _script: {fileID: -974389366465450183, guid: 475196c2905476841b34b4cc6e015986, type: 3}
+  _networkId: 3850142490
+  _properties: []
+  m_Title: Toilet Party!
+  m_Description: Call a Toilet Party!! Everyone in Line gets into Potty Rise!
+  m_Price: 2000
+  m_IconID: toilet_party
+  m_ActionID: action_toilet
+  references:
+    version: 2
+    RefIds: []

@@ -28,7 +28,6 @@ namespace Highrise.Lua.Generated
         [SerializeField] public UnityEngine.GameObject m_ActionButtonOBJ = default;
         [SerializeField] public UnityEngine.GameObject m_HudButtonsOBJ = default;
         [SerializeField] public UnityEngine.GameObject m_PurchaseConfirmationOBJ = default;
-        [SerializeField] public UnityEngine.ScriptableObject m_testData = default;
 
         protected override SerializedPropertyValue[] SerializeProperties()
         {
@@ -40,7 +39,6 @@ namespace Highrise.Lua.Generated
                 CreateSerializedProperty(_script.GetPropertyAt(0), m_ActionButtonOBJ),
                 CreateSerializedProperty(_script.GetPropertyAt(1), m_HudButtonsOBJ),
                 CreateSerializedProperty(_script.GetPropertyAt(2), m_PurchaseConfirmationOBJ),
-                CreateSerializedProperty(_script.GetPropertyAt(3), m_testData),
             };
         }
     }

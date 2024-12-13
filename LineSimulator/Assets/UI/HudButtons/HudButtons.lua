@@ -5,6 +5,14 @@ local buttonIcons : {Texture} = nil
 
 --!SerializeField
 local fartCloudData: ItemUITemplate = nil
+--!SerializeField
+local fartBombData: ItemUITemplate = nil
+--!SerializeField
+local fireAlarmData: ItemUITemplate = nil
+--!SerializeField
+local toiletPartyData: ItemUITemplate = nil
+--!SerializeField
+local poopHeadData: ItemUITemplate = nil
 
 --!Bind
 local hud_buttons: UILuaView = nil
@@ -17,7 +25,11 @@ local uiManager = require("UIManager")
 
 function self:Start()
     
-    function CreateHudButton(iconID:string, cost:number, side: string, callback: () -> ())
+    function CreateHudButton(actionData: ItemUITemplate, side: string)
+
+        local iconID = actionData.GetIconID()
+        local cost = actionData.GetPrice()
+
         local _buttonContainer = VisualElement.new()
         _buttonContainer:AddToClassList("button-container")
     
@@ -41,16 +53,17 @@ function self:Start()
     
         _buttonContainer:AddToClassList(side .. "-side")
     
-        _buttonContainer:RegisterPressCallback(callback)
+        _buttonContainer:RegisterPressCallback(function()
+            uiManager.ShowConfirmationPopup(actionData.GetTitle(), actionData.GetDescription(), actionData.GetPrice(), actionData.GetIconID(), actionData.GetActionID())
+        end)
     
         return _buttonContainer
     end
 
-    CreateHudButton(fartCloudData.GetIconID(), fartCloudData.GetPrice(), "right", function()
-        uiManager.ShowConfirmationPopup(fartCloudData.GetTitle(), fartCloudData.GetDescription(), fartCloudData.GetPrice(), fartCloudData.GetIconID(), fartCloudData.GetActionID())
-    end)
+    CreateHudButton(fartCloudData, "right")
+    CreateHudButton(fartBombData, "right")
+    CreateHudButton(poopHeadData, "right")
 
-    --CreateHudButton("", 200, "right", function() print("Two") end)
-    --CreateHudButton("", 350, "right", function() print("Three") end)
-    --CreateHudButton("", 500, "right", function() print("Four") end)
+    CreateHudButton(fireAlarmData, "right")
+    CreateHudButton(toiletPartyData, "right")
 end
