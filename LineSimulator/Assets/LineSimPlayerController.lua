@@ -331,10 +331,12 @@ local function HandleTapOnTapHandler(playerInfo: PlayerInfo, handler : TapHandle
 	-- If within range then perform it now
 	if Vector3.Distance(targetPosition, character.transform.position) <= handler.distance then
 		if anchor and handler.moveTo then
+			if not options.enabled then return end
 			LocalMoveTo(character, targetPosition, -1, handler.distance, anchor)   
 		end
 		handler:Perform()
 	elseif handler.moveTo then
+		if not options.enabled then return end
 		-- Move the character to the handler and perform the action when arriving
 		LocalMoveTo(character, targetPosition, -1, handler.distance, anchor, function(character)
 			handler:Perform()

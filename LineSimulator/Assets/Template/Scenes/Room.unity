@@ -18996,12 +18996,12 @@ MonoBehaviour:
   m_fartSounds:
   - {fileID: 11400000, guid: 09446ad2df1ca71459d96fc8d368d455, type: 2}
   - {fileID: 11400000, guid: 683101fa43611ea41b215a3f378514c3, type: 2}
-  m_fartBombCost: 1000
+  m_fartBombCost: 2000
   m_fartBombParticle: {fileID: 4706965720063940025, guid: fc8ea3fbb65d2394bb1095a3eabec076,
     type: 3}
   m_fartBombSounds:
   - {fileID: 11400000, guid: 37cda37d03305544fbba10112dde0662, type: 2}
-  m_toiletPartyCost: 1000
+  m_toiletPartyCost: 2000
   m_toiletPartyParticle: {fileID: 4706965720063940025, guid: 040471fb7d309d2499016bddcc76c565,
     type: 3}
   m_toiletPartySounds:

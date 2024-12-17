@@ -332,7 +332,7 @@ function self:ServerAwake()
         table.insert(_tempQueue, player)
         playerQueue.value = _tempQueue
 
-        IncomeTimersByPlayer[player] = Timer.Every(0.25, function()
+        IncomeTimersByPlayer[player] = Timer.Every(0.1, function()
             IncrementMoney(player)
         end)
     end

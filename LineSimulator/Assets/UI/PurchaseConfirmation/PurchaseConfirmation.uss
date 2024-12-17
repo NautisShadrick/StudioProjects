@@ -107,3 +107,7 @@
     background-image: url("project://database/Assets/UI/Icons/Close@2x.png");
     cursor: pointer;
 }
+
+.disabled {
+    opacity: 0.5;
+}

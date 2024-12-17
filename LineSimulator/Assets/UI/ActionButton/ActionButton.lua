@@ -41,7 +41,7 @@ function self:Awake()
     end)
     GameManager.UpdateTimerEvent:Connect(function(timer)
         if GameManager.GetPlace() > 1 then return end
-        button_label.text = "Toilet Time: " .. tostring(timer)
+        button_label.text = "Party in: " .. tostring(timer)
         action_button_main:EnableInClassList("disabled", not CheckWallet())
     end)
 
