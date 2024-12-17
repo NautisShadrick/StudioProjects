@@ -85,6 +85,8 @@ end
 -- Private
 -------------------------------------------------------------------------------
 
+local danceFloorController = require("DanceFloorController")
+
 local moveRequest = Event.new("MoveRequest")
 local moveEvent = Event.new("MoveEvent")
 local emoteRequest = Event.new("EmoteRequest")
@@ -268,6 +270,7 @@ local function LocalMoveTo(
 
 		ShowMovementIndicator(indicatorPosition)
 		moveRequest:FireServer(character.destination, anchor)
+		danceFloorController.ReSyncRequest()
 	end
 
 	return moved

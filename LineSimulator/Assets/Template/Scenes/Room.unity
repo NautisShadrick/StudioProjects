@@ -18996,12 +18996,12 @@ MonoBehaviour:
   m_fartSounds:
   - {fileID: 11400000, guid: 09446ad2df1ca71459d96fc8d368d455, type: 2}
   - {fileID: 11400000, guid: 683101fa43611ea41b215a3f378514c3, type: 2}
-  m_fartBombCost: 2000
+  m_fartBombCost: 1500
   m_fartBombParticle: {fileID: 4706965720063940025, guid: fc8ea3fbb65d2394bb1095a3eabec076,
     type: 3}
   m_fartBombSounds:
   - {fileID: 11400000, guid: 37cda37d03305544fbba10112dde0662, type: 2}
-  m_toiletPartyCost: 2000
+  m_toiletPartyCost: 1500
   m_toiletPartyParticle: {fileID: 4706965720063940025, guid: 040471fb7d309d2499016bddcc76c565,
     type: 3}
   m_toiletPartySounds:
@@ -26397,6 +26397,83 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1947621217}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1949311276
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1949311277}
+  - component: {fileID: 1949311278}
+  - component: {fileID: 1949311279}
+  m_Layer: 7
+  m_Name: DanceFloorTrigger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1949311277
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1949311276}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 14.27, y: 7.5, z: 2}
+  m_LocalScale: {x: 7, y: 1, z: 7}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1949311278
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1949311276}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1949311279
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1949311276}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9fc3f5c240a9e71026fc7c12b1fa7d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _networkId: 0
+  _script: {fileID: -974389366465450183, guid: 43233f899ed59ea4b8b0c71491c0a700, type: 3}
+  _properties: []
+  _uiOutput: 0
+  _uiOutputSettings:
+    rid: -2
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
 --- !u!1001 &1949715214
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -29330,3 +29407,4 @@ SceneRoots:
   - {fileID: 383699691}
   - {fileID: 65554724}
   - {fileID: 1273065508}
+  - {fileID: 1949311277}
