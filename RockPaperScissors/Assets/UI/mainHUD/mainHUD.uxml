@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UXML
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="UnityEngine.UIElements"
+    xmlns:hr="Highrise.UI"
+    xmlns:editor="UnityEditor.UIElements"
+    xsi:noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd"
+>
+
+  <hr:UILuaView class="main-h-u-d" picking-mode="Ignore">
+    <VisualElement name="buttons_container" class="hidden">
+      <VisualElement name="button1" class="action-button"/>
+      <VisualElement name="button2" class="action-button"/>
+      <VisualElement name="button3" class="action-button"/>
+    </VisualElement>
+
+    <VisualElement name="response_button" class="hidden">
+      <Label name="response_label" text="Accept Challenge"/>
+    </VisualElement>
+
+  </hr:UILuaView>
+
+</UXML>

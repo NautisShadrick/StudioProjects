@@ -1,0 +1,53 @@
+{
+  "IncludeFallbacks": false,
+  "Clothing": [
+    {
+      "Id": "body-flesh",
+      "Color": 0
+    },
+    {
+      "Id": "eye-n_basic2018malesquaresleepy",
+      "Color": 0
+    },
+    {
+      "Id": "shirt-n_room32019denimjackethoodie",
+      "Color": 0
+    },
+    {
+      "Id": "handbag-n_room32019skateboardcamo",
+      "Color": 0
+    },
+    {
+      "Id": "mouth-basic2018chippermouth",
+      "Color": 0
+    },
+    {
+      "Id": "hair_front-n_malenew05",
+      "Color": 0
+    },
+    {
+      "Id": "hair_back-n_malenew05",
+      "Color": 0
+    },
+    {
+      "Id": "nose-n_basic2018newnose05",
+      "Color": 0
+    },
+    {
+      "Id": "eyebrow-n_basic2018newbrows07",
+      "Color": 0
+    },
+    {
+      "Id": "freckle-n_basic2018freckle04",
+      "Color": 0
+    },
+    {
+      "Id": "pants-n_starteritems2019cuffedjeanswhite",
+      "Color": 0
+    },
+    {
+      "Id": "shoes-n_room32019socksneakersgrey",
+      "Color": 0
+    }
+  ]
+}
