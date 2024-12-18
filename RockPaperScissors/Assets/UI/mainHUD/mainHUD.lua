@@ -29,5 +29,19 @@ response_button:RegisterPressCallback(function()
     print("response_button pressed")
 end)
 
+function SetState(state:string)
+    if state == "options" then
+        print("Setting state to options")
+        buttons_container:EnableInClassList("hidden", false)
+        response_button:EnableInClassList("hidden", true)
+    elseif state == "response" then
+        buttons_container:EnableInClassList("hidden", true)
+        response_button:EnableInClassList("hidden", false)
+    else
+        buttons_container:EnableInClassList("hidden", true)
+        response_button:EnableInClassList("hidden", true)
+    end
+end
+
 function self:Awake()
 end
