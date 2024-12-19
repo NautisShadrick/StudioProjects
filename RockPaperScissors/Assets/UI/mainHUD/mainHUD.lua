@@ -13,35 +13,79 @@ local button3: VisualElement = nil
 --!Bind
 local response_button: VisualElement = nil
 
-button1:RegisterPressCallback(function()
-    print("button1 pressed")
-end)
+local enabled = true
 
-button2:RegisterPressCallback(function()
-    print("button2 pressed")
-end)
+local gameManager = require("GameManager")
 
-button3:RegisterPressCallback(function()
-    print("button3 pressed")
-end)
+function self:Awake()
+end
 
-response_button:RegisterPressCallback(function()
-    print("response_button pressed")
-end)
+function DisableOptions()
+    enabled = false
+    buttons_container:EnableInClassList("disabled", true)
+end
 
-function SetState(state:string)
-    if state == "options" then
+function EnableOptions()
+    enabled = true
+    buttons_container:EnableInClassList("disabled", false)
+end
+
+function HideButtons()
+    buttons_container:EnableInClassList("hidden", true)
+end
+
+function SetState(state:number)
+    if state == 1 then
+        EnableOptions()
         print("Setting state to options")
         buttons_container:EnableInClassList("hidden", false)
         response_button:EnableInClassList("hidden", true)
-    elseif state == "response" then
+        gameManager.localPlayerIsResponding = false
+
+    elseif state == 2 then
+        EnableOptions()
         buttons_container:EnableInClassList("hidden", true)
         response_button:EnableInClassList("hidden", false)
+        gameManager.localPlayerIsResponding = true
+
+    elseif state == 3 then
+        EnableOptions()
+        buttons_container:EnableInClassList("hidden", false)
+        response_button:EnableInClassList("hidden", true)
     else
         buttons_container:EnableInClassList("hidden", true)
         response_button:EnableInClassList("hidden", true)
     end
 end
 
-function self:Awake()
-end
+button1:RegisterPressCallback(function()
+    if not enabled then return end
+
+    if not gameManager.localPlayerIsResponding then
+        gameManager.SendChallenge(1)
+    else
+        gameManager.SendResponse(1)
+    end
+end)
+
+button2:RegisterPressCallback(function()
+    if not enabled then return end
+    if not gameManager.localPlayerIsResponding then
+        gameManager.SendChallenge(2)
+    else
+        gameManager.SendResponse(2)
+    end
+end)
+
+button3:RegisterPressCallback(function()
+    if not enabled then return end
+    if not gameManager.localPlayerIsResponding then
+        gameManager.SendChallenge(3)
+    else
+        gameManager.SendResponse(3)
+    end
+end)
+
+response_button:RegisterPressCallback(function()
+    SetState(3)
+end)

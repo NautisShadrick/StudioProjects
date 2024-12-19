@@ -41,7 +41,7 @@ function self:ClientAwake()
 
         playerinfo.isReady.Changed:Connect(function()
             print("Player " .. player.name .. " is ready: " .. tostring(playerinfo.isReady.Value))
-            myIndicator:SetActive(playerinfo.isReady.value)
+            myIndicator:SetActive(not playerinfo.isReady.value)
         end)
     end
 

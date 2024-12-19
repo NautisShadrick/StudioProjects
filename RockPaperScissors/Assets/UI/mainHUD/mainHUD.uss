@@ -1,5 +1,9 @@
 :root {
-  --font-muesou-900: url("project://database/Assets/UI/Fonts/MuseoSansRounded1000 SDF.asset");
+    --font-muesou-900: url("project://database/Assets/UI/Fonts/MuseoSansRounded1000 SDF.asset");
+    --rock-image: url("project://database/Assets/UI/Icons/Rock_icon.png");
+    --paper-image: url("project://database/Assets/UI/Icons/Paper_icon.png");
+    --scissors-image: url("project://database/Assets/UI/Icons/Scissors_icon.png");
+    --Go-image: url("project://database/Assets/UI/Icons/Go_icon.png");
 }
 
 .main-h-u-d {
@@ -13,7 +17,6 @@
 .action-button {
     width: 80px;
     height: 80px;
-    background-color: white;
 
     border-radius: 50%;
 }
@@ -57,4 +60,18 @@
 
 .hidden {
     display: none;
+}
+
+.disabled {
+    opacity: 0.5;
+}
+
+#button1 {
+    background-image: var(--rock-image);
+}
+#button2 {
+    background-image: var(--paper-image);
+}
+#button3 {
+    background-image: var(--scissors-image);
 }

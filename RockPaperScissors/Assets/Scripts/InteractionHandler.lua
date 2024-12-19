@@ -2,11 +2,19 @@
 
 local gameManager = require("GameManager")
 
+local tappedPlayer = nil
+
 function self:ClientAwake()
     local tapHandler = self.gameObject:GetComponent(TapHandler)
-    print("Got handler")
+
     tapHandler.Tapped:Connect(function()
-        print("Tapped")
-        gameManager.StartChallenge()
+        if gameManager.localPlayerIsResponding then return end
+        if tappedPlayer == nil then print(" I DONT HAVE A PLAYER"); return end
+        gameManager.StartChallenge(tappedPlayer)
     end)
+
+end
+
+function self:ClientStart()
+    tappedPlayer = self.gameObject.transform.parent.gameObject:GetComponent(Character).player
 end
