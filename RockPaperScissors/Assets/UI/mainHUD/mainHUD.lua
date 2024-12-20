@@ -32,6 +32,7 @@ end
 
 function HideButtons()
     buttons_container:EnableInClassList("hidden", true)
+    response_button:EnableInClassList("hidden", true)
 end
 
 function SetState(state:number)
@@ -88,4 +89,5 @@ end)
 
 response_button:RegisterPressCallback(function()
     SetState(3)
+    gameManager.UpdateBusy(true)
 end)

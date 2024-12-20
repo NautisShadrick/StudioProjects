@@ -9,6 +9,8 @@ local paperEffect: GameObject = nil
 --!SerializeField
 local scissorsEffect: GameObject = nil
 
+local updateStatus = Event.new("UpdateStatus")
+
 local SendChallengeRequest = Event.new("SendChallengeRequest")
 local RecieveChallengeRequest = Event.new("RecieveChallengeRequest")
 local SendResponseRequest = Event.new("SendResponseRequest")
@@ -33,6 +35,7 @@ function self:ClientAwake()
         if client.localPlayer == challengerPlayer or client.localPlayer == respondingPlayer then
             uiManager.ResetGame()
             localPlayerIsResponding = false
+            UpdateBusy(false)
         end
 
         local _winningPlayer:Player = winner == 1 and challengerPlayer or winner == 2 and respondingPlayer or nil
@@ -81,13 +84,27 @@ function StartChallenge(targetPlayer: Player)
     uiManager.ShowOptions()
 end
 
+local pendingTimer = nil
+
 function SendChallenge(challengeID: number)
+    UpdateBusy(true)
     SendChallengeRequest:FireServer(currentTargetPlayer, challengeID)
     uiManager.DisableOptions()
+    -- After pending time cancel and reset
+    if pendingTimer then pendingTimer:Stop() end
+    pendingTimer = Timer.After(5, function()
+        uiManager.ResetGame()
+        UpdateBusy(false)
+        localPlayerIsResponding = false
+    end)
 end
 
 function SendResponse(responseID: number)
     SendResponseRequest:FireServer(currentChallengerPlayer, responseID)
+end
+
+function UpdateBusy(Busy: boolean)
+    updateStatus:FireServer(Busy)
 end
 
 
@@ -107,6 +124,10 @@ function self:ServerAwake()
 
     server.PlayerDisconnected:Connect(function(player)
         challengeIDbyPlayer[player] = nil
+    end)
+
+    updateStatus:Connect(function(player, Busy)
+        playerTracker.players[player].isReady.value = not Busy
     end)
 end
 
