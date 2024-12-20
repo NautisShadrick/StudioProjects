@@ -25,6 +25,10 @@ namespace Highrise.Lua.Generated
         private const string s_scriptGUID = "569067bf74c210d4f8075272b08f2ed3";
         public override string ScriptGUID => s_scriptGUID;
 
+        [SerializeField] public UnityEngine.GameObject m_rockEffect = default;
+        [SerializeField] public UnityEngine.GameObject m_bloodParticle = default;
+        [SerializeField] public UnityEngine.GameObject m_paperEffect = default;
+        [SerializeField] public UnityEngine.GameObject m_scissorsEffect = default;
 
         protected override SerializedPropertyValue[] SerializeProperties()
         {
@@ -33,6 +37,10 @@ namespace Highrise.Lua.Generated
 
             return new SerializedPropertyValue[]
             {
+                CreateSerializedProperty(_script.GetPropertyAt(0), m_rockEffect),
+                CreateSerializedProperty(_script.GetPropertyAt(1), m_bloodParticle),
+                CreateSerializedProperty(_script.GetPropertyAt(2), m_paperEffect),
+                CreateSerializedProperty(_script.GetPropertyAt(3), m_scissorsEffect),
             };
         }
     }

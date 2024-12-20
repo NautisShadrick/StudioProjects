@@ -1,5 +1,14 @@
 --!Type(Module)
 
+--!SerializeField
+local rockEffect: GameObject = nil
+--!SerializeField
+local bloodParticle: GameObject = nil
+--!SerializeField
+local paperEffect: GameObject = nil
+--!SerializeField
+local scissorsEffect: GameObject = nil
+
 local SendChallengeRequest = Event.new("SendChallengeRequest")
 local RecieveChallengeRequest = Event.new("RecieveChallengeRequest")
 local SendResponseRequest = Event.new("SendResponseRequest")
@@ -25,6 +34,45 @@ function self:ClientAwake()
             uiManager.ResetGame()
             localPlayerIsResponding = false
         end
+
+        local _winningPlayer:Player = winner == 1 and challengerPlayer or winner == 2 and respondingPlayer or nil
+        local _losingPlayer:Player = winner == 1 and respondingPlayer or winner == 2 and challengerPlayer or nil
+        
+        if _winningPlayer then _winningPlayer.character:PlayEmote("emote-happy", 1.5, false) end
+        if _losingPlayer then
+            -- Play emote based on winning action
+            print(winningActionID)
+            if winningActionID == 1 then
+                --- Play Rock Animations
+                Timer.After(0.2, function()
+                    _losingPlayer.character:PlayEmote("emote-death2", 2, false)
+                    local _bloodParticle = GameObject.Instantiate(bloodParticle)
+                    _bloodParticle.transform.position = _losingPlayer.character.gameObject.transform.position + Vector3.new(0, 2, 0)
+                end)
+                local rockEffectInstance = GameObject.Instantiate(rockEffect)
+                rockEffectInstance.transform.position = _losingPlayer.character.gameObject.transform.position
+                GameObject.Destroy(rockEffectInstance, 2)
+
+            elseif winningActionID == 2 then
+                --- Play Paper Animations
+                local paperEffectInstance = GameObject.Instantiate(paperEffect)
+                paperEffectInstance.transform.position = _losingPlayer.character.gameObject.transform.position
+
+                _losingPlayer.character:PlayEmote("emote-gravity", 2, false)
+
+            elseif winningActionID == 3 then
+                --- Play Scissors Animations
+                _losingPlayer.character:PlayEmote("emote-apart", 1.5, false)
+                Timer.After(.8, function()
+                    local _bloodParticle = GameObject.Instantiate(bloodParticle)
+                    _bloodParticle.transform.position = _losingPlayer.character.gameObject.transform.position + Vector3.new(0, 2, 0)
+                end)
+                local scissorsEffectInstance = GameObject.Instantiate(scissorsEffect)
+                scissorsEffectInstance.transform.position = _losingPlayer.character.gameObject.transform.position
+                GameObject.Destroy(scissorsEffectInstance, 2)
+            end
+        end
+
     end)
 end
 
