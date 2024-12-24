@@ -19,7 +19,7 @@ local CompleteGameEvent = Event.new("CompleteGameEvent")
 local uiManager = require("UIManager")
 local playerTracker = require("PlayerTracker")
 
-local currentTargetPlayer = nil
+currentTargetPlayer = nil
 currentChallengerPlayer = nil
 
 local responsePendingTimer = nil
@@ -78,10 +78,7 @@ function self:ClientAwake()
         uiManager.ShowResponse()
         if responsePendingTimer then responsePendingTimer:Stop() end
         responsePendingTimer = Timer.After(5, function()
-            uiManager.ResetGame()
-            localPlayerIsResponding = false
-            currentChallengerPlayer = nil
-            UpdateBusy(false)
+            ResetGame()
         end)
     end)
 
@@ -117,6 +114,14 @@ function self:ClientAwake()
         end
 
     end)
+end
+
+function ResetGame()
+    uiManager.ResetGame()
+    localPlayerIsResponding = false
+    currentChallengerPlayer = nil
+    currentTargetPlayer = nil
+    UpdateBusy(false)
 end
 
 function StartChallenge(targetPlayer: Player)

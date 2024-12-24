@@ -45,6 +45,10 @@ function self:ClientAwake()
             print("Player " .. player.name .. " is ready: " .. tostring(playerinfo.isReady.value))
             _myIndicator:SetActive(not playerinfo.isReady.value)
             if playerinfo.isReady.value then _myChallengeIndicator:SetActive(false) end
+            if not playerinfo.isReady.value and gameManger.currentTargetPlayer == player then
+                gameManger.currentTargetPlayer = nil
+                gameManger.ResetGame()
+            end
         end)
     end
 
