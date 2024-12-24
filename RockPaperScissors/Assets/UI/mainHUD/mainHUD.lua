@@ -42,15 +42,10 @@ function SetState(state:number)
         buttons_container:EnableInClassList("hidden", false)
         response_button:EnableInClassList("hidden", true)
         gameManager.localPlayerIsResponding = false
-
     elseif state == 2 then
         EnableOptions()
-        buttons_container:EnableInClassList("hidden", true)
-        response_button:EnableInClassList("hidden", false)
+        gameManager.UpdateBusy(true)
         gameManager.localPlayerIsResponding = true
-
-    elseif state == 3 then
-        EnableOptions()
         buttons_container:EnableInClassList("hidden", false)
         response_button:EnableInClassList("hidden", true)
     else
@@ -85,9 +80,4 @@ button3:RegisterPressCallback(function()
     else
         gameManager.SendResponse(3)
     end
-end)
-
-response_button:RegisterPressCallback(function()
-    SetState(3)
-    gameManager.UpdateBusy(true)
 end)

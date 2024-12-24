@@ -1,5 +1,6 @@
 --!Type(Module)
 
+local gameManger = require("GameManager")
 --local uiManager = require("UIManager")
 players = {}
 local playercount = 0
@@ -37,11 +38,13 @@ function self:ClientAwake()
         local player = playerinfo.player
         local character = playerinfo.player.character
 
-        local myIndicator = character.gameObject.transform:GetChild(1).gameObject
+        local _myIndicator = character.gameObject.transform:GetChild(1).gameObject
+        local _myChallengeIndicator = character.gameObject.transform:GetChild(2).gameObject
 
         playerinfo.isReady.Changed:Connect(function()
-            print("Player " .. player.name .. " is ready: " .. tostring(playerinfo.isReady.Value))
-            myIndicator:SetActive(not playerinfo.isReady.value)
+            print("Player " .. player.name .. " is ready: " .. tostring(playerinfo.isReady.value))
+            _myIndicator:SetActive(not playerinfo.isReady.value)
+            if playerinfo.isReady.value then _myChallengeIndicator:SetActive(false) end
         end)
     end
 

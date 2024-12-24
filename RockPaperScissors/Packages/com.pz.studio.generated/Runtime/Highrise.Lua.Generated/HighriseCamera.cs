@@ -18,11 +18,11 @@ using Highrise.Lua;
 
 namespace Highrise.Lua.Generated
 {
-    [AddComponentMenu("Lua/RTSCamera")]
-    [LuaRegisterType(0x98701db57e52a0cf, typeof(LuaBehaviour))]
-    public class RTSCamera : LuaBehaviourThunk
+    [AddComponentMenu("Lua/HighriseCamera")]
+    [LuaRegisterType(0x94c93fb0918d8887, typeof(LuaBehaviour))]
+    public class HighriseCamera : LuaBehaviourThunk
     {
-        private const string s_scriptGUID = "5bf9b46e92aad47ed9faec56891fc6e3";
+        private const string s_scriptGUID = "cf12d0dbbd40b47938ef05a0810adfda";
         public override string ScriptGUID => s_scriptGUID;
 
         [Header("Zoom Settings")]
@@ -31,7 +31,6 @@ namespace Highrise.Lua.Generated
         [SerializeField] public System.Double m_zoomMax = 50;
         [SerializeField] public System.Double m_fov = 30;
         [Header("Defaults")]
-        [SerializeField] public System.Boolean m_allowRotation = true;
         [SerializeField] public System.Double m_pitch = 30;
         [SerializeField] public System.Double m_yaw = 45;
         [SerializeField] public System.Boolean m_centerOnCharacterWhenSpawned = true;
@@ -53,14 +52,13 @@ namespace Highrise.Lua.Generated
                 CreateSerializedProperty(_script.GetPropertyAt(1), m_zoomMin),
                 CreateSerializedProperty(_script.GetPropertyAt(2), m_zoomMax),
                 CreateSerializedProperty(_script.GetPropertyAt(3), m_fov),
-                CreateSerializedProperty(_script.GetPropertyAt(4), m_allowRotation),
-                CreateSerializedProperty(_script.GetPropertyAt(5), m_pitch),
-                CreateSerializedProperty(_script.GetPropertyAt(6), m_yaw),
-                CreateSerializedProperty(_script.GetPropertyAt(7), m_centerOnCharacterWhenSpawned),
-                CreateSerializedProperty(_script.GetPropertyAt(8), m_centerOnCharacterWhenMovingSpeed),
-                CreateSerializedProperty(_script.GetPropertyAt(9), m_orthographic),
-                CreateSerializedProperty(_script.GetPropertyAt(10), m_keepPlayerInView),
-                CreateSerializedProperty(_script.GetPropertyAt(11), m_keepPlayerInViewPanDuration),
+                CreateSerializedProperty(_script.GetPropertyAt(4), m_pitch),
+                CreateSerializedProperty(_script.GetPropertyAt(5), m_yaw),
+                CreateSerializedProperty(_script.GetPropertyAt(6), m_centerOnCharacterWhenSpawned),
+                CreateSerializedProperty(_script.GetPropertyAt(7), m_centerOnCharacterWhenMovingSpeed),
+                CreateSerializedProperty(_script.GetPropertyAt(8), m_orthographic),
+                CreateSerializedProperty(_script.GetPropertyAt(9), m_keepPlayerInView),
+                CreateSerializedProperty(_script.GetPropertyAt(10), m_keepPlayerInViewPanDuration),
             };
         }
     }

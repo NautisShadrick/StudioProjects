@@ -20,15 +20,69 @@ local uiManager = require("UIManager")
 local playerTracker = require("PlayerTracker")
 
 local currentTargetPlayer = nil
-local currentChallengerPlayer = nil
+currentChallengerPlayer = nil
+
+local responsePendingTimer = nil
+local pendingTimer = nil
+
+
 
 localPlayerIsResponding = false
 
 -------- CLIENT --------
+
+function PlayLosingAnimation(_losingPlayer: Player, winningActionID: number)
+    -- Play emote based on winning action
+    print(winningActionID)
+    if winningActionID == 1 then
+        --- Play Rock Animations
+        Timer.After(0.2, function()
+            _losingPlayer.character:PlayEmote("emote-death2", 2, false)
+            local _bloodParticle = GameObject.Instantiate(bloodParticle)
+            _bloodParticle.transform.position = _losingPlayer.character.gameObject.transform.position + Vector3.new(0, 2, 0)
+        end)
+        local rockEffectInstance = GameObject.Instantiate(rockEffect)
+        rockEffectInstance.transform.position = _losingPlayer.character.gameObject.transform.position
+        GameObject.Destroy(rockEffectInstance, 2)
+
+    elseif winningActionID == 2 then
+        --- Play Paper Animations
+        local paperEffectInstance = GameObject.Instantiate(paperEffect)
+        paperEffectInstance.transform.position = _losingPlayer.character.gameObject.transform.position
+
+        _losingPlayer.character:PlayEmote("emote-gravity", 2, false)
+
+    elseif winningActionID == 3 then
+        --- Play Scissors Animations
+        _losingPlayer.character:PlayEmote("emote-apart", 1.5, false)
+        Timer.After(.8, function()
+            local _bloodParticle = GameObject.Instantiate(bloodParticle)
+            _bloodParticle.transform.position = _losingPlayer.character.gameObject.transform.position + Vector3.new(0, 2, 0)
+        end)
+        local scissorsEffectInstance = GameObject.Instantiate(scissorsEffect)
+        scissorsEffectInstance.transform.position = _losingPlayer.character.gameObject.transform.position
+        GameObject.Destroy(scissorsEffectInstance, 2)
+    end
+end
+
 function self:ClientAwake()
     RecieveChallengeRequest:Connect(function(challengerPlayer)
         currentChallengerPlayer = challengerPlayer
+
+        local _challengeIndicator = challengerPlayer.character.gameObject.transform:GetChild(2).gameObject
+        _challengeIndicator:SetActive(true)
+
+        local _busyIndicator = challengerPlayer.character.gameObject.transform:GetChild(1).gameObject
+        _busyIndicator:SetActive(false)
+
         uiManager.ShowResponse()
+        if responsePendingTimer then responsePendingTimer:Stop() end
+        responsePendingTimer = Timer.After(5, function()
+            uiManager.ResetGame()
+            localPlayerIsResponding = false
+            currentChallengerPlayer = nil
+            UpdateBusy(false)
+        end)
     end)
 
     CompleteGameEvent:Connect(function(challengerPlayer, respondingPlayer, winner, winningActionID)
@@ -36,44 +90,30 @@ function self:ClientAwake()
             uiManager.ResetGame()
             localPlayerIsResponding = false
             UpdateBusy(false)
+
+            local _challengeIndicator = challengerPlayer.character.gameObject.transform:GetChild(2).gameObject
+            _challengeIndicator:SetActive(false)
+            currentChallengerPlayer = nil
+
+            if responsePendingTimer then responsePendingTimer:Stop(); responsePendingTimer = nil end
+            if pendingTimer then pendingTimer:Stop(); pendingTimer = nil end
         end
+
+        local _isDraw = false
 
         local _winningPlayer:Player = winner == 1 and challengerPlayer or winner == 2 and respondingPlayer or nil
         local _losingPlayer:Player = winner == 1 and respondingPlayer or winner == 2 and challengerPlayer or nil
+
+        if not _winningPlayer and not _losingPlayer then _isDraw = true end
         
         if _winningPlayer then _winningPlayer.character:PlayEmote("emote-happy", 1.5, false) end
         if _losingPlayer then
-            -- Play emote based on winning action
-            print(winningActionID)
-            if winningActionID == 1 then
-                --- Play Rock Animations
-                Timer.After(0.2, function()
-                    _losingPlayer.character:PlayEmote("emote-death2", 2, false)
-                    local _bloodParticle = GameObject.Instantiate(bloodParticle)
-                    _bloodParticle.transform.position = _losingPlayer.character.gameObject.transform.position + Vector3.new(0, 2, 0)
-                end)
-                local rockEffectInstance = GameObject.Instantiate(rockEffect)
-                rockEffectInstance.transform.position = _losingPlayer.character.gameObject.transform.position
-                GameObject.Destroy(rockEffectInstance, 2)
+            PlayLosingAnimation(_losingPlayer, winningActionID)
+        end
 
-            elseif winningActionID == 2 then
-                --- Play Paper Animations
-                local paperEffectInstance = GameObject.Instantiate(paperEffect)
-                paperEffectInstance.transform.position = _losingPlayer.character.gameObject.transform.position
-
-                _losingPlayer.character:PlayEmote("emote-gravity", 2, false)
-
-            elseif winningActionID == 3 then
-                --- Play Scissors Animations
-                _losingPlayer.character:PlayEmote("emote-apart", 1.5, false)
-                Timer.After(.8, function()
-                    local _bloodParticle = GameObject.Instantiate(bloodParticle)
-                    _bloodParticle.transform.position = _losingPlayer.character.gameObject.transform.position + Vector3.new(0, 2, 0)
-                end)
-                local scissorsEffectInstance = GameObject.Instantiate(scissorsEffect)
-                scissorsEffectInstance.transform.position = _losingPlayer.character.gameObject.transform.position
-                GameObject.Destroy(scissorsEffectInstance, 2)
-            end
+        if _isDraw then
+            PlayLosingAnimation(challengerPlayer, winningActionID)
+            PlayLosingAnimation(respondingPlayer, winningActionID)
         end
 
     end)
@@ -82,20 +122,18 @@ end
 function StartChallenge(targetPlayer: Player)
     currentTargetPlayer = targetPlayer
     uiManager.ShowOptions()
+    UpdateBusy(true)
 end
 
-local pendingTimer = nil
-
 function SendChallenge(challengeID: number)
-    UpdateBusy(true)
     SendChallengeRequest:FireServer(currentTargetPlayer, challengeID)
     uiManager.DisableOptions()
     -- After pending time cancel and reset
     if pendingTimer then pendingTimer:Stop() end
     pendingTimer = Timer.After(5, function()
         uiManager.ResetGame()
-        UpdateBusy(false)
         localPlayerIsResponding = false
+        UpdateBusy(false)
     end)
 end
 
