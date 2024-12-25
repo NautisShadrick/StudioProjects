@@ -91,9 +91,23 @@ function self:ClientAwake()
             local _challengeIndicator = challengerPlayer.character.gameObject.transform:GetChild(2).gameObject
             _challengeIndicator:SetActive(false)
             currentChallengerPlayer = nil
+            playerTracker.chalengeSent = false
 
             if responsePendingTimer then responsePendingTimer:Stop(); responsePendingTimer = nil end
             if pendingTimer then pendingTimer:Stop(); pendingTimer = nil end
+
+            if client.localPlayer == challengerPlayer and winner == 1 then
+                uiManager.ShowResults("win")
+            elseif client.localPlayer == challengerPlayer and winner == 2 then
+                uiManager.ShowResults("lose")
+            elseif client.localPlayer == respondingPlayer and winner == 1 then
+                uiManager.ShowResults("lose")
+            elseif client.localPlayer == respondingPlayer and winner == 2 then
+                uiManager.ShowResults("win")
+            elseif winner == 0 then
+                uiManager.ShowResults("draw")
+            end
+
         end
 
         local _isDraw = false
@@ -117,11 +131,13 @@ function self:ClientAwake()
 end
 
 function ResetGame()
+    print("RESET GAME")
     uiManager.ResetGame()
     localPlayerIsResponding = false
     currentChallengerPlayer = nil
     currentTargetPlayer = nil
     UpdateBusy(false)
+    playerTracker.chalengeSent = false
 end
 
 function StartChallenge(targetPlayer: Player)
@@ -131,6 +147,7 @@ function StartChallenge(targetPlayer: Player)
 end
 
 function SendChallenge(challengeID: number)
+    playerTracker.chalengeSent = true
     SendChallengeRequest:FireServer(currentTargetPlayer, challengeID)
     uiManager.DisableOptions()
     -- After pending time cancel and reset

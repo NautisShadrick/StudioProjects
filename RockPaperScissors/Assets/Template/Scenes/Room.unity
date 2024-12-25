@@ -3289,6 +3289,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1253375588}
   - component: {fileID: 1253375589}
+  - component: {fileID: 1253375590}
   m_Layer: 0
   m_Name: UIManager
   m_TagString: Untagged
@@ -3332,6 +3333,30 @@ MonoBehaviour:
   _uiOutputSettings:
     rid: -2
   m_mainHUDOBJ: {fileID: 1606729751}
+  m_resultsOBJ: {fileID: 1018656737}
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
+--- !u!114 &1253375590
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1253375587}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b3d5dd2608d8df1115ac3c12a51cf54, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _networkId: 0
+  _script: {fileID: -974389366465450183, guid: d1e25d07da528d24ab85c314908ecf81, type: 3}
+  _properties: []
+  _uiOutput: 0
+  _uiOutputSettings:
+    rid: -2
   references:
     version: 2
     RefIds:

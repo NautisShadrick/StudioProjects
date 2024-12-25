@@ -32,3 +32,7 @@
 .draw {
     color: #ffff00;
 }
+
+.hidden {
+    display: none;
+}

@@ -32,6 +32,8 @@ function TrackPlayers(game, characterCallback)
     end)
 end
 
+chalengeSent = false
+
 ------------- CLIENT -------------
 function self:ClientAwake()
     function OnCharacterInstantiate(playerinfo)
@@ -41,11 +43,14 @@ function self:ClientAwake()
         local _myIndicator = character.gameObject.transform:GetChild(1).gameObject
         local _myChallengeIndicator = character.gameObject.transform:GetChild(2).gameObject
 
-        playerinfo.isReady.Changed:Connect(function()
-            print("Player " .. player.name .. " is ready: " .. tostring(playerinfo.isReady.value))
-            _myIndicator:SetActive(not playerinfo.isReady.value)
-            if playerinfo.isReady.value then _myChallengeIndicator:SetActive(false) end
-            if not playerinfo.isReady.value and gameManger.currentTargetPlayer == player then
+        playerinfo.isReady.Changed:Connect(function(ready)
+            print("Player " .. player.name .. " is ready: " .. tostring(ready))
+
+            _myIndicator:SetActive(not ready)
+
+            if ready then _myChallengeIndicator:SetActive(false) end
+
+            if not ready and gameManger.currentTargetPlayer == player and chalengeSent == false then
                 gameManger.currentTargetPlayer = nil
                 gameManger.ResetGame()
             end

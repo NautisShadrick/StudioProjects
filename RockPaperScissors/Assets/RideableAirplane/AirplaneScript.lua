@@ -15,22 +15,23 @@ function self:ClientStart()
     airplaneAnimator = Airplane:GetComponent(Animator)
     camScript = CameraObject:GetComponent(RTSCamera)
 
-    myAnchor.Entered:Connect(function(anchor, player)
+    myAnchor.Entered:Connect(function(anchor, character)
         airplaneAnimator:SetTrigger("Fly")
 
-        if player ~= client.localPlayer then
+        if character ~= client.localPlayer.character then
+            print("Not local player")
             return
         end
 
-        CameraObject.transform.parent = Airplane.transform
         camScript.enabled = false
+        CameraObject.transform.parent = Airplane.transform
     end)
 
-    myAnchor.Exited:Connect(function(anchor, player)
-        if player ~= client.localPlayer then
+    myAnchor.Exited:Connect(function(anchor, character)
+        if character ~= client.localPlayer.character then
             return
         end
-        CameraObject.transform.parent = nil
         camScript.enabled = true
+        CameraObject.transform.parent = nil
     end)
 end
