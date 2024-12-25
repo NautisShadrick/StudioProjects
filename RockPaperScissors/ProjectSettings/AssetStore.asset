@@ -533,3 +533,16 @@ MonoBehaviour:
     - 91057b244f547eb408c34c40f8bec528
     - 5f34ab98f76b64b46a21be8918d4691c
     IsBundle: 0
+  - Guid: b038cc9ffb3e4e343bad11763a25f95b
+    StoreId: 667c2a7a8cbc8ac9ee4e28b5
+    Name: Living Vampire Throne
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/63f1befa566d3f603482bcd6/667c2a7a8cbc8ac9ee4e28b5/190550728f8_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/63f1befa566d3f603482bcd6/667c2a7a8cbc8ac9ee4e28b5/19055071188_0.jpg
+    AdditionalAssetGUIDs:
+    - a549ec0eca338c24d88428e31a1592f2
+    - 1ff08f6171a233b4f8c07ec0a77b94f6
+    - a7666306b517f25449223ffc7c12635a
+    - cca99f4f85ef4f44f9fcb4ba543a39fc
+    - 39b384183b267f4429a7f0612a5cb1c9
+    IsBundle: 0
