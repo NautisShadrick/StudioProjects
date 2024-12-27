@@ -38,7 +38,7 @@ end
 -- Function to update the local player
 function UpdateLocalPlayer(place: number, name: string, score: number)
 
-  _localrank:SetPrelocalizedText(GetPositionSuffix(place)) -- Set the name of the local player
+  _localrank:SetPrelocalizedText(GetPositionSuffix(place+1)) -- Set the name of the local player
   _localname:SetPrelocalizedText(name) -- Set the name of the local player
   _localscore:SetPrelocalizedText(tostring(score)) -- Set the score of the local player
 
@@ -88,10 +88,4 @@ function UpdateLeaderboard(entries)
     -- Add the rank item to the leaderboard
     _ranklist:Add(_rankItem)
   end
-end
-
--- Call the function to update the leaderboard
-function self:Awake()
-  -- Note: This function can be called from another script
-  Timer.After(3, function() uiManager.UpdateLocalPlayer() end) -- Update the local player
 end

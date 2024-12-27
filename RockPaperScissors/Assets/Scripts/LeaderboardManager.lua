@@ -1,7 +1,4 @@
 --!Type(Module)
-
-local incrementEvent = Event.new("IncrementEvent")
-
 local EntryRequest = Event.new("EntryRequest")
 local EntryRepsonse = Event.new("EntryResponse")
 
@@ -41,13 +38,12 @@ function RequestLocalEntry(cb)
 end
 
 function self:ClientAwake()
-    Timer.Every(1, function() incrementEvent:FireServer() end)
 end
 
 ------- Server -------
 
 function GetEntries(cb)
-    Leaderboard.GetEntries(gamesPlayedLeaderboardID, 0, 50, function(entries, error)
+    Leaderboard.GetEntries(gamesPlayedLeaderboardID, 0, 25, function(entries, error)
         if error ~= 0 then print(tostring(error)); return end
         --print(typeof(entries))
 
@@ -75,8 +71,6 @@ function IncrementPlayerScore(player: Player)
 end
 
 function self:ServerAwake()
-    incrementEvent:Connect(function(player) IncrementPlayerScore(player) end)
-
     EntryRequest:Connect(function(player)
         GetEntries(function(entries)
             print("Firing Entry Response")
@@ -94,8 +88,15 @@ function self:ServerAwake()
 
     LocalEntryRequest:Connect(function(player)
         GetPlayerEntry(player, function(entry)
-            print(entry.score)
-            LocalEntryResponse:FireClient(player, {name = entry.name, score = entry.score, rank = entry.rank})
+
+            local _TableEntry = {}
+            if entry == nil then
+                print("DEFAULTS")
+                _TableEntry = {name = "Play a game to join", score = 0, rank = 0}
+            else
+                _TableEntry = {name = entry.name, score = entry.score, rank = entry.rank}
+            end
+            LocalEntryResponse:FireClient(player, _TableEntry)
         end)
     end)
 end

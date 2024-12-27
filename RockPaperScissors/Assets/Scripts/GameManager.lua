@@ -18,6 +18,7 @@ local CompleteGameEvent = Event.new("CompleteGameEvent")
 
 local uiManager = require("UIManager")
 local playerTracker = require("PlayerTracker")
+local leaderboardManager = require("LeaderboardManager")
 
 currentTargetPlayer = nil
 currentChallengerPlayer = nil
@@ -194,6 +195,9 @@ function self:ServerAwake()
             _currentStreak = 0
             playerTracker.players[losingPlayer].winStreak.value = _currentStreak
         end
+
+        leaderboardManager.IncrementPlayerScore(challengerPlayer)
+        leaderboardManager.IncrementPlayerScore(respondingPlayer)
 
     end)
 
