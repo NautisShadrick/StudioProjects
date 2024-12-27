@@ -4,15 +4,26 @@
 local mainHUDOBJ: GameObject = nil
 --!SerializeField
 local resultsOBJ: GameObject = nil
+--!SerializeField
+local leaderboardOBJ: GameObject = nil
+--!SerializeField
+local hudButtonsOBJ: GameObject = nil
 
 local mainHudUI = nil
 local resultsUI = nil
+local leaderboardUI = nil
+local hudButtonsUI = nil
 
 local gameManager = require("GameManager")
+local leaderboardManager = require("LeaderboardManager")
 
 function self:ClientStart()
     mainHudUI = mainHUDOBJ.gameObject:GetComponent(mainHUD)
     resultsUI = resultsOBJ.gameObject:GetComponent(ResultsUI)
+    leaderboardUI = leaderboardOBJ.gameObject:GetComponent(LeaderboardUI)
+    hudButtonsUI = hudButtonsOBJ.gameObject:GetComponent(HudButtons)
+
+    leaderboardOBJ:SetActive(false)
 end
 
 function ShowOptions()
@@ -37,4 +48,30 @@ end
 
 function ShowResults(results)
     resultsUI.ShowResults(results)
+end
+
+function ShowLeaderboard()
+    hudButtonsOBJ:SetActive(false)
+    leaderboardOBJ:SetActive(true)
+    UpdateLeaderboard()
+    UpdateLocalPlayer()
+end
+
+function HideLeaderboard()
+    leaderboardOBJ:SetActive(false)
+    hudButtonsOBJ:SetActive(true)
+end
+
+
+-------- Leaderboard Functions --------
+function UpdateLocalPlayer()
+    leaderboardManager.RequestLocalEntry(function(entry)
+        leaderboardUI.UpdateLocalPlayer(entry.rank, entry.name, entry.score)
+    end)
+end
+
+function UpdateLeaderboard()
+    leaderboardManager.RequestEntries(function(entries)
+        leaderboardUI.UpdateLeaderboard(entries)
+    end)
 end

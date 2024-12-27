@@ -1,0 +1,157 @@
+.leaderboard-u-i {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+
+  align-self: center;
+  justify-content: center;
+  align-items: center;
+
+  width: 100%;
+  height: 100%;
+
+  top: 0;
+  bottom: 0;
+
+  padding: 30px;
+}
+
+.leaderboard-container {
+  display: flex;
+  overflow: hidden;
+
+  padding: 5px;
+  min-height: 450px;
+  min-width: 350px;
+
+  max-height: 660px;
+  max-width: 800px;
+
+  background-color: #1b1935;
+  border-radius: 10px;
+  border-width: 2px;
+  border-color: rgba(23, 25, 35, 0.5);
+}
+
+.leaderboard-close {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+}
+
+.button-content Image {
+  --unity-image: var(--image-icon-close);
+
+  width: 37px;
+  height: 37px;
+}
+
+
+.header .title {
+  font-size: 35px;
+  color: #3DABEA;
+
+  align-self: center;
+
+  text-shadow: -3px 5px 0px rgba(0, 0, 0, .4);
+  -unity-font-definition: var(--font-black);
+}
+
+.leaderboard-u-i .content {
+  display: flex;
+
+  justify-content: space-between;
+  align-items: center;
+
+  width: 100%;
+  padding: 10px 5px;
+}
+
+.content .ranklist {
+  display: flex;
+
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+
+  width: 100%;
+}
+
+.content .local-rank {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+
+  background-color: #2f2c4f;
+  border-radius: 5px;
+
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 10px;
+
+  -unity-text-align: middle-center;
+  -unity-font-definition: var(--font-black);
+  text-shadow: -3px 5px 0px rgba(0, 0, 0, .4);
+  font-size: 20px;
+  color: #3DABEA;
+}
+
+.content .rank-item {
+  display: flex;
+
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+
+  -unity-text-align: middle-left;
+  -unity-font-definition: var(--font-bold);
+  text-shadow: -3px 5px 0px rgba(0, 0, 0, .4);
+  color: #c2d6e2;
+  font-size: 20px;
+}
+
+.rank-item .name-label {
+  flex-grow: 1;
+  margin-left: 10px;
+}
+
+.rank-item .rank-label {
+  width: 50px;
+  color: #3DABEA;
+}
+
+.scroll-view__content-container {
+
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: row;
+  flex-wrap: wrap;
+
+  width: auto;
+  height: auto;
+}
+
+.scroll-bar {
+  width: 5px;
+  height: 100%;
+
+  background-color: #212037;
+  border-radius: 2px;
+}
+
+.scroll-bar__thumb {
+  background-color: #2f2c4f;
+  border-radius: 5px;
+}
+
+.scroll-bar__thumb:hover {
+  background-color: #fff;
+}

@@ -1,0 +1,70 @@
+:root {
+  --font-muesou-900: url("project://database/Assets/UI/Fonts/MuseoSansRounded1000 SDF.asset");
+}
+
+
+.hud-buttons {
+    width: 100%;
+    height: 100%;
+
+    padding: 0;
+    padding-top: 47px;
+
+    flex-direction: row;
+}
+
+.button-container {
+    position: relative;
+    align-items: center;
+    justify-content: center;
+
+    width: 64px;
+    height: 64px;
+
+    margin-bottom: 15px;
+    margin-right: 15px;
+
+    background-color: rgba(0, 0, 0, 0.5);
+
+    border-radius: 20px;
+}
+
+.button-icon {
+    width: 48px;
+    height: 48px;
+}
+
+.button-label {
+    position: absolute;
+
+    left: 50%;
+    bottom: -10px;
+    translate: -50% 0;
+
+    color: white;
+    font-size: 20px;
+    -unity-font-definition: var(--font-muesou-900);
+    -unity-text-align: middle-center;
+    -unity-text-outline-color: rgba(0,0,0,0.5);
+    -unity-text-outline-width: 1px;
+    text-shadow: 0 3 0 rgba(0,0,0,0.5);
+}
+
+.right-side {
+    margin-left: auto;
+}
+
+.left-side {
+    margin-right: auto;
+}
+
+#left_container {
+    width: 50%;
+}
+#right_container {
+    width: 50%;
+}
+
+.rank_icon {
+    background-image: url("project://database/Assets/UI/Icons/RankIcon.png");
+}

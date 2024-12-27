@@ -12,6 +12,7 @@ function TrackPlayers(game, characterCallback)
         players[player] = {
             player = player,
             isReady = BoolValue.new("isReady" .. player.user.id, true),
+            winStreak = IntValue.new("winStreak" .. player.user.id, 0)
         }
 
         player.CharacterChanged:Connect(function(player, character) 
@@ -42,6 +43,8 @@ function self:ClientAwake()
 
         local _myIndicator = character.gameObject.transform:GetChild(1).gameObject
         local _myChallengeIndicator = character.gameObject.transform:GetChild(2).gameObject
+        local _myWinStreakUIObject = character.gameObject.transform:GetChild(4):GetChild(0).gameObject
+        local _myWinStreakUIScript = _myWinStreakUIObject:GetComponent(WinStreakUI)
 
         playerinfo.isReady.Changed:Connect(function(ready)
             print("Player " .. player.name .. " is ready: " .. tostring(ready))
@@ -54,6 +57,11 @@ function self:ClientAwake()
                 gameManger.currentTargetPlayer = nil
                 gameManger.ResetGame()
             end
+        end)
+
+        playerinfo.winStreak.Changed:Connect(function(winStreak)
+            print(tostring(winStreak))
+            _myWinStreakUIScript.UpdateWinStreak(winStreak)
         end)
     end
 

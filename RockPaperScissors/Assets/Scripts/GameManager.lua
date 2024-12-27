@@ -180,6 +180,21 @@ function self:ServerAwake()
     SendResponseRequest:Connect(function(respondingPlayer, challengerPlayer, responseID)
         local winStats = DetermineWinner(challengeIDbyPlayer[challengerPlayer], responseID)
         CompleteGameEvent:FireAllClients(challengerPlayer, respondingPlayer, winStats[1], winStats[2])
+
+        local winningPlayer = winStats[1] == 1 and challengerPlayer or winStats[1] == 2 and respondingPlayer or nil
+        if winningPlayer ~= nil then
+            local _currentStreak = playerTracker.players[winningPlayer].winStreak.value
+            _currentStreak = _currentStreak + 1
+            playerTracker.players[winningPlayer].winStreak.value = _currentStreak
+        end
+
+        local losingPlayer = winStats[1] == 1 and respondingPlayer or winStats[1] == 2 and challengerPlayer or nil
+        if losingPlayer ~= nil then
+            local _currentStreak = playerTracker.players[losingPlayer].winStreak.value
+            _currentStreak = 0
+            playerTracker.players[losingPlayer].winStreak.value = _currentStreak
+        end
+
     end)
 
     server.PlayerDisconnected:Connect(function(player)
@@ -193,7 +208,7 @@ end
 
 
 -- Returns 0 if it's a tie, 1 if the challenger wins, and 2 if the responder wins
--- Output {winner, winningActionID}
+-- Output {winnerID, winningActionID}
 function DetermineWinner(challengeID: number, responseID: number): {number}
     if challengeID == responseID then
         return {0, challengeID}

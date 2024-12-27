@@ -546,3 +546,14 @@ MonoBehaviour:
     - cca99f4f85ef4f44f9fcb4ba543a39fc
     - 39b384183b267f4429a7f0612a5cb1c9
     IsBundle: 0
+  - Guid: a4914b6227161664c95abb3a2a9fd35a
+    StoreId: 66747aafe33913810177f292
+    Name: Leaderboard UI
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/55bb64735531104341039ca8/66747aafe33913810177f292/19036ff6a78_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/55bb64735531104341039ca8/66747aafe33913810177f292/19036ff4f20_0.jpg
+    AdditionalAssetGUIDs:
+    - c274746a4f8f17d4c96e62d71648ddc7
+    - 120feafcbc2afe14480892dd94d96b3a
+    - 20a0e02c942da774d8234f58810c0fa3
+    IsBundle: 0
