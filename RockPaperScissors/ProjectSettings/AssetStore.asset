@@ -557,3 +557,65 @@ MonoBehaviour:
     - 120feafcbc2afe14480892dd94d96b3a
     - 20a0e02c942da774d8234f58810c0fa3
     IsBundle: 0
+  - Guid: 79b00a54222b38e4faa5a134bcac422a
+    StoreId: 6658ec906e9f2ad62c40e8dd
+    Name: Wood Floor 1
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658ec906e9f2ad62c40e8dd/18fcb5c6c58_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658ec906e9f2ad62c40e8dd/18fcb5c5100_0.jpg
+    AdditionalAssetGUIDs:
+    - 6f7f2a481ad926b42814f4a1f862dfd8
+    - 9d880476009fa2f449c76490cc018594
+    - 101b2d1ed5b1bf9488c576a660f26bb1
+    IsBundle: 0
+  - Guid: 8665fa2f6f2999040a2051c3ab082743
+    StoreId: 6658f1426e9f2ad62c40e90a
+    Name: School Wall Window
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658f1426e9f2ad62c40e90a/18fcb6f2938_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658f1426e9f2ad62c40e90a/18fcb6f15b0_0.jpg
+    AdditionalAssetGUIDs:
+    - 7cad33aafac861c45ac43bd7b6274dd4
+    - 5f34ab98f76b64b46a21be8918d4691c
+    - 28204f518d621454d95e484c0a58bc5a
+    - a4f1445c8b264084a86496890eab64ad
+    IsBundle: 0
+  - Guid: 1f5856bafde4caf49a6c5cc501629421
+    StoreId: 6658f0f86e9f2ad62c40e906
+    Name: School Wall 1
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658f0f86e9f2ad62c40e906/18fcb6d77a0_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658f0f86e9f2ad62c40e906/18fcb6d6be8_0.jpg
+    AdditionalAssetGUIDs:
+    - 7cad33aafac861c45ac43bd7b6274dd4
+    - 273c7d4791505ed43a7907e7ffef3411
+    - 5f34ab98f76b64b46a21be8918d4691c
+    IsBundle: 0
+  - Guid: 82d4a7df5a5fe8f469bd240676fc42df
+    StoreId: 66713cfbb0995c7e10e74b20
+    Name: Gumball Machine
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/6063eb1ece8f4adf51370f48/66713cfbb0995c7e10e74b20/1902a56c500_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/6063eb1ece8f4adf51370f48/66713cfbb0995c7e10e74b20/1902a569df0_0.jpg
+    AdditionalAssetGUIDs:
+    - 4a95ce3486b5a2a4aa833eb0f3ae0805
+    - 4a4d5cf2e28c64446ad99d50071f2994
+    - 590ccd623af7ef146895ad9bc82f1d93
+    - b4adc4e4f7b8d1946ab78e16f6714538
+    - 5bc8a4660c4548b4c874fca00b7aee81
+    - c239f74c568b76e46a93b33aa94e49cf
+    - ad654bd9076d2c149b778d21814ad59b
+    - da4cd42d056afa24a8659dfd65aa0dc9
+    - 78ec1b21caaaf4543964c22864e8139d
+    IsBundle: 0
+  - Guid: d9f69118d6cb92245a7b8d8dacf917c6
+    StoreId: 665901146e9f2ad62c40e95d
+    Name: Trash Can 1
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/665901146e9f2ad62c40e95d/18fcbac6118_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/665901146e9f2ad62c40e95d/18fcbac5178_0.jpg
+    AdditionalAssetGUIDs:
+    - 57b40a5bb03205a488c80b971e89c0f5
+    - 7cad33aafac861c45ac43bd7b6274dd4
+    - 5f34ab98f76b64b46a21be8918d4691c
+    IsBundle: 0

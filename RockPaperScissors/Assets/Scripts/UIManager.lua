@@ -10,6 +10,8 @@ local leaderboardOBJ: GameObject = nil
 local hudButtonsOBJ: GameObject = nil
 --!SerializeField
 local welcomObj: GameObject = nil
+--!SerializeField
+local eventTimerObj: GameObject = nil
 
 local mainHudUI = nil
 local resultsUI = nil
@@ -28,11 +30,18 @@ function self:ClientStart()
     welcomeUI = welcomObj.gameObject:GetComponent(UIWelcomePopup)
 
     leaderboardOBJ:SetActive(false)
+    eventTimerObj:SetActive(false)
 end
 
 function ShowInfo()
+    eventTimerObj:SetActive(false)
     welcomObj:SetActive(true)
     welcomeUI.ShowState(1)
+end
+
+function CloseInfo()
+    welcomObj:SetActive(false)
+    eventTimerObj:SetActive(true)
 end
 
 function ShowOptions()
@@ -60,6 +69,7 @@ function ShowResults(results)
 end
 
 function ShowLeaderboard()
+    eventTimerObj:SetActive(false)
     hudButtonsOBJ:SetActive(false)
     leaderboardOBJ:SetActive(true)
     UpdateLeaderboard()
@@ -67,6 +77,7 @@ function ShowLeaderboard()
 end
 
 function HideLeaderboard()
+    eventTimerObj:SetActive(true)
     leaderboardOBJ:SetActive(false)
     hudButtonsOBJ:SetActive(true)
 end

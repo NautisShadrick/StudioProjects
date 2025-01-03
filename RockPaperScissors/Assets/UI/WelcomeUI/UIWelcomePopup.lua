@@ -46,6 +46,8 @@ local _states = 3
 local _currentState = 1
 local _closeCallback: () -> () = nil
 
+local uiManager = require("UIManager")
+
 -- Import Tweening module for animations.
 local TweenModule = require("TweenModule")	
 local Tween = TweenModule.Tween -- Tween class for creating animations.
@@ -110,7 +112,7 @@ function ShowState(state: number)
 end
 
 local function OnCloseButton()
-	self.gameObject:SetActive(false)
+	uiManager.CloseInfo()
 end
 
 local function OnNext()

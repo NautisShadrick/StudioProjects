@@ -1,2 +1,24 @@
+:root {
+    --font-muesou-900: url("project://database/Assets/UI/Fonts/MuseoSansRounded1000 SDF.asset");
+}
+
 .event-timer {
+    position: absolute;
+    width: 100%;
+    
+}
+
+.timer-label {
+    
+    margin: 0;
+    padding: 0;
+
+    color: white;
+    font-size: 22px;
+    -unity-font-definition: var(--font-muesou-900);
+    -unity-text-align: middle-center;
+    -unity-text-outline-color: rgba(0,0,0,.7);
+    -unity-text-outline-width: 4px;
+    text-shadow: 0 3 0 rgba(0,0,0,0.5);
+    -unity-font-style: bold;
 }

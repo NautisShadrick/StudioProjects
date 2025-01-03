@@ -7,7 +7,9 @@
     xsi:noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd"
 >
 
-  <hr:UILuaView class="event-timer">
+  <hr:UILuaView class="event-timer" picking-mode="Ignore">
+    <Label class="timer-label" text="Event Time Remaining:" picking-mode="Ignore"/>
+    <Label name="timer_label" class="timer-label" text="00:00:00:00" picking-mode="Ignore"/>
   </hr:UILuaView>
 
 </UXML>

@@ -30,6 +30,7 @@ namespace Highrise.Lua.Generated
         [SerializeField] public UnityEngine.GameObject m_leaderboardOBJ = default;
         [SerializeField] public UnityEngine.GameObject m_hudButtonsOBJ = default;
         [SerializeField] public UnityEngine.GameObject m_welcomObj = default;
+        [SerializeField] public UnityEngine.GameObject m_eventTimerObj = default;
 
         protected override SerializedPropertyValue[] SerializeProperties()
         {
@@ -43,6 +44,7 @@ namespace Highrise.Lua.Generated
                 CreateSerializedProperty(_script.GetPropertyAt(2), m_leaderboardOBJ),
                 CreateSerializedProperty(_script.GetPropertyAt(3), m_hudButtonsOBJ),
                 CreateSerializedProperty(_script.GetPropertyAt(4), m_welcomObj),
+                CreateSerializedProperty(_script.GetPropertyAt(5), m_eventTimerObj),
             };
         }
     }
