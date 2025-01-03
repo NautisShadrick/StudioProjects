@@ -71,6 +71,8 @@ function UpdateLocalPlayer(place: number, name: string, score: number)
   else
     local_rewards_container:EnableInClassList("hidden", true)
   end
+  local_rewards_container:EnableInClassList("hidden", true)
+
 
   -- Note: When passing the "score" make sure you convert it to a string
 end
@@ -130,7 +132,7 @@ function UpdateLeaderboard(entries)
     -- Add the rank, name, and score labels to the rank item
     _rankItem:Add(_rankLabel)
     _rankItem:Add(_nameLabel)
-    if entry.rank <= 10 then _rankItem:Add(_rewardsContainer) end
+    --if entry.rank <= 10 then _rankItem:Add(_rewardsContainer) end
     _rankItem:Add(_scoreLabel)
 
     -- Add the rank item to the leaderboard

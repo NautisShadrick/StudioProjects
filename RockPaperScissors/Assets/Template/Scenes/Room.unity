@@ -377,6 +377,7 @@ GameObject:
   m_Component:
   - component: {fileID: 126020944}
   - component: {fileID: 126020945}
+  - component: {fileID: 126020946}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -425,6 +426,30 @@ MonoBehaviour:
     type: 3}
   m_scissorsEffect: {fileID: 7271155048442222910, guid: bff6be2b61fd1ce4e8c481bd653ec81c,
     type: 3}
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
+--- !u!114 &126020946
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 126020943}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cac1344714ecd11b35319968c9f7f91, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _networkId: 0
+  _script: {fileID: -974389366465450183, guid: 86731391cb91cdc4098c194336407f44, type: 3}
+  _properties: []
+  _uiOutput: 0
+  _uiOutputSettings:
+    rid: -2
+  m_bgMusic: {fileID: 11400000, guid: 43686093b245c4243a77f73e4eb908b3, type: 2}
   references:
     version: 2
     RefIds:

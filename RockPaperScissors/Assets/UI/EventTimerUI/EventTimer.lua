@@ -50,8 +50,8 @@ local targetMinute = 0
 timeUntil(targetYear, targetMonth, targetDay, targetHour, targetMinute)
 
 function self:Start()
-    local updateTimer = Timer.Every(1, function()
-        local timeLeft = timeUntil(targetYear, targetMonth, targetDay, targetHour, targetMinute)
-        timer_label.text = timeLeft
-    end)
+    --local updateTimer = Timer.Every(1, function()
+    --    local timeLeft = timeUntil(targetYear, targetMonth, targetDay, targetHour, targetMinute)
+    --    timer_label.text = timeLeft
+    --end)
 end
