@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UXML
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="UnityEngine.UIElements"
+    xmlns:hr="Highrise.UI"
+    xmlns:editor="UnityEditor.UIElements"
+    xsi:noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd"
+>
+
+  <hr:UILuaView name="welcome_popup" class="welcome-popup">
+    <VisualElement name="_closeOverlay" class="fill-parent absolute modal expand"/>
+    <VisualElement name="_content" class="vertical-layout justifystart">
+      <VisualElement name="_inset">
+
+        <VisualElement name="_image1" class="fill-parent"></VisualElement>
+        <VisualElement name="_image2" class="fill-parent"></VisualElement>
+        <VisualElement name="_image3" class="fill-parent"></VisualElement>
+        <!-- <VisualElement name="_image4" class="fill-parent"></VisualElement> -->
+
+        <VisualElement name="_pipsContainer" class="pips-container">
+            <VisualElement name="_pip1" class="pip" />
+            <VisualElement name="_pip2" class="pip" />
+            <VisualElement name="_pip3" class="pip" />
+            <!-- <VisualElement name="_pip4" class="pip" /> -->
+        </VisualElement>
+
+      </VisualElement>
+
+      <Label name="_desc1" text=
+      "Challenge other players! Interact and send them a Rock-Paper-Scissors challenge to start the fun!"
+
+      picking-mode="Ignore"/>
+      <Label name="_desc2" text=
+      "Climb the leaderboard! Every game counts, win, lose, or draw!"
+
+      picking-mode="Ignore"/>
+      <Label name="_desc3" text=
+      "Strike gold! Secure a spot in the TOP 10 ranks by the end of the event to WIN exclusive rewards!"
+
+      picking-mode="Ignore"/>
+      <!-- <Label name="_desc4" text="DescSlide4" picking-mode="Ignore"/> -->
+      <VisualElement name="_buttonContainer" class="horizontal-layout centered">
+        <hr:UIButton name="_backButton">
+          <Label name="_backButtonLabel" text="Back" class="buttonLabel wrap"/>
+        </hr:UIButton>
+        <hr:UIButton name="_nextButton">
+          <Label name="_nextButtonLabel" text="NEXT" class="buttonLabel wrap"/>
+        </hr:UIButton>
+      </VisualElement>
+    </VisualElement>
+  </hr:UILuaView>
+
+</UXML>

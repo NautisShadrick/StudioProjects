@@ -8,11 +8,14 @@ local resultsOBJ: GameObject = nil
 local leaderboardOBJ: GameObject = nil
 --!SerializeField
 local hudButtonsOBJ: GameObject = nil
+--!SerializeField
+local welcomObj: GameObject = nil
 
 local mainHudUI = nil
 local resultsUI = nil
 local leaderboardUI = nil
 local hudButtonsUI = nil
+local welcomeUI = nil
 
 local gameManager = require("GameManager")
 local leaderboardManager = require("LeaderboardManager")
@@ -22,8 +25,14 @@ function self:ClientStart()
     resultsUI = resultsOBJ.gameObject:GetComponent(ResultsUI)
     leaderboardUI = leaderboardOBJ.gameObject:GetComponent(LeaderboardUI)
     hudButtonsUI = hudButtonsOBJ.gameObject:GetComponent(HudButtons)
+    welcomeUI = welcomObj.gameObject:GetComponent(UIWelcomePopup)
 
     leaderboardOBJ:SetActive(false)
+end
+
+function ShowInfo()
+    welcomObj:SetActive(true)
+    welcomeUI.ShowState(1)
 end
 
 function ShowOptions()

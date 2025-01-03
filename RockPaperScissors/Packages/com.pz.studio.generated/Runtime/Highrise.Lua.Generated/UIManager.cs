@@ -1,6 +1,6 @@
 /*
 
-    Copyright (c) 2024 Pocketz World. All rights reserved.
+    Copyright (c) 2025 Pocketz World. All rights reserved.
 
     This is a generated file, do not edit!
 
@@ -29,6 +29,7 @@ namespace Highrise.Lua.Generated
         [SerializeField] public UnityEngine.GameObject m_resultsOBJ = default;
         [SerializeField] public UnityEngine.GameObject m_leaderboardOBJ = default;
         [SerializeField] public UnityEngine.GameObject m_hudButtonsOBJ = default;
+        [SerializeField] public UnityEngine.GameObject m_welcomObj = default;
 
         protected override SerializedPropertyValue[] SerializeProperties()
         {
@@ -41,6 +42,7 @@ namespace Highrise.Lua.Generated
                 CreateSerializedProperty(_script.GetPropertyAt(1), m_resultsOBJ),
                 CreateSerializedProperty(_script.GetPropertyAt(2), m_leaderboardOBJ),
                 CreateSerializedProperty(_script.GetPropertyAt(3), m_hudButtonsOBJ),
+                CreateSerializedProperty(_script.GetPropertyAt(4), m_welcomObj),
             };
         }
     }

@@ -1,3 +1,7 @@
+:root {
+    --font-muesou-900: url("project://database/Assets/UI/Fonts/MuseoSansRounded1000 SDF.asset");
+}
+
 .leaderboard-u-i {
   display: flex;
   flex-direction: column;
@@ -8,6 +12,7 @@
   align-items: center;
 
   width: 100%;
+  max-width: 300px;
   height: 100%;
 
   top: 0;
@@ -22,39 +27,47 @@
 
   padding: 5px;
   min-height: 450px;
-  min-width: 350px;
+  min-width: 360px;
 
   max-height: 660px;
   max-width: 800px;
 
-  background-color: #1b1935;
   border-radius: 10px;
   border-width: 2px;
   border-color: rgba(23, 25, 35, 0.5);
+
+  background-image: url("project://database/Assets/UI/Icons/paperBG.jpg");
+
 }
 
 .leaderboard-close {
   position: absolute;
-  top: 2px;
-  right: 2px;
+
+  width: 32px;
+  height: 32px;
+
+  top: 8px;
+  right: 8px;
+  background-image: url("project://database/Assets/UI/Icons/X.png");
+  opacity: 0.75;
 }
 
 .button-content Image {
   --unity-image: var(--image-icon-close);
-
   width: 37px;
   height: 37px;
 }
 
 
 .header .title {
-  font-size: 35px;
-  color: #3DABEA;
-
-  align-self: center;
-
-  text-shadow: -3px 5px 0px rgba(0, 0, 0, .4);
-  -unity-font-definition: var(--font-black);
+  color: white;
+  font-size: 32px;
+  -unity-font-definition: var(--font-muesou-900);
+  -unity-text-align: middle-center;
+  -unity-text-outline-color: rgba(0,0,0,.7);
+  -unity-text-outline-width: 3px;
+  text-shadow: 0 3 0 rgba(0,0,0,0.5);
+  -unity-font-style: bold;
 }
 
 .leaderboard-u-i .content {
@@ -80,52 +93,69 @@
 .content .local-rank {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
   align-items: center;
 
-  background-color: #2f2c4f;
+  background-color: #ffffff;
   border-radius: 5px;
 
   width: 100%;
   margin-bottom: 10px;
   padding: 10px;
 
-  -unity-text-align: middle-center;
-  -unity-font-definition: var(--font-black);
-  text-shadow: -3px 5px 0px rgba(0, 0, 0, .4);
+  color: white;
   font-size: 20px;
-  color: #3DABEA;
+  -unity-font-definition: var(--font-muesou-900);
+  -unity-text-align: middle-center;
+  -unity-text-outline-color: rgba(50,50,50,1);
+  -unity-text-outline-width: 3px;
+  text-shadow: 0 3 0 rgba(0,0,0,0.5);
+  -unity-font-style: bold;
+
+  border-color: rgb(102, 102, 102);
+  border-width: 2px;
+  
 }
 
 .content .rank-item {
   display: flex;
 
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
 
-  background-color: rgba(0, 0, 0, 0.1);
+  background-color:rgb(255, 255, 255);
   border-radius: 5px;
+  border-color: rgb(102, 102, 102);
+  border-width: 2px;
 
   width: 100%;
   padding: 10px;
   margin-bottom: 10px;
 
-  -unity-text-align: middle-left;
-  -unity-font-definition: var(--font-bold);
-  text-shadow: -3px 5px 0px rgba(0, 0, 0, .4);
-  color: #c2d6e2;
+  color: white;
   font-size: 20px;
+  -unity-font-definition: var(--font-muesou-900);
+  -unity-text-align: middle-center;
+  -unity-text-outline-color: rgba(50,50,50,1);
+  -unity-text-outline-width: 3px;
+  text-shadow: 0 3 0 rgba(0,0,0,0.5);
+  -unity-font-style: bold;
 }
 
-.rank-item .name-label {
+.name-label {
   flex-grow: 1;
-  margin-left: 10px;
+  margin-left: 5px;
 }
 
-.rank-item .rank-label {
+.rank-label {
   width: 50px;
-  color: #3DABEA;
+  color:rgb(255, 255, 255);
+}
+
+.score-label {
+  width: 20px;
+  color:rgb(255, 255, 255);
+  margin: 0 4px;
 }
 
 .scroll-view__content-container {
@@ -154,4 +184,47 @@
 
 .scroll-bar__thumb:hover {
   background-color: #fff;
+}
+
+.rewards-container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  width: 50px;
+  height: 40px;
+
+  margin: 0 5px;
+  padding: 0px;
+
+}
+
+.rewards-icon{
+  position: absolute;
+  width: 32px;
+  height: 32px;
+
+  background-image: url("project://database/Assets/UI/Icons/Coin.png");
+}
+
+.rewards-label{
+  position: absolute;
+
+  bottom: 0px;
+
+  margin: 0;
+  padding: 0;
+
+  color: rgb(255, 217, 28);
+  font-size: 16px;
+  -unity-font-definition: var(--font-muesou-900);
+  -unity-text-align: middle-center;
+  -unity-text-outline-color: rgb(152, 94, 8);
+  -unity-text-outline-width: 3px;
+  text-shadow: 0 3 0 rgba(0,0,0,0.5);
+  -unity-font-style: bold;
+}
+
+.hidden {
+  display: none;
 }

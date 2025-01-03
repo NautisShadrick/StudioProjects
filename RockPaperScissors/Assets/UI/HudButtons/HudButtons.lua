@@ -14,7 +14,7 @@ local uiManager = require("UIManager")
 
 function self:Start()
     
-    function CreateHudButton(iconID: string, side: string, cb)
+    function CreateHudButton(text: string, iconID: string, side: string, cb)
 
         local iconID = iconID or 0
 
@@ -28,7 +28,7 @@ function self:Start()
         local _butonLabel = Label.new()
         _butonLabel:AddToClassList("button-label")
     
-        _butonLabel.text = "Rank"
+        _butonLabel.text = text
     
         _buttonContainer:Add(_buttonIcon)
         _buttonContainer:Add(_butonLabel)
@@ -45,7 +45,11 @@ function self:Start()
         return _buttonContainer
     end
 
-    CreateHudButton("rank_icon", "right", function()
+    CreateHudButton("Rank", "rank_icon", "right", function()
         uiManager.ShowLeaderboard()
+    end)
+
+    CreateHudButton("Info", "info_icon", "right", function()
+        uiManager.ShowInfo()
     end)
 end

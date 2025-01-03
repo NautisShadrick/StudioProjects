@@ -68,3 +68,7 @@
 .rank_icon {
     background-image: url("project://database/Assets/UI/Icons/RankIcon.png");
 }
+
+.info_icon {
+    background-image: url("project://database/Assets/UI/Icons/Lesson.png");
+}

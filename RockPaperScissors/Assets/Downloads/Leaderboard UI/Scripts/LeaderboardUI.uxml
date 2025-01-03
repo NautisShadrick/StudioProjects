@@ -14,18 +14,18 @@
         </VisualElement>
 
         <!-- Note: A player can also close the leaderboard using the same button that opened it -->
-        <VisualElement name="_closeButton" class="leaderboard-close">
-          <VisualElement class="button-content">
-            <Image name="_closeIcon"/>
-          </VisualElement>
-        </VisualElement>
+        <VisualElement name="_closeButton" class="leaderboard-close"/>
 
         <VisualElement class="content" name="_content">
           <!-- Local Rank -->
           <VisualElement class="local-rank">
             <hr:UILabel class="rank-label" name="_localrank"/>
-            <hr:UILabel class="localname" name="_localname"/>
-            <hr:UILabel class="localscore" name="_localscore"/>
+            <hr:UILabel class="name-label" name="_localname"/>
+            <VisualElement name="local_rewards_container" class="rewards-container">
+              <VisualElement class="rewards-icon"/>
+              <Label class="rewards-label" name="local_rewards_label"/>
+            </VisualElement>
+            <hr:UILabel class="score-label" name="_localscore"/>
           </VisualElement>
 
           <!-- Leaderboard -->
