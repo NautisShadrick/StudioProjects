@@ -57,6 +57,7 @@ function self:ClientAwake()
                 gameManger.currentTargetPlayer = nil
                 gameManger.ResetGame()
             end
+
         end)
 
         playerinfo.winStreak.Changed:Connect(function(winStreak)
@@ -64,6 +65,17 @@ function self:ClientAwake()
             _myWinStreakUIScript.UpdateWinStreak(winStreak)
         end)
     end
+
+    client.PlayerDisconnected:Connect(function(player)
+        if player == gameManger.currentTargetPlayer then
+            gameManger.currentTargetPlayer = nil
+            gameManger.ResetGame()
+        end
+        if player == gameManger.currentChallengerPlayer then
+            gameManger.currentChallengerPlayer = nil
+            gameManger.ResetGame()
+        end
+    end)
 
     TrackPlayers(client, OnCharacterInstantiate)
 end

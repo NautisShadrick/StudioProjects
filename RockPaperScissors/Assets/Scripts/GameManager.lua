@@ -9,6 +9,9 @@ local paperEffect: GameObject = nil
 --!SerializeField
 local scissorsEffect: GameObject = nil
 
+--!SerializeField
+local alertSound: AudioShader = nil
+
 local updateStatus = Event.new("UpdateStatus")
 
 local SendChallengeRequest = Event.new("SendChallengeRequest")
@@ -81,6 +84,10 @@ function self:ClientAwake()
         responsePendingTimer = Timer.After(5, function()
             ResetGame()
         end)
+
+        --Play alert sound
+        Audio:PlayShader(alertSound)
+        
     end)
 
     CompleteGameEvent:Connect(function(challengerPlayer, respondingPlayer, winner, winningActionID)

@@ -29,6 +29,7 @@ namespace Highrise.Lua.Generated
         [SerializeField] public UnityEngine.GameObject m_bloodParticle = default;
         [SerializeField] public UnityEngine.GameObject m_paperEffect = default;
         [SerializeField] public UnityEngine.GameObject m_scissorsEffect = default;
+        [SerializeField] public Highrise.AudioShader m_alertSound = default;
 
         protected override SerializedPropertyValue[] SerializeProperties()
         {
@@ -41,6 +42,7 @@ namespace Highrise.Lua.Generated
                 CreateSerializedProperty(_script.GetPropertyAt(1), m_bloodParticle),
                 CreateSerializedProperty(_script.GetPropertyAt(2), m_paperEffect),
                 CreateSerializedProperty(_script.GetPropertyAt(3), m_scissorsEffect),
+                CreateSerializedProperty(_script.GetPropertyAt(4), m_alertSound),
             };
         }
     }
