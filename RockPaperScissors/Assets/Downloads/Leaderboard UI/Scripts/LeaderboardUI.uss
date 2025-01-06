@@ -92,7 +92,9 @@
 
 .content .local-rank {
   display: flex;
+
   flex-direction: row;
+  justify-content: space-around;
   align-items: center;
 
   background-color: #ffffff;
@@ -143,7 +145,7 @@
 }
 
 .name-label {
-  flex-grow: 1;
+
   margin-left: 5px;
 }
 

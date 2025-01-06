@@ -1,0 +1,20 @@
+fileFormatVersion: 2
+guid: 03c9bb9e0b7ceed4ea13018038cf1a32
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 1355218169, guid: 6f9c394430e33933bbac989b158f2ac4, type: 3 }
+  _scriptType: 4
+  _defaultReferences:
+  - Name: movementIndicator
+    Value: {fileID: 7025435918243807456, guid: 5dfae8e2eae84f140b64b0e4cfcbcfe8, type: 3}
+  - Name: longPressSound
+    Value: {fileID: 11400000, guid: 25625e178d869405c92bfc4024612fb9, type: 2}
+  - Name: footstepWalkSound
+    Value: {fileID: 11400000, guid: 06f9d1665c501494cab2fabb8d9c0d4e, type: 2}
+  - Name: footstepRunSound
+    Value: {fileID: 11400000, guid: 264793f51d6488647abe8a49a72e9487, type: 2}

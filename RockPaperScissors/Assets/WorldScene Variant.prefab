@@ -69,8 +69,48 @@ PrefabInstance:
       propertyPath: m_Name
       value: WorldScene Variant
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 6694746433855017560, guid: 4ea8fc71d0d33aa4794e860bd8a9318a, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8457444051872364791, guid: 4ea8fc71d0d33aa4794e860bd8a9318a,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7057606142620800556}
   m_SourcePrefab: {fileID: 100100000, guid: 4ea8fc71d0d33aa4794e860bd8a9318a, type: 3}
+--- !u!1 &5889163222120879451 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8457444051872364791, guid: 4ea8fc71d0d33aa4794e860bd8a9318a,
+    type: 3}
+  m_PrefabInstance: {fileID: 2658357646227729836}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7057606142620800556
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5889163222120879451}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b916bb4bb1a3ee0150cc015582101ae7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _networkId: 0
+  _script: {fileID: -974389366465450183, guid: 03c9bb9e0b7ceed4ea13018038cf1a32, type: 3}
+  _properties: []
+  _uiOutput: 0
+  _uiOutputSettings:
+    rid: -2
+  m_movementIndicator: {fileID: 7025435918243807456, guid: 5dfae8e2eae84f140b64b0e4cfcbcfe8,
+    type: 3}
+  m_longPressSound: {fileID: 11400000, guid: 25625e178d869405c92bfc4024612fb9, type: 2}
+  m_footstepWalkSound: {fileID: 11400000, guid: 06f9d1665c501494cab2fabb8d9c0d4e,
+    type: 2}
+  m_footstepRunSound: {fileID: 11400000, guid: 264793f51d6488647abe8a49a72e9487, type: 2}
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }

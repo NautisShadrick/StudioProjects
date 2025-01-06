@@ -44,14 +44,14 @@ end
 -- Example usage
 local targetYear = 2025
 local targetMonth = 1
-local targetDay = 10  -- Assuming today is January 3rd
-local targetHour = 12  -- Target time is 12:00 PM
+local targetDay = 12  -- Assuming today is January 3rd
+local targetHour = 14  -- Target time is 12:00 PM
 local targetMinute = 0
 timeUntil(targetYear, targetMonth, targetDay, targetHour, targetMinute)
 
 function self:Start()
-    --local updateTimer = Timer.Every(1, function()
-    --    local timeLeft = timeUntil(targetYear, targetMonth, targetDay, targetHour, targetMinute)
-    --    timer_label.text = timeLeft
-    --end)
+    local updateTimer = Timer.Every(1, function()
+        local timeLeft = timeUntil(targetYear, targetMonth, targetDay, targetHour, targetMinute)
+        timer_label.text = timeLeft
+    end)
 end

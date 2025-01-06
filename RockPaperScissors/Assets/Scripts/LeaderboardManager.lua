@@ -5,7 +5,7 @@ local EntryRepsonse = Event.new("EntryResponse")
 local LocalEntryRequest = Event.new("LocalEntryRequest")
 local LocalEntryResponse = Event.new("LocalEntryResponse")
 
-local gamesPlayedLeaderboardID = "games_played_lb"
+local gamesPlayedLeaderboardID = "games_played_lb_2"
 
 local requestConnection : EventConnection | nil = nil
 local localRequestConnection : EventConnection | nil = nil

@@ -94,7 +94,6 @@ function self:ClientAwake()
         if client.localPlayer == challengerPlayer or client.localPlayer == respondingPlayer then
             uiManager.ResetGame()
             localPlayerIsResponding = false
-            UpdateBusy(false)
 
             local _challengeIndicator = challengerPlayer.character.gameObject.transform:GetChild(2).gameObject
             _challengeIndicator:SetActive(false)
@@ -115,6 +114,10 @@ function self:ClientAwake()
             elseif winner == 0 then
                 uiManager.ShowResults("draw")
             end
+
+            Timer.After(2, function()
+                UpdateBusy(false)
+            end)
 
         end
 
@@ -180,12 +183,20 @@ end
 function self:ServerAwake()
 
     local challengeIDbyPlayer = {}
+    local currentTargetbyPlayer = {}
 
     SendChallengeRequest:Connect(function(challengerPlayer, targetPlayer, challengeID)
         challengeIDbyPlayer[challengerPlayer] = challengeID
+        currentTargetbyPlayer[challengerPlayer] = targetPlayer
         RecieveChallengeRequest:FireClient(targetPlayer, challengerPlayer)
     end)
+
     SendResponseRequest:Connect(function(respondingPlayer, challengerPlayer, responseID)
+
+        if respondingPlayer == challengerPlayer then print(respondingPlayer.name .. " is a CHEATER! you cannot challenge yourself") return end
+        if not challengeIDbyPlayer[challengerPlayer] then print(respondingPlayer.name .. " is a CHEATER! they have no selection") return end
+        if not currentTargetbyPlayer[challengerPlayer] == respondingPlayer then print(respondingPlayer.name .. " is a CHEATER! you are not the target") return end
+
         local winStats = DetermineWinner(challengeIDbyPlayer[challengerPlayer], responseID)
         CompleteGameEvent:FireAllClients(challengerPlayer, respondingPlayer, winStats[1], winStats[2])
 
@@ -194,6 +205,7 @@ function self:ServerAwake()
             local _currentStreak = playerTracker.players[winningPlayer].winStreak.value
             _currentStreak = _currentStreak + 1
             playerTracker.players[winningPlayer].winStreak.value = _currentStreak
+            leaderboardManager.IncrementPlayerScore(winningPlayer)
         end
 
         local losingPlayer = winStats[1] == 1 and respondingPlayer or winStats[1] == 2 and challengerPlayer or nil
@@ -201,10 +213,11 @@ function self:ServerAwake()
             local _currentStreak = playerTracker.players[losingPlayer].winStreak.value
             _currentStreak = 0
             playerTracker.players[losingPlayer].winStreak.value = _currentStreak
+            leaderboardManager.IncrementPlayerScore(losingPlayer)
         end
 
-        leaderboardManager.IncrementPlayerScore(challengerPlayer)
-        leaderboardManager.IncrementPlayerScore(respondingPlayer)
+        challengeIDbyPlayer[challengerPlayer] = nil
+        currentTargetbyPlayer[challengerPlayer] = nil
 
     end)
 
