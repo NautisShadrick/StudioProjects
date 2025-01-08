@@ -1,0 +1,98 @@
+:root {
+    --font-muesou-900: url("project://database/Assets/UI/Fonts/MuseoSansRounded1000 SDF.asset");
+}
+
+.battle-screen {
+    width: 370px;
+    height: 100%;
+
+    color: white;
+    font-size: 18px;
+    -unity-font-definition: var(--font-muesou-900);
+    -unity-text-align: middle-center;
+    -unity-text-outline-color: rgba(0,0,0,.7);
+    -unity-text-outline-width: 1.5px;
+    text-shadow: 0 3 0 rgba(0,0,0,0.5);
+    -unity-font-style: bold;
+
+    margin: auto;
+}
+
+/* Action bar container */
+.action__bar {
+    margin-top:auto;
+    width: 100%;
+    height: 125px;
+
+    background-color: red;
+    flex-direction: row;
+}
+
+/* Action bar message container */
+.action__bar__message {
+    background-color: green;
+    width: 100%;
+    height: 100%;
+}
+
+/* Action bar message text */
+.action__bar__message__text {
+    display: flex;
+
+    flex-shrink: 1;
+
+    width: auto;
+    height: auto;
+
+    white-space: normal;
+    flex-wrap: wrap;
+
+    -unity-text-align: middle-left;
+}
+
+/* Action bar buttons container */
+.action__bar__buttons {
+    flex-shrink: 0;
+    height: 100%;
+    width: 200px;
+    margin-left: auto;
+    background-color: blue;
+    flex-direction: row;
+    flex-wrap: wrap;
+    -unity-text-align: middle-left;
+}
+
+/* Action bar button */
+.action__bar__button {
+    position: absolute;
+    width: 85px;
+    height: 50px;
+    background-color: yellow;
+    border-width: 2px;
+    border-color: black;
+}
+
+#fight_button {
+    left: 10;
+    top: 10;
+}
+#items_button {
+    right: 10;
+    top:10;
+}
+#monsters_button {
+    left: 10;
+    bottom: 10;
+}
+#flee_button {
+    right: 10;
+    bottom: 10;
+}
+
+/* Active inventory container */
+.active__inventory__container {
+}
+
+/* Active info container */
+.active__info__container {
+}

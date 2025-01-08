@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UXML
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="UnityEngine.UIElements"
+    xmlns:hr="Highrise.UI"
+    xmlns:editor="UnityEditor.UIElements"
+    xsi:noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd"
+>
+
+  <hr:UILuaView class="battle-screen">
+    <VisualElement name="action_bar" class="action__bar">
+
+      <Label name="message" class="action__bar__message__text" text="The Fight is On!"/>
+
+      <VisualElement name="action_bar_buttons" class="action__bar__buttons">
+        <VisualElement name="fight_button" class="action__bar__button" />
+        <VisualElement name="items_button" class="action__bar__button" />
+        <VisualElement name="monsters_button" class="action__bar__button" />
+        <VisualElement name="flee_button" class="action__bar__button" />
+      </VisualElement>
+
+      <VisualElement name="active_inventory_container" class="active__inventory__container">
+      </VisualElement>
+
+      <VisualElement name="active_info_container" class="active__info__container">
+      </VisualElement>
+
+    </VisualElement>
+  </hr:UILuaView>
+
+</UXML>
