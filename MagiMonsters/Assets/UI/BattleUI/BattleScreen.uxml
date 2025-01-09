@@ -7,7 +7,8 @@
     xsi:noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd"
 >
 
-  <hr:UILuaView class="battle-screen">
+  <hr:UILuaView class="battle-screen" picking-mode="Ignore">
+
     <VisualElement name="action_bar" class="action__bar">
 
       <Label name="message" class="action__bar__message__text" text="The Fight is On!"/>
@@ -31,6 +32,39 @@
       </VisualElement>
 
     </VisualElement>
+
+    <VisualElement class="player__stat__block">
+      <VisualElement class="player__info__conatiner">
+        <Label name="player_name" class="player__name__text" text="Gavinor"/>
+        <Label name="player_level" class="player__level__text" text="Lv1"/>
+      </VisualElement>
+
+      <VisualElement class="healthbar__container">
+        <VisualElement class="healthbar">
+          <VisualElement name="player_healthbar_fill" class="healthbar__fill"/>
+        </VisualElement>
+        <Label name="player_hp" class="player__hp__text" text="13/25"/>
+      </VisualElement>
+
+      <Label name="player_mp" class="player__mp__text" text="75/100"/>
+    </VisualElement>
+
+    <VisualElement class="enemy__stat__block">
+      <VisualElement class="player__info__conatiner">
+        <Label name="enemy_name" class="player__name__text" text="Evil Cat"/>
+        <Label name="enemy_level" class="player__level__text" text="Lv1"/>
+      </VisualElement>
+
+      <VisualElement class="healthbar__container">
+        <VisualElement class="healthbar">
+          <VisualElement name="enemy_healthbar_fill" class="healthbar__fill"/>
+        </VisualElement>
+        <Label name="enemy_hp" class="player__hp__text" text="13/25"/>
+      </VisualElement>
+
+      <Label name="enemy_mp" class="player__mp__text" text="75/100"/>
+    </VisualElement>
+
   </hr:UILuaView>
 
 </UXML>

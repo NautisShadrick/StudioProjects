@@ -154,6 +154,93 @@
     margin-top: 10px;
 }
 
+/* Stat Block Classes */
+.player__stat__block{
+    position: absolute;
+    width: 200px;
+    height: auto;
+
+    flex-direction: column;
+    background-color: rgba(0,0,0,0.5);
+    border-width: 3px;
+    border-color: black;
+
+    right:0;
+    bottom: 130px;
+}
+
+.enemy__stat__block{
+    position: absolute;
+    width: 200px;
+    height: auto;
+
+    flex-direction: column;
+    background-color: rgba(0,0,0,0.5);
+    border-width: 3px;
+    border-color: black;
+
+    left:0;
+    top: 5px;
+}
+
+.player__info__conatiner{
+    flex-direction: row;
+}
+
+.player__name__text {
+    margin: auto;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding: 0;
+}
+
+.healthbar__container {
+    width: 100%;
+    height: 20px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    -unity-text-align: middle-center;
+}
+
+.player__hp__text {
+    position: absolute;
+    font-size: 14px;
+    left: 50%;
+    top: 50%;
+    translate: -50%;
+
+    padding: 0;
+    margin: 0;
+}
+
+.player__mp__text {
+    margin: 4px;
+    padding: 0;
+    margin-left: auto;
+}
+
+.player__level__text {
+    margin: auto;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding: 0;
+}
+
+.healthbar {
+    position: absolute;
+    width: 100%;
+    height: 20px;
+    background-color: rgba(0,0,0,0.5);
+    border-width: 3px;
+    border-color: black;
+}
+
+.healthbar__fill {
+    width: 100%;
+    height: 100%;
+    background-color: green;
+}
+
 .hidden {
     display: none;
 }
