@@ -23,9 +23,11 @@
     margin-top:auto;
     width: 100%;
     height: 125px;
-
-    background-color: red;
+    background-color: rgba(0,0,0,0.5);
     flex-direction: row;
+
+    border-width: 3px;
+    border-color: black;
 }
 
 /* Action bar message container */
@@ -40,6 +42,9 @@
     display: flex;
 
     flex-shrink: 1;
+
+    padding: 4px;
+    margin: auto;
 
     width: auto;
     height: auto;
@@ -56,43 +61,99 @@
     height: 100%;
     width: 200px;
     margin-left: auto;
-    background-color: blue;
+
     flex-direction: row;
     flex-wrap: wrap;
-    -unity-text-align: middle-left;
+    -unity-text-align: middle-center;
+
+    border-left-width: 3px;
+    border-color: black;
 }
 
 /* Action bar button */
 .action__bar__button {
     position: absolute;
-    width: 85px;
-    height: 50px;
-    background-color: yellow;
-    border-width: 2px;
-    border-color: black;
+
+    margin: 0;
+    padding: 0;
+
+    width: 50%;
+    height: 50%;
 }
 
 #fight_button {
-    left: 10;
-    top: 10;
+    left: 0;
+    top: 0;
 }
 #items_button {
-    right: 10;
-    top:10;
+    right: 0;
+    top:0;
 }
 #monsters_button {
-    left: 10;
-    bottom: 10;
+    left: 0;
+    bottom: 0;
 }
 #flee_button {
-    right: 10;
-    bottom: 10;
+    right: 0;
+    bottom: 0;
 }
 
 /* Active inventory container */
 .active__inventory__container {
+
+    position: absolute;
+    width: 200px;
+    height: 100%;
+    flex-direction: row;
+    flex-wrap: wrap;
+    -unity-text-align: middle-left;
+}
+
+.item__slot {
+    position: absolute;
+    width: 50%;
+    height: 50%;
+
+    -unity-text-align: middle-center;
+
+    margin: 0;
+    padding: 0;
+}
+
+#item_1 {
+    left: 0;
+    top: 0;
+}
+#item_2 {
+    right: 0;
+    top: 0;
+}
+#item_3 {
+    left: 0;
+    bottom: 0;
+}
+#item_4 {
+    right: 0;
+    bottom: 0;
 }
 
 /* Active info container */
 .active__info__container {
+
+    position: absolute;
+    right:0;
+    width: 170px;
+    height: 100%;
+
+    border-left-width: 3px;
+    border-color: black;
+}
+
+.active__info__title__text {
+    margin:auto;
+    margin-top: 10px;
+}
+
+.hidden {
+    display: none;
 }

@@ -13,16 +13,21 @@
       <Label name="message" class="action__bar__message__text" text="The Fight is On!"/>
 
       <VisualElement name="action_bar_buttons" class="action__bar__buttons">
-        <VisualElement name="fight_button" class="action__bar__button" />
-        <VisualElement name="items_button" class="action__bar__button" />
-        <VisualElement name="monsters_button" class="action__bar__button" />
-        <VisualElement name="flee_button" class="action__bar__button" />
+        <Label name="fight_button" class="action__bar__button" text="FIGHT"/>
+        <Label name="items_button" class="action__bar__button" text="Items"/>
+        <Label name="monsters_button" class="action__bar__button" text="Monsters"/>
+        <Label name="flee_button" class="action__bar__button" text="Flee"/>
       </VisualElement>
 
-      <VisualElement name="active_inventory_container" class="active__inventory__container">
+      <VisualElement name="active_inventory_container" class="active__inventory__container hidden">
+        <Label name="item_1" class="item__slot" text="Item 1"/>
+        <Label name="item_2" class="item__slot" text="Item 1"/>
+        <Label name="item_3" class="item__slot" text="Item 1"/>
+        <Label name="item_4" class="item__slot" text="Item 1"/>
       </VisualElement>
 
-      <VisualElement name="active_info_container" class="active__info__container">
+      <VisualElement name="active_info_container" class="active__info__container hidden">
+        <Label name="active_info_title" class="active__info__title__text" text="Attack name!"/>
       </VisualElement>
 
     </VisualElement>
