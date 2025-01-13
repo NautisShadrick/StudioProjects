@@ -1,157 +1,24 @@
 :root {
-    --font-muesou-900: url("project://database/Assets/UI/Fonts/MuseoSansRounded1000 SDF.asset");
+    --font-muesou-1000: url("project://database/Assets/UI/Fonts/MuseoSansRounded1000 SDF.asset");
+    --font-comic: url("project://database/Assets/UI/Fonts/Hey Comic SDF.asset");
 }
 
 .battle-screen {
-    width: 370px;
+    width: 100%;
     height: 100%;
 
-    color: white;
+    color: #0f2c38;
     font-size: 18px;
-    -unity-font-definition: var(--font-muesou-900);
+    letter-spacing: 3px;
+    -unity-font-definition: var(--font-muesou-1000);
     -unity-text-align: middle-center;
-    -unity-text-outline-color: rgba(0,0,0,.7);
+    /*
+    -unity-text-outline-color: #0f2c38;
     -unity-text-outline-width: 1.5px;
-    text-shadow: 0 3 0 rgba(0,0,0,0.5);
-    -unity-font-style: bold;
+    text-shadow: 0 3 0 #0f2c38;
+    */
 
     margin: auto;
-}
-
-/* Action bar container */
-.action__bar {
-    margin-top:auto;
-    width: 100%;
-    height: 125px;
-    background-color: rgba(0,0,0,0.5);
-    flex-direction: row;
-
-    border-width: 3px;
-    border-color: black;
-}
-
-/* Action bar message container */
-.action__bar__message {
-    background-color: green;
-    width: 100%;
-    height: 100%;
-}
-
-/* Action bar message text */
-.action__bar__message__text {
-    display: flex;
-
-    flex-shrink: 1;
-
-    padding: 4px;
-    margin: auto;
-
-    width: auto;
-    height: auto;
-
-    white-space: normal;
-    flex-wrap: wrap;
-
-    -unity-text-align: middle-left;
-}
-
-/* Action bar buttons container */
-.action__bar__buttons {
-    flex-shrink: 0;
-    height: 100%;
-    width: 200px;
-    margin-left: auto;
-
-    flex-direction: row;
-    flex-wrap: wrap;
-    -unity-text-align: middle-center;
-
-    border-left-width: 3px;
-    border-color: black;
-}
-
-/* Action bar button */
-.action__bar__button {
-    position: absolute;
-
-    margin: 0;
-    padding: 0;
-
-    width: 50%;
-    height: 50%;
-}
-
-#fight_button {
-    left: 0;
-    top: 0;
-}
-#items_button {
-    right: 0;
-    top:0;
-}
-#monsters_button {
-    left: 0;
-    bottom: 0;
-}
-#flee_button {
-    right: 0;
-    bottom: 0;
-}
-
-/* Active inventory container */
-.active__inventory__container {
-
-    position: absolute;
-    width: 200px;
-    height: 100%;
-    flex-direction: row;
-    flex-wrap: wrap;
-    -unity-text-align: middle-left;
-}
-
-.item__slot {
-    position: absolute;
-    width: 50%;
-    height: 50%;
-
-    -unity-text-align: middle-center;
-
-    margin: 0;
-    padding: 0;
-}
-
-#item_1 {
-    left: 0;
-    top: 0;
-}
-#item_2 {
-    right: 0;
-    top: 0;
-}
-#item_3 {
-    left: 0;
-    bottom: 0;
-}
-#item_4 {
-    right: 0;
-    bottom: 0;
-}
-
-/* Active info container */
-.active__info__container {
-
-    position: absolute;
-    right:0;
-    width: 170px;
-    height: 100%;
-
-    border-left-width: 3px;
-    border-color: black;
-}
-
-.active__info__title__text {
-    margin:auto;
-    margin-top: 10px;
 }
 
 /* Stat Block Classes */
@@ -161,12 +28,12 @@
     height: auto;
 
     flex-direction: column;
-    background-color: rgba(0,0,0,0.5);
-    border-width: 3px;
-    border-color: black;
+    background-color: white;
 
-    right:0;
-    bottom: 130px;
+    border-radius: 10px;
+
+    right: 10px;
+    bottom: 140px;
 }
 
 .enemy__stat__block{
@@ -175,31 +42,38 @@
     height: auto;
 
     flex-direction: column;
-    background-color: rgba(0,0,0,0.5);
-    border-width: 3px;
-    border-color: black;
+    background-color: white;
 
-    left:0;
+    border-radius: 10px;
+
+    left: 10px;
     top: 5px;
 }
 
 .player__info__conatiner{
+    justify-content: space-between;
     flex-direction: row;
+    padding: 0 10px;
 }
 
 .player__name__text {
-    margin: auto;
-    margin-top: 5px;
-    margin-bottom: 5px;
     padding: 0;
 }
 
 .healthbar__container {
-    width: 100%;
-    height: 20px;
+    width: 90%;
+    height: 15px;
+
     flex-direction: row;
     flex-wrap: wrap;
     -unity-text-align: middle-center;
+
+    border-radius: 5px;
+    overflow: hidden;
+
+    margin: 0;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .player__hp__text {
@@ -211,34 +85,32 @@
 
     padding: 0;
     margin: 0;
+
+    color: white;
 }
 
 .player__mp__text {
-    margin: 4px;
+    font-size: 14px;
+    margin: 0 4px;
+    margin-bottom: 4px;
     padding: 0;
     margin-left: auto;
 }
 
 .player__level__text {
-    margin: auto;
-    margin-top: 5px;
-    margin-bottom: 5px;
     padding: 0;
 }
 
 .healthbar {
-    position: absolute;
     width: 100%;
-    height: 20px;
+    height: 100%;
     background-color: rgba(0,0,0,0.5);
-    border-width: 3px;
-    border-color: black;
 }
 
 .healthbar__fill {
     width: 100%;
     height: 100%;
-    background-color: green;
+    background-color: #34d50a;
 }
 
 .hidden {
