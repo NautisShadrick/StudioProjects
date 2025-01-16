@@ -1,5 +1,8 @@
 --!Type(Module)
 
+ActionEvent = Event.new("ActionEvent")
+EndBattleEvent = Event.new("EndBattleEvent")
+
 local actionLibrary = require("ActionLibrary")
 local monsterLibrary = require("MonsterLibrary")
 
@@ -21,6 +24,7 @@ function Battle:new(player: Player, playerMonster: monsterLibrary.MonsterData, e
         turn = 0
     }
     setmetatable(obj, Battle)
+    self.turn = 0
     return obj
 end
 
@@ -28,6 +32,10 @@ function Battle:GetStats()
     print("Player: "..self.player.name)
     print("Player Monster: "..self.playerMonster.name)
     print("Enemy: "..self.enemy.name)
+end
+
+function Battle:EndBattle(_winner)
+    EndBattleEvent:FireClient(self.player, _winner)
 end
 
 function Battle:DoAction(actionID: string)
@@ -54,11 +62,34 @@ function Battle:DoAction(actionID: string)
     print(_target.name)
     print(action.GetActionName())
 
-    _attacker.currentMana = _attacker.currentMana - action.GetActionManaCost()
-    _target.currentHealth = _target.currentHealth - action.GetActionDamage()
-    print(_target.name.." has ".._target.currentHealth.." health remaining")
+    --_attacker.currentMana = _attacker.currentMana - action.GetActionManaCost()
+    local _damage = action.GetActionDamage() * math.random(80,120)/100
+    _damage = math.floor(_damage)
+    print(_damage)
+    _target.currentHealth = _target.currentHealth - _damage
 
+    -- 0 for player, 1 for enemy
     self.turn = self.turn == 0 and 1 or 0
+
+    ActionEvent:FireClient(self.player,
+    self.turn,
+    self.playerMonster.currentHealth,
+    self.playerMonster.currentMana,
+    self.enemy.currentHealth,
+    self.enemy.maxHealth,
+    self.enemy.currentMana,
+    self.enemy.maxMana,
+    action.GetActionName())
+
+    if self.playerMonster.currentHealth <= 0 or self.enemy.currentHealth <= 0 then
+        local _winner = self.playerMonster.currentHealth > 0 and self.player or self.enemy
+        self:EndBattle(_winner)
+        return
+    end
+
+    if self.turn == 1 then
+        Timer.After(2, function() self:DoAction(self.enemy.actionIDs[math.random(1,#self.enemy.actionIDs)]) end)
+    end
 
 end
 

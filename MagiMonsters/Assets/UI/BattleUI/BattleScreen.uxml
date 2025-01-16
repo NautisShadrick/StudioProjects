@@ -7,7 +7,7 @@
     xsi:noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd"
 >
 
-  <hr:UILuaView class="battle-screen" picking-mode="Ignore">
+  <hr:UILuaView name="battle_screen" class="battle-screen" picking-mode="Ignore">
   
     <VisualElement class="player__stat__block">
       <VisualElement class="player__info__conatiner">

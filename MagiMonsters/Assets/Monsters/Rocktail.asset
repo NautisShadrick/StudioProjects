@@ -20,9 +20,9 @@ MonoBehaviour:
   m_MaxHP: 250
   m_MaxMana: 50
   m_MonsterActions:
-  - {fileID: 11400000, guid: 98ac47d0c81abad4198f5295cc539ae7, type: 2}
-  - {fileID: 11400000, guid: f1b96833caa6da144ab96b99d6c8f513, type: 2}
-  - {fileID: 11400000, guid: 4cf81c0c478a79a46b01aac45cf15e26, type: 2}
+  - Bark
+  - Bite
+  - Tackle
   references:
     version: 2
     RefIds: []

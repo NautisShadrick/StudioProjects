@@ -17,7 +17,7 @@ MonoBehaviour:
   _properties: []
   m_actionName: Lightning Lash
   m_actionElement: lightning
-  m_actionDamage: 10
+  m_actionDamage: 40
   m_actionManaCost: 2
   references:
     version: 2

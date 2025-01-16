@@ -20,8 +20,9 @@ MonoBehaviour:
   m_MaxHP: 150
   m_MaxMana: 100
   m_MonsterActions:
-  - {fileID: 11400000, guid: 6e75f40bf8698a246860f52b33a24d44, type: 2}
-  - {fileID: 11400000, guid: 4c6670129b2eae347a380bf9012bbe09, type: 2}
+  - Scratch
+  - LightningLash
+  - Bite
   references:
     version: 2
     RefIds: []

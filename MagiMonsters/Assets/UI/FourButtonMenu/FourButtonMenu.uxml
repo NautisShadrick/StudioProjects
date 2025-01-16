@@ -7,7 +7,7 @@
     xsi:noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd"
 >
 
-  <hr:UILuaView class="four-button-menu" picking-mode="Ignore">
+  <hr:UILuaView name="four_button_menu" class="four-button-menu" picking-mode="Ignore">
     <Label name="back_button" text="back"/>
     <VisualElement name="buttons_root"/>
   </hr:UILuaView>

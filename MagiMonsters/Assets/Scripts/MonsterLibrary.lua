@@ -1,12 +1,12 @@
 --!Type(Module)
 
 --!SerializeField
-local StromCat: MonsterBase = nil
+local StormCat: MonsterBase = nil
 --!SerializeField
 local Rocktail: MonsterBase = nil
 
 monsters = {
-    StromCat = StromCat,
+    StormCat = StormCat,
     Rocktail = Rocktail
 }
 
@@ -17,10 +17,12 @@ export type MonsterData = {
     currentHealth: number,
     maxMana: number,
     currentMana: number,
+    level: number,
     actionIDs: {string}
 }
 
 function GetDefaultMonsterData(monsterName: string): MonsterData
+    print(typeof(monsters[monsterName]))
     return {
         name = monsters[monsterName].GetName(),
         speciesName = monsterName,
@@ -28,6 +30,7 @@ function GetDefaultMonsterData(monsterName: string): MonsterData
         currentHealth = monsters[monsterName].GetMaxHP(),
         maxMana = monsters[monsterName].GetMaxMana(),
         currentMana = monsters[monsterName].GetMaxMana(),
+        level = 1,
         actionIDs = monsters[monsterName].GetActions()
     }
 end

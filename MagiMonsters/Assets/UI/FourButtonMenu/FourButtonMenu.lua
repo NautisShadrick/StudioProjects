@@ -1,6 +1,8 @@
 --!Type(UI)
 
 --!Bind
+local four_button_menu: UILuaView = nil
+--!Bind
 local buttons_root: VisualElement = nil
 --!Bind
 local back_button: Label = nil
@@ -13,6 +15,7 @@ export type menuButton = {
 local playerTracker = require("PlayerTracker")
 local gameManger = require("GameManager")
 local actionLibrary = require("ActionLibrary")
+local uiManager = require("UIManager")
 
 function CreateButton(button: menuButton)
     local _button = VisualElement.new()
@@ -42,7 +45,7 @@ local FightButtonCallback = function()
     local _availableActionButtons = {}
 
     local playerMonster = playerTracker.GetPlayerMonsterData()
-    local _actionIDs = playerMonster.actions
+    local _actionIDs = playerMonster.actionIDs
 
     print(#_actionIDs)
 
@@ -82,7 +85,7 @@ local FleeButtonCallback = function()
     print("Flee Button Pressed")
 end
 
-local Menu_One =
+Menu_One =
 {
     {title = "Fight", callback = FightButtonCallback},
     {title = "Items", callback = ItemsButtonCallback},

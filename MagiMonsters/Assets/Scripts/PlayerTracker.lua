@@ -68,7 +68,8 @@ function self:ServerAwake()
             currentHealth = 100,
             maxMana = 100,
             currentMana = 100,
-            actions = {"Bark", "Bite", "Tackle"}
+            level = 1,
+            actionIDs = {"Bark", "Bite", "Tackle"}
         }
 
         players[player].monsterData.value = _newMonsterData
