@@ -3,11 +3,11 @@
 --!SerializeField
 local Zapkit: MonsterBase = nil
 --!SerializeField
-local Terakita: MonsterBase = nil
+local Terrakita: MonsterBase = nil
 
 monsters = {
     Zapkit = Zapkit,
-    Terakita = Terakita
+    Terrakita = Terrakita
 }
 
 export type MonsterData = {
@@ -18,7 +18,8 @@ export type MonsterData = {
     maxMana: number,
     currentMana: number,
     level: number,
-    actionIDs: {string}
+    actionIDs: {string},
+    monsterSprite: Texture
 }
 
 function GetDefaultMonsterData(monsterName: string): MonsterData
@@ -31,6 +32,7 @@ function GetDefaultMonsterData(monsterName: string): MonsterData
         maxMana = monsters[monsterName].GetMaxMana(),
         currentMana = monsters[monsterName].GetMaxMana(),
         level = 1,
-        actionIDs = monsters[monsterName].GetActions()
+        actionIDs = monsters[monsterName].GetActions(),
+        monsterSprite = monsters[monsterName].GetSprite()
     }
 end

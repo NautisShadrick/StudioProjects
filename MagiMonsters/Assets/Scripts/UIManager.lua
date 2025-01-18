@@ -12,6 +12,9 @@ local FourButtonUI: FourButtonMenu = nil
 local ResultsLabelUI: ResultsUI = nil
 
 local BattleDataModule = require("BattleData")
+local cameraManager = require("CameraManager")
+local playerTracker = require("PlayerTracker")
+local battlGroundManager = require("BattleGroundController")
 
 currentBattleTurn = 0
 
@@ -21,6 +24,11 @@ function InitializeBattle(enemy: string)
 
     FourButtonUI.UpdateButtons(FourButtonUI.Menu_One)
     BattleScreenUI.InitializeBattle(enemy)
+
+    cameraManager.SwitchCamera(1)
+
+    battlGroundManager.InitializeBattleGrounds(playerTracker.players[client.localPlayer].monsterData.value.speciesName, enemy)
+
 end
 
 function self:ClientStart()
@@ -39,10 +47,14 @@ function self:ClientStart()
     end)
     EndBattle()
 
+    cameraManager.SwitchCamera(0)
+
 end
 
 function EndBattle()
     FourButtonOBJ:SetActive(false)
     BattleScreenOBJ:SetActive(false)
     currentBattleTurn = 0
+
+    cameraManager.SwitchCamera(0)
 end

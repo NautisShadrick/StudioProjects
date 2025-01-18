@@ -23,6 +23,7 @@ MonoBehaviour:
   - Bark
   - Bite
   - Tackle
+  m_MonsterSprite: {fileID: 2800000, guid: 9c4f4a3f2f6e6c2478ded2cc74a4db44, type: 3}
   references:
     version: 2
     RefIds: []

@@ -10,6 +10,8 @@ local MaxHP: number = 0
 local MaxMana: number = 0
 --!SerializeField
 local MonsterActions: {string} = {}
+--!SerializeField
+local MonsterSprite: Texture = nil
 
 function GetName()
     return MonsterName
@@ -29,4 +31,8 @@ end
 
 function GetActions()
     return MonsterActions
+end
+
+function GetSprite()
+    return MonsterSprite
 end

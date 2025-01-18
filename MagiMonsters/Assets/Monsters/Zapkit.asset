@@ -23,6 +23,7 @@ MonoBehaviour:
   - Scratch
   - LightningLash
   - Bite
+  m_MonsterSprite: {fileID: 2800000, guid: 2354db48eb2f4b645904033cdfaecc05, type: 3}
   references:
     version: 2
     RefIds: []

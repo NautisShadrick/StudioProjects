@@ -29,9 +29,7 @@ end
 
 function Search(objectType: string)
     print("Searching through", objectType)
-
     StartNewBattle("Zapkit")
-
 end
 
 function self:ClientAwake()
