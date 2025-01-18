@@ -62,7 +62,7 @@ function Battle:DoAction(actionID: string)
     print(_target.name)
     print(action.GetActionName())
 
-    --_attacker.currentMana = _attacker.currentMana - action.GetActionManaCost()
+    _attacker.currentMana = _attacker.currentMana - action.GetActionManaCost()
     local _damage = action.GetActionDamage() * math.random(80,120)/100
     _damage = math.floor(_damage)
     print(_damage)

@@ -34,13 +34,13 @@ function InitializeBattle(enemy: string)
     player_name.text = _playerMonsterData.name
     --player_level.text = "Lvl. ".._playerMonsterData.level
     player_hp.text = _playerMonsterData.currentHealth.."/".._playerMonsterData.maxHealth
-    player_mp.text = _playerMonsterData.currentMana.."/".._playerMonsterData.maxMana
+    player_mp.text = "mp: " .. _playerMonsterData.currentMana.."/".._playerMonsterData.maxMana
     player_healthbar_fill.style.width = StyleLength.new(Length.Percent((_playerMonsterData.currentHealth / _playerMonsterData.maxHealth)*100))
 
     enemy_name.text = _enemyMonsterData.name
     --enemy_level.text = "Lvl. ".._enemyMonsterData.level
     enemy_hp.text = _enemyMonsterData.currentHealth.."/".._enemyMonsterData.maxHealth
-    enemy_mp.text = _enemyMonsterData.currentMana.."/".._enemyMonsterData.maxMana
+    enemy_mp.text = "mp: " .. _enemyMonsterData.currentMana.."/".._enemyMonsterData.maxMana
     enemy_healthbar_fill.style.width = StyleLength.new(Length.Percent((_enemyMonsterData.currentHealth / _enemyMonsterData.maxHealth)*100))
 end
 
@@ -54,10 +54,10 @@ function UpdateStats(turn, playerHealth, playerMana, enemyHealth, enemyMaxHealth
     local _playerMonsterData = playerTracker.players[client.localPlayer].monsterData.value
 
     player_hp.text = playerHealth.."/".._playerMonsterData.maxHealth
-    player_mp.text = playerMana.."/".._playerMonsterData.maxMana
+    player_mp.text = "mp: " .. playerMana.."/".._playerMonsterData.maxMana
     player_healthbar_fill.style.width = StyleLength.new(Length.Percent((playerHealth / _playerMonsterData.maxHealth)*100))
 
     enemy_hp.text = enemyHealth.."/"..enemyMaxHealth
-    enemy_mp.text = enemyMana.."/"..enemyMaxMana
+    enemy_mp.text = "mp:" .. enemyMana.."/"..enemyMaxMana
     enemy_healthbar_fill.style.width = StyleLength.new(Length.Percent((enemyHealth / enemyMaxHealth)*100))
 end
