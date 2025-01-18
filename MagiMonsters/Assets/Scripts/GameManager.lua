@@ -30,7 +30,7 @@ end
 function Search(objectType: string)
     print("Searching through", objectType)
 
-    StartNewBattle("StormCat")
+    StartNewBattle("Zapkit")
 
 end
 

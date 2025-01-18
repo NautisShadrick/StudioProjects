@@ -18,7 +18,7 @@ MonoBehaviour:
   m_actionName: Bark
   m_actionElement: force
   m_actionDamage: 10
-  m_actionManaCost: 2
+  m_actionManaCost: 0
   references:
     version: 2
     RefIds: []

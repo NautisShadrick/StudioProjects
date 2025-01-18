@@ -26,9 +26,9 @@ namespace Highrise.Lua.Generated
         public override string ScriptGUID => s_scriptGUID;
 
         [LuaScriptPropertyAttribute("d2f77d2881e7f6941bb149becef8f82a")]
-        [SerializeField] public UnityEngine.Object m_StormCat = default;
+        [SerializeField] public UnityEngine.Object m_Zapkit = default;
         [LuaScriptPropertyAttribute("d2f77d2881e7f6941bb149becef8f82a")]
-        [SerializeField] public UnityEngine.Object m_Rocktail = default;
+        [SerializeField] public UnityEngine.Object m_Terakita = default;
 
         protected override SerializedPropertyValue[] SerializeProperties()
         {
@@ -37,8 +37,8 @@ namespace Highrise.Lua.Generated
 
             return new SerializedPropertyValue[]
             {
-                CreateSerializedProperty(_script.GetPropertyAt(0), m_StormCat),
-                CreateSerializedProperty(_script.GetPropertyAt(1), m_Rocktail),
+                CreateSerializedProperty(_script.GetPropertyAt(0), m_Zapkit),
+                CreateSerializedProperty(_script.GetPropertyAt(1), m_Terakita),
             };
         }
     }

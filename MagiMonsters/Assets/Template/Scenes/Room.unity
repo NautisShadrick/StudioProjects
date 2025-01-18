@@ -592,8 +592,8 @@ MonoBehaviour:
   _uiOutput: 0
   _uiOutputSettings:
     rid: -2
-  m_StormCat: {fileID: 11400000, guid: 37c1c4be63666e249990c18c8e473817, type: 2}
-  m_Rocktail: {fileID: 11400000, guid: a3aa255b57d3a944cbf11b3f173607e5, type: 2}
+  m_Zapkit: {fileID: 11400000, guid: 37c1c4be63666e249990c18c8e473817, type: 2}
+  m_Terakita: {fileID: 11400000, guid: a3aa255b57d3a944cbf11b3f173607e5, type: 2}
   references:
     version: 2
     RefIds:

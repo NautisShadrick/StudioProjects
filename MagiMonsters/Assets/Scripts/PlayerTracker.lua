@@ -14,7 +14,8 @@ function TrackPlayers(game, characterCallback)
         playercount = playercount + 1
         players[player] = {
             player = player,
-            monsterData = TableValue.new("MonsterData"..player.user.id, {})
+            monsterData = TableValue.new("MonsterData"..player.user.id, {}),
+            monsterCollection = TableValue.new("MonsterCollection"..player.user.id, {})
         }
 
         player.CharacterChanged:Connect(function(player, character) 
@@ -56,23 +57,26 @@ end
 
 ------------- SERVER -------------
 
+function SavePlayerMonstersToStorage(player: Player)
+    local _monsterCollection = players[player].monsterCollection.value
+    Storage.SetPlayerValue(player, "monster_colletion", _monsterCollection)
+end
+
+function GetPlayerMonstersFromStorage(player: Player)
+    Storage.GetPlayerValue(player, "monster_colletion", function(monsterCollection)
+        if monsterCollection == nil then 
+            return
+        end
+        players[player].monsterCollection.value = monsterCollection
+        players[player].monsterData.value = monsterCollection[1]
+    end)
+end
+
 function self:ServerAwake()
     TrackPlayers(server)
 
     GetDefaultMonsterDataRequest:Connect(function(player)
         print("setting monster data for: ", player.name)
-        local _newMonsterData = {
-            name = "Gavinor",
-            speciesName = "Rocktail",
-            maxHealth = 100,
-            currentHealth = 100,
-            maxMana = 100,
-            currentMana = 100,
-            level = 1,
-            actionIDs = {"Bark", "Bite", "Tackle"}
-        }
-
-        players[player].monsterData.value = _newMonsterData
-
+        GetPlayerMonstersFromStorage(player)
     end)
 end

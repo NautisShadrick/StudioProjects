@@ -1,13 +1,13 @@
 --!Type(Module)
 
 --!SerializeField
-local StormCat: MonsterBase = nil
+local Zapkit: MonsterBase = nil
 --!SerializeField
-local Rocktail: MonsterBase = nil
+local Terakita: MonsterBase = nil
 
 monsters = {
-    StormCat = StormCat,
-    Rocktail = Rocktail
+    Zapkit = Zapkit,
+    Terakita = Terakita
 }
 
 export type MonsterData = {
