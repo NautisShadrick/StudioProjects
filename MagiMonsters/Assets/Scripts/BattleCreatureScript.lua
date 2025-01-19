@@ -9,3 +9,7 @@ end
 function playTrigger(triggerName: string)
     animator:SetTrigger(triggerName)
 end
+
+function setBool(boolName: string, value: boolean)
+    animator:SetBool(boolName, value)
+end

@@ -28,7 +28,6 @@ function InitializeBattle(enemy: string)
     cameraManager.SwitchCamera(1)
 
     battlGroundManager.InitializeBattleGrounds(playerTracker.players[client.localPlayer].monsterData.value.speciesName, enemy)
-
 end
 
 function self:ClientStart()
@@ -43,7 +42,15 @@ function self:ClientStart()
     end)
 
     BattleDataModule.EndBattleEvent:Connect(function(winner)
-        EndBattle()
+        local _gameOverText = winner == client.localPlayer and "You Win!" or "You Lose!"
+        ResultsLabelUI.ShowPopup(_gameOverText)
+
+        local _deadCreatureScript = winner == client.localPlayer and battlGroundManager.GetEnemyCreature() or battlGroundManager.GetPlayerCreature()
+        _deadCreatureScript.setBool("dead", true)
+
+        Timer.After(2, function()
+            EndBattle()
+        end)
     end)
     EndBattle()
 

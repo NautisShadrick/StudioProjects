@@ -15,6 +15,16 @@ local enemyCreature: GameObject = nil
 local monsterLibrary = require("MonsterLibrary")
 local battleData = require("BattleData")
 
+local playerCreatureScript
+local enemyCreatureScript
+
+function GetPlayerCreature()
+    return playerCreature.transform.parent.gameObject:GetComponent(BattleCreatureScript)
+end
+function GetEnemyCreature()
+    return enemyCreature.transform.parent.gameObject:GetComponent(BattleCreatureScript)
+end
+
 function InitializeBattleGrounds(playerCreatureID: string, enemyCreatureID: string)
 
     battleGround:SetActive(true)
@@ -27,6 +37,10 @@ function InitializeBattleGrounds(playerCreatureID: string, enemyCreatureID: stri
 
     _playerMonsterMaterial.mainTexture = _playerSprite
     _enemyMonsterMaterial.mainTexture = _enemySprite
+
+    playerCreatureScript.setBool("dead", false)
+    enemyCreatureScript.setBool("dead", false)
+
 end
 
 function EndBattleGrounds()
@@ -35,8 +49,8 @@ end
 
 function self:ClientStart()
 
-    local playerCreatureScript = playerCreature.transform.parent.gameObject:GetComponent(BattleCreatureScript)
-    local enemyCreatureScript = enemyCreature.transform.parent.gameObject:GetComponent(BattleCreatureScript)
+    playerCreatureScript = playerCreature.transform.parent.gameObject:GetComponent(BattleCreatureScript)
+    enemyCreatureScript = enemyCreature.transform.parent.gameObject:GetComponent(BattleCreatureScript)
 
     battleData.ActionEvent:Connect(function(turn, playerHealth, playerMana, enemyHealth, enemyMaxHealth, enemyMana, enemyMaxMana, actionName)
 
