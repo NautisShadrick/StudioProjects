@@ -16,7 +16,7 @@ local monsterLibrary = require("MonsterLibrary")
 
 function InitializeBattleGrounds(playerCreatureID: string, enemyCreatureID: string)
 
-    print(playerCreatureID, enemyCreatureID)
+    battleGround:SetActive(true)
 
     local _playerSprite = monsterLibrary.GetDefaultMonsterData(playerCreatureID).monsterSprite
     local _enemySprite = monsterLibrary.GetDefaultMonsterData(enemyCreatureID).monsterSprite
@@ -26,4 +26,8 @@ function InitializeBattleGrounds(playerCreatureID: string, enemyCreatureID: stri
 
     _playerMonsterMaterial.mainTexture = _playerSprite
     _enemyMonsterMaterial.mainTexture = _enemySprite
+end
+
+function EndBattleGrounds()
+    battleGround:SetActive(false)
 end

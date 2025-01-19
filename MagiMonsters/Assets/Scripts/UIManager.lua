@@ -57,4 +57,5 @@ function EndBattle()
     currentBattleTurn = 0
 
     cameraManager.SwitchCamera(0)
+    battlGroundManager.EndBattleGrounds()
 end
