@@ -23,7 +23,7 @@ export type MonsterData = {
 }
 
 function GetDefaultMonsterData(monsterName: string): MonsterData
-    print(typeof(monsters[monsterName]))
+    print(monsterName)
     return {
         name = monsters[monsterName].GetName(),
         speciesName = monsterName,

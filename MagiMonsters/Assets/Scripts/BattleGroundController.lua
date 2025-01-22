@@ -12,11 +12,14 @@ local playerCreature: GameObject = nil
 --!SerializeField
 local enemyCreature: GameObject = nil
 
+local playerTracker = require("PlayerTracker")
 local monsterLibrary = require("MonsterLibrary")
 local battleData = require("BattleData")
 
 local playerCreatureScript
 local enemyCreatureScript
+
+local currentEnemyCreatureID = ""
 
 function GetPlayerCreature()
     return playerCreature.transform.parent.gameObject:GetComponent(BattleCreatureScript)
@@ -25,7 +28,9 @@ function GetEnemyCreature()
     return enemyCreature.transform.parent.gameObject:GetComponent(BattleCreatureScript)
 end
 
-function InitializeBattleGrounds(playerCreatureID: string, enemyCreatureID: string)
+function InitializeBattleGrounds(playerCreatureID: string, enemyCreatureID)
+    enemyCreatureID = enemyCreatureID or currentEnemyCreatureID
+    currentEnemyCreatureID = enemyCreatureID
 
     battleGround:SetActive(true)
 
@@ -61,6 +66,8 @@ function self:ClientStart()
             playerCreatureScript.playTrigger("attack")
             Timer.After(.5, function() enemyCreatureScript.playTrigger("hurt") end)
         end
+
+        InitializeBattleGrounds(playerTracker.players[client.localPlayer].monsterData.value.speciesName)
         
     end)
 end

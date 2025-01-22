@@ -3,6 +3,7 @@
 ActionEvent = Event.new("ActionEvent")
 EndBattleEvent = Event.new("EndBattleEvent")
 
+local playerTracker = require("PlayerTracker")
 local actionLibrary = require("ActionLibrary")
 local monsterLibrary = require("MonsterLibrary")
 
@@ -91,6 +92,32 @@ function Battle:DoAction(actionID: string)
         Timer.After(2, function() self:DoAction(self.enemy.actionIDs[math.random(1,#self.enemy.actionIDs)]) end)
     end
 
+end
+
+function Battle:SwapMonster()
+    self.playerMonster = playerTracker.players[self.player].monsterData.value
+    -- 0 for player, 1 for enemy
+    self.turn = self.turn == 0 and 1 or 0
+
+    ActionEvent:FireClient(self.player,
+    self.turn,
+    self.playerMonster.currentHealth,
+    self.playerMonster.currentMana,
+    self.enemy.currentHealth,
+    self.enemy.maxHealth,
+    self.enemy.currentMana,
+    self.enemy.maxMana,
+    nil)
+
+    if self.playerMonster.currentHealth <= 0 or self.enemy.currentHealth <= 0 then
+        local _winner = self.playerMonster.currentHealth > 0 and self.player or self.enemy
+        self:EndBattle(_winner)
+        return
+    end
+
+    if self.turn == 1 then
+        Timer.After(2, function() self:DoAction(self.enemy.actionIDs[math.random(1,#self.enemy.actionIDs)]) end)
+    end
 end
 
 return {

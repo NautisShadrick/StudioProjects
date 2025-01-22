@@ -3,6 +3,8 @@
 local StartBattleRequest = Event.new("StartBattleRequest")
 local DoActionRequest = Event.new("DoActionRequest")
 
+local SwapMonsterRequest = Event.new("SwapMonsterRequest")
+
 local playerTracker = require("PlayerTracker")
 local monsterLibrary = require("MonsterLibrary")
 local battleModule = require("BattleData")
@@ -12,6 +14,10 @@ local uiManager = require("UIManager")
 -----------------------
 --    CLIENT SIDE    --
 -----------------------
+
+function SwapMonster(monsterIndex: number)
+    SwapMonsterRequest:FireServer(monsterIndex)
+end
 
 function ClientDoAction(action: string)
     if uiManager.currentBattleTurn ~= 0 then
@@ -60,6 +66,16 @@ function self:ServerAwake()
         end
 
         playerBattles[player]:DoAction(action)
+    end)
+
+    SwapMonsterRequest:Connect(function(player, monsterIndex)
+        playerTracker.players[player].monsterData.value = playerTracker.players[player].monsterCollection.value[monsterIndex]
+
+        if not playerBattles[player] then
+            print("Player is not in a battle")
+            return
+        end
+        playerBattles[player]:SwapMonster()
     end)
 
     server.PlayerDisconnected:Connect(function(player)

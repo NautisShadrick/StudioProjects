@@ -652,6 +652,7 @@ MonoBehaviour:
   m_Scratch: {fileID: 11400000, guid: 6e75f40bf8698a246860f52b33a24d44, type: 2}
   m_Tackle: {fileID: 11400000, guid: 4cf81c0c478a79a46b01aac45cf15e26, type: 2}
   m_LightningLash: {fileID: 11400000, guid: 4c6670129b2eae347a380bf9012bbe09, type: 2}
+  m_SwapMonster: {fileID: 11400000, guid: 7e1eb8188ece36c449f58435efc7057d, type: 2}
   references:
     version: 2
     RefIds:

@@ -89,7 +89,7 @@ local MonstersButtonCallback = function()
                 _monsterButtons,
                 {
                 title = monster.name,
-                callback = function() print(monster.name) end
+                callback = function() gameManger.SwapMonster(i) end
                 }
             )
         else

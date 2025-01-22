@@ -10,11 +10,14 @@ local Scratch: AttackBase = nil
 local Tackle: AttackBase = nil
 --!SerializeField
 local LightningLash: AttackBase = nil
+--!SerializeField
+local SwapMonster: AttackBase = nil
 
 actions = {
     Bark = Bark,
     Bite = Bite,
     Scratch = Scratch,
     Tackle = Tackle,
-    LightningLash = LightningLash
+    LightningLash = LightningLash,
+    SwapMonster = SwapMonster
 }

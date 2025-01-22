@@ -48,11 +48,14 @@ function UpdateStats(turn, playerHealth, playerMana, enemyHealth, enemyMaxHealth
 
     playerHealth = math.max(0, playerHealth)
     playerMana = math.max(0, playerMana)
+
     enemyHealth = math.max(0, enemyHealth)
     enemyMana = math.max(0, enemyMana)
 
     local _playerMonsterData = playerTracker.players[client.localPlayer].monsterData.value
 
+    player_name.text = _playerMonsterData.name
+    
     player_hp.text = playerHealth.."/".._playerMonsterData.maxHealth
     player_mp.text = "mp: " .. playerMana.."/".._playerMonsterData.maxMana
     player_healthbar_fill.style.width = StyleLength.new(Length.Percent((playerHealth / _playerMonsterData.maxHealth)*100))

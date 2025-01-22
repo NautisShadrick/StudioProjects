@@ -35,6 +35,8 @@ namespace Highrise.Lua.Generated
         [SerializeField] public UnityEngine.Object m_Tackle = default;
         [LuaScriptPropertyAttribute("6bbfc1ed25f4b2e4b845f812887c8ece")]
         [SerializeField] public UnityEngine.Object m_LightningLash = default;
+        [LuaScriptPropertyAttribute("6bbfc1ed25f4b2e4b845f812887c8ece")]
+        [SerializeField] public UnityEngine.Object m_SwapMonster = default;
 
         protected override SerializedPropertyValue[] SerializeProperties()
         {
@@ -48,6 +50,7 @@ namespace Highrise.Lua.Generated
                 CreateSerializedProperty(_script.GetPropertyAt(2), m_Scratch),
                 CreateSerializedProperty(_script.GetPropertyAt(3), m_Tackle),
                 CreateSerializedProperty(_script.GetPropertyAt(4), m_LightningLash),
+                CreateSerializedProperty(_script.GetPropertyAt(5), m_SwapMonster),
             };
         }
     }
