@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "com.pz.studio": {
-      "version": "0.17.10",
+      "version": "0.17.12",
       "depth": 0,
       "source": "registry",
       "dependencies": {

@@ -55,6 +55,10 @@ function GetPlayerMonsterData()
     return players[client.localPlayer].monsterData.value
 end
 
+function GetPlayerMonsterCollection()
+    return players[client.localPlayer].monsterCollection.value
+end
+
 ------------- SERVER -------------
 
 function SavePlayerMonstersToStorage(player: Player)

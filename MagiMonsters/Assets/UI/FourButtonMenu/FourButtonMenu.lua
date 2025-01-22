@@ -79,6 +79,31 @@ end
 
 local MonstersButtonCallback = function()
     print("Monsters Button Pressed")
+    local _myMonsters = playerTracker.GetPlayerMonsterCollection()
+    local _monsterButtons = {}
+    
+    for i = 1, 4 do
+        local monster = _myMonsters[i]
+        if monster then
+            table.insert(
+                _monsterButtons,
+                {
+                title = monster.name,
+                callback = function() print(monster.name) end
+                }
+            )
+        else
+            table.insert(
+                _monsterButtons,
+                {
+                title = "-",
+                callback = function() end
+                }
+            )
+        end
+    end
+
+    UpdateButtons(_monsterButtons)
 end
 
 local FleeButtonCallback = function()
