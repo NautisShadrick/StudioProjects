@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UXML
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="UnityEngine.UIElements"
+    xmlns:hr="Highrise.UI"
+    xmlns:editor="UnityEditor.UIElements"
+    xsi:noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd"
+>
+
+  <hr:UILuaView class="dialogue-u-i" picking-mode="Ignore">
+
+    <VisualElement name="message_container" class="message-container">
+
+      <VisualElement name="title_container" class="title-container">
+        <Label name="title" class="title" text="NPC NAME" />
+      </VisualElement>
+
+      <VisualElement name="message" class="message">
+      </VisualElement>
+
+      <VisualElement name="indicator" />
+
+    </VisualElement>
+
+  </hr:UILuaView>
+
+</UXML>

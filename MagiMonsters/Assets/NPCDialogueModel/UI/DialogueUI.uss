@@ -1,0 +1,71 @@
+:root {
+    --font-muesou-1000: url("project://database/Assets/UI/Fonts/MuseoSansRounded1000 SDF.asset");
+    --font-comic: url("project://database/Assets/UI/Fonts/Hey Comic SDF.asset");
+}
+
+.dialogue-u-i {
+    color:rgb(255, 255, 255);
+    font-size: 18px;
+    letter-spacing: 3px;
+    -unity-text-align: middle-center;
+    -unity-font-definition: var(--font-comic);
+    -unity-font-style: bold;
+
+
+    width: 100%;
+    height: 100%;
+}
+
+.title-container {
+    position: absolute;
+    background-color: #9d38bb;
+
+    margin: auto;
+    margin-top: -20px;
+    margin-left: 20px;
+
+    border-radius: 8px;
+}
+
+.title {
+    margin: auto;
+    padding: 4px 8px;
+}
+
+.message-container {
+    width: 350px;
+    height: 110px;
+    margin: auto;
+    margin-bottom: 10px;
+    background-color: white;
+
+    border-radius: 20px;
+}
+
+.message {
+    flex-direction: row;
+    padding: 5px 15px;
+    height: auto;
+    flex-wrap: wrap;
+
+    margin-top: 20px;
+    margin-bottom: auto;
+}
+
+.message-character {
+    padding: 0px;
+    margin: 0px;
+    color: #0f2c38;
+}
+
+#indicator {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+
+    background-image: url("project://database/Assets/NPCDialogueModel/TapIndicator.png");
+
+    bottom: -10px;
+    left: 50%;
+    translate: -50% 0;
+}

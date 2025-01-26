@@ -92,7 +92,9 @@ end
 -- Update the tween
 -- deltaTime: time elapsed since last update (in seconds)
 function Tween:update(deltaTime)
-    if self.finished then return end
+    if self.finished then
+        return
+    end
 
     self.elapsed = self.elapsed + deltaTime * self.direction
     local t = self.elapsed / self.duration
@@ -128,6 +130,9 @@ function Tween:update(deltaTime)
 
     if self.finished and self.onComplete then
         self.onComplete()
+        if not self.loop then
+            tweens[self] = nil
+        end
     end
 end
 
@@ -145,6 +150,9 @@ function Tween:stop(doCompleteCB)
     self.finished = true
     if doCompleteCB and self.onComplete then
         self.onComplete()
+        if not self.loop then
+            tweens[self] = nil
+        end
     end
 end
 
