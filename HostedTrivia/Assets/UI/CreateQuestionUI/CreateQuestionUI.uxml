@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UXML
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="UnityEngine.UIElements"
+    xmlns:hr="Highrise.UI"
+    xmlns:editor="UnityEditor.UIElements"
+    xsi:noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd"
+>
+
+  <hr:UILuaView name="root" class="create-question-u-i">
+
+    <VisualElement name="close_button"/>
+
+    <Label name="header" text="Create a Question!"/>
+    <VisualElement name="question_input"/>
+    <VisualElement name="answer_input_one" class="answer-input-container"/>
+    <VisualElement name="answer_input_two" class="answer-input-container"/>
+    <VisualElement name="answer_input_three" class="answer-input-container"/>
+    <VisualElement name="answer_input_four" class="answer-input-container"/>
+
+    <Label name="correct_answer_label" text="~ Correct Answer ~"/>
+    <VisualElement name="correct_answer_container">
+      <Label name="answer_a" text="Answer A" class="answer-button"/>
+      <Label name="answer_b" text="Answer B" class="answer-button"/>
+      <Label name="answer_c" text="Answer C" class="answer-button"/>
+      <Label name="answer_d" text="Answer D" class="answer-button"/>
+    </VisualElement>
+
+    <Label name="submit_button" text="Submit Q"/>
+  </hr:UILuaView>
+
+</UXML>

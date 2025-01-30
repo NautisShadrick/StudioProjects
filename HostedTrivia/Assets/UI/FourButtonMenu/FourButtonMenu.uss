@@ -1,0 +1,200 @@
+:root {
+    --font-comic: url("project://database/Assets/UI/Fonts/Hey Comic SDF.asset");
+}
+
+.four-button-menu {
+    align-self: center;
+    position: absolute;
+    width: 100%;
+    max-width: 350px;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+
+    color: #ffffff;
+    font-size: 18px;
+    letter-spacing: 3px;
+    -unity-font-definition: var(--font-comic);
+    -unity-text-align: middle-center;
+    /*
+    -unity-text-outline-color: #0f2c38;
+    -unity-text-outline-width: 1.5px;
+    text-shadow: 0 3 0 #0f2c38;
+    */
+    -unity-font-style: bold;
+}
+
+#question_container {
+    width: 100%;
+    max-width: 350px;
+    height: 94px;
+
+    background-color: #2C81FE;
+    border-color: #105BCA;
+    border-bottom-width: 4px;
+    border-radius: 10px;
+
+    margin: 0;
+    padding: 0;
+}
+
+#question_index {
+    position: absolute;
+    color: #ffffff;
+    font-size: 24px;
+    letter-spacing: 3px;
+    -unity-font-definition: var(--font-comic);
+    -unity-text-align: middle-center;
+    -unity-font-style: bold;
+
+    margin: 0;
+    padding: 0;
+    left: 10px;
+}
+
+#back_button {
+
+    width: auto;
+    height: 50px;
+
+    margin: auto;
+    margin-bottom: 10px;
+    margin-left: 65px;
+
+    padding: 0 10px;
+
+    background-color: white;
+    border-radius: 10px;
+}
+
+#question_text {
+    flex-direction: row;
+
+    padding: 0;
+    margin: 5px;
+    margin-left: 40px;
+
+    white-space: normal;
+
+    color: #ffffff;
+    font-size: 16px;
+    letter-spacing: 3px;
+    -unity-font-definition: var(--font-comic);
+    -unity-text-align: upper-left;
+    -unity-font-style: bold;
+}
+
+#buttons_root {
+    width: 100%;
+    height: auto;
+
+    margin: 0;
+    padding: 0;
+
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    
+}
+
+.button-base {
+    flex-direction: row;
+    flex-shrink: 0;
+    width: 150px;
+    height: 50px;
+
+    margin: 10px;
+    padding: 0;
+
+    border-radius: 25px;
+
+    background-color: #2C81FE;
+    border-color: #105BCA;
+    border-bottom-width: 4px;
+
+    align-items: center;
+    justify-content: center;
+}
+
+.button-index {
+    position: absolute;
+    color: #ffffff;
+    font-size: 24px;
+    letter-spacing: 3px;
+    -unity-font-definition: var(--font-comic);
+    -unity-text-align: middle-center;
+    -unity-font-style: bold;
+
+    margin: 0;
+    padding: 0;
+    left: 10px;
+}
+
+.button-title{
+    margin: 4px;
+    padding: 0;
+    margin-left: 26px;
+    margin-right: 12px;
+    white-space: normal;
+}
+
+.selected {
+    background-color:#FF32A1;
+    border-color: #C11773;
+    border-bottom-width: 4px;
+    color: white;
+}
+
+.hidden {
+    display: none;
+}
+
+#timer_icon {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    border-radius: 5px;
+    margin: 0;
+    padding: 0;
+
+    translate: 0 -15px;
+
+    background-image: url("project://database/Assets/UI/Icons/clock_icon.png");
+
+    justify-content: center;
+    align-items: center;
+}
+
+#timer_arm_icon {
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    margin: 0;
+    padding: 0;
+
+    background-image: url("project://database/Assets/UI/Icons/clock_arm_icon.png");
+}
+
+#timer_bar {
+    width: 100%;
+    height: 10px;
+    border-radius: 5px;
+    margin: 10px 0;
+    padding: 0;
+    margin-top: auto;
+
+    align-items: center;
+    justify-content: center;
+}
+
+#timer_bar_fill {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color:rgb(255, 186, 25);
+    border-color: rgb(217, 141, 19);
+    border-bottom-width: 2px;
+    border-radius: 5px;
+    margin: 0;
+    padding: 0;
+}

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UXML
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="UnityEngine.UIElements"
+    xmlns:hr="Highrise.UI"
+    xmlns:editor="UnityEditor.UIElements"
+    xsi:noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd"
+>
+
+  <hr:UILuaView name="four_button_menu" class="four-button-menu" picking-mode="Ignore">
+
+    <VisualElement name="timer_bar" >
+      <VisualElement name="timer_bar_fill" picking-mode="Ignore"/>
+      <VisualElement name="timer_icon" picking-mode="Ignore">
+        <VisualElement name="timer_arm_icon" picking-mode="Ignore"/>
+      </VisualElement>
+    </VisualElement>
+
+    <VisualElement name="question_container">
+      <Label  name="question_index" text="Q:" picking-mode="Ignore"/>
+      <Label  name="question_text" text="" picking-mode="Ignore"/>
+    </VisualElement>
+
+    <VisualElement name="buttons_root"/>
+  </hr:UILuaView>
+
+</UXML>

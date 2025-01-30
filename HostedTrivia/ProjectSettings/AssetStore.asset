@@ -1,0 +1,53 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &1
+MonoBehaviour:
+  m_ObjectHideFlags: 53
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 258248712, guid: a215bd465061e3c4abe0b86c7c8c3d14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _assetMappings:
+  - Guid: a5de734b0779eb04aa5e22760f433d0b
+    StoreId: 66f69d93b0bd8e1e6ea67585
+    Name: Admin Panel
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/55bb64735531104341039ca8/66f69d93b0bd8e1e6ea67585/1923357ad48_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/55bb64735531104341039ca8/66f69d93b0bd8e1e6ea67585/192335795d8_0.jpg
+    AdditionalAssetGUIDs:
+    - 241a7dde6a47d2b4e813607cddf5e591
+    - c68e2aa37cb94b047af40797f3b5e6ae
+    - 72a09b322d8ef6c49a79699399ff2bfb
+    - 645e5dfd6e9514a47bf37ebafba29e6f
+    - 2f72b8fc4b0c0cc4cb63dd80ec799971
+    - add24f19d4ea65d4d9f664912befe3da
+    - 58c8663a8b044f5448980268ed849c4c
+    - 0500ec04e8f7d5d4886996a0fedd2ba5
+    - a32a158b17f0e7f45aff0411791fa0f3
+    - 03ee68479d87cd8439d57b77ca30a251
+    - 6ba642cf48d49b041a005d3acf6372b2
+    - 3bf808e01827b8e4585de3b429891e8c
+    - 1cbc1eedfc6d90748bad51fedfb7e732
+    - 4bbb1fb7eb7656a4f8243fc08cfd1068
+    - c3096f3474510204a977d155c7b188a6
+    - fc332a31903ab8c489bdbdd464d8ade4
+    - c5e8814d0f193534eb7877de73fea41f
+    - 634fcf582689d2940b85759d1c04f0a7
+    - fe26e30b8b4ae6342a21d8957b829e33
+    - 0ab4c84b3de3bea4291b0a99d97c7cdc
+    - 9c797e911be38b64ebe8a355f48c02af
+    - 0c09a2c3c2545b7489f6c212647582c9
+    - 402b2c95ff623d646b1ce9a83dbf83f7
+    - 1b113fde4ab5de5459a47510888eb63a
+    - 2f72b8fc4b0c0cc4cb63dd80ec799971
+    - 9cb5808eff837b04185aafef7d83cf43
+    - 60895836024662049827911bd45cbacd
+    - 098f98a8465c2fc4eb04ccdfd29fd814
+    - 2f72b8fc4b0c0cc4cb63dd80ec799971
+    - 2f72b8fc4b0c0cc4cb63dd80ec799971
+    IsBundle: 0

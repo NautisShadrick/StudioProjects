@@ -1,0 +1,145 @@
+:root {
+    --font-comic: url("project://database/Assets/UI/Fonts/Hey Comic SDF.asset");
+}
+
+.create-question-u-i {
+    width: 350px;
+    height: 500px;
+    background-color: #2C81FE;
+    border-color: #105BCA;
+    border-bottom-width: 6px;
+    margin: auto;
+    border-radius: 10px;
+    align-items: center;
+    color: white;
+
+    -unity-font-definition: var(--font-comic);
+
+}
+
+#header {
+    margin-top: 10px;
+    font-size: 32px;
+
+    -unity-text-align: middle-center;
+
+}
+
+#question_input {
+    height: 90px;
+    width: 80%;
+    margin: 5px;
+    background-color:  #105BCA;
+    border-radius: 5px;
+}
+
+.answer-input-container {
+    height: 30px;
+    width: 80%;
+    margin: 5px;
+    background-color: #105BCA;
+    border-radius: 5px;
+}
+
+#submit_button {
+    height: 50px;
+    width: auto;
+    background-color:rgb(255, 186, 25);
+    border-color: rgb(217, 141, 19);
+    border-bottom-width: 4px;
+    border-radius: 10px;
+    font-size: 20px;
+    -unity-text-align: middle-center;
+
+    margin: auto;
+    padding: 0px 20px;
+}
+
+#correct_answer_label {
+    font-size: 24px;
+    -unity-text-align: middle-center;
+}
+
+#correct_answer_container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+    width: 100%;
+    height: auto;
+
+    align-self: center;
+    padding: 0px 0px;
+
+    flex-wrap: wrap;
+    white-space: normal;
+}
+
+.answer-button {
+    color: #000000;
+    font-size: 13px;
+    height: 35px;
+    width: auto;
+
+    background-color: rgba(255,255,255,1);
+    border-color: rgb(182, 197, 203);
+    border-bottom-width: 4px;
+    border-radius: 10px;
+    
+    margin: 4px;
+    padding: 0px 8px;
+    -unity-text-align: middle-left;
+}
+
+.selected {
+    background-color:#FF32A1;
+    border-color: #C11773;
+    border-bottom-width: 4px;
+    color: white;
+}
+
+.title {
+  display: flex;
+
+  justify-content: space-between;
+  align-items: center;
+
+  width: 100%;
+  height: 100%;
+
+  padding: 0px 0px;
+
+}
+
+.title .unity-text-element {
+  color: #ffffff;
+
+  -unity-text-align: upper-left;
+  -unity-font-definition: var(--font-comic);
+
+  flex-wrap: wrap;
+  white-space: normal;
+  
+
+  padding-top: 5px;
+}
+
+.title .unity-text-element.#UILabel {
+  white-space: normal;
+}
+
+#close_button {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    background-color: #FF32A1;
+    border-color: #C11773;
+    border-bottom-width: 4px;
+    border-radius: 10px;
+
+    right: -10px;
+    top: -10px;
+
+    background-image: url("project://database/Assets/UI/Icons/icon_small_close.png");
+}
