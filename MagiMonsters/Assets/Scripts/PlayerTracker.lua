@@ -72,6 +72,19 @@ function GetPlayerMonstersFromStorage(player: Player)
     end)
 end
 
+function SetHealthInCollection(player: Player, hp: number)
+
+    local _tempCollection = players[player].monsterCollection.value
+    local _tempMonsterData = _tempCollection[players[player].currentMosnterIndex.value]
+
+    _tempMonsterData.currentHealth = hp
+    _tempCollection[players[player].currentMosnterIndex.value] = _tempMonsterData
+
+    players[player].monsterCollection.value = _tempCollection
+
+    print("Health from PlayerTracker Reference ", players[player].monsterCollection.value[players[player].currentMosnterIndex.value].currentHealth)
+end
+
 function self:ServerAwake()
     TrackPlayers(server)
 
