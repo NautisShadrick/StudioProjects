@@ -51,6 +51,7 @@
 }
 
 .button-base {
+    flex-direction: row;
     flex-shrink: 0;
     width: 150px;
     height: 50px;
@@ -59,15 +60,44 @@
     padding: 0;
 
     border-radius: 25px;
-
+    border-bottom-width: 5px;
     background-color: white;
+    border-color: #dbeef5;
+}
+
+.button-icon {
+    width: 50px;
+    height: 50px;
+
+    margin: 0;
+    padding: 5px;
+    padding-bottom: 10px;
+
+    border-radius: 25px;
+    flex-shrink: 0;
+    --unity-image-tint-color: white;
 }
 
 .button-title{
+    font-size: 16px;
+
     margin: auto;
-    padding: 0;
+    white-space: normal;
+    flex-shrink: 1;
+    padding: 5px;
+    padding-right: 12px;
 }
 
 .hidden {
     display: none;
+}
+
+.lightning {
+    background-color: #fff34a;
+    border-color: #efc410;
+}
+
+.earth {
+    background-color: #faad4d;
+    border-color: #d66623;
 }

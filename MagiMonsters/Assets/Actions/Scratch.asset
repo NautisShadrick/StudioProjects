@@ -16,7 +16,7 @@ MonoBehaviour:
   _networkId: 1180867059
   _properties: []
   m_actionName: Scratch
-  m_actionElement: force
+  m_actionElement: 
   m_actionDamage: 10
   m_actionManaCost: 2
   references:

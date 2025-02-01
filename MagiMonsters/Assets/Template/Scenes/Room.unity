@@ -994,6 +994,19 @@ MonoBehaviour:
   _uiOutput: 0
   _uiOutputSettings:
     rid: -2
+  m_elementsIcons:
+  - {fileID: 2800000, guid: 7597367de1c10c34d824eac7476e44f0, type: 3}
+  - {fileID: 2800000, guid: e7aebe5312c923241a6388244d560291, type: 3}
+  - {fileID: 2800000, guid: b79c0b03d8cb13f4abe355a9cbbf65e8, type: 3}
+  - {fileID: 2800000, guid: aa68ae8bd32487446a6467a97880e4bc, type: 3}
+  - {fileID: 2800000, guid: 50003b143250a414ea660b815615989f, type: 3}
+  - {fileID: 2800000, guid: b57cb2962bf0cba4fac36d0d5936689c, type: 3}
+  - {fileID: 2800000, guid: 566367136c9730f41afe5f17fd934257, type: 3}
+  - {fileID: 2800000, guid: 4ece7d4ccd1bd7d41a929ac84de2d243, type: 3}
+  - {fileID: 2800000, guid: 496b9d4d12757e94a97ac7b0cb18db19, type: 3}
+  - {fileID: 2800000, guid: 76b0235c523b817409c120ec9294742c, type: 3}
+  - {fileID: 2800000, guid: 2f69f56da88c0a14a831d5c443ef6870, type: 3}
+  - {fileID: 2800000, guid: 02007c0f99e735643ad365e515cafa0a, type: 3}
   m_BattleScreenOBJ: {fileID: 952873938}
   m_FourButtonOBJ: {fileID: 1440935405}
   m_ResultsLabelObj: {fileID: 1303523270}

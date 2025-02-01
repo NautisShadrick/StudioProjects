@@ -1,6 +1,9 @@
 --!Type(Module)
 
 --!SerializeField
+local elementsIcons: {Texture} = nil
+
+--!SerializeField
 local BattleScreenOBJ: GameObject = nil
 --!SerializeField
 local FourButtonOBJ: GameObject = nil
@@ -17,6 +20,25 @@ local playerTracker = require("PlayerTracker")
 local battlGroundManager = require("BattleGroundController")
 
 currentBattleTurn = 0
+
+elementsIconsMap = {
+    air = 1,
+    death = 2,
+    earth = 3,
+    fire = 4,
+    ice = 5,
+    life = 6,
+    lightning = 7,
+    metal = 8,
+    mist = 9,
+    phsycic = 10,
+    sand = 11,
+    water = 12
+}
+
+function GetIcon(mapID)
+    return elementsIcons[elementsIconsMap[mapID]]
+end
 
 function InitializeBattle(enemy: string)
     FourButtonOBJ:SetActive(true)

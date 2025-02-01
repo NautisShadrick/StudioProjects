@@ -16,7 +16,7 @@ MonoBehaviour:
   _networkId: 2048924416
   _properties: []
   m_actionName: Bite
-  m_actionElement: force
+  m_actionElement: 
   m_actionDamage: 25
   m_actionManaCost: 10
   references:

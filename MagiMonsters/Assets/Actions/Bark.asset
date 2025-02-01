@@ -16,7 +16,7 @@ MonoBehaviour:
   _networkId: 2048924416
   _properties: []
   m_actionName: Bark
-  m_actionElement: force
+  m_actionElement: 
   m_actionDamage: 10
   m_actionManaCost: 0
   references:

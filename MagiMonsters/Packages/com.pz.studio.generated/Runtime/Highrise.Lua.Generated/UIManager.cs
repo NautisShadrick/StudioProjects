@@ -25,6 +25,7 @@ namespace Highrise.Lua.Generated
         private const string s_scriptGUID = "500c8e2431917754ca05bfd472cfeb43";
         public override string ScriptGUID => s_scriptGUID;
 
+        [SerializeField] public System.Collections.Generic.List<UnityEngine.Texture> m_elementsIcons = default;
         [SerializeField] public UnityEngine.GameObject m_BattleScreenOBJ = default;
         [SerializeField] public UnityEngine.GameObject m_FourButtonOBJ = default;
         [SerializeField] public UnityEngine.GameObject m_ResultsLabelObj = default;
@@ -36,9 +37,10 @@ namespace Highrise.Lua.Generated
 
             return new SerializedPropertyValue[]
             {
-                CreateSerializedProperty(_script.GetPropertyAt(0), m_BattleScreenOBJ),
-                CreateSerializedProperty(_script.GetPropertyAt(1), m_FourButtonOBJ),
-                CreateSerializedProperty(_script.GetPropertyAt(2), m_ResultsLabelObj),
+                CreateSerializedProperty(_script.GetPropertyAt(0), m_elementsIcons),
+                CreateSerializedProperty(_script.GetPropertyAt(1), m_BattleScreenOBJ),
+                CreateSerializedProperty(_script.GetPropertyAt(2), m_FourButtonOBJ),
+                CreateSerializedProperty(_script.GetPropertyAt(3), m_ResultsLabelObj),
             };
         }
     }
