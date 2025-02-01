@@ -69,6 +69,7 @@ function Battle:DoAction(actionID: string)
     print(_damage)
     _target.currentHealth = _target.currentHealth - _damage
 
+
     -- 0 for player, 1 for enemy
     self.turn = self.turn == 0 and 1 or 0
 
@@ -95,7 +96,7 @@ function Battle:DoAction(actionID: string)
 end
 
 function Battle:SwapMonster()
-    self.playerMonster = playerTracker.players[self.player].monsterData.value
+    self.playerMonster = playerTracker.players[self.player].monsterCollection.value[playerTracker.players[self.player].currentMosnterIndex.value]
     -- 0 for player, 1 for enemy
     self.turn = self.turn == 0 and 1 or 0
 

@@ -14,8 +14,8 @@ function TrackPlayers(game, characterCallback)
         playercount = playercount + 1
         players[player] = {
             player = player,
-            monsterData = TableValue.new("MonsterData"..player.user.id, {}),
-            monsterCollection = TableValue.new("MonsterCollection"..player.user.id, {})
+            monsterCollection = TableValue.new("MonsterCollection"..player.user.id, {}),
+            currentMosnterIndex = NumberValue.new("CurrentMonsterIndex"..player.user.id, 1)
         }
 
         player.CharacterChanged:Connect(function(player, character) 
@@ -43,16 +43,13 @@ function self:ClientAwake()
         local character = playerinfo.player.character
 
         GetDefaultMonsterDataRequest:FireServer()
-
-        playerinfo.monsterData.Changed:Connect(function(newMonsterData)
-        end)
     end
 
     TrackPlayers(client, OnCharacterInstantiate)
 end
 
 function GetPlayerMonsterData()
-    return players[client.localPlayer].monsterData.value
+    return players[client.localPlayer].monsterCollection.value[players[client.localPlayer].currentMosnterIndex.value]
 end
 
 function GetPlayerMonsterCollection()
@@ -72,7 +69,6 @@ function GetPlayerMonstersFromStorage(player: Player)
             return
         end
         players[player].monsterCollection.value = monsterCollection
-        players[player].monsterData.value = monsterCollection[1]
     end)
 end
 

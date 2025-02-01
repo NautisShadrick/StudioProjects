@@ -27,7 +27,7 @@ function InitializeBattle(enemy: string)
 
     cameraManager.SwitchCamera(1)
 
-    battlGroundManager.InitializeBattleGrounds(playerTracker.players[client.localPlayer].monsterData.value.speciesName, enemy)
+    battlGroundManager.InitializeBattleGrounds(playerTracker.players[client.localPlayer].monsterCollection.value[playerTracker.players[client.localPlayer].currentMosnterIndex.value].speciesName, enemy)
 end
 
 function self:ClientStart()

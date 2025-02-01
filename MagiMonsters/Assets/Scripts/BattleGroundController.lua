@@ -67,7 +67,7 @@ function self:ClientStart()
             Timer.After(.5, function() enemyCreatureScript.playTrigger("hurt") end)
         end
 
-        InitializeBattleGrounds(playerTracker.players[client.localPlayer].monsterData.value.speciesName)
+        InitializeBattleGrounds(playerTracker.players[client.localPlayer].monsterCollection.value[playerTracker.players[client.localPlayer].currentMosnterIndex.value].speciesName)
         
     end)
 end

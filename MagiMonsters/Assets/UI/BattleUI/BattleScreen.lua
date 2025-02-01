@@ -28,7 +28,7 @@ local playerTracker = require("PlayerTracker")
 local monsterLibrary = require("MonsterLibrary")
 
 function InitializeBattle(enemy: string)
-    local _playerMonsterData = playerTracker.players[client.localPlayer].monsterData.value
+    local _playerMonsterData = playerTracker.players[client.localPlayer].monsterCollection.value[playerTracker.players[client.localPlayer].currentMosnterIndex.value]
     local _enemyMonsterData = monsterLibrary.GetDefaultMonsterData(enemy)
 
     player_name.text = _playerMonsterData.name
@@ -52,7 +52,7 @@ function UpdateStats(turn, playerHealth, playerMana, enemyHealth, enemyMaxHealth
     enemyHealth = math.max(0, enemyHealth)
     enemyMana = math.max(0, enemyMana)
 
-    local _playerMonsterData = playerTracker.players[client.localPlayer].monsterData.value
+    local _playerMonsterData = playerTracker.players[client.localPlayer].monsterCollection.value[playerTracker.players[client.localPlayer].currentMosnterIndex.value]
 
     player_name.text = _playerMonsterData.name
     

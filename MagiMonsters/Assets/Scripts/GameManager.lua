@@ -51,7 +51,7 @@ function self:ServerAwake()
 
     StartBattleRequest:Connect(function(player, enemy)
         playerBattles[player] = nil
-        playerBattles[player] = battleModule.Battle:new(player, playerTracker.players[player].monsterData.value, monsterLibrary.GetDefaultMonsterData(enemy))
+        playerBattles[player] = battleModule.Battle:new(player, playerTracker.players[player].monsterCollection.value[playerTracker.players[player].currentMosnterIndex.value], monsterLibrary.GetDefaultMonsterData(enemy))
     end)
 
     DoActionRequest:Connect(function(player, action)
@@ -69,7 +69,7 @@ function self:ServerAwake()
     end)
 
     SwapMonsterRequest:Connect(function(player, monsterIndex)
-        playerTracker.players[player].monsterData.value = playerTracker.players[player].monsterCollection.value[monsterIndex]
+        playerTracker.players[player].currentMosnterIndex.value = monsterIndex
 
         if not playerBattles[player] then
             print("Player is not in a battle")
