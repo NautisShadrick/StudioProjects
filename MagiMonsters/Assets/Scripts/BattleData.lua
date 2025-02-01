@@ -59,22 +59,15 @@ function Battle:DoAction(actionID: string)
         return
     end
 
-    print(_attacker.name)
-    print(_target.name)
-    print(action.GetActionName())
-
     _attacker.currentMana = _attacker.currentMana - action.GetActionManaCost()
     local _damage = action.GetActionDamage() * math.random(80,120)/100
     _damage = math.floor(_damage)
-    print(_damage)
+
     _target.currentHealth = _target.currentHealth - _damage
 
     if self.turn == 1 then -- The player is being attacked
         -- Update Player Monster Stats
         playerTracker.SetHealthInCollection(self.player, _target.currentHealth)
-        print("MONSTER HEALTH CHANGED IN MONSTER COLLECTION",
-        playerTracker.players[self.player].monsterCollection.value[playerTracker.players[self.player].currentMosnterIndex.value].currentHealth,
-        _target.currentHealth)
     end
 
     -- 0 for player, 1 for enemy

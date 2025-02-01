@@ -16,6 +16,10 @@ local uiManager = require("UIManager")
 -----------------------
 
 function SwapMonster(monsterIndex: number)
+    if uiManager.currentBattleTurn ~= 0 then
+        print("Not your turn")
+        return
+    end
     SwapMonsterRequest:FireServer(monsterIndex)
 end
 

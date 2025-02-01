@@ -81,8 +81,6 @@ function SetHealthInCollection(player: Player, hp: number)
     _tempCollection[players[player].currentMosnterIndex.value] = _tempMonsterData
 
     players[player].monsterCollection.value = _tempCollection
-
-    print("Health from PlayerTracker Reference ", players[player].monsterCollection.value[players[player].currentMosnterIndex.value].currentHealth)
 end
 
 function self:ServerAwake()

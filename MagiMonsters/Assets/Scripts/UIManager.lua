@@ -37,8 +37,13 @@ function self:ClientStart()
 
     BattleDataModule.ActionEvent:Connect(function(turn, playerHealth, playerMana, enemyHealth, enemyMaxHealth, enemyMana, enemyMaxMana, actionName)
         BattleScreenUI.UpdateStats(turn, playerHealth, playerMana, enemyHealth, enemyMaxHealth, enemyMana, enemyMaxMana)
-        currentBattleTurn = turn
         ResultsLabelUI.ShowPopup(actionName)
+
+        if turn == 0 then
+            Timer.After(1, function() currentBattleTurn = turn end)
+        else
+            currentBattleTurn = turn
+        end
     end)
 
     BattleDataModule.EndBattleEvent:Connect(function(winner)
