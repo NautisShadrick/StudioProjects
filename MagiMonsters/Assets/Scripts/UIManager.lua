@@ -9,6 +9,10 @@ local BattleScreenOBJ: GameObject = nil
 local FourButtonOBJ: GameObject = nil
 --!SerializeField
 local ResultsLabelObj: GameObject = nil
+--!SerializeField
+local TimerUIObject: GameObject = nil
+
+timerUI = nil
 
 local BattleScreenUI: BattleScreen = nil
 local FourButtonUI: FourButtonMenu = nil
@@ -53,6 +57,8 @@ function InitializeBattle(enemy: string)
 end
 
 function self:ClientStart()
+    timerUI = TimerUIObject:GetComponent(HealthBarUI)
+
     BattleScreenUI = BattleScreenOBJ:GetComponent(BattleScreen)
     FourButtonUI = FourButtonOBJ:GetComponent(FourButtonMenu)
     ResultsLabelUI = ResultsLabelObj:GetComponent(ResultsUI)

@@ -18,14 +18,13 @@ using Highrise.Lua;
 
 namespace Highrise.Lua.Generated
 {
-    [AddComponentMenu("Lua/BillboardScript")]
-    [LuaRegisterType(0x4a1809a4d4d6f8bf, typeof(LuaBehaviour))]
-    public class BillboardScript : LuaBehaviourThunk
+    [AddComponentMenu("Lua/HealthBarUI")]
+    [LuaRegisterType(0x3d59edb1bf2ba4e2, typeof(LuaBehaviour))]
+    public class HealthBarUI : LuaBehaviourThunk
     {
-        private const string s_scriptGUID = "f60c72160913eaf4a88ebdc3bff72519";
+        private const string s_scriptGUID = "aa755b07b02f5dc4890fc2867a57d46c";
         public override string ScriptGUID => s_scriptGUID;
 
-        [SerializeField] public System.Boolean m_locUp = false;
 
         protected override SerializedPropertyValue[] SerializeProperties()
         {
@@ -34,7 +33,8 @@ namespace Highrise.Lua.Generated
 
             return new SerializedPropertyValue[]
             {
-                CreateSerializedProperty(_script.GetPropertyAt(0), m_locUp),
+                CreateSerializedProperty(_script.GetPropertyAt(0), null),
+                CreateSerializedProperty(_script.GetPropertyAt(1), null),
             };
         }
     }

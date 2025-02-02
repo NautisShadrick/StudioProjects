@@ -18,3 +18,6 @@ end
 function GetBattleCam()
     return battleCamera
 end
+function GetMainCam()
+    return mainCamera
+end

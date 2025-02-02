@@ -2,11 +2,18 @@
 
 --!SerializeField
 local objectType : string = ""
+--!SerializeField
+local timerPoint : Transform = nil
+--!SerializeField
+local duration : number = 5
 
 local gameManager = require("GameManager")
+local uiManager = require("UIManager")
 
 local TweenModule = require("TweenModule")
 local Tween = TweenModule.Tween
+
+local characterController = require("PlayerCharacterController")
 
 local TapBounce = Tween:new(
     .75,
@@ -26,7 +33,21 @@ local TapBounce = Tween:new(
 function self:Awake()
     local tapHander = self.gameObject:GetComponent(TapHandler)
     tapHander.Tapped:Connect(function()
-        gameManager.Search(objectType)
+
         TapBounce:start()
+
+        local timerUI = uiManager.timerUI
+        local timerUIObject = uiManager.timerUI.gameObject
+
+        timerUIObject:SetActive(true)
+        timerUIObject.transform.position = timerPoint.transform.position
+        timerUI.PlayTimer(duration)
+
+        characterController.options.enabled = false
+        Timer.After(duration, function()
+            gameManager.Search(objectType)
+            characterController.options.enabled = true
+        end)
+
     end)
 end
