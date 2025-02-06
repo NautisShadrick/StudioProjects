@@ -16,10 +16,18 @@ MonoBehaviour:
   _publishedId: 
   _worldPrefab: {fileID: 9171886453793455768, guid: 569fdf5ca373dfb43bac53ec5237b9a6,
     type: 3}
-  _scenePrefab: {fileID: 8457444051872364791, guid: 4ea8fc71d0d33aa4794e860bd8a9318a,
+  _scenePrefab: {fileID: 2314250957837367020, guid: d3113463ef5be974bbbd383143f5d9c7,
     type: 3}
-  _hideVirtualPlayerScenes: 1
+  _uiFactory: {fileID: -2017830929143987780, guid: 608e4a4fb57f96e4aa0d2dff60a513bc,
+    type: 3}
+  _localizationDatabase: {fileID: 0}
   _scenes:
   - Name: Room
     Scene: {fileID: 102900000, guid: 3d97b014f52721147ba461f2a8133078, type: 3}
     LoadingImage: {fileID: 2800000, guid: 6f9235fd7c31aea498918ab44c186b79, type: 3}
+  _highQualityAvatars: 0
+  _hideVirtualPlayerScenes: 1
+  _defaultPlayerProfileId: 0
+  _useRemoteServer: 0
+  _remoteServerUserIds: []
+  _checkStudioUpdatesOnLaunch: 1

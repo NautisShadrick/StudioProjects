@@ -1,8 +1,12 @@
 --!Type(Module)
 
+--!SerializeField
+local teamOutfits : {CharacterOutfit} = nil
+
 --local uiManager = require("UIManager")
 players = {}
 local playercount = 0
+local currentTeam = 1
 
 ------------ Player Tracking ------------
 function TrackPlayers(game, characterCallback)
@@ -10,7 +14,7 @@ function TrackPlayers(game, characterCallback)
         playercount = playercount + 1
         players[player] = {
             player = player,
-            playerTeam = NumberValue.new("PlayerTeam"..player.user.id, 1),
+            playerTeam = NumberValue.new("PlayerTeam"..player.user.id, 0),
         }
 
         player.CharacterChanged:Connect(function(player, character) 
@@ -42,6 +46,9 @@ function self:ClientAwake()
     function OnCharacterInstantiate(playerinfo)
         local player = playerinfo.player
         local character = playerinfo.player.character
+
+        playerinfo.playerTeam.Changed:Connect(function(team)
+        end)
     end
 
     TrackPlayers(client, OnCharacterInstantiate)
@@ -51,4 +58,18 @@ end
 
 function self:ServerAwake()
     TrackPlayers(server)
+end
+
+function SetTeams()
+    currentTeam = 1
+    for i, playerinfo in pairs(players) do
+        playerinfo.playerTeam.value = currentTeam
+        currentTeam = currentTeam == 1 and 2 or 1
+    end
+end
+
+function ClearTeams()
+    for i, playerinfo in pairs(players) do
+        playerinfo.playerTeam.value = 0
+    end
 end

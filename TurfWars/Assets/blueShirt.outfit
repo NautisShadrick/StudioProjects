@@ -1,0 +1,10 @@
+{
+  "IncludeFallbacks": true,
+  "Skeleton": "",
+  "Clothing": [
+    {
+      "Id": "hat-n_pixelhatpink_1",
+      "Color": -1
+    }
+  ]
+}

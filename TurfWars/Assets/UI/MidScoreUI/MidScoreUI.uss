@@ -1,0 +1,46 @@
+:root {
+    --font-comic: url("project://database/Assets/UI/Fonts/Hey Comic SDF.asset");
+}
+
+.mid-score-u-i {
+    flex-direction: row;
+    width:100%;
+    height: auto;
+
+    justify-content: space-between;
+
+    top: 60px;
+
+    font-size: 45px;
+    letter-spacing: 3px;
+    -unity-font-definition: var(--font-comic);
+    -unity-text-align: middle-center;
+
+    -unity-font-style: bold;
+
+    color:white;
+    text-shadow: 0 3 0 rgb(173, 195, 199);
+}
+
+#score_left_conatiner {
+    align-items: center;
+    justify-content: center;
+
+    left: 15px;
+}
+
+#score_right_conatiner {
+    align-items: center;
+    justify-content: center;
+
+    right: 15px;
+}
+
+.teamRed {
+    color: #febbfe;
+    text-shadow: 0 3 0 rgb(236, 131, 236);
+}
+.teamBlue {
+    color: #9bfefe;
+    text-shadow: 0 3 0 rgb(86, 192, 219);
+}

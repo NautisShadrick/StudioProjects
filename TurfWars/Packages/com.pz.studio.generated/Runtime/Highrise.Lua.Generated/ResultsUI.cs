@@ -18,14 +18,13 @@ using Highrise.Lua;
 
 namespace Highrise.Lua.Generated
 {
-    [AddComponentMenu("Lua/PlayerTrackerTemplate")]
-    [LuaRegisterType(0x258b1d4cc77745e6, typeof(LuaBehaviour))]
-    public class PlayerTrackerTemplate : LuaBehaviourThunk
+    [AddComponentMenu("Lua/ResultsUI")]
+    [LuaRegisterType(0xfb3d406dc1d600b, typeof(LuaBehaviour))]
+    public class ResultsUI : LuaBehaviourThunk
     {
-        private const string s_scriptGUID = "a9f425f7ff3deee4ab404d436ab62c9b";
+        private const string s_scriptGUID = "4fbab0d9ab69479489e6dd5d65948d0f";
         public override string ScriptGUID => s_scriptGUID;
 
-        [SerializeField] public System.Collections.Generic.List<Highrise.CharacterOutfit> m_teamOutfits = default;
 
         protected override SerializedPropertyValue[] SerializeProperties()
         {
@@ -34,7 +33,7 @@ namespace Highrise.Lua.Generated
 
             return new SerializedPropertyValue[]
             {
-                CreateSerializedProperty(_script.GetPropertyAt(0), m_teamOutfits),
+                CreateSerializedProperty(_script.GetPropertyAt(0), null),
             };
         }
     }
