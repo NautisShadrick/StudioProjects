@@ -3,11 +3,11 @@
 local dancefloorTiles = TableValue.new("TeamOneTiles", {})
 
 roundTime = NumberValue.new("RoundTime", 1)
-gameState = NumberValue.new("GameState", 2)
+gameState = NumberValue.new("GameState", 1)
 
 roundDurations = {
-    5,
-    10,
+    32,
+    32,
 }
 
 
@@ -33,6 +33,7 @@ end
 
 function self:ClientAwake()
     dancefloorTiles.Changed:Connect(OnDancefloorTilesChanged)
+
 end
 
 
@@ -89,6 +90,7 @@ function self:ServerStart()
                     tileData[2] = 0
                 end
             elseif gameState.value == 1 then -- Intermission
+                -- GAME JSUT ENDED
                 playerTracker.ClearTeams()
             end
         end

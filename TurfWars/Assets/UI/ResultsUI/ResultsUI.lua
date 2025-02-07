@@ -42,7 +42,7 @@ function ShowPopup(txt)
 
     result_label:EnableInClassList("hidden", false)
     popInTween:start()
-    Timer.After(1, function()
+    Timer.After(2, function()
         shrinkOutTween:start()
     end)
 end

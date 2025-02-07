@@ -4,22 +4,42 @@
 
 .mid-score-u-i {
     flex-direction: row;
-    width:100%;
+    width:190px;
     height: auto;
 
     justify-content: space-between;
 
-    top: 60px;
+    top: 110px;
+
+    left: 50%;
+    translate: -50%;
 
     font-size: 45px;
     letter-spacing: 3px;
     -unity-font-definition: var(--font-comic);
     -unity-text-align: middle-center;
-
     -unity-font-style: bold;
+
 
     color:white;
     text-shadow: 0 3 0 rgb(173, 195, 199);
+    -unity-text-outline-color: rgb(173, 195, 199);
+    -unity-text-outline-width: 2px;
+
+    margin: 0;
+    padding: 0;
+
+    transition: top .5s ease-in-out, translate .5s ease-in-out, scale .5s ease-in-out;
+}
+
+.final-mode {
+
+    transition: top .8s ease-in-out, translate .8s ease-in-out, scale .9s ease-in-out;
+
+    top: 50%;
+    left: 50%;
+    translate: -50%;
+    scale: 1.8;
 }
 
 #score_left_conatiner {
@@ -36,11 +56,24 @@
     right: 15px;
 }
 
+#score_right_label {
+    margin: 0;
+    padding: 0;
+}
+
+#score_left_label {
+    margin: 0;
+    padding: 0;
+}
+
 .teamRed {
     color: #febbfe;
     text-shadow: 0 3 0 rgb(236, 131, 236);
+    -unity-text-outline-color: rgb(236, 131, 236);
+
 }
 .teamBlue {
     color: #9bfefe;
     text-shadow: 0 3 0 rgb(86, 192, 219);
+    -unity-text-outline-color: rgb(86, 192, 219);
 }

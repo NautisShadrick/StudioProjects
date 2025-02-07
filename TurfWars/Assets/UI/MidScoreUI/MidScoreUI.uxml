@@ -7,7 +7,7 @@
     xsi:noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd"
 >
 
-  <hr:UILuaView class="mid-score-u-i" picking-mode="Ignore">
+  <hr:UILuaView name="root" class="mid-score-u-i" picking-mode="Ignore">
 
     <VisualElement name="score_left_conatiner" picking-mode="Ignore">
       <Label name="score_left_label" text="x" class="teamRed" picking-mode="Ignore"/>
