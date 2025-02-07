@@ -6,7 +6,7 @@ roundTime = NumberValue.new("RoundTime", 1)
 gameState = NumberValue.new("GameState", 1)
 
 roundDurations = {
-    20,
+    10,
     30,
 }
 

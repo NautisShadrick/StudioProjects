@@ -49,9 +49,11 @@ function self:ClientAwake()
         local player = playerinfo.player
         local character = playerinfo.player.character
 
+        local namePlateUI = player.character.gameObject.transform:GetChild(1).gameObject:GetComponent(Nameplate)
+
         playerinfo.playerTeam.Changed:Connect(function(team)
             --print("Player team changed to "..team .. " for player "..player.name)
-            setPlayerTeamEvent:Fire(player, team)
+            namePlateUI.ChangeTeamColor(team)
         end)
     end
 

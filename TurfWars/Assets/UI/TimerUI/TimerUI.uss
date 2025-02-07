@@ -15,9 +15,10 @@
 
     -unity-font-style: bold;
 
-
     color:white;
-    text-shadow: 0 3 0 rgb(145, 178, 184);
+    text-shadow: 0 3 0 rgb(129, 171, 179);
+    -unity-text-outline-color: rgb(129, 171, 179);
+    -unity-text-outline-width: 2px;
 }
 
 #timer_icon {

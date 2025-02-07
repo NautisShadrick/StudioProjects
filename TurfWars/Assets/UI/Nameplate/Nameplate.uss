@@ -24,10 +24,6 @@
     -unity-text-align: middle-center;
     -unity-font-style: bold;
     -unity-text-outline-width: 1;
-
-    color: #febbfe;
-    text-shadow: 0 3 0 rgb(236, 131, 236);
-    -unity-text-outline-color: rgb(236, 131, 236);
 }
 
 .teamRed {
