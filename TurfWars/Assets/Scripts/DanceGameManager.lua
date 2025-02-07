@@ -1,13 +1,13 @@
 --!Type(Module)
 
-local dancefloorTiles = TableValue.new("TeamOneTiles", {})
+UpdateTilesEvent = Event.new("UpdateTilesEvent")
 
-roundTime = NumberValue.new("RoundTime", 1)
+roundTime = NumberValue.new("RoundTime", 10)
 gameState = NumberValue.new("GameState", 1)
 
 roundDurations = {
-    10,
     30,
+    60,
 }
 
 
@@ -16,24 +16,12 @@ local playerTracker = require("PlayerTrackerTemplate")
 
 -------- CLIENT --------
 
-function OnDancefloorTilesChanged(newFloor)
-    local numberOfTeamOneTiles = 0
-    local numberOfTeamTwoTiles = 0
-
-    for i, tileData in ipairs(newFloor) do
-        if tileData[2] == 1 then
-            numberOfTeamOneTiles = numberOfTeamOneTiles + 1
-        elseif tileData[2] == 2 then
-            numberOfTeamTwoTiles = numberOfTeamTwoTiles + 1
-        end
-    end
-
-    uiManager.SetScores({left = numberOfTeamOneTiles, right = numberOfTeamTwoTiles})
+function ScoreChanged(scores)
+    uiManager.SetScores(scores)
 end
 
 function self:ClientAwake()
-    dancefloorTiles.Changed:Connect(OnDancefloorTilesChanged)
-
+    UpdateTilesEvent:Connect(ScoreChanged)
 end
 
 
@@ -42,35 +30,44 @@ end
 -------- SERVER --------
 
 local roundTimer = nil
-
+local dancefloorTiles = {}
 
 function AddTileToFloor (tileScript: TileController, ID)
-    local _tempFloor = dancefloorTiles.value
-    table.insert(_tempFloor, {tileScript, ID})
-    dancefloorTiles.value = _tempFloor
+    table.insert(dancefloorTiles, {tileScript, ID})
+end
+
+function CalculateScores()
+    local teamOneScore = 0
+    local teamTwoScore = 0
+
+    for i, tileData in ipairs(dancefloorTiles) do
+        if tileData[2] == 1 then
+            teamOneScore = teamOneScore + 1
+        elseif tileData[2] == 2 then
+            teamTwoScore = teamTwoScore + 1
+        end
+    end
+
+    return {left = teamOneScore, right = teamTwoScore}
 end
 
 function ChangeTileID(tileScript : TileController, ID : number)
-
-    local _tempfloor = dancefloorTiles.value
-
-    for i, tileData in ipairs(_tempfloor) do
+    tileScript.tileID.value = ID
+    for i, tileData in ipairs(dancefloorTiles) do
         if tileData[1] == tileScript then
-            _tempfloor[i][2] = ID
+            dancefloorTiles[i][2] = ID
         end
     end
+    UpdateTilesEvent:FireAllClients(CalculateScores())
+end
 
-    dancefloorTiles.value = _tempfloor
-
-    --print("Total Tiles: ", #dancefloorTiles.value)
-    -- Get hoiw many tiles have this id
-    local count = 0
-    for i, tileData in ipairs(dancefloorTiles.value) do
-        if tileData[2] == ID then
-            count = count + 1
-        end
+function ResetTiles()
+    --Reset all the tiles
+    for i, tileData in ipairs(dancefloorTiles) do
+        tileData[1].tileID.value = 0
+        dancefloorTiles[i][2] = 0
     end
-    --print("Total Tiles with ID: ", count)
+    UpdateTilesEvent:FireAllClients(CalculateScores())
 end
 
 function self:ServerStart()
@@ -84,16 +81,20 @@ function self:ServerStart()
 
             if gameState.value == 2 then -- Dance Off
                 playerTracker.SetTeams()
-                --reset each tile in the floor
-                for i, tileData in ipairs(dancefloorTiles.value) do
-                    tileData[1].tileID.value = 0
-                    tileData[2] = 0
-                end
             elseif gameState.value == 1 then -- Intermission
                 -- GAME JSUT ENDED
                 playerTracker.ClearTeams()
+                Timer.After(10,ResetTiles)
             end
         end
+    end)
 
+    server.PlayerConnected:Connect(function(player)
+        player.CharacterChanged:Connect(function(player, character) 
+            if (character == nil) then
+                return
+            end
+            UpdateTilesEvent:FireClient(player, CalculateScores())
+        end)
     end)
 end

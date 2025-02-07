@@ -58,9 +58,6 @@ function self:ServerStart()
     changeTileRequestEvent:Connect(function(player)
         local TeamID = playerTracker.GetTeam(player)
         if TeamID == 0 then return end
-        tileID.value = TeamID
         danceGameManager.ChangeTileID(self, TeamID)
-        print(player.name .. " changed tile to " .. playerTracker.GetTeam(player))
-
     end)
 end
