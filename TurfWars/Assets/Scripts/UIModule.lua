@@ -37,6 +37,10 @@ function self:ClientAwake()
         end
         StartTimer(danceGameManager.roundDurations[state])
     end)
+
+    Timer.After(1, function()
+        StartTimer(danceGameManager.roundTime.value)
+    end)
 end
 
 function AnnounceWinner()
@@ -52,6 +56,7 @@ end
 
 function StartTimer(duration)
     timerUI.StartTimer(duration)
+    print(danceGameManager.roundTime.value)
 end
 
 function SetScores(scores)

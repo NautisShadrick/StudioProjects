@@ -1,0 +1,43 @@
+.nameplate {
+    align-items: center;
+    margin-top: auto;
+    margin-bottom: auto;
+    overflow: visible;
+}
+
+#nameplateContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+#nameLabel {
+    font-size: 28px;
+    margin-right: 10px;
+
+    white-space: wrap;    
+    -unity-font-definition: url("project://database/Assets/UI/Fonts/Hey Comic SDF.asset");
+    letter-spacing: 3px;
+    -unity-text-align: middle-center;
+    -unity-font-style: bold;
+    -unity-text-outline-width: 1;
+
+    color: #febbfe;
+    text-shadow: 0 3 0 rgb(236, 131, 236);
+    -unity-text-outline-color: rgb(236, 131, 236);
+}
+
+.teamRed {
+    color: #febbfe;
+    text-shadow: 0 3 0 rgb(236, 131, 236);
+    -unity-text-outline-color: rgb(236, 131, 236);
+
+}
+.teamBlue {
+    color: #9bfefe;
+    text-shadow: 0 3 0 rgb(86, 192, 219);
+    -unity-text-outline-color: rgb(86, 192, 219);
+}

@@ -3,6 +3,8 @@
 --!SerializeField
 local teamOutfits : {CharacterOutfit} = nil
 
+setPlayerTeamEvent = Event.new("SetPlayerTeam")
+
 --local uiManager = require("UIManager")
 players = {}
 local playercount = 0
@@ -48,6 +50,8 @@ function self:ClientAwake()
         local character = playerinfo.player.character
 
         playerinfo.playerTeam.Changed:Connect(function(team)
+            --print("Player team changed to "..team .. " for player "..player.name)
+            setPlayerTeamEvent:Fire(player, team)
         end)
     end
 
