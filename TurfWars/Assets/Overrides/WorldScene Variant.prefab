@@ -64,6 +64,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1321356926074220701, guid: d281ae75034a02b47adff280cbfe1ce3,
         type: 3}
+    - target: {fileID: 6694746433855017560, guid: 4ea8fc71d0d33aa4794e860bd8a9318a,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8457444051872364791, guid: 4ea8fc71d0d33aa4794e860bd8a9318a,
         type: 3}
       propertyPath: m_Name
@@ -72,5 +77,52 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8457444051872364791, guid: 4ea8fc71d0d33aa4794e860bd8a9318a,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8356365054144981763}
   m_SourcePrefab: {fileID: 100100000, guid: 4ea8fc71d0d33aa4794e860bd8a9318a, type: 3}
+--- !u!1 &2314250957837367020 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8457444051872364791, guid: 4ea8fc71d0d33aa4794e860bd8a9318a,
+    type: 3}
+  m_PrefabInstance: {fileID: 6143822977429884443}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &8356365054144981763
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2314250957837367020}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9dec71a9220331e193baece930b44620, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _networkId: 0
+  _script: {fileID: -974389366465450183, guid: 2733717c98dc31342965ec3c8a6b46f5, type: 3}
+  _properties: []
+  _uiOutput: 0
+  _uiOutputSettings:
+    rid: -2
+  m_footstepWalkSound: {fileID: 11400000, guid: 06f9d1665c501494cab2fabb8d9c0d4e,
+    type: 2}
+  m_footstepRunSound: {fileID: 11400000, guid: 264793f51d6488647abe8a49a72e9487, type: 2}
+  m_externalInputAction: {fileID: -5286476055075906855, guid: b7982f498f23b6541879e8a3da96b11d,
+    type: 3}
+  m_runningSpeedThreshold: 5
+  m_is2D: 0
+  m_maxLinkDistance: 1
+  m_maxLinkAngle: 95
+  m_minLinkMoveStepChange: 0.24
+  m_hideOnDesktop: 0
+  m_hideOnExternalInput: 1
+  m_anchorThumbstick: 0
+  m_preventDraggingThumbstick: 1
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }

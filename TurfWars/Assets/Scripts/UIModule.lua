@@ -31,6 +31,7 @@ function self:ClientAwake()
             -- Tally Scores
             TallyScores()
         elseif state == 2 then
+            SetScores({left = 0, right = 0})
             SetTitle("Dance Off")
             timerUI.ToggleClockAnim(true)
         end

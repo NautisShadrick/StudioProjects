@@ -76,7 +76,6 @@ function TallyScores()
             score_left_label.style.rotate = StyleRotate.new(Rotate.new(Angle.new(0)))
             
             Timer.After(1,function()
-                SetScores({left = 0, right = 0})
                 root:RemoveFromClassList("final-mode")
                 uiManager.AnnounceWinner()
             end)
