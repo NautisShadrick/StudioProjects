@@ -15,7 +15,7 @@ function AddQuestionToQueue(question: string, index: number)
     question_label:AddToClassList("question-text")
 
     -- Extract the first 27 characters of the question
-    local reduced_question = string.sub(question, 1, 24)
+    local reduced_question = string.sub(question, 1, 28)
     if string.len(question) > 27 then
         reduced_question = reduced_question .. "..."
     end

@@ -7,7 +7,11 @@
     flex-direction: column;
     position: absolute;
     top: 0;
-    background-color: rgba(0,0,0,0.5);
+    
+    background-color: #2C81FE;
+    border-color: #105BCA;
+    border-bottom-width: 4px;
+    border-radius: 10px;
     border-radius: 10px;
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
@@ -27,7 +31,7 @@
 }
 
 .question-text {
-    font-size: 18px;
+    font-size: 14px;
     margin: 5px;
     padding: 0;
 }

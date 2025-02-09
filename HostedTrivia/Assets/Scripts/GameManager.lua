@@ -8,6 +8,7 @@ local selectAnswerRequest = Event.new("SelectAnswerRequest")
 local submitQuestionRequest = Event.new("SubmitQuestionRequest")
 local removeQuestionRequest = Event.new("RemoveQuestionRequest")
 
+local FetchQuestionsRequest = Event.new("FetchQuestionsRequest")
 
 local setQuestionEvent = Event.new("SetQuestionEvent")
 local completeQuestionEvent = Event.new("CompleteQuestionEvent")
@@ -90,6 +91,10 @@ function RemoveQuestionFromQueue(index)
     removeQuestionRequest:FireServer(index)
 end
 
+function FetchQuestionsReq()
+    FetchQuestionsRequest:FireServer()
+end
+
 ------------- SERVER -------------
 
 local currentQuestionData = {
@@ -105,6 +110,8 @@ local currentQuestionData = {
 
 local QuestionTimer = nil
 local activeQuestion = false
+
+local FetchedQuestions = {}
 
 function CompleteQuestion()
     if QuestionTimer then
@@ -158,6 +165,17 @@ function SetQuestion(questionData)
     questionsQueueTable.value = tempQueue
 end
 
+FetchQuestions = function()
+    Storage.GetValue("questions", function(value)
+        if value then
+            FetchedQuestions = value
+        else
+            FetchedQuestions = {currentQuestionData}
+            Storage.SetValue("questions", FetchedQuestions)
+        end
+    end)
+end
+
 function self:ServerAwake()
     TrackPlayers(server)
 
@@ -195,7 +213,20 @@ function self:ServerAwake()
         questionsQueueTable.value = tempQueue
     end)
 
+
+    FetchQuestionsRequest:Connect(function()
+        FetchQuestions()
+        -- Add all the Questions to the queue
+        for each, questionData in ipairs(FetchedQuestions) do
+            local tempQueue = questionsQueueTable.value
+            table.insert(tempQueue, questionData)
+            questionsQueueTable.value = tempQueue
+        end
+    end)
+
+    FetchQuestions()
     GetWhiteList()
+    
 end
 
 function GetWhiteList()

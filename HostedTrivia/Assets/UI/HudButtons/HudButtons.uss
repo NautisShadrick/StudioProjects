@@ -70,5 +70,9 @@
 }
 
 .create_icon {
-    background-image: url("project://database/Assets/UI/Icons/clock_icon.png");
+    background-image: url("project://database/Assets/UI/Icons/create_icon.png");
+}
+
+.load_icon {
+    background-image: url("project://database/Assets/UI/Icons/load_icon.png");
 }

@@ -11,6 +11,7 @@ local left_container: VisualElement = nil
 local right_container: VisualElement = nil
 
 local uiManager = require("UiManager")
+local gameManager = require("GameManager")
 
 function self:Start()
     
@@ -47,5 +48,8 @@ function self:Start()
 
     CreateHudButton("Create", "create_icon", "right", function()
         uiManager.openCreateQuestionUI()
+    end)
+    CreateHudButton("Load", "load_icon", "right", function()
+        gameManager.FetchQuestionsReq()
     end)
 end
