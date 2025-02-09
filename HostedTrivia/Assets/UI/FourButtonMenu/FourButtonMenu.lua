@@ -19,7 +19,7 @@ local Tween = TweenModule.Tween
 local timerBarShrinkTween = Tween:new(
     1,
     0,
-    30,
+    15,
     false,
     false,
     TweenModule.Easing.linear,

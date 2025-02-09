@@ -1,7 +1,13 @@
 --!Type(Module)
 
+questionsQueueTable = TableValue.new("QuestionsQueue", {})
+whitelist = TableValue.new("whitelist", {})
+
+
 local selectAnswerRequest = Event.new("SelectAnswerRequest")
 local submitQuestionRequest = Event.new("SubmitQuestionRequest")
+local removeQuestionRequest = Event.new("RemoveQuestionRequest")
+
 
 local setQuestionEvent = Event.new("SetQuestionEvent")
 local completeQuestionEvent = Event.new("CompleteQuestionEvent")
@@ -47,11 +53,16 @@ function self:ClientAwake()
     TrackPlayers(client, OnCharacterInstantiate)
 
     setQuestionEvent:Connect(function(questionData)
+
+        if uiManager.isHost then return end
+
         uiManager.openAnswersUI()
         uiManager.SetQuestionData(questionData)
     end)
 
     completeQuestionEvent:Connect(function(correctPlayers)
+        if uiManager.isHost then return end
+
         uiManager.setDefaultUI()
 
         --Check if player is in the correctPlayers table
@@ -75,6 +86,10 @@ function SubmitQuestion(questionData : {})
     submitQuestionRequest:FireServer(questionData)
 end
 
+function RemoveQuestionFromQueue(index)
+    removeQuestionRequest:FireServer(index)
+end
+
 ------------- SERVER -------------
 
 local currentQuestionData = {
@@ -89,6 +104,7 @@ local currentQuestionData = {
 }
 
 local QuestionTimer = nil
+local activeQuestion = false
 
 function CompleteQuestion()
     if QuestionTimer then
@@ -117,6 +133,29 @@ function CompleteQuestion()
     }
 
     completeQuestionEvent:FireAllClients(correctPlayers)
+
+    if questionsQueueTable.value[1] then
+        SetQuestion(questionsQueueTable.value[1])
+    else
+        activeQuestion = false
+    end
+end
+
+function SetQuestion(questionData)
+    activeQuestion = true
+    currentQuestionData = questionData
+    setQuestionEvent:FireAllClients(questionData)
+
+    if QuestionTimer then
+        QuestionTimer:Stop()
+        QuestionTimer = nil
+    end
+    QuestionTimer = Timer.After(15,CompleteQuestion)
+
+    --Remove from queue
+    local tempQueue = questionsQueueTable.value
+    table.remove(tempQueue, 1)
+    questionsQueueTable.value = tempQueue
 end
 
 function self:ServerAwake()
@@ -128,17 +167,44 @@ function self:ServerAwake()
     end)
 
     submitQuestionRequest:Connect(function(player, questionData)
-        currentQuestionData = questionData
-        setQuestionEvent:FireAllClients(questionData)
 
-        if QuestionTimer then
-            QuestionTimer:Stop()
-            QuestionTimer = nil
+        -- Make sure the player is whitelisted
+        local isWhitelisted = false
+        for each, playerName in ipairs(whitelist.value) do
+            if playerName == player.name then
+                isWhitelisted = true
+                break
+            end
+        end
+        if not isWhitelisted then return end
+
+
+        if not activeQuestion then
+            SetQuestion(questionData)
+        else
+            local tempQueue = questionsQueueTable.value
+            table.insert(tempQueue, questionData)
+            questionsQueueTable.value = tempQueue
         end
 
-        QuestionTimer = Timer.After(30, function()
-            CompleteQuestion()
-        end)
+    end)
 
+    removeQuestionRequest:Connect(function(player, index)
+        local tempQueue = questionsQueueTable.value
+        table.remove(tempQueue, index)
+        questionsQueueTable.value = tempQueue
+    end)
+
+    GetWhiteList()
+end
+
+function GetWhiteList()
+    Storage.GetValue("whitelist", function(value)
+        if value then
+            whitelist.value = value
+        else
+            whitelist = {"NautisShadrick"}
+            Storage.SetValue("whitelist", whitelist)
+        end
     end)
 end

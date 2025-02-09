@@ -1,0 +1,38 @@
+:root {
+    --font-comic: url("project://database/Assets/UI/Fonts/Hey Comic SDF.asset");
+    --delete-icon: url("project://database/Assets/UI/Icons/delete_icon.png");
+}
+
+.questions-queue {
+    flex-direction: column;
+    position: absolute;
+    top: 0;
+    background-color: rgba(0,0,0,0.5);
+    border-radius: 10px;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+
+    color: white;
+    -unity-font-definition: var(--font-comic);
+
+    margin: 0;
+    padding: 5px;
+}
+
+.question {
+    flex-direction: row;
+}
+
+.question-text {
+    font-size: 18px;
+    margin: 5px;
+    padding: 0;
+}
+
+.delete-button {
+    background-image: var(--delete-icon);
+    width: 20px;
+    height: 20px;
+    margin: 5px;
+    padding: 0;
+}

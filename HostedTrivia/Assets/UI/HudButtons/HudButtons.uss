@@ -8,7 +8,7 @@
     height: 100%;
 
     padding: 0;
-    padding-top: 47px;
+    padding-top: 0px;
 
     flex-direction: row;
 }
@@ -22,7 +22,7 @@
     height: 64px;
 
     margin-bottom: 15px;
-    margin-right: 15px;
+    margin-right: 10px;
 
     background-color: #2C81FE;
     border-color: #105BCA;

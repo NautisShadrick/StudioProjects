@@ -1,5 +1,7 @@
 --!Type(UI)
 
+local audioManager = require("AudioManager")
+
 local TweenModule = require("TweenModule")
 local Tween = TweenModule.Tween
 
@@ -45,6 +47,7 @@ function ShowPopup(txt)
     Timer.After(2, function()
         shrinkOutTween:start()
     end)
+    audioManager.PlaySound(2)
 end
 
 function self:Awake()

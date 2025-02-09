@@ -7,6 +7,7 @@ local score_left_label : Label = nil
 --!Bind
 local score_right_label : Label = nil
 
+local audioManager = require("AudioManager")
 local uiManager = require("UIModule")
 
 local TweenModule = require("TweenModule")
@@ -55,6 +56,11 @@ function TallyScores()
     if tallyTimer then tallyTimer:Stop(); tallyTimer = nil end
     tallyTimer = Timer.Every(.15, function()
         scoreBounceTween:start()
+
+        if leftScore > 0 or rightScore > 0 then
+            audioManager.PlaySound(1)
+        end
+
         if leftScore > 0 then
             leftScore = leftScore - 1
             score_left_label.text = leftScore

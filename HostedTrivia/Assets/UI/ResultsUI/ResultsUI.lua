@@ -50,4 +50,3 @@ end
 function self:Awake()
     result_label:EnableInClassList("hidden", true)
 end
-
