@@ -1,7 +1,7 @@
 --!Type(Module)
 
-local ChangedChunksRequest = Event.new("ChangedChunksRequest")
-local ChangedChunksResponse = Event.new("ChangedChunksResponse")
+local ChangedChunksRequest = Event.new("ChangedChinksRequest")
+local ChangedChunksResponse = Event.new("ChangedChinksResponse")
 
 --!SerializeField
 local canvasQuad : GameObject = nil
@@ -9,30 +9,14 @@ local canvasQuad : GameObject = nil
 
 function self:ClientStart()
 
-    local CHUNK_SIZE = 8
+    local CHUNK_SIZE = 32
     local previousTexture = {} -- Stores previous chunk states
 
 
-    local width = 64
-    local height = 64
+    local width = 256
+    local height = 256
     local texture = Texture2D.new(width, height)
     local brushSize = 1
-
-    -- We have (64 / 8) = 8 chunks in each dimension, so total 64 chunks
-    local totalChunksX = width / CHUNK_SIZE
-    local totalChunksY = height / CHUNK_SIZE
-
-    -- Keep track of which chunks have changed (dirty)
-    local dirtyChunks = {}
-    
-    -- 1) Mark the chunk “dirty” if any pixel in that chunk changes
-    local function MarkChunkDirty(x, y)
-        local chunkX = math.floor(x / CHUNK_SIZE)
-        local chunkY = math.floor(y / CHUNK_SIZE)
-        local chunkIndex = chunkY * totalChunksX + chunkX
-        dirtyChunks[chunkIndex] = true
-    end
-
 
     function InitializeCanvas()
         -- Set all pixels to white using SetPixel in a loop
@@ -111,12 +95,63 @@ function self:ClientStart()
     Input.PinchOrDragBegan:Connect(OnDragBegan)
     Input.PinchOrDragChanged:Connect(OnDrag)
     Input.PinchOrDragEnded:Connect(OnDragEnded)
+
+
+    function EncodeChangedChunks()
+        local changedChunks = {}
     
-    ChangedChunksResponse:Connect()
+        for chunkX = 0, width / CHUNK_SIZE - 1 do
+            for chunkY = 0, height / CHUNK_SIZE - 1 do
+                local chunkKey = string.format("%d,%d", chunkX, chunkY)
+                local changedPixels = {}
+    
+                for x = chunkX * CHUNK_SIZE, (chunkX + 1) * CHUNK_SIZE - 1 do
+                    for y = chunkY * CHUNK_SIZE, (chunkY + 1) * CHUNK_SIZE - 1 do
+                        local color = texture:GetPixel(x, y)
+                        local prevColor = previousTexture[chunkX] and previousTexture[chunkX][chunkY] and previousTexture[chunkX][chunkY][x] and previousTexture[chunkX][chunkY][x][y] or Color.white
+                        
+                        if color ~= prevColor then
+                            table.insert(changedPixels, string.format("%d,%d,%.2f,%.2f,%.2f", x % CHUNK_SIZE, y % CHUNK_SIZE, color.r, color.g, color.b))
+    
+                            -- Store new color in previousTexture
+                            if not previousTexture[chunkX] then previousTexture[chunkX] = {} end
+                            if not previousTexture[chunkX][chunkY] then previousTexture[chunkX][chunkY] = {} end
+                            if not previousTexture[chunkX][chunkY][x] then previousTexture[chunkX][chunkY][x] = {} end
+                            previousTexture[chunkX][chunkY][x][y] = color
+                        end
+                    end
+                end
+            end
+        end
+
+        --print out the length of each changed chunk
+        for chunkKey, pixelData in pairs(changedChunks) do
+            print(chunkKey, pixelData)
+        end
+    
+        return changedChunks
+    end
+    
+    function DecodeAndApplyChunks(changedChunks)
+        for chunkKey, pixelData in pairs(changedChunks) do
+            local chunkX, chunkY = chunkKey:match("(%d+),(%d+)")
+            chunkX, chunkY = tonumber(chunkX), tonumber(chunkY)
+    
+            for pixel in string.gmatch(pixelData, "([^;]+)") do
+                local x, y, r, g, b = pixel:match("(%d+),(%d+),([%d%.]+),([%d%.]+),([%d%.]+)")
+                x, y = tonumber(x) + chunkX * CHUNK_SIZE, tonumber(y) + chunkY * CHUNK_SIZE
+                local color = Color.new(r, g, b)
+                texture:SetPixel(x, y, color)
+            end
+        end
+        texture:Apply()
+    end
+    
+    ChangedChunksResponse:Connect(DecodeAndApplyChunks)
     
 
     function SendDrawing()
-        local changedChunks = nil -- Function to encode Data
+        local changedChunks = EncodeChangedChunks() -- Function to encode Data
         if next(changedChunks) then -- Only send if there's a change
             ChangedChunksRequest:FireServer(changedChunks)
             print("Sent updated chunks to server!")
@@ -147,8 +182,8 @@ function self:ClientStart()
     
 end
 
-
 function self:ServerStart()
     ChangedChunksRequest:Connect(function(player, changedChunks)
+        ChangedChunksResponse:FireAllClients(changedChunks)
     end)
 end
