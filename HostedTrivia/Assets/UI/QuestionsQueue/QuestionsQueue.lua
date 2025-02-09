@@ -4,6 +4,7 @@
 local queue_container: VisualElement = nil
 
 local gameManager = require("GameManager")
+local uiManager = require("UiManager")
 
 function AddQuestionToQueue(question: string, index: number)
 
@@ -48,4 +49,5 @@ function self:ClientStart()
     gameManager.questionsQueueTable.Changed:Connect(function(newQueue)
         UpdateQueue(newQueue)
     end)
+    if uiManager.isHost == false then self.gameObject:SetActive(false) end
 end

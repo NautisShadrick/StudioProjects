@@ -9,7 +9,7 @@
 
   <hr:UILuaView class="questions-queue">
 
-    <VisualElement name="queue_container" >
+    <hr:UIScrollView mode="Vertical" name="queue_container" >
 
       <!--
       <VisualElement class="question">
@@ -18,7 +18,7 @@
       </VisualElement>
       -->
       
-    </VisualElement>
+    </hr:UIScrollView>
 
   </hr:UILuaView>
 

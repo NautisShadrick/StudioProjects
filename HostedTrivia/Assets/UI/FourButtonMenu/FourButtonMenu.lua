@@ -5,6 +5,8 @@ local four_button_menu: UILuaView = nil
 --!Bind
 local buttons_root: VisualElement = nil
 --!Bind
+local question_container: VisualElement = nil
+--!Bind
 local question_text: Label = nil
 --!Bind
 local timer_bar_fill : VisualElement = nil
@@ -12,6 +14,8 @@ local timer_bar_fill : VisualElement = nil
 local timer_icon : VisualElement = nil
 --!Bind
 local timer_arm_icon : VisualElement = nil
+--!Bind
+local close_button : VisualElement = nil
 
 local TweenModule = require("TweenModule")
 local Tween = TweenModule.Tween
@@ -100,6 +104,7 @@ function CreateButton(text, index: number)
 end
 
 function UpdateButtons(buttons)
+    question_container.style.display = DisplayStyle.Flex
     buttons_root:Clear()
     currentButtons = {}
     for i, button in ipairs(buttons) do
@@ -123,3 +128,8 @@ Menu_One =
 }
 
 UpdateButtons(Menu_One)
+
+close_button:RegisterPressCallback(function()
+    buttons_root:Clear()
+    question_container.style.display = DisplayStyle.None
+end)

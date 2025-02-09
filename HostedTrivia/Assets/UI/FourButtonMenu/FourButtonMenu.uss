@@ -198,3 +198,18 @@
     margin: 0;
     padding: 0;
 }
+
+#close_button {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    background-color: #FF32A1;
+    border-color: #C11773;
+    border-bottom-width: 4px;
+    border-radius: 10px;
+
+    right: -10px;
+    top: -10px;
+
+    background-image: url("project://database/Assets/UI/Icons/icon_small_close.png");
+}

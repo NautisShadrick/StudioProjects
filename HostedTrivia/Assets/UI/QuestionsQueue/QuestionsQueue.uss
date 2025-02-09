@@ -17,6 +17,9 @@
 
     margin: 0;
     padding: 5px;
+
+    width: auto;
+    height: auto;
 }
 
 .question {
@@ -35,4 +38,38 @@
     height: 20px;
     margin: 5px;
     padding: 0;
+}
+
+
+
+#queue_container{
+    width: auto;
+    height: auto;
+    max-height: 100px;
+
+    flex-shrink: 0;
+    flex-grow: 1;
+
+    padding: 0px;
+    overflow: scroll;
+}
+
+
+/* horizontal scroll bar */
+.scroll-bar {
+}
+
+.scroll-bar {
+  height: 100%;
+
+  min-width: 5px;
+  max-width: 15px;
+
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 2px;
+}
+
+.scroll-bar__thumb {
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 2px;
 }

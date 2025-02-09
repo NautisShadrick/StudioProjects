@@ -19,6 +19,7 @@
     <VisualElement name="question_container">
       <Label  name="question_index" text="Q:" picking-mode="Ignore"/>
       <Label  name="question_text" text="" picking-mode="Ignore"/>
+      <VisualElement name="close_button"/>
     </VisualElement>
 
     <VisualElement name="buttons_root"/>
