@@ -13,10 +13,12 @@ function self:ClientStart()
     local previousTexture = {} -- Stores previous chunk states
 
 
-    local width = 256
-    local height = 256
+    local width = 64
+    local height = 64
     local texture = Texture2D.new(width, height)
     local brushSize = 1
+
+    local ChangedPixels = {} -- Stores the pixels that have changed since the last frame
 
     function InitializeCanvas()
         -- Set all pixels to white using SetPixel in a loop
@@ -41,6 +43,11 @@ function self:ClientStart()
                 -- Check if pixel is inside the circle (distance formula)
                 if (i * i + j * j) <= (brushSize * brushSize) then
                     if px >= 0 and px < width and py >= 0 and py < height then
+
+                        -- Store the changed pixel
+                        ChangedPixels[px] = ChangedPixels[px] or {}
+                        ChangedPixels[px][py] = 'k'
+
                         texture:SetPixel(px, py, color)
                     end
                 end
@@ -48,6 +55,93 @@ function self:ClientStart()
         end
         texture:Apply()
     end
+
+    -- example encoded data of changed pixels:   "0,0,b;10,5,r;123,4,g" -> x,y,color;x,y,color;x,y,color
+    function EncodeChangedPixels()
+        -- We'll store each pixel's data in a table and then concat them with semicolons.
+        local encodedChunks = {}
+        for x, yTable in pairs(ChangedPixels) do
+            for y, color in pairs(yTable) do
+                -- Instead of two-digit formatting, just convert x and y directly to strings
+                table.insert(encodedChunks, x .. "," .. y .. "," .. color)
+            end
+        end
+    
+        -- Join all pixel chunks with `;` as the separator.
+        -- This yields something like: "0,0,b;1,0,b;10,5,b" etc.
+        local encodedData = table.concat(encodedChunks, ";")
+        print("Encoded data:", encodedData)
+        return encodedData
+    end
+
+    -- Simple split function: splits 'input' by the separator 'sep'
+    local function Split(input, sep)
+        local fields = {}
+        local pattern = string.format("([^%s]+)", sep)
+        for match in (input..sep):gmatch(pattern) do
+            table.insert(fields, match)
+        end
+        return fields
+    end
+
+    function GetColorFromChar(color)
+        if color == 'r' then
+            return Color.red
+        elseif color == 'g' then
+            return Color.green
+        elseif color == 'b' then
+            return Color.blue
+        elseif color == 'w' then
+            return Color.white
+        elseif color == 'k' then
+            return Color.black
+        end
+    end
+
+    function SetPixelInTexture(px, py, color)
+        -- Ensure pixel is within texture bounds.
+        if px >= 0 and px < width and py >= 0 and py < height then
+            -- Update the pixel in the texture.
+            texture:SetPixel(px, py, GetColorFromChar(color))
+            -- If you want changes to appear immediately, call this here.
+            texture:Apply()
+        end
+    end
+
+    function DecodeChangedPixelsUpdateTexture(encodedData)
+        -- Split by `;` to get each "x,y,color" triple
+        local pixelChunks = Split(encodedData, ";")
+
+        for _, chunk in ipairs(pixelChunks) do
+            -- Skip empty chunks (e.g. if there's a trailing ';')
+            if chunk ~= "" then
+                -- Split each chunk by `,`
+                local parts = Split(chunk, ",")
+                if #parts == 3 then
+                    local xStr, yStr, colorStr = parts[1], parts[2], parts[3]
+                    local x = tonumber(xStr)
+                    local y = tonumber(yStr)
+
+                    -- Your logic for updating the pixel here:
+                    -- e.g. SetPixelInTexture(x, y, colorStr)
+                    SetPixelInTexture(x, y, colorStr)
+                end
+            end
+        end
+    end
+
+    Timer.Every(.1, function()
+        -- Encode the changed pixels
+        local encodedData = EncodeChangedPixels()
+        -- Reset the changed pixels table
+        ChangedPixels = {}
+        -- check if there are any changes
+        if encodedData == "" then
+            return
+        end
+        -- Send the encoded data to the server
+        ChangedChunksRequest:FireServer(encodedData)
+    end)
 
 
     InitializeCanvas()
@@ -96,89 +190,9 @@ function self:ClientStart()
     Input.PinchOrDragChanged:Connect(OnDrag)
     Input.PinchOrDragEnded:Connect(OnDragEnded)
 
-
-    function EncodeChangedChunks()
-        local changedChunks = {}
-    
-        for chunkX = 0, width / CHUNK_SIZE - 1 do
-            for chunkY = 0, height / CHUNK_SIZE - 1 do
-                local chunkKey = string.format("%d,%d", chunkX, chunkY)
-                local changedPixels = {}
-    
-                for x = chunkX * CHUNK_SIZE, (chunkX + 1) * CHUNK_SIZE - 1 do
-                    for y = chunkY * CHUNK_SIZE, (chunkY + 1) * CHUNK_SIZE - 1 do
-                        local color = texture:GetPixel(x, y)
-                        local prevColor = previousTexture[chunkX] and previousTexture[chunkX][chunkY] and previousTexture[chunkX][chunkY][x] and previousTexture[chunkX][chunkY][x][y] or Color.white
-                        
-                        if color ~= prevColor then
-                            table.insert(changedPixels, string.format("%d,%d,%.2f,%.2f,%.2f", x % CHUNK_SIZE, y % CHUNK_SIZE, color.r, color.g, color.b))
-    
-                            -- Store new color in previousTexture
-                            if not previousTexture[chunkX] then previousTexture[chunkX] = {} end
-                            if not previousTexture[chunkX][chunkY] then previousTexture[chunkX][chunkY] = {} end
-                            if not previousTexture[chunkX][chunkY][x] then previousTexture[chunkX][chunkY][x] = {} end
-                            previousTexture[chunkX][chunkY][x][y] = color
-                        end
-                    end
-                end
-            end
-        end
-
-        --print out the length of each changed chunk
-        for chunkKey, pixelData in pairs(changedChunks) do
-            print(chunkKey, pixelData)
-        end
-    
-        return changedChunks
-    end
-    
-    function DecodeAndApplyChunks(changedChunks)
-        for chunkKey, pixelData in pairs(changedChunks) do
-            local chunkX, chunkY = chunkKey:match("(%d+),(%d+)")
-            chunkX, chunkY = tonumber(chunkX), tonumber(chunkY)
-    
-            for pixel in string.gmatch(pixelData, "([^;]+)") do
-                local x, y, r, g, b = pixel:match("(%d+),(%d+),([%d%.]+),([%d%.]+),([%d%.]+)")
-                x, y = tonumber(x) + chunkX * CHUNK_SIZE, tonumber(y) + chunkY * CHUNK_SIZE
-                local color = Color.new(r, g, b)
-                texture:SetPixel(x, y, color)
-            end
-        end
-        texture:Apply()
-    end
-    
-    ChangedChunksResponse:Connect(DecodeAndApplyChunks)
-    
-
-    function SendDrawing()
-        local changedChunks = EncodeChangedChunks() -- Function to encode Data
-        if next(changedChunks) then -- Only send if there's a change
-            ChangedChunksRequest:FireServer(changedChunks)
-            print("Sent updated chunks to server!")
-        else
-            print("No changes detected, nothing sent.")
-        end
-    end
-
-    Timer.Every(1, SendDrawing)
-
-    function ColorChunksRandomly()
-        for chunkX = 0, width / CHUNK_SIZE - 1 do
-            for chunkY = 0, height / CHUNK_SIZE - 1 do
-                -- Generate a random color
-                local randomColor = Color.new(math.random(), math.random(), math.random())
-    
-                -- Calculate the top-left pixel of the chunk
-                local startX, startY = chunkX * CHUNK_SIZE, chunkY * CHUNK_SIZE
-    
-                -- Draw the entire chunk with the random color
-                Draw(startX + CHUNK_SIZE / 2, startY + CHUNK_SIZE / 2, CHUNK_SIZE / 2, randomColor)
-            end
-        end
-    end
-    
-    -- Call this function to color the canvas randomly
-    --ColorChunksRandomly()
+    ChangedChunksResponse:Connect(function(changedChunks)
+        DecodeChangedPixelsUpdateTexture(changedChunks)
+    end)
     
 end
 
