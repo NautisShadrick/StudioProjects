@@ -133,15 +133,15 @@ function self:ClientStart()
         end
     end
 
-    Timer.Every(.5, function()
+    Timer.Every(.1, function()
         -- Encode the changed pixels
         local encodedData = EncodeChangedPixels()
-        -- Reset the changed pixels table
-        ChangedPixels = {}
-        -- check if there are any changes
+        -- check if there are any changes or if there is atleast 10 pixels changed
         if encodedData == "" then
             return
         end
+        -- Reset the changed pixels table
+        ChangedPixels = {}
         -- Send the encoded data to the server
         ChangedChunksRequest:FireServer(encodedData)
     end)
