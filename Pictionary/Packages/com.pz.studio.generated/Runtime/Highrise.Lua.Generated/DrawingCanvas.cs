@@ -26,6 +26,7 @@ namespace Highrise.Lua.Generated
         public override string ScriptGUID => s_scriptGUID;
 
         [SerializeField] public UnityEngine.GameObject m_canvasQuad = default;
+        [SerializeField] public UnityEngine.GameObject m_cameraOBJ = default;
 
         protected override SerializedPropertyValue[] SerializeProperties()
         {
@@ -35,6 +36,7 @@ namespace Highrise.Lua.Generated
             return new SerializedPropertyValue[]
             {
                 CreateSerializedProperty(_script.GetPropertyAt(0), m_canvasQuad),
+                CreateSerializedProperty(_script.GetPropertyAt(1), m_cameraOBJ),
             };
         }
     }

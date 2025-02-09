@@ -5,16 +5,20 @@ local ChangedChunksResponse = Event.new("ChangedChinksResponse")
 
 --!SerializeField
 local canvasQuad : GameObject = nil
+--!SerializeField
+local cameraOBJ : GameObject = nil
 
 
 function self:ClientStart()
+
+    local camScript = cameraOBJ:GetComponent(RTSCameraOverride)
 
     local CHUNK_SIZE = 32
     local previousTexture = {} -- Stores previous chunk states
 
 
-    local width = 64
-    local height = 64
+    local width = 128
+    local height = 128
     local texture = Texture2D.new(width, height)
     local brushSize = 1
 
@@ -38,16 +42,15 @@ function self:ClientStart()
     function Draw(x, y, brushSize, color)
         for i = -brushSize, brushSize do
             for j = -brushSize, brushSize do
-                local px, py = x + i, y + j
-
-                -- Check if pixel is inside the circle (distance formula)
-                if (i * i + j * j) <= (brushSize * brushSize) then
+                -- Notice the strict < instead of <=
+                if (i * i + j * j) < (brushSize * brushSize) then
+                    local px, py = x + i, y + j
+    
+                    -- Bound check
                     if px >= 0 and px < width and py >= 0 and py < height then
-
-                        -- Store the changed pixel
                         ChangedPixels[px] = ChangedPixels[px] or {}
                         ChangedPixels[px][py] = 'k'
-
+    
                         texture:SetPixel(px, py, color)
                     end
                 end
@@ -55,6 +58,7 @@ function self:ClientStart()
         end
         texture:Apply()
     end
+    
 
     -- example encoded data of changed pixels:   "0,0,b;10,5,r;123,4,g" -> x,y,color;x,y,color;x,y,color
     function EncodeChangedPixels()
@@ -70,7 +74,6 @@ function self:ClientStart()
         -- Join all pixel chunks with `;` as the separator.
         -- This yields something like: "0,0,b;1,0,b;10,5,b" etc.
         local encodedData = table.concat(encodedChunks, ";")
-        print("Encoded data:", encodedData)
         return encodedData
     end
 
@@ -130,7 +133,7 @@ function self:ClientStart()
         end
     end
 
-    Timer.Every(.1, function()
+    Timer.Every(.5, function()
         -- Encode the changed pixels
         local encodedData = EncodeChangedPixels()
         -- Reset the changed pixels table
@@ -171,6 +174,7 @@ function self:ClientStart()
     function OnDragBegan(evt)
         local x, y = GetQuadUVFromTouch(evt.position)
         if x and y then
+            camScript.enabled = false
             Draw(x, y, brushSize, Color.black)
         end
     end
@@ -184,6 +188,7 @@ function self:ClientStart()
 
     function OnDragEnded(evt)
         -- No specific behavior needed
+        camScript.enabled = true
     end
 
     Input.PinchOrDragBegan:Connect(OnDragBegan)
