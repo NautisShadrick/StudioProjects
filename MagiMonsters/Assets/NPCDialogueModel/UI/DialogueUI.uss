@@ -69,3 +69,29 @@
     left: 50%;
     translate: -50% 0;
 }
+
+#responses_container {
+    position: absolute;
+    width: 150px;
+    height: auto;
+    right: 0;
+    top: -2px;
+    translate: 0 -100%;
+    flex-direction: column;
+}
+
+.response-button {
+    background-color: white;
+    border-radius: 8px;
+    padding: 0;
+    margin: 2px;
+}
+
+.response-label {
+    color: #0f2c38;
+    font-size: 18px;
+    letter-spacing: 1px;
+    -unity-text-align: middle-center;
+    -unity-font-definition: var(--font-muesou-1000);
+    -unity-font-style: bold;
+}

@@ -7,7 +7,7 @@ local npcColor: Color = Color.new(157, 56, 187)
 --!SerializeField
 local npcName: string = "NPC"
 --!SerializeField
-local messageTexts: {DialoguePage} = {}
+local startChunk: DialogueChunk = nil
 
 local tapHandler: TapHandler = nil
 local dialogueUI: DialogueUI = nil
@@ -16,6 +16,10 @@ function OnTapped()
     print("Tapped")
     if not dialogueUI then print("There is no Dialogue UI") return end
     dialogueUIObject:SetActive(true)
+
+    local messageTexts = {}
+    messageTexts = startChunk.GetPages()
+
     dialogueUI.InitializeDialogue(npcColor, npcName, messageTexts)
 end
 

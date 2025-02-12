@@ -11,6 +11,9 @@
 
     <VisualElement name="message_container" class="message-container">
 
+      <VisualElement name="responses_container">
+      </VisualElement>
+
       <VisualElement name="title_container" class="title-container">
         <Label name="title" class="title" text="NPC NAME" />
       </VisualElement>

@@ -28,8 +28,8 @@ namespace Highrise.Lua.Generated
         [SerializeField] public UnityEngine.GameObject m_dialogueUIObject = default;
         [SerializeField] public UnityEngine.Color m_npcColor = new Color(157f, 56f, 187f, 1f);
         [SerializeField] public System.String m_npcName = "NPC";
-        [LuaScriptPropertyAttribute("5f7dbb76983dd93469a12bb278d8bb78")]
-        [SerializeField] public System.Collections.Generic.List<UnityEngine.Object> m_messageTexts = default;
+        [LuaScriptPropertyAttribute("3d0bd200f8ab7b948aa8f0034f550645")]
+        [SerializeField] public UnityEngine.Object m_startChunk = default;
 
         protected override SerializedPropertyValue[] SerializeProperties()
         {
@@ -41,7 +41,7 @@ namespace Highrise.Lua.Generated
                 CreateSerializedProperty(_script.GetPropertyAt(0), m_dialogueUIObject),
                 CreateSerializedProperty(_script.GetPropertyAt(1), m_npcColor),
                 CreateSerializedProperty(_script.GetPropertyAt(2), m_npcName),
-                CreateSerializedProperty(_script.GetPropertyAt(3), m_messageTexts),
+                CreateSerializedProperty(_script.GetPropertyAt(3), m_startChunk),
             };
         }
     }

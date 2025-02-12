@@ -27,6 +27,9 @@ namespace Highrise.Lua.Generated
 
         [LuaScriptPropertyAttribute("56c23c95405296944a4c52a9bbff52ec")]
         [SerializeField] public System.Collections.Generic.List<UnityEngine.Object> m_Messages = default;
+        [SerializeField] public System.Collections.Generic.List<System.String> m_responses = default;
+        [LuaScriptPropertyAttribute("3d0bd200f8ab7b948aa8f0034f550645")]
+        [SerializeField] public System.Collections.Generic.List<UnityEngine.Object> m_Chunks = default;
 
         protected override SerializedPropertyValue[] SerializeProperties()
         {
@@ -36,6 +39,8 @@ namespace Highrise.Lua.Generated
             return new SerializedPropertyValue[]
             {
                 CreateSerializedProperty(_script.GetPropertyAt(0), m_Messages),
+                CreateSerializedProperty(_script.GetPropertyAt(1), m_responses),
+                CreateSerializedProperty(_script.GetPropertyAt(2), m_Chunks),
             };
         }
     }

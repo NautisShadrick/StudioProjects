@@ -10,6 +10,8 @@ local message_container: VisualElement = nil
 --!Bind
 local title_container: VisualElement = nil
 --!Bind
+local responses_container : VisualElement = nil
+--!Bind
 local title: Label = nil
 --!Bind
 local message: VisualElement = nil
@@ -102,8 +104,29 @@ function ApplySpecialAnimation(character : Label, characterIndex: number, specia
     end
 end
 
-function ConvertMessageToLabels(messagePage : DialoguePage)
+function CreateResponseButton(response, index, newChunks)
+    local _newResponse = VisualElement.new()
+    _newResponse:AddToClassList("response-button")
+
+    local _newResponseLabel = Label.new()
+    _newResponseLabel:AddToClassList("response-label")
+    _newResponseLabel.text = response
+
+    _newResponse:Add(_newResponseLabel)
+    responses_container:Add(_newResponse)
+
+    _newResponse:RegisterPressCallback(function()
+        SkipTimers()
+        currentPage = 1
+        local ourChunk = newChunks[index]
+        messageTexts = ourChunk.GetPages()
+        ConvertMessageToLabels(messageTexts[currentPage])
+    end)
+end
+
+function ConvertMessageToLabels(messagePage : DialoguePage) -- This is the funciton that populates each page of the dialogue
     message:Clear()
+    responses_container:Clear()
     local charCount = 0
 
     for each, textBlock in pairs(messagePage.GetMessages()) do
@@ -145,6 +168,10 @@ function ConvertMessageToLabels(messagePage : DialoguePage)
 
     end
 
+    local pageResponses = messagePage.GetResponses()
+    local newChunks = messagePage.GetNewChunks()
+    print(#newChunks)
+    for i, response in pageResponses do CreateResponseButton(response, i, newChunks) end
 end
 
 function InitializeDialogue(_npcColor : Color, _npcName : string, _messageTexts : {DialoguePage})
