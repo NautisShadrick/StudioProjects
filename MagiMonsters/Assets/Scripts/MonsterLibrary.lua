@@ -35,3 +35,16 @@ function GetDefaultMonsterData(monsterName: string): MonsterData
         monsterSprite = monsters[monsterName].GetSprite()
     }
 end
+
+function GetStorageMonsterData(monsterName: string)
+    return {
+        name = monsters[monsterName].GetName(),
+        speciesName = monsterName,
+        maxHealth = monsters[monsterName].GetMaxHP(),
+        currentHealth = monsters[monsterName].GetMaxHP(),
+        maxMana = monsters[monsterName].GetMaxMana(),
+        currentMana = monsters[monsterName].GetMaxMana(),
+        level = 1,
+        actionIDs = monsters[monsterName].GetActions()
+    }
+end

@@ -1,6 +1,5 @@
 --!Type(UI)
 
-
 local npcColor: Color = Color.new(157, 56, 187)
 local npcName: string = "NPC"
 local messageTexts: {DialoguePage} = {}
@@ -17,6 +16,8 @@ local title: Label = nil
 local message: VisualElement = nil
 --!Bind
 local indicator: VisualElement = nil
+
+local uiManager = require("UIManager")
 
 local TweenModule = require("TweenModule")
 local Tween = TweenModule.Tween
@@ -69,6 +70,7 @@ local popInTween = Tween:new(
     end
 )
 
+
 function ApplySpecialAnimation(character : Label, characterIndex: number, specialAnimationID : number)
     local isEven = characterIndex % 2 == 0
     if specialAnimationID == 1 then
@@ -104,7 +106,7 @@ function ApplySpecialAnimation(character : Label, characterIndex: number, specia
     end
 end
 
-function CreateResponseButton(response, index, newChunks)
+function CreateResponseButton(response, index, newChunks, responseIDs)
     local _newResponse = VisualElement.new()
     _newResponse:AddToClassList("response-button")
 
@@ -121,7 +123,27 @@ function CreateResponseButton(response, index, newChunks)
         local ourChunk = newChunks[index]
         messageTexts = ourChunk.GetPages()
         ConvertMessageToLabels(messageTexts[currentPage])
+
+        local responseID = responseIDs[index]
+        uiManager.ResponseChosenEvent:Fire(responseID)
     end)
+
+    local _newResponseIn = Tween:new(
+        0,
+        1,
+        0.4,
+        false,
+        false,
+        TweenModule.Easing.easeOutBack,
+        function(value)
+            _newResponse.style.scale = StyleScale.new(Scale.new(Vector2.new(value, value)))
+        end,
+        function()
+            _newResponse.style.scale = StyleScale.new(Scale.new(Vector2.new(1, 1)))
+        end
+    )
+    _newResponseIn:start()
+
 end
 
 function ConvertMessageToLabels(messagePage : DialoguePage) -- This is the funciton that populates each page of the dialogue
@@ -170,8 +192,13 @@ function ConvertMessageToLabels(messagePage : DialoguePage) -- This is the funci
 
     local pageResponses = messagePage.GetResponses()
     local newChunks = messagePage.GetNewChunks()
-    print(#newChunks)
-    for i, response in pageResponses do CreateResponseButton(response, i, newChunks) end
+    local responseIDs = messagePage.GetResponseIDs()
+
+    local responseCount = #pageResponses
+    responses_container.style.height = StyleLength.new(Length.new(responseCount*38))
+    for i, response in pageResponses do
+        Timer.After(i * .2, function() CreateResponseButton(response, i, newChunks, responseIDs ) end)
+    end
 end
 
 function InitializeDialogue(_npcColor : Color, _npcName : string, _messageTexts : {DialoguePage})

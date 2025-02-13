@@ -18,10 +18,14 @@ local BattleScreenUI: BattleScreen = nil
 local FourButtonUI: FourButtonMenu = nil
 local ResultsLabelUI: ResultsUI = nil
 
+ResponseChosenEvent = Event.new("ResponseChosenEvent")
+
 local BattleDataModule = require("BattleData")
 local cameraManager = require("CameraManager")
 local playerTracker = require("PlayerTracker")
 local battlGroundManager = require("BattleGroundController")
+local gameManager = require("GameManager")
+local inventoryManager = require("PlayerInventoryManager")
 
 currentBattleTurn = 0
 
@@ -42,6 +46,21 @@ elementsIconsMap = {
 
 function GetIcon(mapID)
     return elementsIcons[elementsIconsMap[mapID]]
+end
+
+function DialougeResponseHandler(responseID)
+    if responseID == "choose_creature_earth" then
+        inventoryManager.RequestFirstMonster("earth")
+    end
+    if responseID == "choose_creature_fire" then
+        inventoryManager.RequestFirstMonster("fire")
+    end
+    if responseID == "choose_creature_water" then
+        inventoryManager.RequestFirstMonster("water")
+    end
+    if responseID == "choose_creature_air" then
+        inventoryManager.RequestFirstMonster("air")
+    end
 end
 
 function InitializeBattle(enemy: string)
@@ -88,6 +107,8 @@ function self:ClientStart()
     EndBattle()
 
     cameraManager.SwitchCamera(0)
+
+    ResponseChosenEvent:Connect(DialougeResponseHandler)
 
 end
 

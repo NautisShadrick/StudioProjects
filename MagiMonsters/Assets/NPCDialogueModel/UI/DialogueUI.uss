@@ -73,11 +73,10 @@
 #responses_container {
     position: absolute;
     width: 150px;
-    height: auto;
     right: 0;
     top: -2px;
     translate: 0 -100%;
-    flex-direction: column;
+    flex-direction: column-reverse;
 }
 
 .response-button {
@@ -85,6 +84,7 @@
     border-radius: 8px;
     padding: 0;
     margin: 2px;
+    height: 36px;
 }
 
 .response-label {

@@ -5,6 +5,8 @@ local Messages: {DialogueTextBlock} = {}
 --!SerializeField
 local responses: {string} = {}
 --!SerializeField
+local responseIDs: {string} = {}
+--!SerializeField
 local Chunks: {DialogueChunk} = {}
 
 function GetMessages()
@@ -17,4 +19,8 @@ end
 
 function GetNewChunks()
     return Chunks
+end
+
+function GetResponseIDs()
+    return responseIDs
 end

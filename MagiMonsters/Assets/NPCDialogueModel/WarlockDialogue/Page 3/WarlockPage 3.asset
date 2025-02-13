@@ -27,6 +27,11 @@ MonoBehaviour:
   - Fire
   - Water
   - Air
+  m_responseIDs:
+  - choose_creature_earth
+  - choose_creature_fire
+  - choose_creature_water
+  - choose_creature_air
   m_Chunks:
   - {fileID: 11400000, guid: 7dc8ceba20ab5f94d860777709098096, type: 2}
   - {fileID: 11400000, guid: 7dc8ceba20ab5f94d860777709098096, type: 2}
