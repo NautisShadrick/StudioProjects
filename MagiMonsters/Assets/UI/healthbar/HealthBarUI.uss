@@ -9,7 +9,6 @@
     position: absolute;
     width: 40%;
     height: 40%;
-    background-image: url("project://database/Assets/UI/Icons/SearchingIcon.png"); /*opacity: 0.5;*/
     left:0;
     translate: 10px -10px;
 }

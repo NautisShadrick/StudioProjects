@@ -1,9 +1,12 @@
 --!Type(UI)
 
+--!SerializeField
+local icon : Texture = nil
+
 --!Bind
 local health_bar : VisualElement = nil
 --!Bind
-local heart_icon : VisualElement = nil
+local heart_icon : Image = nil
 
 local TweenModule = require("TweenModule")
 local Tween = TweenModule.Tween
@@ -53,7 +56,32 @@ function PlayTimer(duration)
     iconPulseTween:start()
 end
 
+function SyncToRemainingTime(timeRemaining, totalDuration)
+    local currentProgress = (timeRemaining / totalDuration) * 100
+    health_bar.style.width = StyleLength.new(Length.Percent(currentProgress))
+    if healthBarTween then
+        healthBarTween:stop()
+        healthBarTween = nil
+    end
+    healthBarTween = Tween:new(
+        currentProgress,
+        0,
+        timeRemaining,
+        false,
+        false,
+        TweenModule.Easing.linear,
+        function(value)
+            health_bar.style.width = StyleLength.new(Length.Percent(value))
+        end,
+        function()
+            health_bar.style.width = StyleLength.new(Length.Percent(0))
+        end
+    )
+    healthBarTween:start()
+end
+
 function self:Awake()
+    heart_icon.image = icon
     self.gameObject:SetActive(false)
 end
 

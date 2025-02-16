@@ -11,7 +11,7 @@
     <VisualElement name="health_bar_container">
       <VisualElement name="health_bar"/>
     </VisualElement>
-    <VisualElement name="heart_icon"/>
+    <Image name="heart_icon"/>
   </hr:UILuaView>
 
 </UXML>

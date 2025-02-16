@@ -10,12 +10,14 @@ local monsterLibrary = require("MonsterLibrary")
 
 ------------ Player Tracking ------------
 function TrackPlayers(game, characterCallback)
-    scene.PlayerJoined:Connect(function(scene, player)
+    game.PlayerConnected:Connect(function(player)
         playercount = playercount + 1
         players[player] = {
             player = player,
             monsterCollection = TableValue.new("MonsterCollection"..player.user.id, {}),
-            currentMosnterIndex = NumberValue.new("CurrentMonsterIndex"..player.user.id, 1)
+            currentMosnterIndex = NumberValue.new("CurrentMonsterIndex"..player.user.id, 1),
+            hatcheryData = TableValue.new("HatcheryData"..player.user.id, {}),
+            eggCollection = TableValue.new("EggCollection"..player.user.id, {}),
         }
 
         player.CharacterChanged:Connect(function(player, character) 
@@ -69,6 +71,13 @@ function GetPlayerMonstersFromStorage(player: Player)
             return
         end
         players[player].monsterCollection.value = monsterCollection
+    end)
+
+    Storage.GetPlayerValue(player, "egg_collection", function(eggCollection)
+        if eggCollection == nil then 
+            eggCollection = {}
+        end
+        players[player].eggCollection.value = eggCollection
     end)
 end
 

@@ -18,14 +18,13 @@ using Highrise.Lua;
 
 namespace Highrise.Lua.Generated
 {
-    [AddComponentMenu("Lua/HealthBarUI")]
-    [LuaRegisterType(0x3d59edb1bf2ba4e2, typeof(LuaBehaviour))]
-    public class HealthBarUI : LuaBehaviourThunk
+    [AddComponentMenu("Lua/SceneManager")]
+    [LuaRegisterType(0x196173b8fb6082a2, typeof(LuaBehaviour))]
+    public class SceneManager : LuaBehaviourThunk
     {
-        private const string s_scriptGUID = "aa755b07b02f5dc4890fc2867a57d46c";
+        private const string s_scriptGUID = "55ac19130956c4348bded2d597f70b79";
         public override string ScriptGUID => s_scriptGUID;
 
-        [SerializeField] public UnityEngine.Texture m_icon = default;
 
         protected override SerializedPropertyValue[] SerializeProperties()
         {
@@ -34,9 +33,6 @@ namespace Highrise.Lua.Generated
 
             return new SerializedPropertyValue[]
             {
-                CreateSerializedProperty(_script.GetPropertyAt(0), m_icon),
-                CreateSerializedProperty(_script.GetPropertyAt(1), null),
-                CreateSerializedProperty(_script.GetPropertyAt(2), null),
             };
         }
     }
