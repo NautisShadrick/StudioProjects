@@ -2,6 +2,7 @@
 
 StartEggRequest = Event.new("StartEggRequest")
 UpdateEggStatsEvent = Event.new("UpdateEggStatsEvent")
+HatchMonsterRequest = Event.new("HatchMonsterRequest")
 
 local playerTracker = require("PlayerTracker")
 local playerInventoryManager = require("PlayerInventoryManager")
@@ -99,8 +100,32 @@ function StartEgg(player, slotId)
     end
 end
 
+function HatchMonster(player, slotId)
+    local playerinfo = playerTracker.players[player]
+    local _hatcheryData = playerinfo.hatcheryData.value
+
+    for i, _hatcherySlot in ipairs(_hatcheryData) do
+        if _hatcherySlot.slotId == slotId then
+            if _hatcherySlot.totalDuration <= os.time() - _hatcherySlot.startTime then
+                -- Hatch Monster
+                print("Hatching Monster")
+                table.remove(_hatcheryData, i)
+                playerinfo.hatcheryData.value = _hatcheryData
+                SaveHatcheryDataToStorage(player, function()
+                    -- Add Monster to Player Inventory
+                    playerInventoryManager.GivePlayerMonster(player, _hatcherySlot.monster)
+                end)
+            else
+                -- Egg is not ready yet, somehow hacked this event
+                print(player.name .. " tried to hatch an egg that is not ready yet")
+            end
+        end
+    end
+end
+
 function self:ServerStart()
     StartEggRequest:Connect(StartEgg)
+    HatchMonsterRequest:Connect(HatchMonster)
 
     server.PlayerConnected:Connect(function(player)
         player.CharacterChanged:Connect(function(player, character)

@@ -27,6 +27,18 @@ function GivePlayerEgg(player: Player, eggData)
     SaveEggCollectionToStorage(player)
 end
 
+function GivePlayerMonster(player, monsterName)
+    print("Giving Player Monster", player.name, monsterName)
+    local playerInfo = playerTracker.players[player]
+    local monsterCollection = playerInfo.monsterCollection.value
+
+    local monsterData = monsterLibrary.GetStorageMonsterData(monsterName)
+
+    table.insert(monsterCollection, monsterData)
+    playerTracker.players[player].monsterCollection.value = monsterCollection
+    playerTracker.SavePlayerMonstersToStorage(player)
+end
+
 function self:ServerStart()
     requestFirstMonsterRequest:Connect(function(player, type)
         local playerInfo = playerTracker.players[player]
