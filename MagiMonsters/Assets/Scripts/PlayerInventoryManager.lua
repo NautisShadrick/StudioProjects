@@ -13,11 +13,18 @@ end
 
 ------------ Server ------------
 
+function SaveEggCollectionToStorage(player: Player)
+    local _eggCollection = playerTracker.players[player].eggCollection.value
+    Storage.SetPlayerValue(player, "egg_collection", _eggCollection, function()
+        print("Egg Collection Saved")
+    end)
+end
+
 function GivePlayerEgg(player: Player, eggData)
     local _eggCollection = playerTracker.players[player].eggCollection.value
     table.insert(_eggCollection, eggData)
     playerTracker.players[player].eggCollection.value = _eggCollection
-    Storage.SetPlayerValue(player, "egg_collection", playerTracker.players[player].eggCollection.value)
+    SaveEggCollectionToStorage(player)
 end
 
 function self:ServerStart()

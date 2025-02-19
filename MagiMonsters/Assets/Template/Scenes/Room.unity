@@ -1348,6 +1348,7 @@ MonoBehaviour:
   _uiOutput: 1
   _uiOutputSettings:
     rid: 7744501453875314696
+  m_icon: {fileID: 0}
   references:
     version: 2
     RefIds:

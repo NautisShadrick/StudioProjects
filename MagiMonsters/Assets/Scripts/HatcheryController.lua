@@ -4,6 +4,7 @@ StartEggRequest = Event.new("StartEggRequest")
 UpdateEggStatsEvent = Event.new("UpdateEggStatsEvent")
 
 local playerTracker = require("PlayerTracker")
+local playerInventoryManager = require("PlayerInventoryManager")
 
 
 ------------ Client ------------
@@ -52,12 +53,13 @@ function InitializeHatchery(player)
     end
 end
 
-function SaveHatcheryDataToStorage(player: Player)
+function SaveHatcheryDataToStorage(player: Player, cb)
     print("Saving Hatchery Data")
     local _hatcheryData = playerTracker.players[player].hatcheryData.value
     Storage.SetPlayerValue(player, "hatchery_data", _hatcheryData, function()
         print("Hatchery Data Saved")
         InitializeHatchery(player)
+        cb()
     end)
 end
 
@@ -77,13 +79,23 @@ function StartEgg(player)
     local _playerEggCollection = playerTracker.players[player].eggCollection.value
     if #_playerEggCollection > 0 then
         print("Starting Egg Hatch Process")
-        local _eggData = _playerEggCollection[1]
+
+        -- Fetch Egg Data
+        local i = 1
+        local _eggData = _playerEggCollection[i]
+        -- Create hatchery Slot Data
         local _HatcherySlotData = {monster = _eggData.monster, startTime = os.time(), totalDuration = _eggData.totalDuration}
 
+        -- Add Hatchery Slot Data to Player Hatchery Data
         local _hatcheryData = {}
         table.insert(_hatcheryData, _HatcherySlotData)
         playerTracker.players[player].hatcheryData.value = _hatcheryData
-        SaveHatcheryDataToStorage(player)
+        SaveHatcheryDataToStorage(player, function()
+            -- Remove Egg from Eggdata and Save to Storage
+            table.remove(_playerEggCollection, i)
+            playerTracker.players[player].eggCollection.value = _playerEggCollection
+            playerInventoryManager.SaveEggCollectionToStorage(player)
+        end)
     end
 end
 

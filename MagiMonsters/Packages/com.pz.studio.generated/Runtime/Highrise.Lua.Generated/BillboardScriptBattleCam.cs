@@ -19,7 +19,7 @@ using Highrise.Lua;
 namespace Highrise.Lua.Generated
 {
     [AddComponentMenu("Lua/BillboardScriptBattleCam")]
-    [LuaRegisterType(0x4a1809a4d4d6f8bf, typeof(LuaBehaviour))]
+    [LuaRegisterType(0x8dc64d5513fcf114, typeof(LuaBehaviour))]
     public class BillboardScriptBattleCam : LuaBehaviourThunk
     {
         private const string s_scriptGUID = "f60c72160913eaf4a88ebdc3bff72519";
