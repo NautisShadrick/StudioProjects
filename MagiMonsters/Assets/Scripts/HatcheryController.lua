@@ -19,6 +19,7 @@ local playerHatcheryTimers = {}
 
 
 function UpdateStats(player, hatcherySlot)
+    print("Updating Stats")
     local playerinfo = playerTracker.players[player]
     local currentTime = os.time()
     local startTime = hatcherySlot.startTime
@@ -27,7 +28,7 @@ function UpdateStats(player, hatcherySlot)
 
     local _timeRemaining = math.max(0, totalDuration - timeSinceStart)
     local _timeRemainingString = string.format("%02d:%02d", math.floor(_timeRemaining / 60), _timeRemaining % 60)
-    UpdateEggStatsEvent:FireClient(player, _timeRemaining, totalDuration)
+    UpdateEggStatsEvent:FireClient(player, _timeRemaining, totalDuration, hatcherySlot.slotId)
 end
 
 function InitializeHatchery(player)
@@ -74,8 +75,7 @@ function GetHatcheryDataFromStorage(player: Player)
     end)
 end
 
-function StartEgg(player)
-    print("Starting Egg")
+function StartEgg(player, slotId)
     local _playerEggCollection = playerTracker.players[player].eggCollection.value
     if #_playerEggCollection > 0 then
         print("Starting Egg Hatch Process")
@@ -84,7 +84,7 @@ function StartEgg(player)
         local i = 1
         local _eggData = _playerEggCollection[i]
         -- Create hatchery Slot Data
-        local _HatcherySlotData = {monster = _eggData.monster, startTime = os.time(), totalDuration = _eggData.totalDuration}
+        local _HatcherySlotData = {monster = _eggData.monster, startTime = os.time(), totalDuration = _eggData.totalDuration, slotId = slotId}
 
         -- Add Hatchery Slot Data to Player Hatchery Data
         local _hatcheryData = {}
