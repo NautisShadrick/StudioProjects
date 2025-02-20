@@ -52,4 +52,12 @@ function self:Start()
             end
         end
     end)
+
+    hatcheryController.SlotHatchedEvent:Connect(function(updatedSlotId)
+        if updatedSlotId == slotId then
+            eggSlot:SetActive(false)
+            hasEgg = false
+            isReady = false
+        end
+    end)
 end

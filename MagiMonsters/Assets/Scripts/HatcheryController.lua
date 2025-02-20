@@ -3,6 +3,7 @@
 StartEggRequest = Event.new("StartEggRequest")
 UpdateEggStatsEvent = Event.new("UpdateEggStatsEvent")
 HatchMonsterRequest = Event.new("HatchMonsterRequest")
+SlotHatchedEvent = Event.new("SlotHatchedEvent")
 
 local playerTracker = require("PlayerTracker")
 local playerInventoryManager = require("PlayerInventoryManager")
@@ -48,8 +49,18 @@ function InitializeHatchery(player)
         playerHatcheryTimers[player] = Timer.Every(10, function()
             print("Updating Hatchery Timer")
             -- Update hatch Timer and Information
+            local hasActiveSlot = false
             for i, _hatcherySlot in ipairs(_hatcheryData) do
                 UpdateStats(player, _hatcherySlot)
+                if math.max(0, _hatcherySlot.totalDuration - (os.time() - _hatcherySlot.startTime)) > 0 then
+                    hasActiveSlot = true
+                end
+            end
+
+            if not hasActiveSlot then
+                print("Stopping Hatchery Timer")
+                playerHatcheryTimers[player]:Stop()
+                playerHatcheryTimers[player] = nil
             end
         end)
     end
@@ -115,6 +126,7 @@ function HatchMonster(player, slotId)
                 SaveHatcheryDataToStorage(player, function()
                     -- Add Monster to Player Inventory
                     playerInventoryManager.GivePlayerMonster(player, _hatcherySlot.monster)
+                    SlotHatchedEvent:FireClient(player, slotId)
                 end)
             else
                 -- Egg is not ready yet, somehow hacked this event
