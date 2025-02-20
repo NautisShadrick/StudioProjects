@@ -4,6 +4,8 @@
 local eggSlot : GameObject = nil
 --!SerializeField
 local meterUI : GameObject = nil
+--!SerializeField
+local slotId : number = 1
 
 local playerTracker = require("PlayerTracker")
 local hatcheryController = require("HatcheryController")
@@ -11,7 +13,6 @@ local hatcheryController = require("HatcheryController")
 local tapHandler = nil
 local meterUIScript = nil
 
-local slotId = 1
 local hasEgg = false
 local isReady = false
 
@@ -37,12 +38,12 @@ function self:Start()
     end)
 
     hatcheryController.UpdateEggStatsEvent:Connect(function(timeRemaining, totalDuration, updatedSlotId)
-        meterUI:SetActive(true)
-        meterUIScript.SyncToRemainingTime(timeRemaining, totalDuration)
-        eggSlot:SetActive(true)
-
         if updatedSlotId == slotId then
             -- This is the info fo this slot
+            meterUI:SetActive(true)
+            meterUIScript.SyncToRemainingTime(timeRemaining, totalDuration)
+            eggSlot:SetActive(true)
+            
             hasEgg = true
             if timeRemaining <= 0 then
                 -- Egg is ready

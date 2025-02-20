@@ -88,9 +88,10 @@ function StartEgg(player, slotId)
         local _HatcherySlotData = {monster = _eggData.monster, startTime = os.time(), totalDuration = _eggData.totalDuration, slotId = slotId}
 
         -- Add Hatchery Slot Data to Player Hatchery Data
-        local _hatcheryData = {}
+        local _hatcheryData = playerTracker.players[player].hatcheryData.value
         table.insert(_hatcheryData, _HatcherySlotData)
         playerTracker.players[player].hatcheryData.value = _hatcheryData
+
         SaveHatcheryDataToStorage(player, function()
             -- Remove Egg from Eggdata and Save to Storage
             table.remove(_playerEggCollection, i)
