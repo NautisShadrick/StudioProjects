@@ -10,7 +10,6 @@
   <hr:UILuaView class="timer-u-i">
   
     <VisualElement name="timer_bar" >
-      <VisualElement name="timer_bar_fill" picking-mode="Ignore"/>
       <VisualElement name="timer_icon" picking-mode="Ignore">
         <VisualElement name="timer_arm_icon" picking-mode="Ignore"/>
       </VisualElement>

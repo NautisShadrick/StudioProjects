@@ -1,5 +1,8 @@
 --!Type(Module)
 
+local TeleportRequest = Event.new("TeleportRequest")
+local TeleportResponse = Event.new("TeleportResponse")
+
 --local uiManager = require("UIManager")
 players = {}
 local playercount = 0
@@ -38,6 +41,17 @@ function self:ClientAwake()
     end
 
     TrackPlayers(client, OnCharacterInstantiate)
+
+    TeleportResponse:Connect(function(player, destination)
+        local character = player.character
+        if character then
+            character:Teleport(destination)
+        end
+    end)
+end
+
+function TeleportLocalPlayerRequest(destination)
+    TeleportRequest:FireServer(destination)
 end
 
 ------------- SERVER -------------
@@ -68,6 +82,8 @@ end
 function self:ServerAwake()
     TrackPlayers(server)
 
+    TeleportRequest:Connect(TeleportPlayerServer)
+
     Timer.After(2,function()
         local playerPairs, soloPlayer = SeperatePlayersIntoRandomPairs()
         for i, pair in ipairs(playerPairs) do
@@ -77,4 +93,13 @@ function self:ServerAwake()
         end
         if soloPlayer then print("Solo", soloPlayer.name) end
     end)
+    
+end
+
+function TeleportPlayerServer(player, destination)
+    local character = player.character
+    if character then
+        character.transform.position = destination
+        TeleportResponse:FireAllClients(player, destination)
+    end
 end

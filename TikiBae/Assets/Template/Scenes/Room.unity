@@ -272,6 +272,7 @@ GameObject:
   - component: {fileID: 505952288}
   - component: {fileID: 505952289}
   - component: {fileID: 505952290}
+  - component: {fileID: 505952291}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -331,6 +332,32 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _networkId: 0
   _script: {fileID: -974389366465450183, guid: 8a82b7116bc901f409f547132389a3cc, type: 3}
+  _properties: []
+  _uiOutput: 0
+  _uiOutputSettings:
+    rid: -2
+  m_boatPrefab: {fileID: 6129319465137104035, guid: 4c6fe97948070a343953b3d188708510,
+    type: 3}
+  m_stateDuration: 5
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
+--- !u!114 &505952291
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 505952287}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c8fca7dcafdd9c1c1e49087ecd9ea8e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _networkId: 0
+  _script: {fileID: -974389366465450183, guid: 9650caa87022d9147b3b90525606ea5b, type: 3}
   _properties: []
   _uiOutput: 0
   _uiOutputSettings:
@@ -562,6 +589,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1382357497}
+  - component: {fileID: 1382357498}
   m_Layer: 0
   m_Name: UIManager
   m_TagString: Untagged
@@ -585,6 +613,30 @@ Transform:
   - {fileID: 1679650038}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1382357498
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1382357496}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d30d0fba65e369a10211acefc7acc113, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _networkId: 0
+  _script: {fileID: -974389366465450183, guid: 69d20f6fdf3c6974b8ceac3a7d73c1c6, type: 3}
+  _properties: []
+  _uiOutput: 0
+  _uiOutputSettings:
+    rid: -2
+  m_TimerUIObj: {fileID: 1679650037}
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
 --- !u!1001 &1599188571
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -669,7 +721,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1679650038
 Transform:
   m_ObjectHideFlags: 0

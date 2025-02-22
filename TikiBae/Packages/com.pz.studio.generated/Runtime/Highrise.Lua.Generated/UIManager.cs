@@ -18,15 +18,14 @@ using Highrise.Lua;
 
 namespace Highrise.Lua.Generated
 {
-    [AddComponentMenu("Lua/GameStateManager")]
-    [LuaRegisterType(0x49dcb8913c32a6b7, typeof(LuaBehaviour))]
-    public class GameStateManager : LuaBehaviourThunk
+    [AddComponentMenu("Lua/UIManager")]
+    [LuaRegisterType(0x4420fd164eed93fa, typeof(LuaBehaviour))]
+    public class UIManager : LuaBehaviourThunk
     {
-        private const string s_scriptGUID = "8a82b7116bc901f409f547132389a3cc";
+        private const string s_scriptGUID = "69d20f6fdf3c6974b8ceac3a7d73c1c6";
         public override string ScriptGUID => s_scriptGUID;
 
-        [SerializeField] public UnityEngine.GameObject m_boatPrefab = default;
-        [SerializeField] public System.Double m_stateDuration = 15;
+        [SerializeField] public UnityEngine.GameObject m_TimerUIObj = default;
 
         protected override SerializedPropertyValue[] SerializeProperties()
         {
@@ -35,8 +34,7 @@ namespace Highrise.Lua.Generated
 
             return new SerializedPropertyValue[]
             {
-                CreateSerializedProperty(_script.GetPropertyAt(0), m_boatPrefab),
-                CreateSerializedProperty(_script.GetPropertyAt(1), m_stateDuration),
+                CreateSerializedProperty(_script.GetPropertyAt(0), m_TimerUIObj),
             };
         }
     }
