@@ -1,0 +1,77 @@
+:root {
+    --font-comic: url("project://database/Assets/UI/Fonts/Hey Comic SDF.asset");
+}
+
+.timer-u-i {
+    position: absolute;
+    width: 300px;
+    align-self:center;
+    top: 32px;
+
+    font-size: 32px;
+    letter-spacing: 3px;
+    -unity-font-definition: var(--font-comic);
+    -unity-text-align: middle-center;
+
+    -unity-font-style: bold;
+
+    color:white;
+    text-shadow: 0 3 0 rgb(129, 171, 179);
+    -unity-text-outline-color: rgb(129, 171, 179);
+    -unity-text-outline-width: 2px;
+}
+
+#timer_icon {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    border-radius: 5px;
+    margin: 0;
+    padding: 0;
+
+    translate: 0 -15px;
+
+    background-image: url("project://database/Assets/UI/Icons/clock_icon.png");
+
+    justify-content: center;
+    align-items: center;
+}
+
+#timer_arm_icon {
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    margin: 0;
+    padding: 0;
+
+    background-image: url("project://database/Assets/UI/Icons/clock_arm_icon.png");
+}
+
+#timer_bar {
+    width: 100%;
+    height: 10px;
+    border-radius: 5px;
+    margin: 10px 0;
+    padding: 0;
+    margin-top: auto;
+
+    align-items: center;
+    justify-content: center;
+}
+
+#timer_bar_fill {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color:rgb(255, 186, 25);
+    border-color: rgb(217, 141, 19);
+    border-bottom-width: 2px;
+    border-radius: 5px;
+    margin: 0;
+    padding: 0;
+}
+
+#timer_label {
+    bottom:0;
+    translate: 0 20px;
+}
