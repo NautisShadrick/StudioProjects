@@ -18,15 +18,13 @@ using Highrise.Lua;
 
 namespace Highrise.Lua.Generated
 {
-    [AddComponentMenu("Lua/UIManager")]
-    [LuaRegisterType(0x4420fd164eed93fa, typeof(LuaBehaviour))]
-    public class UIManager : LuaBehaviourThunk
+    [AddComponentMenu("Lua/SelectionUI")]
+    [LuaRegisterType(0x7c7d65c5187c36cb, typeof(LuaBehaviour))]
+    public class SelectionUI : LuaBehaviourThunk
     {
-        private const string s_scriptGUID = "69d20f6fdf3c6974b8ceac3a7d73c1c6";
+        private const string s_scriptGUID = "d4ace28dc9782a349a96b417181186ec";
         public override string ScriptGUID => s_scriptGUID;
 
-        [SerializeField] public UnityEngine.GameObject m_TimerUIObj = default;
-        [SerializeField] public UnityEngine.GameObject m_SelectionUIObj = default;
 
         protected override SerializedPropertyValue[] SerializeProperties()
         {
@@ -35,8 +33,8 @@ namespace Highrise.Lua.Generated
 
             return new SerializedPropertyValue[]
             {
-                CreateSerializedProperty(_script.GetPropertyAt(0), m_TimerUIObj),
-                CreateSerializedProperty(_script.GetPropertyAt(1), m_SelectionUIObj),
+                CreateSerializedProperty(_script.GetPropertyAt(0), null),
+                CreateSerializedProperty(_script.GetPropertyAt(1), null),
             };
         }
     }

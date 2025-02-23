@@ -18,15 +18,15 @@ using Highrise.Lua;
 
 namespace Highrise.Lua.Generated
 {
-    [AddComponentMenu("Lua/UIManager")]
-    [LuaRegisterType(0x4420fd164eed93fa, typeof(LuaBehaviour))]
-    public class UIManager : LuaBehaviourThunk
+    [AddComponentMenu("Lua/BoatController")]
+    [LuaRegisterType(0xad7f6b82965e6db7, typeof(LuaBehaviour))]
+    public class BoatController : LuaBehaviourThunk
     {
-        private const string s_scriptGUID = "69d20f6fdf3c6974b8ceac3a7d73c1c6";
+        private const string s_scriptGUID = "781d3704b68af5e4f89b37e85c4c8578";
         public override string ScriptGUID => s_scriptGUID;
 
-        [SerializeField] public UnityEngine.GameObject m_TimerUIObj = default;
-        [SerializeField] public UnityEngine.GameObject m_SelectionUIObj = default;
+        [SerializeField] public System.Double m_moveSpeed = 1;
+        [SerializeField] public System.Double m_radius = 5;
 
         protected override SerializedPropertyValue[] SerializeProperties()
         {
@@ -35,8 +35,8 @@ namespace Highrise.Lua.Generated
 
             return new SerializedPropertyValue[]
             {
-                CreateSerializedProperty(_script.GetPropertyAt(0), m_TimerUIObj),
-                CreateSerializedProperty(_script.GetPropertyAt(1), m_SelectionUIObj),
+                CreateSerializedProperty(_script.GetPropertyAt(0), m_moveSpeed),
+                CreateSerializedProperty(_script.GetPropertyAt(1), m_radius),
             };
         }
     }

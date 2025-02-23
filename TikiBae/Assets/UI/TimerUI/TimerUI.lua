@@ -40,9 +40,6 @@ local rotateClockArmTween = Tween:new(
     end
 )
 
-clockIconRotateBackandForthTween:start()
-rotateClockArmTween:start()
-
 function SetTitle(title)
     timer_label.text = title
 end

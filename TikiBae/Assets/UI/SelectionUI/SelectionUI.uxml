@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UXML
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="UnityEngine.UIElements"
+    xmlns:hr="Highrise.UI"
+    xmlns:editor="UnityEditor.UIElements"
+    xsi:noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd"
+>
+
+  <hr:UILuaView class="selection-u-i">
+    <VisualElement name="no_button" class="selection-button" >
+      <VisualElement name="no_Icon"/>
+      <Label name="no_Label" text="Dive!" class="button-label"/>
+    </VisualElement>
+    <VisualElement name="yes_button" class="selection-button" >
+      <VisualElement name="yes_Icon"/>
+      <Label name="yes_Label" text="Match!" class="button-label"/>
+    </VisualElement>
+  </hr:UILuaView>
+
+</UXML>
