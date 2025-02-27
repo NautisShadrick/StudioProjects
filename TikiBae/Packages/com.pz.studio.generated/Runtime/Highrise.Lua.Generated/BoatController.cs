@@ -25,6 +25,9 @@ namespace Highrise.Lua.Generated
         private const string s_scriptGUID = "781d3704b68af5e4f89b37e85c4c8578";
         public override string ScriptGUID => s_scriptGUID;
 
+        [SerializeField] public UnityEngine.Vector3 m_offset = new Vector3(0f, 0f, 0f);
+        [SerializeField] public UnityEngine.Transform m_pointA = default;
+        [SerializeField] public UnityEngine.Transform m_pointB = default;
         [SerializeField] public System.Double m_moveSpeed = 1;
         [SerializeField] public System.Double m_radius = 5;
 
@@ -35,8 +38,11 @@ namespace Highrise.Lua.Generated
 
             return new SerializedPropertyValue[]
             {
-                CreateSerializedProperty(_script.GetPropertyAt(0), m_moveSpeed),
-                CreateSerializedProperty(_script.GetPropertyAt(1), m_radius),
+                CreateSerializedProperty(_script.GetPropertyAt(0), m_offset),
+                CreateSerializedProperty(_script.GetPropertyAt(1), m_pointA),
+                CreateSerializedProperty(_script.GetPropertyAt(2), m_pointB),
+                CreateSerializedProperty(_script.GetPropertyAt(3), m_moveSpeed),
+                CreateSerializedProperty(_script.GetPropertyAt(4), m_radius),
             };
         }
     }

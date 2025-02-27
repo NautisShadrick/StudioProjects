@@ -31,22 +31,39 @@ local boatTable = {}
 
 function AddToBoats(player_pairs, soloPlayer)
     for i, pair in ipairs(player_pairs) do
+
+        -- Get players
         local player1 = pair[1]
         local player2 = pair[2]
+
+        -- Create Boat
         local boatObj = GameObject.Instantiate(boatPrefab)
         table.insert(boatTable, boatObj)
         boatObj.transform.position = Vector3.new(-7.5, 0, 0)
 
+        -- Get Boat Controller and Points
+        local boatController = boatObj:GetComponent(BoatController)
+        local pointA, pointB = boatController.GetPoints()
+
+        -- Set Players to Boat
         if soloPlayer ~= client.localPlayer then characterController.options.enabled = false end
 
+        -- Disable NavMeshAgent
         player1.character.gameObject:GetComponent(NavMeshAgent).enabled = false
         player2.character.gameObject:GetComponent(NavMeshAgent).enabled = false
 
-        player1.character.gameObject.transform.parent = boatObj.transform
-        player2.character.gameObject.transform.parent = boatObj.transform
+        -- Attach Players to Boat points
+        player1.character.gameObject.transform.parent = pointA
+        player2.character.gameObject.transform.parent = pointB
 
+        -- Set Player Positions
         player1.character.gameObject.transform.localPosition = Vector3.new(0, 0, 0)
         player2.character.gameObject.transform.localPosition = Vector3.new(0, 0, 0)
+
+        -- Set Player Rotations
+        player1.character.gameObject.transform.localRotation = Quaternion.Euler(0, 0, 0)
+        player2.character.gameObject.transform.localRotation = Quaternion.Euler(0, 0, 0)
+
 
         print(player1.character.gameObject.transform.localPosition.x, player1.character.gameObject.transform.localPosition.y, player1.character.gameObject.transform.localPosition.z)
 

@@ -1,0 +1,780 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &1
+MonoBehaviour:
+  m_ObjectHideFlags: 53
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 258248712, guid: a215bd465061e3c4abe0b86c7c8c3d14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _assetMappings:
+  - Guid: 3adb1839d17b5e845a7326996480e43c
+    StoreId: 6658dfea6e9f2ad62c40e852
+    Name: Palm Tree 2
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658dfea6e9f2ad62c40e852/18fcb2adcd8_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658dfea6e9f2ad62c40e852/18fcb2acd38_0.jpg
+    AdditionalAssetGUIDs:
+    - 4f90e989b28d23349bc4b637cee2f126
+    - 7cad33aafac861c45ac43bd7b6274dd4
+    - 5f34ab98f76b64b46a21be8918d4691c
+    - 742146c51f7ee264f846980444faac28
+    - 0eaf05d2fe3ac674f95fa32ce764fa76
+    IsBundle: 0
+  - Guid: 7201207880f6db849a4663680a818038
+    StoreId: 6658dfd56e9f2ad62c40e850
+    Name: Palm Tree 1
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658dfd56e9f2ad62c40e850/18fcb2a7f18_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658dfd56e9f2ad62c40e850/18fcb2a7360_0.jpg
+    AdditionalAssetGUIDs:
+    - 4f90e989b28d23349bc4b637cee2f126
+    - 076f3117f6a16d54fac6cb5759cd7f6a
+    - 7cad33aafac861c45ac43bd7b6274dd4
+    - 5f34ab98f76b64b46a21be8918d4691c
+    - 742146c51f7ee264f846980444faac28
+    IsBundle: 0
+  - Guid: 3c2df89b67546d749979b0463b5e0dfe
+    StoreId: 665903686e9f2ad62c40e98c
+    Name: Wooden Bench
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/665903686e9f2ad62c40e98c/18fcbb57550_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/665903686e9f2ad62c40e98c/18fcbb56998_0.jpg
+    AdditionalAssetGUIDs:
+    - 7cad33aafac861c45ac43bd7b6274dd4
+    - 21734e4e760f65f458ef8499b41ebaa3
+    - 5f34ab98f76b64b46a21be8918d4691c
+    IsBundle: 0
+  - Guid: 278417b49d16c5d4d9f60e7bce811471
+    StoreId: 677d4bd4816296114036e69f
+    Name: Tropical Pirate Island
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/647622d2106a74bac609d8ea/677d4bd4816296114036e69f/441737380.png
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/647622d2106a74bac609d8ea/677d4bd4816296114036e69f/194417387b0_0.png
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/647622d2106a74bac609d8ea/677d4bd4816296114036e69f/1944173a308_0.webp
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/647622d2106a74bac609d8ea/677d4bd4816296114036e69f/1944173ba78_0.webp
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/647622d2106a74bac609d8ea/677d4bd4816296114036e69f/1944173d1e8_0.webp
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/647622d2106a74bac609d8ea/677d4bd4816296114036e69f/1944173e958_0.webp
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/647622d2106a74bac609d8ea/677d4bd4816296114036e69f/19441740c80_0.webp
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/647622d2106a74bac609d8ea/677d4bd4816296114036e69f/194417427d8_0.webp
+    AdditionalAssetGUIDs:
+    - 278417b49d16c5d4d9f60e7bce811471
+    - 8cde3f3d4eb606549bde4445483f9cb2
+    - 5c3f4798bb46cc041beee70594198b8e
+    - 6f514b8a199a6284597c40e13b110f3e
+    - 823ebd41cc8842841a9892b9a00f0c89
+    - 18a91162c17daaf4ca32b11b3bcfcd71
+    - a992d1abd0769c24989b0d78b97fc14d
+    - 140b630889964c444ba6b6f56fb16971
+    - a42bd0cecfc9f934e94b204baebcd750
+    - 998ea5eecd696c440a04d1b2e7d220ed
+    - e00e416b5fc74844ea4f2a1afa4f9e09
+    - 09cd2c265d1e46e4594bb460165691a4
+    - 598a829e34c235045a4752392232fe2c
+    - be70587a0bfde9d479ee5ed71cbaaf41
+    - 27b042674da390c46a1ff4cc2317d5f2
+    - c5e7a45250a22f5429dcda937437b611
+    - 792aa12ef42422742aa2142a47d70da3
+    - f25fd87b4b5d93145809e8ddefe85a7e
+    - eaf27664f28c298448bb59190480dd79
+    - 37a9677b271e5254e90b3ba0be19387b
+    - 42fc34f57ddf93e4aae2f5477d2b6f6a
+    - a401fd119dc4764449990a13d9245dab
+    - df4e091db90a50348b59130084e17e12
+    - 8f6167459987aad4f9ca0b0df9698b4f
+    - be228878089bc084c975f0a234efd927
+    - 8e4a3abccd48fea4da4275c22c2a1d0d
+    - b607a91079a3b98499deb1217d29ab5f
+    - a3078f19558ac0d449eb8d638e0fec79
+    - ca334f6ef47c32c47a854dcf94b2417b
+    - 8d7f02d4d2a925241bc6453df51c1a3f
+    - 817b7f71673b05d469ec64c6645e163c
+    - efe282c09dffb6f4d9516447cefbf4ea
+    - e28871c2e9b9ad5429cac99d53e21ba2
+    - 68dd95c2695b6e74e9e9f285d8beff96
+    - a1c5bcd2989ea3e4194af9a8e3aed2ff
+    - d7634442264176740a831f09f4f62186
+    - 1653eabaad1166e4aa8690519d4e1dcf
+    - 6f4fb77711e290244a38dc4cd52505cb
+    - 43b5cf70713ce32459d8554ffc1da554
+    - e21ae835ff1dffe4081f375ebdd3d1d3
+    - f8cafe3fd3d9c8c43b6cff8799afd654
+    - b2e9898911e13234ab27f17806fd4f82
+    - 262c53a0748ee764b9747090f6e78c41
+    - cabef2a036ca34c41abb96e0e2f593e7
+    - 07186b837f313014db2c0e38ef5f8cca
+    - fc1eef60a83a26143b5ec304f29c7e2f
+    - 14f0dcc4aaf291a48ade2974db1603f7
+    - 93ad4cc2f15137c4ea134ea9ee7a0ddb
+    - 4f29fbdf91c29184db15890f6a1d332e
+    - 23befe9f4a38a5c4c89d3be644bbf6d9
+    - a0da9e264ee7b984593867a40c498c4c
+    - f172b1f1eba6bab4499e67bb6fe18914
+    - 385db33730e927a4d8ff8e80271802e4
+    - 7b2684c8f4c4c2a47a7ee860d07d3e7f
+    - 007d68a1da76d374ba532cfb0076ac99
+    - fcf6b5eb494e53443b7e45f8fdb7641a
+    - 14c7ace4e7f3884429ad6427a2632193
+    - 876ad945da601f34bb528d1488271002
+    - 7e5524e01e4ba4241a8b624252cccf54
+    - 4563e8e80f7baea46839a3ffe8b1941a
+    - fd124c1964e6bcf489ac199a87b46992
+    - b19d742bdd0c78348a2f1a8a674bc385
+    - e44020ca7d1c6d64a9e411fcf81c6122
+    - fbb90c3162d8ce345ba5efc136afbabb
+    - c010f4833b9a62843b565f95d3cb63df
+    - 415cc30727f46394b8b9cc9e6ea2f69c
+    - 97df3012193107645a3f8e3c3c4ef96f
+    - 8c002ca7077bd58498b74b52ff61bd9e
+    - 2282dc3d3c6057847adbfe6cb4ffae7d
+    - 44d255e07591eba42a650077b8e4db89
+    - bb02a9e4a348b9249a3d3a2a222d1d80
+    - 508ab614d65fc194cb81f038c6de6cc2
+    - f5ff0ea9968be82489b9190870cb190e
+    - 52733836bf5a5494884477c6acc2ef66
+    - 8b7a771f91a478b4ea3fe3b6ec22300d
+    - f60a5b3a7a8d16c4d8aa94159957b6de
+    - c9ee3d404827fa34890e9fa83f5ee72f
+    - 3742d50368f139c469a07bcfa36345ae
+    - ca63ac98709ccbf4689f178d8cf0d831
+    - f8b60c5494f5ec54c88c1fe094d2cf1e
+    - 12c6bde4a69436848ad7b72f0a9dd900
+    - 34b50eab0a17b2f4abcc96846600bd00
+    - 9aced1f428502744fb88436ad92f4ab3
+    - dc879a0e660c7c7448f1749cc5cd3637
+    - 773422392bab890459ef8930b002a0ee
+    - 278e87ed922e9b64d83347638de543fb
+    - 5f5ce47825431624eab71236b6320920
+    - 97f7b5a3dd196a0458b5498528a3492d
+    - d4fd3e54701c9fe4b96c18109abdbc63
+    - 77c36411ae373074f918a5a769d6520a
+    - 394d45033b6890249ab6948806b548f8
+    - f9b88f58eed72c049a62fe627e147c12
+    - 7466d5c82b058bd4b9a503d4f42a8f47
+    - a320f980c867493459fa83a45ee4f456
+    - 8a52cac210d109d4682a7746afd641d1
+    - e42ea56630d349c45b20c4521beeb13f
+    - c25e38779f93e4b4faeab28edb3737eb
+    - 8a9cc76d902915b48a14407711809ac8
+    - b3b14a3ab8d3100489a45d75bb0e52a6
+    - 7c693cc86058c044b8ae66206784b267
+    - afac5ef47ba567a429340947cc534889
+    - 0821604bf3092f446b9caea51ae8bd08
+    - 473149ed82f947d4baf61b40814dbf30
+    - 80b30805e85871942bb8a50e626ba443
+    - afbea170acf748d49bb93eb29601f7f9
+    - 3fb20404c3384514a853eaf4ce1e3eb6
+    - 37310d21e785c4b47815091d9289a1dd
+    - 8ecdd9d99fe773a4eb50a39f720af6ed
+    - 3bec7b9d3b9ae684398c1291cf83bec2
+    - 1165dcb502294ba4da1c99b2a17cf291
+    - f0c4e8ba6989075488b46dba5e39c6f6
+    - 30a70f1dfcb360d47ab170cf1a82c859
+    - 702024a6499f46a4c8e0d7005941f789
+    - 42526251eae8dc1408e51bc8cc1a28e4
+    - 2ba9247b153c28446a22f4123a6cf017
+    - f1bca630e71acb24ba2880f23c37fb62
+    - 218f635712cc4df4b880e58151b26afc
+    - 228974ae37f4d5340bb04c0da87b311f
+    - 89a657ad229ac494f8b002b541fbd247
+    - a15ee8436f708bb4a87967d018f0e8ea
+    - 29a0d381134ce4945b8930ad5db9a188
+    - e855959a397330641ab1d304dc5aff8b
+    - efbc18a4a86007844b8bb27e713e8ade
+    - e5b0ff3124ff0d344894205ab165cdb0
+    - a68e6d02224df9a43be02c80bd7a0a42
+    - a9f8a4b6570b3634bba788222ac3cbc5
+    - 9a3bb2d1a5c406f43a07e4124f44c42f
+    - c0ffb8e3602fa6e42ad99e50619e45ed
+    - 4face478cebbfaa49a701953db55884a
+    - c6dcb3290d5ee174f8663db2969731b8
+    - d80050764eb0b2f468c95d47bb311ae1
+    - 90d552ef24541ac43b5b5bd066accd8d
+    - b3b56d5013dd6cc47a923214f5ee6758
+    - 98c310f50f965244e9d09148067c841f
+    - 4f3deffc75df73d4c84056edde53fb8f
+    - 6d90afef15f966f4b886a7ffc418f442
+    - 69a55545e62df924b995521b095ddad1
+    - a8abff8f4d39b944ba3adad0af7f7142
+    - 7b4b564bcfa087b46aa43cb481b57e7e
+    - af62bea15cf02504fa22feed5056c2b5
+    - 188f3a8f3002f4947ba681dd0bf70cca
+    - 211c13781fa88d3488a1c3bdb70691d6
+    - d3fd03c1ec3062e4f8f937281b46ded7
+    - 6212619a5f044b840a9df227c9636d0d
+    - f689d689a3101084a9074f72d4304083
+    - 08ac8a4b68a42044487d553892576292
+    - 3b50f503dc588714da904937e3429719
+    - b14928f3bea622d40b2c0c48fa4e1110
+    - db4324f2b28152a4fab77f167fda6d68
+    - b2a540dd5fd8c6441becc040ef6db353
+    - afc3a3b2f247ad94c9687cbc6892c967
+    - d6ff3b85ce995844896ddb9a55f3a620
+    - 705cc77cd066e4043969214c6e6ec74c
+    - 0c16d8716d4159d429fe20ab902405b9
+    - 7c95a0bb02792114e99576c42acd741c
+    - 019aabe5bc98bf1488296e1537e64695
+    - 60b8299f3d565fa4988dbefe2a4c4526
+    - a16cd91de6646854fb919ab7b12b42e0
+    - ccc3ce5021a82b841a19b0a261ce0dc5
+    - 854f6c76a69171048a16cffa0dc7c7bc
+    - 9eea516e748d2de4589a0414ee33958b
+    - b33ea43ad98f0d14fb040142c199aeac
+    - ad86eb7882d71124291d56aba5fe10b5
+    - 310503fc058374744b0977da8ad5e107
+    - 07f31229819ed1245ab67a99a5b42275
+    - b89111abd475c2e4797e272d182203b3
+    - f05a551e424777841a2f084aff5b90bf
+    - 7e16072db7c11ca4db743bc3f8e465fc
+    - 2452bb43f88aef74f8e72fcda8cab012
+    - 6213d2b7253cf4b44acf337864e9f115
+    - 10da5d5caf5d9554894fde37d2fa5a81
+    - 21870f24ff3991a46a29376e8eb8dfc4
+    - 2e71c291477b11a40af3f8b9cdd9594c
+    - f4300f25e7fafc445881ed69cf8cf791
+    - 497847b2eb8785549ab734e3b3bdd2a0
+    - 49ac01e2b0cd86b41b90276d484cfee4
+    - 554f0684da16aa4449091420efc5bbe1
+    - 2d9e954e709315d468437a42116076ec
+    - fb1e57474cff7214d964e050cdfa3aab
+    - b7437249197333d498d8411ed74b801f
+    - bbd1f7f79195e1a45882603e9d0c7cf6
+    - 4f4bc8abffd14f44e927e48000eebab4
+    - 0f07717e5d4a70e458def73c8dfa7af0
+    - 290f0493750d888478a59db66c65a482
+    - a5f582a0bde801f4fa67e110f2886217
+    - 2c8522bb8df09554bb28c5f27c19057a
+    - 65ba291baa652664bbcca3c964f5aa34
+    - ad361770045a67441b1ce401763a55fc
+    - d7addb2ba746606499d6c144913db81a
+    - 46f5f6d9560e2934c9f8ab79360580a8
+    - 451f0d96303032446b4b7d9e044aa74b
+    - 76797a9d71ebf9245bcdeaef502be8bc
+    - abb03477577d8d5458f355fd11c45768
+    - c3ba009a97bcd4f43a0c61be7f28d7d7
+    - 49edd2eb8b5fa1d4cb6b242c717ea29a
+    - 21a416d0b4c099b4d85416113f727c70
+    - 72cf4847d7cf36441b23126987170865
+    - 790ca2a234705354f9e322d072995d44
+    - 81930c419efcbfc4d85a9a9a69793bd7
+    - 81a9fdfe1a49ed741a13870a4315b678
+    - 3ea474c1c1bc1874aa16253c3f5e6b43
+    - a0c0189179fcf45438430377860f3da8
+    - 87157aa43d3c5e24cbfe349e4ef7caa7
+    - be6462c09d6168b4586102b00e005c68
+    - 6f1c8e6f597c0cb4fa60fbf4c805689e
+    - 3f705a6f4ee843d4abb98a1359a052ac
+    - cc02f5f9623204e41981d996410eb84e
+    - c5ef4078ed28b394386934f796e2173e
+    - b011e7ad9effbe44bbba83503404db40
+    - db74e433e6ff96b4b86835659ca5794a
+    - 636b5aa10f582164ea11efe4df6b7183
+    - c6987261859fff04c9d2ccbdb1e8bc02
+    - 23a1c76f038a37b4eacf672661131dad
+    - ed064302910d0a64a9de52355e37145f
+    - 4351ebd2ccbca8349b9a431c6117c960
+    - e0437d6e272a71b4b9b38cd45154bdbb
+    - 3d17df2b188a3db438164ad2215caad5
+    - 83bbbf4d2f6aeec48bf0edd9e9adc78d
+    - fd015652ba7028941b89dea010aebfda
+    - d27679dd21832ec4f861b5acf00fa089
+    - 39a135f7e26f90941ba7f73d7f94394f
+    - e89580f61cd4ba641a3e9332073a18f2
+    - 4ab68a9d2bc2e0946a248d871672441a
+    - b655fac60bb989348bfee0432dfe791e
+    - 6c00c028e27323a4892d3171ca841d96
+    - d9e51b156373ca44baa948b7a8ae4282
+    - be1375c9c2dac284ebad46c1762061e4
+    - 795ddc3de8e9ae14793bc24d9b111547
+    - e7413cf4495f68540bf1064ed3aac44f
+    - 73ed43fd884d21e4589886bb354cea32
+    - 5a310b94e2e8574479678203a064f92c
+    - 0f78fbc9fb67eb34bb3f0200013211c4
+    - 0a32fb2aef64d924781103eb6734858b
+    - bb6846a09604b504d84181e2ee9332c2
+    - a087ab535fcfe7840859af743052cfbe
+    - bc850445cf0af1244b6e8a15e4e299ad
+    - cebbe719f93337945a61ad6c25bd1907
+    - 80d589ba24897354fb2b3396c01d9348
+    - 25ee42baf9ce40f4894ed6039398d331
+    - 057ee56c9112a9e4383608c8ded669cf
+    - a1c82c968507dc04485f1ec368d28943
+    - d77ece98bcc0e074eaee2af9b1df7b59
+    - c44f8a3586c7a2449be6c103b123993c
+    - ec34262d34b70f0428940bf9fc5cf773
+    - 6fccdb6e9e2b6474291808af3e5370b8
+    - 35491f9b695922f4ab2fa96e5336a138
+    - 3e4ebc19ca38e954eaf4eac218a7a423
+    - e4b17f2ad3e8bc44da063157fb38bf64
+    - 3c85650ed2a774a4d9b9acf981e73e7e
+    - 66528bedfb001454db7957771b63dfaf
+    - b7b0ddb3da0aad249858dc70ef273fc6
+    - c3283183b5d79604f8a68fb274e70d2a
+    - 6cd454f0ece55104e92173f709a32cf0
+    - 4736e226be67c314ab003cd62ecade5b
+    - d605f613856f2bb45a29c6ea08a6ddbf
+    - 749829295ebefa04cb79b761ed547f14
+    - 10067e13666dc6a4dbba1f259fd610b1
+    - 0b057849527e89f4bb6bb2d46e7ac868
+    - d417f80a5f8a1594e8d09bd65fc16780
+    - 518a5c2e5dacc6e458a2398cab70679b
+    - 38282ac7690da8440994a98e5f1eee24
+    - 16a414836d0d2c0408dce5be8470001f
+    - dc4e4b6572c951a4783424cf5baf3653
+    - 23e1812ee092a974287a25343c5b8d45
+    - a654c6b412986fa4c9242c469c7d0c57
+    - 5bd55c16b5b292445a9f1446b2ccfce3
+    - 4886f089f1adf674292e23523f6541ac
+    - d3ad6e0da3e20894cbd4d4ec014df578
+    - ada7a4b9f8c4ceb43adb73783e3d71da
+    - 881463ba2c300934c934f05851521e58
+    - 2f789b5955cdf1d4d8db3504c31ceab9
+    - 6c202296ef333fb41abdc43c38a85404
+    - 4b91a7d3254c88d45a973a5af476eb3d
+    - a79e51ec471d6784a8e553d0ee706581
+    - 6d2aebd82bc72ca449244703b021fd41
+    - e9cf97d38134e6f459303b0cb0a25e61
+    - 99e3cea6e9033aa47bfb555c3a053c84
+    - b546c68bdd41b9b4eae0743293287abf
+    - 2256ccb23b6b9ac48bb5770a8265e666
+    - 0b2c7e9945b530847b32e58666b14a3e
+    - 609dd83d06eed184b860c34e895a0991
+    - cb0332290ac8aa84986d6dee9f793957
+    - 11e7baee3a435d249a3f165ca6d76969
+    - 39e8a5191ff16e1498145a9b6cbb1f54
+    - d296b3df5dcbbe94d9ba78d797007aed
+    - 5463ac4452f28f74797276ca7d5d5c45
+    - 3fad8d74afdb9e64da9163235366eabd
+    - bda068e7f1c094d4c929b2e50da986ac
+    - 199828505f2b9a640b37b998934c1634
+    - de09becd7ac541e4d935d67b43ee4b75
+    - f34962a783cdefc47b47f3584f87a4e0
+    - bb3129fcc70934f4c9873df906845dd5
+    - 8c8094ecce82a154a8f36015a526a732
+    - c9bed54e384ab0b44b3a17143cb343d6
+    - f70bd144aba7374408146df837b62c0b
+    - bc4105a1b2f8ea64497e636a6ae4c6dc
+    - 01f966b76bfd67145a365ad86e85eeef
+    - 28e414848251f0845a3d10c6cff0231c
+    - af3ced4d7aa58ec4ebb12a7925cdc982
+    - 03783912f5752e94494df00e49116708
+    - b842daaa9cfd892469e62f5700a3ebae
+    - 4443618de762a974f8185e5008cb9d50
+    - b827352e5c579f64dbcecccb04eea4cf
+    - 56f047b158608124eb281793da0c6b0a
+    - 32f16716933d14141831beaf1877fe2d
+    - 3a9e2bc46fee4e6428b140c253f85556
+    - 145adb1f0f790a94cbc47d074807e8c6
+    - 55610dcc688d74040be4775566a367ed
+    - 1ee738a773036294ba9acd5574f0886e
+    - 2f0e3c89740d07440b5fed1944cb71ce
+    - a0dc50ae77f90bc40b23bca8a50845cf
+    - d097cd2d7c68c004192d487a4f332963
+    - 3d0952a5abdb73d4f974a8648f4591be
+    - 1040e528c39f8c442b5e43583a966f67
+    - e54aeb7adcf61284bb88b42438b3311a
+    - 031fddaa66c63cc48890af94a5404bf7
+    - 791f89068ce5d9c468b68ae86fe77036
+    - 2dab251f02d06804ba94a49ec656591f
+    - ffb7b6f7e4e48f144b3c3fc686c5b151
+    - 7e524aa66a0446e4ab927523b0595014
+    - b2b81aae4f6eb0641a85d93b655f608a
+    - 50f9318868661e2469088d42070f1e39
+    - a37fd3e700b085b459c72ace9e93895f
+    - 4b759ec7047e5044991c84fbe677eaf0
+    - f5d7c4e1e00ecfe43bd52ab45a20e671
+    - c55474d48bdc2a94db5e1ecabd8032eb
+    - 7305696da2cc36d42b82db465df67ca5
+    - 9a688eaf91b2ffd4985a750124399d95
+    - 0c2a24548895a664fb52f25f4c95b952
+    - 7d9236b604ac15946896db50dfbcd6f4
+    - 2f72048c368e88c44be553fcdb9e2a54
+    - 4cf4e060de0f4e843a4b8aed93564853
+    - 7fb2dec1045ad7540bb98ed8ded5ae6d
+    - 4a0fb7d66f4765d45bdf48be1a8f2429
+    - af852aa256a461f4eaa7f69d10df48a7
+    - da9261c41a819574abd8c2289993ea71
+    - ba918337de632c44a8c042d8f9667595
+    - 72414d3afc3312748a23b401339186b1
+    - 38c7ae8d5d268e24a835593b0ac1b9de
+    - 14e66d63dcf628b48922dbcce67817d4
+    - 262d2cdd7bc1ea8409147f0c59465aa0
+    - e25afffe073cff74998d1b13467fd56b
+    - 3cb5b5f6dd125914794fa11acaffd3f0
+    - 95c69dfe7017fa0478c08ac22cffad08
+    - ac61273190f26364c80146bc86d2e3dc
+    - af15989d9cc066b4c9f060781a964ac6
+    - 82572688689f2e244bb80e8200783189
+    - 46930885e38739c4695707851148bd1a
+    - 6ba1c31162aa2b6469aae8ba1e912214
+    - 9efca78796a36f745a4c04efc568b2ce
+    - 4445c071d461a4d4ba5137d1a1e74c6b
+    - e45c382d718913141ab9f95d3c6947a6
+    - e917baa523ece7f4fa7b0e5f3ad362ec
+    IsBundle: 1
+  - Guid: add6fdc68f476cb458c453710c9759b2
+    StoreId: 665904626e9f2ad62c40e99a
+    Name: Wooden Table Round 2
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/665904626e9f2ad62c40e99a/18fcbb945e0_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/665904626e9f2ad62c40e99a/18fcbb93a28_0.jpg
+    AdditionalAssetGUIDs:
+    - 7cad33aafac861c45ac43bd7b6274dd4
+    - 927c1364ac37c4740974b3e48d25c85f
+    - 5f34ab98f76b64b46a21be8918d4691c
+    IsBundle: 0
+  - Guid: 68c2448d8102a304aaf7b8a592e0edc7
+    StoreId: 6659054e6e9f2ad62c40e9a8
+    Name: Wooden Pallet 1
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6659054e6e9f2ad62c40e9a8/18fcbbcdfc0_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6659054e6e9f2ad62c40e9a8/18fcbbcd408_0.jpg
+    AdditionalAssetGUIDs:
+    - 7cad33aafac861c45ac43bd7b6274dd4
+    - 5f34ab98f76b64b46a21be8918d4691c
+    - 17fac4963c18efd4386bc85be390cccf
+    IsBundle: 0
+  - Guid: 5486c25db1b5b9648beba12068408403
+    StoreId: 6658f7856e9f2ad62c40e930
+    Name: Starfish
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658f7856e9f2ad62c40e930/18fcb870a80_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658f7856e9f2ad62c40e930/18fcb86fae0_0.jpg
+    AdditionalAssetGUIDs:
+    - 7cad33aafac861c45ac43bd7b6274dd4
+    - e88726794f3a145488c35198f26c6222
+    - 5f34ab98f76b64b46a21be8918d4691c
+    IsBundle: 0
+  - Guid: ddaf909ca7033cc44bf6ce778b8d05b8
+    StoreId: 6658e4fb6e9f2ad62c40e886
+    Name: Pillow Blossom
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658e4fb6e9f2ad62c40e886/18fcb3ea740_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658e4fb6e9f2ad62c40e886/18fcb3e97a0_0.jpg
+    AdditionalAssetGUIDs:
+    - 7cad33aafac861c45ac43bd7b6274dd4
+    - 91057b244f547eb408c34c40f8bec528
+    - 5f34ab98f76b64b46a21be8918d4691c
+    IsBundle: 0
+  - Guid: 418fb9f145700624ab93d49fc688944d
+    StoreId: 6658e2ec6e9f2ad62c40e87a
+    Name: Picnic Quilt 3
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658e2ec6e9f2ad62c40e87a/18fcb3694d8_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658e2ec6e9f2ad62c40e87a/18fcb368920_0.jpg
+    AdditionalAssetGUIDs:
+    - 7cad33aafac861c45ac43bd7b6274dd4
+    - 5f34ab98f76b64b46a21be8918d4691c
+    - e9db29fc14ee8834c8e0dfe15f76f986
+    IsBundle: 0
+  - Guid: 64b8d7225a9f54c4f87f34bd1e724ca2
+    StoreId: 6658e2dc6e9f2ad62c40e878
+    Name: Picnic Quilt 2
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658e2dc6e9f2ad62c40e878/18fcb364e88_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658e2dc6e9f2ad62c40e878/18fcb3642d0_0.jpg
+    AdditionalAssetGUIDs:
+    - 8c291441130a9d54cab676055c423d52
+    - 7cad33aafac861c45ac43bd7b6274dd4
+    - 5f34ab98f76b64b46a21be8918d4691c
+    IsBundle: 0
+  - Guid: f3427ebe99e660842982a307c7d7cb39
+    StoreId: 6658e2c86e9f2ad62c40e876
+    Name: Picnic Quilt 1
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658e2c86e9f2ad62c40e876/18fcb360838_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658e2c86e9f2ad62c40e876/18fcb35f898_0.jpg
+    AdditionalAssetGUIDs:
+    - 7cad33aafac861c45ac43bd7b6274dd4
+    - 5568c969cef0b824ba47e880a3066859
+    - 5f34ab98f76b64b46a21be8918d4691c
+    IsBundle: 0
+  - Guid: 7da63170a7c09f44c8e699593bcbc4d1
+    StoreId: 6658dbc06e9f2ad62c40e815
+    Name: Light Log
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658dbc06e9f2ad62c40e815/18fcb1a9cb0_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658dbc06e9f2ad62c40e815/18fcb1a8d10_0.jpg
+    AdditionalAssetGUIDs:
+    - 7cad33aafac861c45ac43bd7b6274dd4
+    - 5f34ab98f76b64b46a21be8918d4691c
+    - 561f66cc361fa6e4785d3c1fb63ca651
+    IsBundle: 0
+  - Guid: d1c3153f1a0efbf408be17f83187cbb3
+    StoreId: 6658dbea6e9f2ad62c40e817
+    Name: Log Bench Light
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658dbea6e9f2ad62c40e817/18fcb1b3508_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658dbea6e9f2ad62c40e817/18fcb1b2568_0.jpg
+    AdditionalAssetGUIDs:
+    - 3f1e7ebadbae957458777158eedab0ad
+    - 7cad33aafac861c45ac43bd7b6274dd4
+    - 5f34ab98f76b64b46a21be8918d4691c
+    IsBundle: 0
+  - Guid: 260fb700cbba7ca40902bd8e1fddfde4
+    StoreId: 6658dc1f6e9f2ad62c40e81b
+    Name: Log Fence 1
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658dc1f6e9f2ad62c40e81b/18fcb1c07f8_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658dc1f6e9f2ad62c40e81b/18fcb1bf088_0.jpg
+    AdditionalAssetGUIDs:
+    - ba7786640e22f0f4e8c6819ab922c8de
+    - 7cad33aafac861c45ac43bd7b6274dd4
+    - 5f34ab98f76b64b46a21be8918d4691c
+    IsBundle: 0
+  - Guid: e6ad95a616f447c49a542604e821698b
+    StoreId: 6658dc336e9f2ad62c40e81d
+    Name: Log Fence 2
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658dc336e9f2ad62c40e81d/18fcb1c5230_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658dc336e9f2ad62c40e81d/18fcb1c4290_0.jpg
+    AdditionalAssetGUIDs:
+    - 77cd2cc87b595f34cb00a492eca7beb6
+    - 7cad33aafac861c45ac43bd7b6274dd4
+    - 5f34ab98f76b64b46a21be8918d4691c
+    IsBundle: 0
+  - Guid: 839f6b7686349c249a700d94306bb441
+    StoreId: 6658dc506e9f2ad62c40e81f
+    Name: Log Road Sign 1
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658dc506e9f2ad62c40e81f/18fcb1ccb48_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658dc506e9f2ad62c40e81f/18fcb1cbf90_0.jpg
+    AdditionalAssetGUIDs:
+    - 7cad33aafac861c45ac43bd7b6274dd4
+    - f12fced63b276b347a2011448f5cba0d
+    - 5f34ab98f76b64b46a21be8918d4691c
+    IsBundle: 0
+  - Guid: 089b3a12c21fa0b4d848308bb78d8b56
+    StoreId: 6658b7f26e9f2ad62c40e72e
+    Name: Coconut Drink 1
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658b7f26e9f2ad62c40e72e/18fca8eac78_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658b7f26e9f2ad62c40e72e/18fca8ea0c0_0.jpg
+    AdditionalAssetGUIDs:
+    - 7cad33aafac861c45ac43bd7b6274dd4
+    - 5f34ab98f76b64b46a21be8918d4691c
+    - 235c7690bf1d2854a91d11b51dcc9067
+    IsBundle: 0
+  - Guid: 4ee24c5496ba5164da23a39c263b0fc0
+    StoreId: 6658b96b6e9f2ad62c40e73d
+    Name: Kawaii Dice Lantern
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658b96b6e9f2ad62c40e73d/18fca949048_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658b96b6e9f2ad62c40e73d/18fca9474f0_0.jpg
+    AdditionalAssetGUIDs:
+    - 5733fb8b4b12d80408ce1304a02d64c0
+    - e92f5909515f83741815dbaeaabc2ef2
+    - 7341b18ed2c9f314ba037daa9a9c6f58
+    IsBundle: 0
+  - Guid: 8e8f46ef3dd1f6e49b976ff8f511a6ae
+    StoreId: 6658b2e46e9f2ad62c40e6f4
+    Name: Beach Umbrella 2
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658b2e46e9f2ad62c40e6f4/18fca7d2430_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658b2e46e9f2ad62c40e6f4/18fca7d1878_0.jpg
+    AdditionalAssetGUIDs:
+    - 7cad33aafac861c45ac43bd7b6274dd4
+    - 133ac33a09f70d24282d50b53c0713d8
+    - 5f34ab98f76b64b46a21be8918d4691c
+    IsBundle: 0
+  - Guid: 15eee914ee4b660469dded22ed5ca709
+    StoreId: 6658b2d46e9f2ad62c40e6f0
+    Name: Beach Chair 1
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658b2d46e9f2ad62c40e6f0/18fca7cc288_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658b2d46e9f2ad62c40e6f0/18fca7cab18_0.jpg
+    AdditionalAssetGUIDs:
+    - 3616728a940f511479a1e6fd16a5a7cf
+    - 7cad33aafac861c45ac43bd7b6274dd4
+    - 5f34ab98f76b64b46a21be8918d4691c
+    IsBundle: 0
+  - Guid: 06a14f2c8311ec64b937e46cd3d75e0a
+    StoreId: 6658b2dd6e9f2ad62c40e6f2
+    Name: Beach Umbrella 1
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658b2dd6e9f2ad62c40e6f2/18fca7cf550_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658b2dd6e9f2ad62c40e6f2/18fca7cdde0_0.jpg
+    AdditionalAssetGUIDs:
+    - 7cad33aafac861c45ac43bd7b6274dd4
+    - 1e718a89d93c0544aad1fb56d71d767d
+    - 5f34ab98f76b64b46a21be8918d4691c
+    IsBundle: 0
+  - Guid: 2edaf22e167eecc408535152a97c0a67
+    StoreId: 6658b2506e9f2ad62c40e6ec
+    Name: Bamboo 4
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658b2506e9f2ad62c40e6ec/18fca79a1c0_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658b2506e9f2ad62c40e6ec/18fca799608_0.jpg
+    AdditionalAssetGUIDs:
+    - 1567bab94d6e666479545cbe6fa2fb75
+    - 7cad33aafac861c45ac43bd7b6274dd4
+    - 5f34ab98f76b64b46a21be8918d4691c
+    IsBundle: 0
+  - Guid: 3f43953ed7264f54ab14e9cba0f192b2
+    StoreId: 6658b2476e9f2ad62c40e6ea
+    Name: Bamboo 3
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658b2476e9f2ad62c40e6ea/18fca7976c8_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658b2476e9f2ad62c40e6ea/18fca796728_0.jpg
+    AdditionalAssetGUIDs:
+    - 7cad33aafac861c45ac43bd7b6274dd4
+    - fb4a3d657ced18b4da2dafee6ba54f4c
+    - 5f34ab98f76b64b46a21be8918d4691c
+    IsBundle: 0
+  - Guid: 994ad0a7ffc1538459a74343bdc92b60
+    StoreId: 6658b23f6e9f2ad62c40e6e8
+    Name: Bamboo 2
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658b23f6e9f2ad62c40e6e8/18fca793c30_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658b23f6e9f2ad62c40e6e8/18fca791cf0_0.jpg
+    AdditionalAssetGUIDs:
+    - 7cad33aafac861c45ac43bd7b6274dd4
+    - e469ff4b1d90f284fa4ea220163e9836
+    - 5f34ab98f76b64b46a21be8918d4691c
+    IsBundle: 0
+  - Guid: 9d6ecbebde030d24da3c95b7e751f35a
+    StoreId: 6658b2386e9f2ad62c40e6e6
+    Name: Bamboo 1
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658b2386e9f2ad62c40e6e6/18fca78f5e0_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6658b2386e9f2ad62c40e6e6/18fca78ea28_0.jpg
+    AdditionalAssetGUIDs:
+    - 9a421871900d1d541929446777c0c0d9
+    - 7cad33aafac861c45ac43bd7b6274dd4
+    - 5f34ab98f76b64b46a21be8918d4691c
+    IsBundle: 0
+  - Guid: 359ab363829f1354db841b8c451ba896
+    StoreId: 66269bfc486f5fbcfabe663e
+    Name: Tall Grass 02
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/66269bfc486f5fbcfabe663e/18f06d2cf30_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/66269bfc486f5fbcfabe663e/18f06d2bba8_0.jpg
+    AdditionalAssetGUIDs:
+    - 7cad33aafac861c45ac43bd7b6274dd4
+    - 4fe657e97bf8be34ca216f9aced12c3c
+    - 5f34ab98f76b64b46a21be8918d4691c
+    IsBundle: 0
+  - Guid: c92f2aa8d297658499a51096e6291f4f
+    StoreId: 66269bf2486f5fbcfabe663c
+    Name: Tall Grass 01
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/66269bf2486f5fbcfabe663c/18f06d29498_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/66269bf2486f5fbcfabe663c/18f06d284f8_0.jpg
+    AdditionalAssetGUIDs:
+    - c92f2aa8d297658499a51096e6291f4f
+    - 7cad33aafac861c45ac43bd7b6274dd4
+    - 930bd7e3f534e6f48a984520feb328d6
+    - 5f34ab98f76b64b46a21be8918d4691c
+    IsBundle: 0
+  - Guid: ab5a0568d2a8dbf43976d9e2c640a4fc
+    StoreId: 662697d2486f5fbcfabe6613
+    Name: Hosta 03
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/662697d2486f5fbcfabe6613/18f06c1c3e8_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/662697d2486f5fbcfabe6613/18f06c1b060_0.jpg
+    AdditionalAssetGUIDs:
+    - ab5a0568d2a8dbf43976d9e2c640a4fc
+    - 4f90e989b28d23349bc4b637cee2f126
+    - 53b30633df59a994487ee8f4c68f84f2
+    - 742146c51f7ee264f846980444faac28
+    IsBundle: 0
+  - Guid: 5b4c826781145ca43b859f8a88e6cfa8
+    StoreId: 662697c8486f5fbcfabe6611
+    Name: Hosta 02
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/662697c8486f5fbcfabe6611/18f06c198f0_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/662697c8486f5fbcfabe6611/18f06c175c8_0.jpg
+    AdditionalAssetGUIDs:
+    - 5b4c826781145ca43b859f8a88e6cfa8
+    - 4f90e989b28d23349bc4b637cee2f126
+    - 662bc4658f50b974fb3e37051bfc515b
+    - 742146c51f7ee264f846980444faac28
+    IsBundle: 0
+  - Guid: c057e5d4e42e43c48870fd05687e5b8b
+    StoreId: 662697bf486f5fbcfabe660f
+    Name: Hosta 01
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/662697bf486f5fbcfabe660f/18f06c15a70_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/662697bf486f5fbcfabe660f/18f06c146e8_0.jpg
+    AdditionalAssetGUIDs:
+    - c057e5d4e42e43c48870fd05687e5b8b
+    - 4f90e989b28d23349bc4b637cee2f126
+    - 742146c51f7ee264f846980444faac28
+    - c1879d6f3a68b214bbcaba408474a919
+    IsBundle: 0
+  - Guid: e8dab24bb3296b74095553972f627363
+    StoreId: 662022c471d0a0535503a6d5
+    Name: Large Crate
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/662022c471d0a0535503a6d5/18eed889ca8_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/662022c471d0a0535503a6d5/18eed888920_0.jpg
+    AdditionalAssetGUIDs:
+    - e1c8678b22d86aa48a906ea9256a6eac
+    - d03b5fd9f951be84ea6702cb1d6786bc
+    - 2c31ad22132603b4f952c18894afe04d
+    - 83f42031c8fd6de44a25fc07af90a8f8
+    IsBundle: 0
+  - Guid: 364c81d136d252748a8ec492a766db06
+    StoreId: 662022e471d0a0535503a6d7
+    Name: Small Crate
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/662022e471d0a0535503a6d7/18eed8963e0_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/662022e471d0a0535503a6d7/18eed895058_0.jpg
+    AdditionalAssetGUIDs:
+    - e1c8678b22d86aa48a906ea9256a6eac
+    - 8835d0b8ba6fc4d40a0c14885db1d817
+    - 2c31ad22132603b4f952c18894afe04d
+    - 83f42031c8fd6de44a25fc07af90a8f8
+    IsBundle: 0
+  - Guid: 90780f0bf2d76a749b360c6b4a06076f
+    StoreId: 662020b771d0a0535503a6cd
+    Name: Water Barrel
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/662020b771d0a0535503a6cd/18eed805390_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/662020b771d0a0535503a6cd/18eed8047d8_0.jpg
+    AdditionalAssetGUIDs:
+    - e1c8678b22d86aa48a906ea9256a6eac
+    - 36a8d2a1998d9024b9b1dfd9d1ffc032
+    - 2c31ad22132603b4f952c18894afe04d
+    - 83f42031c8fd6de44a25fc07af90a8f8
+    IsBundle: 0
+  - Guid: ee7a16571df6e3f49a186628bf0e07d3
+    StoreId: 662020a471d0a0535503a6cb
+    Name: Barrel 02
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/662020a471d0a0535503a6cb/18eed803068_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/662020a471d0a0535503a6cb/18eed8020c8_0.jpg
+    AdditionalAssetGUIDs:
+    - e1c8678b22d86aa48a906ea9256a6eac
+    - 2c31ad22132603b4f952c18894afe04d
+    - 83f42031c8fd6de44a25fc07af90a8f8
+    - 0b5faf1084b4a1147adf10bc76439c3f
+    IsBundle: 0
+  - Guid: f166bb6207beae94b86d78d04eb3b27e
+    StoreId: 6620208171d0a0535503a6c9
+    Name: Barrel 01
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6620208171d0a0535503a6c9/18eed7ffda0_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6620208171d0a0535503a6c9/18eed7fea18_0.jpg
+    AdditionalAssetGUIDs:
+    - e1c8678b22d86aa48a906ea9256a6eac
+    - 22146c04cf892694d9a877563aeb4ed1
+    - 2c31ad22132603b4f952c18894afe04d
+    - 83f42031c8fd6de44a25fc07af90a8f8
+    IsBundle: 0
+  - Guid: 8a63025e405eea740a7dee27b3b9daa7
+    StoreId: 6659034d6e9f2ad62c40e98a
+    Name: Wooden Beam
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6659034d6e9f2ad62c40e98a/18fcbb50fc0_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/6659034d6e9f2ad62c40e98a/18fcbb50408_0.jpg
+    AdditionalAssetGUIDs:
+    - 7cad33aafac861c45ac43bd7b6274dd4
+    - 5f34ab98f76b64b46a21be8918d4691c
+    - 6f057d985cce8124992b3cdf67f5799f
+    IsBundle: 0
