@@ -117,8 +117,8 @@ MonoBehaviour:
   m_offset: {x: 0, y: 0, z: 95}
   m_pointA: {fileID: 3832316048819504553}
   m_pointB: {fileID: 7384407289030962745}
-  m_moveSpeed: 0.2
-  m_radius: 100
+  m_moveSpeed: 0.05
+  m_radius: 80
   references:
     version: 2
     RefIds:
