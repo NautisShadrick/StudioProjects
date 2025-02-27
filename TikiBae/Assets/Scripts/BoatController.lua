@@ -35,4 +35,7 @@ function self:Update()
 
     -- Set the new position
     self.transform.position = Vector3.new(x, 0, z) + offset
+
+    --Rotate the boat to face to moving direction
+    self.transform.rotation = Quaternion.LookRotation(Vector3.new(-x, 0, -z))
 end
