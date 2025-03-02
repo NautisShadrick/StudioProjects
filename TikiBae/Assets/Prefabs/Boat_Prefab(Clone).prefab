@@ -345,7 +345,7 @@ MonoBehaviour:
   m_pointA: {fileID: 9146183461131865544}
   m_pointB: {fileID: 5783175206250119862}
   m_moveSpeed: 0.05
-  m_radius: 80
+  m_radius: 60
   references:
     version: 2
     RefIds:

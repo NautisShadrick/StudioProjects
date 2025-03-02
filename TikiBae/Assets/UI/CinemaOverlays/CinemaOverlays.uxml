@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UXML
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="UnityEngine.UIElements"
+    xmlns:hr="Highrise.UI"
+    xmlns:editor="UnityEditor.UIElements"
+    xsi:noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd"
+>
+
+  <hr:UILuaView class="cinema-overlays">
+
+    <VisualElement name="letter_box" >
+      <VisualElement name="letter_top"/>
+      <VisualElement name="letter_bottom"/>
+    </VisualElement>
+
+    <VisualElement name="fade"/>
+
+    <Label name="player_name_title" text="Nautis Shadrick"/>
+
+  </hr:UILuaView>
+
+</UXML>

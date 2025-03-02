@@ -1,0 +1,60 @@
+:root {
+    --font-museo: url("project://database/Assets/UI/Fonts/MuseoSansRounded1000 SDF.asset");
+}
+
+.cinema-overlays {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+#letter_box {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+#letter_top {
+    position: absolute;
+    width: 100%;
+    height: 100px;
+    background-color: black;
+
+    top: -50px;
+}
+
+#letter_bottom {
+    position: absolute;
+    width: 100%;
+    height: 100px;
+    background-color: black;
+
+    bottom: -70px;
+}
+
+#fade {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+
+    scale: 1.5;
+}
+
+#player_name_title {
+
+    position: absolute;
+
+    bottom: 100px;
+    right: 10px;
+
+    font-size: 24px;
+    letter-spacing: 3px;
+    -unity-font-definition: var(--font-museo);
+    -unity-text-align: middle-center;
+
+    -unity-font-style: bold;
+
+    color:rgb(247, 253, 255);
+    text-shadow: 0 3 0 rgb(182, 210, 221);
+}
