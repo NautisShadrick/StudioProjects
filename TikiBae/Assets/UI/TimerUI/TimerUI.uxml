@@ -12,8 +12,8 @@
     <VisualElement name="timer_bar" >
       <VisualElement name="timer_icon" picking-mode="Ignore">
         <VisualElement name="timer_arm_icon" picking-mode="Ignore"/>
+        <Label name="timer_label" picking-mode="Ignore"/>
       </VisualElement>
-      <Label name="timer_label" picking-mode="Ignore"/>
     </VisualElement>
 
   </hr:UILuaView>

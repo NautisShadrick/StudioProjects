@@ -8,6 +8,13 @@
 >
 
   <hr:UILuaView class="results-u-i" picking-mode="Ignore">
+  <VisualElement name="hearts_container" picking-mode="Ignore" >
+    <VisualElement name="glow" picking-mode="Ignore" />
+    <VisualElement name="left_heart" picking-mode="Ignore" />
+    <VisualElement name="right_heart" picking-mode="Ignore" />
+    <VisualElement name="full_heart" picking-mode="Ignore" />
+
+  </VisualElement>
   <Label name="result_label" class="results-label" text="YOU WON!" picking-mode="Ignore"/>
   </hr:UILuaView>
 

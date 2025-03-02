@@ -6,32 +6,28 @@
     position: absolute;
     width: 300px;
     align-self:center;
-    top: 32px;
+    top: 10px;
 
-    font-size: 32px;
+    font-size: 24px;
     letter-spacing: 3px;
     -unity-font-definition: var(--font-comic);
     -unity-text-align: middle-center;
 
     -unity-font-style: bold;
 
-    color:white;
-    text-shadow: 0 3 0 rgb(129, 171, 179);
-    -unity-text-outline-color: rgb(129, 171, 179);
-    -unity-text-outline-width: 2px;
+    color: #ffe3a2;
+    text-shadow: 0 3 0 #ef935a;
 }
 
 #timer_icon {
     position: absolute;
-    width: 50px;
-    height: 50px;
+    width:  180px;
+    height: 180px;
     border-radius: 5px;
     margin: 0;
     padding: 0;
 
-    translate: 0 -15px;
-
-    background-image: url("project://database/Assets/UI/Icons/clock_icon.png");
+    background-image: url("project://database/Assets/UI/Icons/sign_bg.png");
 
     justify-content: center;
     align-items: center;
@@ -39,12 +35,14 @@
 
 #timer_arm_icon {
     position: absolute;
-    width: 25px;
-    height: 25px;
+    width: 62px;
+    height: 62px;
     margin: 0;
     padding: 0;
 
-    background-image: url("project://database/Assets/UI/Icons/clock_arm_icon.png");
+    translate: 0 20px;
+
+    background-image: url("project://database/Assets/UI/Icons/Sign_Hand.png");
 }
 
 #timer_bar {
@@ -72,6 +70,6 @@
 }
 
 #timer_label {
-    bottom:0;
+    bottom: -25px;
     translate: 0 20px;
 }

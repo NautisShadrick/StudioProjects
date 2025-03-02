@@ -8,11 +8,14 @@ local stateDuration : number = 15
 local GetpairsResponse = Event.new("GetpairsResponse")
 makeChoiceRequest = Event.new("makeChoiceRequest")
 
+playerMatchedEvent = Event.new("playerMatchedEvent")
+playerMismatchedEvent = Event.new("playerMismatchedEvent")
+
 --[[
 0 -> Island, Group Mingling
 1 -> Paired Boat Rides
 --]]
-local GameState = NumberValue.new("gameState", 0)
+GameState = NumberValue.new("gameState", 0)
 local pairInfo = TableValue.new("pairInfo", {})
 local currentTimeRemaining = NumberValue.new("currentTimeRemaining", 0)
 
@@ -27,6 +30,15 @@ local myCurrentPair = nil
 
 local boatTable = {}
 
+--- Utility Functions ---
+
+-- Function to convert seconds to min:seconds 00:00
+function SecondsToMinSec(seconds)
+    local min = math.floor(seconds / 60)
+    local sec = seconds % 60
+    return string.format("%02d:%02d", min, sec)
+end
+
 ---- CLIENT ----
 
 function AddToBoats(player_pairs, soloPlayer)
@@ -35,6 +47,9 @@ function AddToBoats(player_pairs, soloPlayer)
         -- Get players
         local player1 = pair[1]
         local player2 = pair[2]
+
+        player1.character:PlayEmote("sit-idle-cute", true)
+        player2.character:PlayEmote("sit-idle-cute", true)
 
         -- Create Boat
         local boatObj = GameObject.Instantiate(boatPrefab)
@@ -113,7 +128,7 @@ function self:ClientStart()
     end)
 
     currentTimeRemaining.Changed:Connect(function(timeRemaining)
-        uiManager.timerUI.SetTitle(tostring(timeRemaining))
+        uiManager.timerUI.SetTitle(SecondsToMinSec(timeRemaining))
 
         if myCurrentPair then
             if timeRemaining == 10 then
@@ -162,6 +177,7 @@ function self:ServerAwake()
     server.PlayerDisconnected:Connect(function(player)
         playerPairMatesByPlayer[player] = nil
         choicesByPlayer[player] = nil
+
     end)
 end
 
@@ -197,15 +213,24 @@ function EndBoatRide()
 
     -- Get Choice Matches
     local choiceMatches = {}
+    local choiceMismatches = {}
     for player, choice in choicesByPlayer do
         local pairMate = playerPairMatesByPlayer[player]
         if choicesByPlayer[pairMate] == choice and choice == 1 then
             choiceMatches[player] = pairMate
+        else
+            choiceMismatches[player] = pairMate
         end
     end
 
     for player, mate in choiceMatches do
         print(player.name, "and", mate.name, "matched!")
+        playerMatchedEvent:FireClient(player, mate)
+    end
+
+    for player, mate in choiceMismatches do
+        print(player.name, "and", mate.name, "did not match!")
+        playerMismatchedEvent:FireClient(player, mate)
     end
 
     -- Clear Pair Mates

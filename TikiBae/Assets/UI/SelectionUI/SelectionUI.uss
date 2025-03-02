@@ -11,25 +11,30 @@
     justify-content: center;
 
     font-size: 18px;
-    -unity-font-definition: var(--font-museo);
-
     letter-spacing: 3px;
+    -unity-font-definition: var(--font-museo);
     -unity-text-align: middle-center;
-    color:rgb(13, 21, 33);
+
     -unity-font-style: bold;
+
+    color: #ffe3a2;
+    text-shadow: 0 3 0 #ef935a;
 }
 
 .selection-button {
     flex-direction: row;
-    background-color: #FFFFFF;
     border-radius: 10px;
-    padding: 10px;
-    margin: 10px;
+    padding: 0px;
+    margin:  10px;
 
+    height: 64px;
     width: 140px;
+
+    background-image: url("project://database/Assets/UI/Icons/sign_button.png");
 }
 
 .button-label {
+    display: none;
     flex-grow: 0;
     flex-shrink: 1;
     margin: 0;
@@ -44,15 +49,23 @@
 }
 
 #no_Icon {
-    width: 48px;
-    height: 48px;
+
+    left: 50%;
+    top: 50%;
+    translate: -50%;
+
+    width:  56px;
+    height: 56px;
     background-image: url("project://database/Assets/UI/Icons/Heart_Icon_broken.png");
 }
 
 #yes_Icon {
-    flex-grow: 1;
-    flex-shrink: 0;
-    width: 48px;
-    height: 48px;
+
+    left: 50%;
+    top: 50%;
+    translate: -50%;
+
+    width:  56px;
+    height: 56px;
     background-image: url("project://database/Assets/UI/Icons/Heart_Icon.png");
 }

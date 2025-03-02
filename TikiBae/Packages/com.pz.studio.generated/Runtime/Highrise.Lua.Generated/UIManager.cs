@@ -27,6 +27,7 @@ namespace Highrise.Lua.Generated
 
         [SerializeField] public UnityEngine.GameObject m_TimerUIObj = default;
         [SerializeField] public UnityEngine.GameObject m_SelectionUIObj = default;
+        [SerializeField] public UnityEngine.GameObject m_resultsUIObj = default;
 
         protected override SerializedPropertyValue[] SerializeProperties()
         {
@@ -37,6 +38,7 @@ namespace Highrise.Lua.Generated
             {
                 CreateSerializedProperty(_script.GetPropertyAt(0), m_TimerUIObj),
                 CreateSerializedProperty(_script.GetPropertyAt(1), m_SelectionUIObj),
+                CreateSerializedProperty(_script.GetPropertyAt(2), m_resultsUIObj),
             };
         }
     }

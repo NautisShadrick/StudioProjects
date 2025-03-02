@@ -23,11 +23,56 @@
     letter-spacing: 3px;
     -unity-text-align: middle-center;
     color:white;
-    text-shadow: 0 3 0 rgb(97, 114, 138);
-    -unity-text-outline-color: rgb(97, 114, 138);
+    text-shadow: 0 3 0 #97005a;
+    -unity-text-outline-color: #97005a;
     -unity-text-outline-width: 2px;
     -unity-font-style: bold;
 }
+
+
+#hearts_container {
+    position: absolute;
+    width:  100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+#glow{
+    position: absolute;
+    width:  280px;
+    height: 280px;
+    justify-content: center;
+    align-items: center;
+
+    background-image: url("project://database/Assets/UI/Icons/Burst_Sprite.png");
+
+}
+
+#full_heart {
+    position: absolute;
+    width:  200px;
+    height: 200px;
+    background-image: url("project://database/Assets/UI/Icons/Red_heart.png");
+}
+
+#left_heart {
+    position: absolute;
+
+    width:  200px;
+    height: 200px;
+    background-image: url("project://database/Assets/UI/Icons/Heart_Icon_left.png");
+
+}
+
+#right_heart {
+    position: absolute;
+
+    width:  200px;
+    height: 200px;
+    background-image: url("project://database/Assets/UI/Icons/Heart_Icon_right.png");
+}
+
 
 .hidden {
     display: none;
