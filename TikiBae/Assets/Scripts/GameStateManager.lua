@@ -4,6 +4,8 @@
 local boatPrefab : GameObject = nil
 --!SerializeField
 local stateDuration : number = 15
+--!SerializeField
+local mainCamera : Camera = nil
 
 local GetpairsResponse = Event.new("GetpairsResponse")
 makeChoiceRequest = Event.new("makeChoiceRequest")
@@ -22,8 +24,6 @@ local currentTimeRemaining = NumberValue.new("currentTimeRemaining", 0)
 uiManager = require("UIManager")
 playerTracker = require("PlayerTracker")
 characterController = require("PlayerCharacterController")
-
-local mainCamera = nil
 local camScript = nil
 
 local myCurrentPair = nil
@@ -71,6 +71,13 @@ function AddToBoats(player_pairs, soloPlayer)
         player1.character.gameObject.transform.parent = pointA
         player2.character.gameObject.transform.parent = pointB
 
+        --Offset the camera
+        camScript.UpdateOffsets(Vector3.new(0, -1, 0))
+
+        --Lower the chat bubbles
+        player1.character.transform:GetChild(0).transform.localPosition = Vector3.new(0, 2, 0)
+        player2.character.transform:GetChild(0).transform.localPosition = Vector3.new(0, 2, 0)
+
         -- Set Player Positions
         player1.character.gameObject.transform.localPosition = Vector3.new(0, 0, 0)
         player2.character.gameObject.transform.localPosition = Vector3.new(0, 0, 0)
@@ -96,10 +103,13 @@ function RemoveFromBoats()
         local char = player.character
         char.gameObject.transform.parent = nil
         char.gameObject:GetComponent(NavMeshAgent).enabled = true
+        char.transform:GetChild(0).transform.localPosition = Vector3.new(0, 3.25, 0)
     end
     characterController.options.enabled = true
     playerTracker.TeleportLocalPlayerRequest(Vector3.new(math.random(-2,2),0,math.random(-2,2)))
     myCurrentPair = nil
+    camScript.UpdateOffsets(Vector3.new(0, 0, 0))
+
 
     for i, boat in ipairs(boatTable) do
         GameObject.Destroy(boat)
@@ -118,6 +128,9 @@ function SyncToState(newState)
 end
 
 function self:ClientStart()
+
+    camScript = mainCamera.gameObject:GetComponent(ThirdPersonCameraOverride)
+
     GameState.Changed:Connect(SyncToState)
 
     Chat.TextMessageReceivedHandler:Connect(function(channelInfo, player, message)
@@ -139,7 +152,6 @@ function self:ClientStart()
 
     end)
 
-    mainCamera = Camera.main
     if GameState.value == 1 then    
         SyncToState(1)
     end

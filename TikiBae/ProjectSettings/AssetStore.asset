@@ -778,3 +778,15 @@ MonoBehaviour:
     - 5f34ab98f76b64b46a21be8918d4691c
     - 6f057d985cce8124992b3cdf67f5799f
     IsBundle: 0
+  - Guid: f3c4bf96159053241818716202125d1d
+    StoreId: 661ebff271d0a0535503a59b
+    Name: Wall Lantern
+    ThumbnailUrl: https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/661ebff271d0a0535503a59b/18ee81f30b0_0.jpg
+    AdditionalImageUrls:
+    - https://d4v5j9dz6t9fz.cloudfront.net/web_uploads/world_builder_assets/647622d2106a74bac609d8ea/661ebff271d0a0535503a59b/18ee81f2110_0.jpg
+    AdditionalAssetGUIDs:
+    - a4bdd44989511c548b8ddf470c7fc0bd
+    - 9cea6976d0072314c976447dd9661ff9
+    - 33caf3a176eca104e89fe26415597b25
+    - c8bc6a7177c72334bac1f3eef221fbbf
+    IsBundle: 0

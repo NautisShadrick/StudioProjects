@@ -193,3 +193,7 @@ function self:LateUpdate()
 
     UpdatePosition()
 end
+
+function UpdateOffsets(offset)
+    cameraOffset = offset
+end

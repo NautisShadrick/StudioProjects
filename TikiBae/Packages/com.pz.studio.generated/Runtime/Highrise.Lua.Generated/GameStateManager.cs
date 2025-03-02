@@ -27,6 +27,7 @@ namespace Highrise.Lua.Generated
 
         [SerializeField] public UnityEngine.GameObject m_boatPrefab = default;
         [SerializeField] public System.Double m_stateDuration = 15;
+        [SerializeField] public UnityEngine.Camera m_mainCamera = default;
 
         protected override SerializedPropertyValue[] SerializeProperties()
         {
@@ -37,6 +38,7 @@ namespace Highrise.Lua.Generated
             {
                 CreateSerializedProperty(_script.GetPropertyAt(0), m_boatPrefab),
                 CreateSerializedProperty(_script.GetPropertyAt(1), m_stateDuration),
+                CreateSerializedProperty(_script.GetPropertyAt(2), m_mainCamera),
             };
         }
     }

@@ -13208,9 +13208,10 @@ MonoBehaviour:
   _uiOutput: 0
   _uiOutputSettings:
     rid: -2
-  m_boatPrefab: {fileID: 6129319465137104035, guid: 4c6fe97948070a343953b3d188708510,
+  m_boatPrefab: {fileID: 4668738752416053395, guid: 60380bc1e9e223f4bb4c05615f15d524,
     type: 3}
   m_stateDuration: 15
+  m_mainCamera: {fileID: 1734549975}
   references:
     version: 2
     RefIds:
@@ -15712,30 +15713,6 @@ MonoBehaviour:
   _uiOutput: 3
   _uiOutputSettings:
     rid: -2
-  m_fallAnimationCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 2
-      outSlope: 2
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
   references:
     version: 2
     RefIds:
@@ -20692,6 +20669,7 @@ MonoBehaviour:
     rid: -2
   m_TimerUIObj: {fileID: 1679650037}
   m_SelectionUIObj: {fileID: 842744867}
+  m_resultsUIObj: {fileID: 822458104}
   references:
     version: 2
     RefIds:
@@ -27980,6 +27958,12 @@ MonoBehaviour:
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
+--- !u!20 &1734549975 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 7247727291475991689, guid: 4db44322431f6d6439fa69e352e81b67,
+    type: 3}
+  m_PrefabInstance: {fileID: 1599188571}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1738891591
 PrefabInstance:
   m_ObjectHideFlags: 0
