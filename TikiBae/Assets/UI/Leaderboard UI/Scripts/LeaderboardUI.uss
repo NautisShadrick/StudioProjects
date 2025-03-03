@@ -1,0 +1,127 @@
+:root {
+    --font-muesou-900: url("project://database/Assets/UI/Fonts/MuseoSansRounded1000 SDF.asset");
+}
+
+.leaderboard-u-i {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+
+  align-self: center;
+  justify-content: center;
+  align-items: center;
+
+  width: 100%;
+  height: 100%;
+}
+
+.leaderboard-container {
+  display: flex;
+  overflow: hidden;
+
+  height: 450px;
+  width: 350px;
+
+  justify-content: center;
+}
+
+.leaderboard-close {
+  position: absolute;
+
+  width: 32px;
+  height: 32px;
+
+  top: 8px;
+  right: 8px;
+  background-image: url("project://database/Assets/UI/Icons/icon_small_close.png");
+  opacity: 0.75;
+}
+
+.button-content Image {
+  --unity-image: var(--image-icon-close);
+  width: 37px;
+  height: 37px;
+}
+
+
+.header .title {
+  color: #f9e6a2;
+  font-size: 32px;
+  -unity-font-definition: var(--font-muesou-900);
+  -unity-text-align: middle-center;
+
+  text-shadow: 0 3 0 #e9885e;
+}
+
+
+
+.content .rank-item {
+  display: flex;
+
+  flex-direction: row;
+  align-items: center;
+
+  border-width: 1px;
+  border-color: #6b2d00;
+  border-radius: 15px;
+  background-color: #6b2d00;
+
+  width: 100%;
+  height: 64px;
+  padding: 10px;
+  padding-left: 25px;
+  margin-bottom: 4px;
+
+  background-image: url("project://database/Assets/UI/Icons/sign_button.png");
+
+  color: #f9e6a2;
+  font-size: 24px;
+  -unity-font-definition: var(--font-muesou-900);
+  -unity-text-align: middle-center;
+
+  text-shadow: 0 3 0 #e9885e;
+}
+
+.user_thumb{
+  width:  48px;
+  height: 48px;
+  border-radius: 20px;
+
+  background-color: #f9e6a2;
+}
+
+.name-label {
+  margin-left: 25px;
+}
+
+.scroll-view__content-container {
+
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: row;
+  flex-wrap: wrap;
+
+  width: auto;
+  height: auto;
+}
+
+.scroll-bar {
+  width: 5px;
+  height: 100%;
+
+  background-color: #212037;
+  border-radius: 2px;
+}
+
+.scroll-bar__thumb {
+  background-color: #2f2c4f;
+  border-radius: 5px;
+}
+
+.scroll-bar__thumb:hover {
+  background-color: #fff;
+}
+
+.hidden {
+  display: none;
+}

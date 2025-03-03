@@ -29,6 +29,8 @@ namespace Highrise.Lua.Generated
         [SerializeField] public UnityEngine.GameObject m_SelectionUIObj = default;
         [SerializeField] public UnityEngine.GameObject m_resultsUIObj = default;
         [SerializeField] public UnityEngine.GameObject m_cinematicOverlayObj = default;
+        [SerializeField] public UnityEngine.GameObject m_leaderboardUIObj = default;
+        [SerializeField] public UnityEngine.GameObject m_hudButtonsUIObj = default;
         [SerializeField] public UnityEngine.Camera m_mainCamera = default;
         [SerializeField] public UnityEngine.Camera m_cutSceneCamera = default;
 
@@ -43,8 +45,10 @@ namespace Highrise.Lua.Generated
                 CreateSerializedProperty(_script.GetPropertyAt(1), m_SelectionUIObj),
                 CreateSerializedProperty(_script.GetPropertyAt(2), m_resultsUIObj),
                 CreateSerializedProperty(_script.GetPropertyAt(3), m_cinematicOverlayObj),
-                CreateSerializedProperty(_script.GetPropertyAt(4), m_mainCamera),
-                CreateSerializedProperty(_script.GetPropertyAt(5), m_cutSceneCamera),
+                CreateSerializedProperty(_script.GetPropertyAt(4), m_leaderboardUIObj),
+                CreateSerializedProperty(_script.GetPropertyAt(5), m_hudButtonsUIObj),
+                CreateSerializedProperty(_script.GetPropertyAt(6), m_mainCamera),
+                CreateSerializedProperty(_script.GetPropertyAt(7), m_cutSceneCamera),
             };
         }
     }

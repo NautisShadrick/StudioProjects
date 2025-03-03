@@ -13271,7 +13271,7 @@ MonoBehaviour:
     rid: -2
   m_boatPrefab: {fileID: 4668738752416053395, guid: 60380bc1e9e223f4bb4c05615f15d524,
     type: 3}
-  m_stateDuration: 60
+  m_stateDuration: 15
   m_mainCamera: {fileID: 1734549975}
   references:
     version: 2
@@ -15152,6 +15152,61 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 38984156}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &783130314
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 783130315}
+  - component: {fileID: 783130316}
+  m_Layer: 0
+  m_Name: Leaderboard
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &783130315
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 783130314}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1382357497}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &783130316
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 783130314}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78ab74bff550170173b16202ac97dd12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _networkId: 0
+  _script: {fileID: -974389366465450183, guid: c274746a4f8f17d4c96e62d71648ddc7, type: 3}
+  _properties: []
+  _uiOutput: 3
+  _uiOutputSettings:
+    rid: -2
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
 --- !u!4 &789795311 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6791689603306655776, guid: ab5a0568d2a8dbf43976d9e2c640a4fc,
@@ -20892,6 +20947,8 @@ Transform:
   - {fileID: 842744868}
   - {fileID: 822458105}
   - {fileID: 967315802}
+  - {fileID: 783130315}
+  - {fileID: 1810530553}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1382357498
@@ -20916,6 +20973,8 @@ MonoBehaviour:
   m_SelectionUIObj: {fileID: 842744867}
   m_resultsUIObj: {fileID: 822458104}
   m_cinematicOverlayObj: {fileID: 967315801}
+  m_leaderboardUIObj: {fileID: 783130314}
+  m_hudButtonsUIObj: {fileID: 1810530552}
   m_mainCamera: {fileID: 1734549975}
   m_cutSceneCamera: {fileID: 846837440}
   references:
@@ -28630,6 +28689,62 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1782331824}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1810530552
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1810530553}
+  - component: {fileID: 1810530554}
+  m_Layer: 0
+  m_Name: HudButtons
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1810530553
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1810530552}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1382357497}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1810530554
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1810530552}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa8aeb0ba30edbb140404db602314492, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _networkId: 0
+  _script: {fileID: -974389366465450183, guid: 1055ebde19d1db64fa9f4d63b8ee4447, type: 3}
+  _properties: []
+  _uiOutput: 3
+  _uiOutputSettings:
+    rid: -2
+  m_buttonIcons: []
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
 --- !u!4 &1816821958 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2977650273899709960, guid: 7201207880f6db849a4663680a818038,

@@ -8,6 +8,10 @@ local SelectionUIObj : GameObject = nil
 local resultsUIObj : GameObject = nil
 --!SerializeField
 local cinematicOverlayObj : GameObject = nil
+--!SerializeField
+local leaderboardUIObj : GameObject = nil
+--!SerializeField
+local hudButtonsUIObj : GameObject = nil
 
 --!SerializeField
 local mainCamera : Camera = nil
@@ -18,6 +22,8 @@ timerUI = nil
 selectionUI = nil
 resultsUI = nil
 cinematicOverlay = nil
+leaderboardUI = nil
+hudButtonsUI = nil
 
 local gameManager = require("GameStateManager")
 
@@ -26,7 +32,10 @@ function self:ClientStart()
     selectionUI = SelectionUIObj:GetComponent(SelectionUI)
     resultsUI = resultsUIObj:GetComponent(ResultsUI)
     cinematicOverlay = cinematicOverlayObj:GetComponent(CinemaOverlays)
+    leaderboardUI = leaderboardUIObj:GetComponent(LeaderboardUI)
+    hudButtonsUI = hudButtonsUIObj:GetComponent(HudButtons)
     ToggleSelectionUI(false)
+    HideLeaderboard()
 
     gameManager.playerMatchedEvent:Connect(function(match)
         resultsUI.Match()
@@ -56,6 +65,22 @@ function self:ClientStart()
 
 end
 
+function ToggleDefaultHUD(state)
+    hudButtonsUIObj:SetActive(state)
+    TimerUIObj:SetActive(state)
+end
+
 function ToggleSelectionUI(state)
     SelectionUIObj:SetActive(state)
+end
+
+function HideLeaderboard()
+    leaderboardUIObj:SetActive(false)
+    ToggleDefaultHUD(true)
+end
+
+function ShowLeaderboard()
+    leaderboardUIObj:SetActive(true)
+    leaderboardUI.UpdateLeaderboard()
+    ToggleDefaultHUD(false)
 end
