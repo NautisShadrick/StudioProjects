@@ -24,7 +24,6 @@ local FadeTween = Tween:new(
     function(value)
         -- opacity is 0 to 1 to 0
         local opacity = 1-math.abs(value)
-        print("opacity", opacity)
         fade.style.opacity = StyleFloat.new(opacity)
     end,
     function()

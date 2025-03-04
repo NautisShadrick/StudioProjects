@@ -238,6 +238,16 @@ function EndBoatRide()
     for player, mate in choiceMatches do
         print(player.name, "and", mate.name, "matched!")
         playerMatchedEvent:FireClient(player, mate)
+
+        local playersMatches = playerTracker.players[player].matches.value
+
+        local matchCount = playersMatches[mate.user.id] or 0
+        playersMatches[mate.user.id] = {mate.name, matchCount + 1}
+
+        playerTracker.players[player].matches.value = playersMatches
+
+        Storage.SetPlayerValue(player, "matches", playersMatches)
+
     end
 
     for player, mate in choiceMismatches do

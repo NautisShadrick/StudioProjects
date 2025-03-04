@@ -14,6 +14,7 @@ local local_rewards_container : VisualElement = nil -- Do not touch this line
 local local_rewards_label : Label = nil -- Do not touch this line
 
 local uiManager = require("UIManager")
+local playerTracker = require("PlayerTracker")
 
 local testEntries = {
   {id = "player.user.id", name = "Player 1" , },
@@ -47,8 +48,19 @@ function GetPositionSuffix(position)
 end
 
 -- Function to update the leaderboard
-function UpdateLeaderboard(entries)
-  entries = entries or testEntries
+function UpdateLeaderboard()
+
+  local entries = {}
+
+  for id, matchData in playerTracker.players[client.localPlayer].matches.value do
+    print("Match Data: " .. id)
+    local entry = {
+      id = id,
+      name = matchData.name,
+    }
+    table.insert(entries, entry)
+  end
+
   print("Updating leaderboard..." .. #entries)
   -- Clear the previous leaderboard entries
   _ranklist:Clear()
@@ -70,8 +82,8 @@ function UpdateLeaderboard(entries)
     local name = entry.name -- Get the name of the player
 
     -- Set the name and score of the player
-    local _nameLabel = UILabel.new()
-    _nameLabel:SetPrelocalizedText(name)
+    local _nameLabel = Label.new()
+    _nameLabel.text = entry.name
     _nameLabel:AddToClassList("name-label")
 
     -- Add the user thumbnail to the rank item
@@ -82,5 +94,10 @@ function UpdateLeaderboard(entries)
 
     -- Add the rank item to the leaderboard
     _ranklist:Add(_rankItem)
+
+    _rankItem:RegisterPressCallback(function()
+      UI:OpenMiniProfile(entry.id)
+    end, true, true, true)
+    
   end
 end

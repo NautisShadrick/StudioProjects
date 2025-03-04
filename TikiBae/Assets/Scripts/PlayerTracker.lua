@@ -9,10 +9,11 @@ local playercount = 0
 
 ------------ Player Tracking ------------
 function TrackPlayers(game, characterCallback)
-    scene.PlayerJoined:Connect(function(scene, player)
+    game.PlayerConnected:Connect(function(player)
         playercount = playercount + 1
         players[player] = {
-            player = player
+            player = player,
+            matches = TableValue.new("matches"..player.user.id, {}),
         }
 
         player.CharacterChanged:Connect(function(player, character) 
@@ -25,6 +26,14 @@ function TrackPlayers(game, characterCallback)
                 characterCallback(playerinfo)
             end
         end)
+
+        if game == server then
+            Storage.GetPlayerValue(player, "matches", function(matches)
+                print("Loaded matches for", player.name)
+                playersMatches = matches or {}
+                players[player].matches.value = playersMatches
+            end)
+        end
     end)
 
     game.PlayerDisconnected:Connect(function(player)
@@ -93,7 +102,6 @@ function self:ServerAwake()
         end
         if soloPlayer then print("Solo", soloPlayer.name) end
     end)
-    
 end
 
 function TeleportPlayerServer(player, destination)
