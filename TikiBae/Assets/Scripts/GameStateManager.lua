@@ -241,7 +241,7 @@ function EndBoatRide()
 
         local playersMatches = playerTracker.players[player].matches.value
 
-        local matchCount = playersMatches[mate.user.id] or 0
+        local matchCount = playersMatches[mate.user.id][2] or 0
         playersMatches[mate.user.id] = {mate.name, matchCount + 1}
 
         playerTracker.players[player].matches.value = playersMatches
