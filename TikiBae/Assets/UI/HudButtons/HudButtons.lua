@@ -12,6 +12,43 @@ local right_container: VisualElement = nil
 
 local uiManager = require("UIManager")
 
+local TweenModule = require("TweenModule")
+local Tween = TweenModule.Tween
+
+local diaryButton = nil
+
+local diaryBounceDown = Tween:new(
+    1.2,
+    1,
+    0.3,
+    false,
+    false,
+    TweenModule.Easing.easeOutBack,
+    function(value)
+        diaryButton.style.scale = StyleScale.new(Scale.new(Vector2.new(value, value)))
+
+    end,
+    function()
+        diaryButton.style.scale = StyleScale.new(Scale.new(Vector2.new(1, 1)))
+
+    end
+)
+
+local diaryBounceUp = Tween:new(
+    1,
+    1.2,
+    0.2,
+    false,
+    false,
+    TweenModule.Easing.linear, 
+    function(value)
+        diaryButton.style.scale = StyleScale.new(Scale.new(Vector2.new(value, value)))
+    end,
+    function()
+        diaryBounceDown:start()
+    end
+)
+
 function self:Start()
     
     function CreateHudButton(text: string, iconID: string, side: string, cb)
@@ -45,7 +82,11 @@ function self:Start()
         return _buttonContainer
     end
 
-    CreateHudButton("Diary", "diary_icon", "right", function()
+    diaryButton = CreateHudButton("Diary", "diary_icon", "right", function()
         uiManager.ShowLeaderboard()
+    end)
+
+    uiManager.matchAnimationCompleteEvent:Connect(function()
+        diaryBounceUp:start()
     end)
 end

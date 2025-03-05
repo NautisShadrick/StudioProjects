@@ -144,7 +144,7 @@ function self:ClientStart()
         uiManager.timerUI.SetTitle(SecondsToMinSec(timeRemaining))
 
         if myCurrentPair then
-            if timeRemaining == 10 then
+            if timeRemaining == 5 then
                 -- Display Choice UI
                 uiManager.ToggleSelectionUI(true)
             end
@@ -254,7 +254,7 @@ function EndBoatRide()
     end
 
     for player, mate in choiceMismatches do
-        print(player.name, "and", mate.name, "did not match!")
+        --print(player.name, "and", mate.name, "did not match!")
         playerMismatchedEvent:FireClient(player, mate)
     end
 

@@ -18,6 +18,8 @@ local mainCamera : Camera = nil
 --!SerializeField
 local cutSceneCamera : Camera = nil
 
+matchAnimationCompleteEvent = Event.new("MatchAnimationCompleteEvent")
+
 timerUI = nil
 selectionUI = nil
 resultsUI = nil
@@ -25,6 +27,7 @@ cinematicOverlay = nil
 leaderboardUI = nil
 hudButtonsUI = nil
 
+local audioManager = require("AudioManager")
 local gameManager = require("GameStateManager")
 
 function self:ClientStart()
@@ -40,10 +43,12 @@ function self:ClientStart()
 
     gameManager.playerMatchedEvent:Connect(function(match)
         resultsUI.Match()
+        audioManager.PlaySound("match")
     end)
 
     gameManager.playerMismatchedEvent:Connect(function(match)
         resultsUI.Split()
+        audioManager.PlaySound("pass")
     end)
 
     mainCamera.gameObject:SetActive(false)
@@ -85,4 +90,5 @@ function ShowLeaderboard()
     leaderboardUIObj:SetActive(true)
     leaderboardUI.UpdateLeaderboard()
     ToggleDefaultHUD(false)
+    audioManager.PlaySound("rustle")
 end

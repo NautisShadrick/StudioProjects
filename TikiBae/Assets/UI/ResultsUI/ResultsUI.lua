@@ -1,5 +1,6 @@
 --!Type(UI)
 
+local uiManager = require("UIManager")
 local audioManager = require("AudioManager")
 
 local TweenModule = require("TweenModule")
@@ -78,6 +79,8 @@ local heartsContainerShrinkOutTween = Tween:new(
     end,
     function()
         hearts_container:EnableInClassList("hidden", true)
+        uiManager.matchAnimationCompleteEvent:Fire()
+        audioManager.PlaySound("pop")
     end
 )
 
