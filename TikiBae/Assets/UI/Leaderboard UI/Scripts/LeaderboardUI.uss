@@ -25,7 +25,14 @@
   justify-content: center;
 }
 
+#click_off {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
 .leaderboard-close {
+  display: none;
   position: absolute;
 
   width: 32px;

@@ -8,7 +8,8 @@
 >
 
   <hr:UILuaView class="leaderboard-u-i">
-    <VisualElement class="leaderboard-container">
+    <VisualElement name="click_off" />
+    <VisualElement class="leaderboard-container" picking-mode="Ignore">
         <VisualElement class="header">
           <Label class="title" text="MY MATCHES" />
         </VisualElement>

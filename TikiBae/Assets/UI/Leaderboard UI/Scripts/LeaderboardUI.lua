@@ -13,6 +13,9 @@ local local_rewards_container : VisualElement = nil -- Do not touch this line
 --!Bind
 local local_rewards_label : Label = nil -- Do not touch this line
 
+--!Bind
+local click_off : VisualElement = nil -- Do not touch this line
+
 local uiManager = require("UIManager")
 local playerTracker = require("PlayerTracker")
 
@@ -56,7 +59,7 @@ function UpdateLeaderboard()
     print("Match Data: " .. id)
     local entry = {
       id = id,
-      name = matchData.name,
+      name = matchData[1]
     }
     table.insert(entries, entry)
   end
@@ -80,6 +83,7 @@ function UpdateLeaderboard()
     userthumbnail:AddToClassList("user_thumb")
 
     local name = entry.name -- Get the name of the player
+    print(name)
 
     -- Set the name and score of the player
     local _nameLabel = Label.new()
@@ -101,3 +105,7 @@ function UpdateLeaderboard()
     
   end
 end
+
+click_off:RegisterPressCallback(function()
+  uiManager.HideLeaderboard()
+end, true, true, true)
