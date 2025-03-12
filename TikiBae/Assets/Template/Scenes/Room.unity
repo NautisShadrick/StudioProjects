@@ -14295,7 +14295,7 @@ MonoBehaviour:
     rid: -2
   m_boatPrefab: {fileID: 4668738752416053395, guid: 60380bc1e9e223f4bb4c05615f15d524,
     type: 3}
-  m_stateDuration: 120
+  m_stateDuration: 10
   m_mainCamera: {fileID: 1734549975}
   references:
     version: 2

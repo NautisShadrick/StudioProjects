@@ -26,6 +26,7 @@ local playerTracker = require("PlayerTracker")
 local battlGroundManager = require("BattleGroundController")
 local gameManager = require("GameManager")
 local inventoryManager = require("PlayerInventoryManager")
+local sceneManager = require("SceneManager")
 
 currentBattleTurn = 0
 
@@ -119,4 +120,12 @@ function EndBattle()
 
     cameraManager.SwitchCamera(0)
     battlGroundManager.EndBattleGrounds()
+end
+
+function SwitchSceneRequest(scene)
+    if scene == "home" then
+        sceneManager.goHomeRequest:FireServer()
+    elseif scene == "main" then
+        sceneManager.leaveHomeRequest:FireServer()
+    end
 end
