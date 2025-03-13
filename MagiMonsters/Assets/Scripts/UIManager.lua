@@ -11,15 +11,19 @@ local FourButtonOBJ: GameObject = nil
 local ResultsLabelObj: GameObject = nil
 --!SerializeField
 local TimerUIObject: GameObject = nil
+--!SerializeField
+local HatcherySelectionObj: GameObject = nil
 
 timerUI = nil
 
 local BattleScreenUI: BattleScreen = nil
 local FourButtonUI: FourButtonMenu = nil
 local ResultsLabelUI: ResultsUI = nil
+local HatcherSelectionUI: HatcherySelectionUI = nil
 
 ResponseChosenEvent = Event.new("ResponseChosenEvent")
 
+local hatcheryController = require("HatcheryController")
 local BattleDataModule = require("BattleData")
 local cameraManager = require("CameraManager")
 local playerTracker = require("PlayerTracker")
@@ -29,6 +33,8 @@ local inventoryManager = require("PlayerInventoryManager")
 local sceneManager = require("SceneManager")
 
 currentBattleTurn = 0
+
+local currentSlotId = 0
 
 elementsIconsMap = {
     air = 1,
@@ -82,6 +88,8 @@ function self:ClientStart()
     BattleScreenUI = BattleScreenOBJ:GetComponent(BattleScreen)
     FourButtonUI = FourButtonOBJ:GetComponent(FourButtonMenu)
     ResultsLabelUI = ResultsLabelObj:GetComponent(ResultsUI)
+    HatcherSelectionUI = HatcherySelectionObj:GetComponent(HatcherySelectionUI)
+    CloseHatcherySelection()
 
     BattleDataModule.ActionEvent:Connect(function(turn, playerHealth, playerMana, enemyHealth, enemyMaxHealth, enemyMana, enemyMaxMana, actionName)
         BattleScreenUI.UpdateStats(turn, playerHealth, playerMana, enemyHealth, enemyMaxHealth, enemyMana, enemyMaxMana)
@@ -128,4 +136,18 @@ function SwitchSceneRequest(scene)
     elseif scene == "main" then
         sceneManager.leaveHomeRequest:FireServer()
     end
+end
+
+function OpenHatcherySelection(slotId)
+    currentSlotId = slotId
+    HatcherySelectionObj:SetActive(true)
+    HatcherSelectionUI.GenerateCollection()
+end
+
+function CloseHatcherySelection()
+    HatcherySelectionObj:SetActive(false)
+end
+
+function SelectEggForHatchery(eggId)
+    hatcheryController.StartEggRequest:FireServer(currentSlotId, eggId)
 end

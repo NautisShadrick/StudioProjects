@@ -35,22 +35,23 @@ end
 
 function InitializeHatchery(player)
     print("Initializing Hatchery")
-    local _hatcheryData = playerTracker.players[player].hatcheryData.value
-    if #_hatcheryData > 0 then
-        print("Starting Hatchery Timer")
+
+    if #playerTracker.players[player].hatcheryData.value > 0 then
         -- Update hatch Timer and Information
-        for i, _hatcherySlot in ipairs(_hatcheryData) do
+        for i, _hatcherySlot in ipairs(playerTracker.players[player].hatcheryData.value) do
             UpdateStats(player, _hatcherySlot)
         end
         if playerHatcheryTimers[player] then
             playerHatcheryTimers[player]:Stop()
             playerHatcheryTimers[player] = nil
         end
+        print("Starting Hatchery Timer")
         playerHatcheryTimers[player] = Timer.Every(10, function()
+
             print("Updating Hatchery Timer")
             -- Update hatch Timer and Information
             local hasActiveSlot = false
-            for i, _hatcherySlot in ipairs(_hatcheryData) do
+            for i, _hatcherySlot in ipairs(playerTracker.players[player].hatcheryData.value) do
                 UpdateStats(player, _hatcherySlot)
                 if math.max(0, _hatcherySlot.totalDuration - (os.time() - _hatcherySlot.startTime)) > 0 then
                     hasActiveSlot = true
@@ -71,7 +72,7 @@ function SaveHatcheryDataToStorage(player: Player, cb)
     local _hatcheryData = playerTracker.players[player].hatcheryData.value
     Storage.SetPlayerValue(player, "hatchery_data", _hatcheryData, function()
         print("Hatchery Data Saved")
-        InitializeHatchery(player)
+        if #_hatcheryData > 0 then InitializeHatchery(player) end
         cb()
     end)
 end
@@ -87,13 +88,13 @@ function GetHatcheryDataFromStorage(player: Player)
     end)
 end
 
-function StartEgg(player, slotId)
+function StartEgg(player, slotId, eggId)
     local _playerEggCollection = playerTracker.players[player].eggCollection.value
     if #_playerEggCollection > 0 then
         print("Starting Egg Hatch Process")
 
         -- Fetch Egg Data
-        local i = 1
+        local i = eggId or 1
         local _eggData = _playerEggCollection[i]
         -- Create hatchery Slot Data
         local _HatcherySlotData = {monster = _eggData.monster, startTime = os.time(), totalDuration = _eggData.totalDuration, slotId = slotId}

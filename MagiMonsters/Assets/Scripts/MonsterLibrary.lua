@@ -5,9 +5,16 @@ local Zapkit: MonsterBase = nil
 --!SerializeField
 local Terrakita: MonsterBase = nil
 
+--!SerializeField
+local airEggSprite: Texture = nil
+
 monsters = {
     Zapkit = Zapkit,
     Terrakita = Terrakita
+}
+
+eggSprites = {
+    ["air"] = airEggSprite
 }
 
 export type MonsterData = {

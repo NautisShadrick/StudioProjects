@@ -29,6 +29,7 @@ namespace Highrise.Lua.Generated
         [SerializeField] public UnityEngine.Object m_Zapkit = default;
         [LuaScriptPropertyAttribute("d2f77d2881e7f6941bb149becef8f82a")]
         [SerializeField] public UnityEngine.Object m_Terrakita = default;
+        [SerializeField] public UnityEngine.Texture m_airEggSprite = default;
 
         protected override SerializedPropertyValue[] SerializeProperties()
         {
@@ -39,6 +40,7 @@ namespace Highrise.Lua.Generated
             {
                 CreateSerializedProperty(_script.GetPropertyAt(0), m_Zapkit),
                 CreateSerializedProperty(_script.GetPropertyAt(1), m_Terrakita),
+                CreateSerializedProperty(_script.GetPropertyAt(2), m_airEggSprite),
             };
         }
     }

@@ -1,0 +1,42 @@
+.hatchery-selection-u-i {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+#hatchery_selection_container {
+    flex-direction: row;
+    width: 250px;
+    height: 300px;
+    background-color: white;
+    border-radius: 10px;
+
+    margin: auto;
+    padding: 10px;
+    flex-wrap: wrap;
+    
+    justify-content: center;
+}
+
+#click_off {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.item-container {
+    width:  70px;
+    height: 70px;
+    background-color: white;
+    margin: 5px;
+    margin-right: 0px;
+
+    border-radius: 5px;
+    align-items: center;
+    justify-content: center;
+}
+
+.item-image {
+    width:  70px;
+    height: 70px;
+}

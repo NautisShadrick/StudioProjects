@@ -9,6 +9,7 @@ local slotId : number = 1
 
 local playerTracker = require("PlayerTracker")
 local hatcheryController = require("HatcheryController")
+local uiManager = require("UIManager")
 
 local tapHandler = nil
 local meterUIScript = nil
@@ -22,9 +23,7 @@ function self:Start()
     tapHandler.Tapped:Connect(function()
         -- Interacted With do something
         if not hasEgg then
-            -- Start Egg
-            print("Adding Egg")
-            hatcheryController.StartEggRequest:FireServer(slotId)
+            uiManager.OpenHatcherySelection(slotId)
         else
             if isReady then
                 -- Hatch Monster

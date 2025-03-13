@@ -82,6 +82,8 @@ end
 
 function self:Awake()
     heart_icon.image = icon
+    print(typeof(TweenModule))
+    print(typeof(Tween))
     self.gameObject:SetActive(false)
 end
 

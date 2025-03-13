@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 68287dfd3b38f641a16e496b7427f8ff, type: 3}
-  m_Name: Terakita
+  m_Name: Terrakita
   m_EditorClassIdentifier: 
   _script: {fileID: -974389366465450183, guid: d2f77d2881e7f6941bb149becef8f82a, type: 3}
   _networkId: 3526040400
