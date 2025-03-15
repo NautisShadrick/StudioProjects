@@ -23,6 +23,7 @@ function CreateCollectionItem(eggIndex, eggType)
     _collectionItem:RegisterPressCallback(function()
         print("Item Clicked")
         uiManager.SelectEggForHatchery(eggIndex)
+        uiManager.CloseHatcherySelection()
     end)
 
     return _collectionItem
@@ -43,3 +44,7 @@ end
 click_off:RegisterPressCallback(function()
     self.gameObject:SetActive(false)
 end)
+
+function self:Start()
+    playerTracker.players[client.localPlayer].eggCollection.Changed:Connect(GenerateCollection)
+end

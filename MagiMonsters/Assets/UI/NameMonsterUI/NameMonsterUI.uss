@@ -1,0 +1,86 @@
+:root {
+    --font-muesou-1000: url("project://database/Assets/UI/Fonts/MuseoSansRounded1000 SDF.asset");
+    --font-comic: url("project://database/Assets/UI/Fonts/Hey Comic SDF.asset");
+}
+
+.name-monster-u-i {
+    width: 300px;
+    height: 200px;
+    background-color:rgb(255, 255, 255);
+    border-color:rgb(190, 208, 225);
+    border-bottom-width: 6px;
+    margin: auto;
+    border-radius: 10px;
+    align-items: center;
+    color: #0f2c38;
+
+    -unity-font-definition: var(--font-comic);
+
+}
+
+#header {
+    margin-top: 10px;
+    font-size: 28px;
+
+    -unity-text-align: middle-center;
+}
+
+#question_input {
+    height: 50px;
+    width: 80%;
+    margin: 5px;
+    background-color:rgb(219, 227, 234);
+    border-radius: 5px;
+}
+
+#submit_button {
+    height: 50px;
+    width: auto;
+
+    color: white;
+    background-color: #9d38bb;
+    border-color:rgb(104, 30, 138);
+    border-bottom-width: 4px;
+    border-radius: 10px;
+    font-size: 20px;
+    -unity-text-align: middle-center;
+
+    margin: auto;
+    padding: 0px 20px;
+}
+
+
+.title .unity-text-element {
+  color: #0f2c38;
+  font-size: 26px;
+  -unity-text-align: middle-center;
+  -unity-font-definition: var(--font-comic);
+
+  flex-wrap: wrap;
+  white-space: normal;
+  
+  padding: 0px;
+}
+
+.title .text-field__placeholder {
+  color:rgb(102, 127, 138);
+}
+
+#close_button {
+    position: absolute;
+    width:  32px;
+    height: 32px;
+    background-color: #9d38bb;
+    border-color:rgb(104, 30, 138);
+    border-bottom-width: 4px;
+    border-radius: 10px;
+
+    right: -15px;
+    top:   -15px;
+
+    background-image: url("project://database/Assets/UI/Icons/icon_close.png");
+}
+
+.hidden {
+    display: none;
+}

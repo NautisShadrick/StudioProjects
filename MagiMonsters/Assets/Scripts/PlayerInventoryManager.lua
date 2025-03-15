@@ -27,12 +27,13 @@ function GivePlayerEgg(player: Player, eggData)
     SaveEggCollectionToStorage(player)
 end
 
-function GivePlayerMonster(player, monsterName)
-    print("Giving Player Monster", player.name, monsterName)
+function GivePlayerMonster(player, monsterSpecies, monsterName)
+    print("Giving Player Monster", player.name, monsterSpecies, "named", monsterName)
     local playerInfo = playerTracker.players[player]
     local monsterCollection = playerInfo.monsterCollection.value
 
-    local monsterData = monsterLibrary.GetStorageMonsterData(monsterName)
+    local monsterData = monsterLibrary.GetStorageMonsterData(monsterSpecies)
+    monsterData.name = monsterName
 
     table.insert(monsterCollection, monsterData)
     playerTracker.players[player].monsterCollection.value = monsterCollection

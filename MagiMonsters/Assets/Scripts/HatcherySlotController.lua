@@ -28,7 +28,7 @@ function self:Start()
             if isReady then
                 -- Hatch Monster
                 print("Hatching Monster")
-                hatcheryController.HatchMonsterRequest:FireServer(slotId)
+                uiManager.OpenNameMonsterUI(slotId)
             else
                 print("Egg is not ready yet")
                 -- Show info

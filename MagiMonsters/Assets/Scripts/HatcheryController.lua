@@ -113,7 +113,7 @@ function StartEgg(player, slotId, eggId)
     end
 end
 
-function HatchMonster(player, slotId)
+function HatchMonster(player, slotId, monsterName)
     local playerinfo = playerTracker.players[player]
     local _hatcheryData = playerinfo.hatcheryData.value
 
@@ -126,7 +126,7 @@ function HatchMonster(player, slotId)
                 playerinfo.hatcheryData.value = _hatcheryData
                 SaveHatcheryDataToStorage(player, function()
                     -- Add Monster to Player Inventory
-                    playerInventoryManager.GivePlayerMonster(player, _hatcherySlot.monster)
+                    playerInventoryManager.GivePlayerMonster(player, _hatcherySlot.monster, monsterName)
                     SlotHatchedEvent:FireClient(player, slotId)
                 end)
             else

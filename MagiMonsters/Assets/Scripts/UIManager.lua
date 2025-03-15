@@ -13,6 +13,8 @@ local ResultsLabelObj: GameObject = nil
 local TimerUIObject: GameObject = nil
 --!SerializeField
 local HatcherySelectionObj: GameObject = nil
+--!SerializeField
+local NameMonsterUIObj: GameObject = nil
 
 timerUI = nil
 
@@ -20,6 +22,7 @@ local BattleScreenUI: BattleScreen = nil
 local FourButtonUI: FourButtonMenu = nil
 local ResultsLabelUI: ResultsUI = nil
 local HatcherSelectionUI: HatcherySelectionUI = nil
+local nameMonsterUI = nil
 
 ResponseChosenEvent = Event.new("ResponseChosenEvent")
 
@@ -34,7 +37,8 @@ local sceneManager = require("SceneManager")
 
 currentBattleTurn = 0
 
-local currentSlotId = 0
+local currentSlotId = 0 -- the Slot that is currently reciving and Egg to hatch
+local currentHatchingSlotId = 0 -- the Slot that is currently being hatched
 
 elementsIconsMap = {
     air = 1,
@@ -89,6 +93,8 @@ function self:ClientStart()
     FourButtonUI = FourButtonOBJ:GetComponent(FourButtonMenu)
     ResultsLabelUI = ResultsLabelObj:GetComponent(ResultsUI)
     HatcherSelectionUI = HatcherySelectionObj:GetComponent(HatcherySelectionUI)
+    nameMonsterUI = NameMonsterUIObj:GetComponent(NameMonsterUI)
+    print(typeof(nameMonsterUI))
     CloseHatcherySelection()
 
     BattleDataModule.ActionEvent:Connect(function(turn, playerHealth, playerMana, enemyHealth, enemyMaxHealth, enemyMana, enemyMaxMana, actionName)
@@ -150,4 +156,11 @@ end
 
 function SelectEggForHatchery(eggId)
     hatcheryController.StartEggRequest:FireServer(currentSlotId, eggId)
+end
+
+function OpenNameMonsterUI(slotId)
+    currentHatchingSlotId = slotId
+    NameMonsterUIObj:SetActive(true)
+    print(typeof(nameMonsterUI))
+    nameMonsterUI.InitializeUI(slotId)
 end

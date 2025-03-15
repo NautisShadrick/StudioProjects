@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UXML
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="UnityEngine.UIElements"
+    xmlns:hr="Highrise.UI"
+    xmlns:editor="UnityEditor.UIElements"
+    xsi:noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd"
+>
+
+  <hr:UILuaView name="_root" class="name-monster-u-i">
+
+    <VisualElement name="close_button"/>
+
+    <Label name="header" text="Name your Monster!"/>
+    <VisualElement name="question_input"/>
+
+    <Label name="submit_button" text="Accept"/>
+    
+  </hr:UILuaView>
+
+</UXML>
