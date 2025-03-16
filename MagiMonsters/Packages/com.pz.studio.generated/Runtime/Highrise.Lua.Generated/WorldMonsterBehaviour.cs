@@ -26,7 +26,11 @@ namespace Highrise.Lua.Generated
         public override string ScriptGUID => s_scriptGUID;
 
         [SerializeField] public System.Double m_followDistance = 5;
+        [SerializeField] public System.Double m_teleportDistance = 10;
         [SerializeField] public UnityEngine.Animator m_anim = default;
+        [SerializeField] public UnityEngine.GameObject m_FairyBody = default;
+        [SerializeField] public UnityEngine.ParticleSystem m_ExplodeParticle = default;
+        [SerializeField] public UnityEngine.GameObject m_CreatureSprite = default;
 
         protected override SerializedPropertyValue[] SerializeProperties()
         {
@@ -36,7 +40,11 @@ namespace Highrise.Lua.Generated
             return new SerializedPropertyValue[]
             {
                 CreateSerializedProperty(_script.GetPropertyAt(0), m_followDistance),
-                CreateSerializedProperty(_script.GetPropertyAt(1), m_anim),
+                CreateSerializedProperty(_script.GetPropertyAt(1), m_teleportDistance),
+                CreateSerializedProperty(_script.GetPropertyAt(2), m_anim),
+                CreateSerializedProperty(_script.GetPropertyAt(3), m_FairyBody),
+                CreateSerializedProperty(_script.GetPropertyAt(4), m_ExplodeParticle),
+                CreateSerializedProperty(_script.GetPropertyAt(5), m_CreatureSprite),
             };
         }
     }

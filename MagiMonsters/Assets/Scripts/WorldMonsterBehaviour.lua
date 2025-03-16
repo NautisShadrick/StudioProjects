@@ -3,16 +3,29 @@
 --!SerializeField
 local followDistance : number = 5
 --!SerializeField
+local teleportDistance : number = 10
+--!SerializeField
 local anim : Animator = nil
+
+--!SerializeField
+local FairyBody : GameObject = nil
+--!SerializeField
+local ExplodeParticle : ParticleSystem = nil
+--!SerializeField
+local CreatureSprite : GameObject = nil
+
 
 local navAgent = nil
 local mainCamera = nil
 myCharacter = nil
 
+local isFairy = true
 
 function self:Start()
     navAgent = self.gameObject:GetComponent(NavMeshAgent)
     mainCamera = Camera.main
+
+
 end
 
 function self:Update()
@@ -21,7 +34,18 @@ function self:Update()
     end
 
     if Vector3.Distance(myCharacter.transform.position, self.transform.position) > followDistance then
-        FollowPlayer()
+        if isFairy == false then
+            FollowPlayer()
+        end
+        if Vector3.Distance(myCharacter.transform.position, self.transform.position) > teleportDistance or isFairy then
+            SetFairy(true)
+            navAgent.enabled = false
+            -- Move Towards the player
+            self.transform.position = Vector3.MoveTowards(self.transform.position, myCharacter.transform.position, 5 * Time.deltaTime)
+        end
+    else
+        navAgent.enabled = true
+        SetFairy(false)
     end
 
     if navAgent.velocity.magnitude > .5 then
@@ -40,7 +64,25 @@ function self:Update()
             self.transform.localScale = Vector3.new(-1, 1, 1)
         end
     end
-    
+
+end
+
+function SetFairy(state)
+    if isFairy == state then
+        return
+    end
+    isFairy = state
+
+    if state then Timer.After(.1, function() CreatureSprite:SetActive(false) end) else CreatureSprite:SetActive(true) end
+    FairyBody:SetActive(state)
+
+    ExplodeParticle:Play()
+
+    if state then
+        anim:SetTrigger("shrink")
+    else
+        anim:SetTrigger("pop")
+    end
 
 end
 
