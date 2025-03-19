@@ -523,6 +523,46 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 1599188571}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1218821423
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1218821422}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9249175761cde7a1728fc82225bd82e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _networkId: 0
+  _script: {fileID: -974389366465450183, guid: 28961782db12e774c850c8f79f628237, type: 3}
+  _properties: []
+  _uiOutput: 0
+  _uiOutputSettings:
+    rid: -2
+  m_cameraPivotHeight: 2.5
+  m_initalDistanceFromPivot: 7.5
+  m_minDistanceFromPivot: 3
+  m_maxDistanceFromPivot: 25
+  m_cameraOffset: {x: 0, y: 0.5, z: 0}
+  m_EnableMaxPitch: 1
+  m_EnableMaxYaw: 0
+  m_initialPitch: 10
+  m_minPitch: -5
+  m_maxPitch: 30
+  m_minYaw: -360
+  m_maxYaw: 360
+  m_touchRotationSensitivity: 0.4
+  m_mouseRotationSensitivity: 0.4
+  m_rotationSmoothing: 1
+  m_touchZoomSensitivity: 5
+  m_FOV: 60
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
 --- !u!1 &1277134859
 GameObject:
   m_ObjectHideFlags: 0
@@ -656,6 +696,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3551931345751937580, guid: 4db44322431f6d6439fa69e352e81b67,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5279981243723839846, guid: 4db44322431f6d6439fa69e352e81b67,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -719,7 +764,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7494135311037265500, guid: 4db44322431f6d6439fa69e352e81b67,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1218821423}
   m_SourcePrefab: {fileID: 100100000, guid: 4db44322431f6d6439fa69e352e81b67, type: 3}
 --- !u!1001 &1731218649
 PrefabInstance:
@@ -867,6 +916,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: WorldMonster
+      objectReference: {fileID: 0}
+    - target: {fileID: 7664140620905302668, guid: fc8c999c6cb9e4d4992c7bb2e2a3bf76,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1195,6 +1249,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1019296394383095956, guid: bc8c539dc51b48c41b3e95d796ae1756,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2645774871667250413, guid: bc8c539dc51b48c41b3e95d796ae1756,
         type: 3}
       propertyPath: m_LocalPosition.x
