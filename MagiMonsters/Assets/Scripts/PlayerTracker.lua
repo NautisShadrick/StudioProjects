@@ -18,6 +18,7 @@ function TrackPlayers(game, characterCallback)
             currentMosnterIndex = NumberValue.new("CurrentMonsterIndex"..player.user.id, 1),
             hatcheryData = TableValue.new("HatcheryData"..player.user.id, {}),
             eggCollection = TableValue.new("EggCollection"..player.user.id, {}),
+            playerInventory = TableValue.new("PlayerInventory"..player.user.id, {}),
         }
 
         player.CharacterChanged:Connect(function(player, character) 
