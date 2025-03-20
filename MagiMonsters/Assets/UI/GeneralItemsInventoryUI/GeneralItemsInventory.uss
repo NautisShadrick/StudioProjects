@@ -1,0 +1,290 @@
+:root {
+    --font-muesou-1000: url("project://database/Assets/UI/Fonts/MuseoSansRounded1000 SDF.asset");
+    --font-comic: url("project://database/Assets/UI/Fonts/Hey Comic SDF.asset");
+}
+
+.general-items-inventory {
+    position: absolute;
+    width:  100%;
+    height: 100%;
+
+    color: #0f2c38;
+    font-size: 18px;
+    letter-spacing: 3px;
+    -unity-font-definition: var(--font-muesou-1000);
+    -unity-text-align: middle-center;
+    /*
+    -unity-text-outline-color: #0f2c38;
+    -unity-text-outline-width: 1.5px;
+    text-shadow: 0 3 0 #0f2c38;
+    */
+}
+
+.inventory-container {
+    position: absolute;
+    width: 300px;
+    height: 450px;
+
+    align-self: center;
+    top: 50%;
+    translate: 0 -50%;
+
+    border-radius: 10px;
+
+    background-color: white;
+
+}
+
+.card-header {
+    font-size: 32px;
+    padding: 0;
+    margin: 0;
+    margin-top: 25px;
+}
+
+.tabs-container {
+    display: flex;
+    justify-content: space-around;
+    flex-direction: row;
+
+    width: 100%;
+    height: 42px;
+
+    margin-top: auto;
+    margin-bottom: 10px;
+}
+
+.tab-icon {
+    width:  42px;
+    height: 42px;
+
+    background-color: #e9e3ff;
+    border-radius: 10px;
+    border-color:rgb(182, 172, 217);
+    border-width: 2px;
+}
+
+#materials_tab {
+    background-image: url("project://database/Assets/UI/Textures/GeneralItemsInventoryUI/TabIcons/Materials.png");
+}
+
+#recipes_tab {
+    background-image: url("project://database/Assets/UI/Textures/GeneralItemsInventoryUI/TabIcons/Recipes.png");
+}
+
+.leaderboard {
+    position: relative;
+    flex-grow: 0;
+    background-color:rgb(233, 227, 255);
+
+    width:  280px;
+    height: 130px;
+
+    align-self: center;
+    margin-bottom: 0px;
+    border-radius: 6px;
+    padding: 0 5px;
+
+    border-color:rgb(182, 172, 217);
+    border-width: 2px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom-width: 1px;
+
+}
+
+.inventory-item {
+    width: 100%;
+    height: 40px;
+
+    margin: 0;
+
+
+    flex-direction: row;
+    align-items: center;
+
+    border-color:rgb(182, 172, 217);
+    border-radius: 2px;
+    border-bottom-width: 2px;
+}
+
+.inventory-item-image {
+    width:  28px;
+    height: 28px;
+
+    margin-left: 2px;
+    flex-shrink: 0;
+}
+
+.inventory-item-name {
+    font-size: 13px;
+
+    padding: 0;
+    margin: 0;
+    margin-left: 4px;
+
+}
+
+.inventory-item-amount {
+    position: absolute;
+    right: 10px;
+
+    padding: 0;
+    margin: 0;
+}
+
+.info-container {
+    position: relative;
+    flex-grow: 0;
+    background-color:rgb(233, 227, 255);
+
+    width:  280px;
+    height: 180px;
+
+    align-self: center;
+    margin-bottom: 10px;
+    border-radius: 6px;
+    padding: 5px;
+
+    border-color:rgb(182, 172, 217);
+    border-width: 2px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-top-width: 1px;
+
+    flex-direction: row;
+
+    justify-content: space-around;
+    align-items: center;
+}
+
+#info_image {
+    width:  64px;
+    height: 64px;
+    background-color: white;
+    border-color:rgb(182, 172, 217);
+    border-radius: 2px;
+    border-width: 2px;
+}
+
+.info-text {
+    width:  180px;
+    height: auto;
+    border-color:rgb(182, 172, 217);
+    border-radius: 2px;
+}
+
+#info_name {
+    font-size: 16px;
+    padding: 0;
+    margin: 5px;
+    margin-bottom: 5px;
+}
+
+#info_description {
+    font-size: 9px;
+    padding: 0;
+    padding-bottom: 4px;
+    margin: 0;
+
+    white-space: normal;
+}
+
+#crafting_info {
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+
+    margin-left: 5px;
+    margin-top: auto;
+    margin-bottom:0;
+}
+
+#ingredients {
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+
+    margin-left: 5px;
+    margin-bottom: 5px;
+
+    border-color:rgb(182, 172, 217);
+    border-radius: 2px;
+    border-top-width: 2px;
+
+}
+
+.material-item {
+    height: 28px;
+    width:  100%;
+
+    margin: 0;
+    padding: 0;
+
+    flex-direction: row;
+
+    align-items: center;
+    justify-content: flex-start;
+
+}
+
+.material-image {
+    width:  16px;
+    height: 16px;
+    flex-shrink: 0;
+    margin-left: 5px;
+}
+
+.material-name {
+    font-size: 9px;
+    padding: 0;
+    margin: 0;
+    margin-left: 4px;
+}
+
+.material-amount {
+    font-size: 9px;
+    padding: 0;
+    margin: 0;
+    margin-left: auto;
+    margin-right: 5px;
+}
+
+#craft_button {
+    width:  70px;
+    height: 30px;
+
+    background-color:rgb(227, 255, 245);
+    border-radius: 10px;
+    border-color:rgb(172, 217, 201);
+    border-width: 2px;
+    margin: auto;
+}
+
+.scroll-view__content-container {
+
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: row;
+    flex-wrap: wrap;
+
+    width: auto;
+    height: auto;
+}
+
+.scroll-bar {
+    width: 5px;
+    height: 100%;
+
+    background-color: rgba(0,0,0,0);
+    border-radius: 2px;
+}
+
+.scroll-bar__thumb {
+    background-color: rgba(0,0,255,1);
+    border-radius: 5px;
+}
+
+.scroll-bar__thumb:hover {
+    background-color: rgba(0,0,0,0);
+}

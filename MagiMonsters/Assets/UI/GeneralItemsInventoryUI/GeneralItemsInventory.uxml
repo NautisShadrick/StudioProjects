@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UXML
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="UnityEngine.UIElements"
+    xmlns:hr="Highrise.UI"
+    xmlns:editor="UnityEditor.UIElements"
+    xsi:noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd"
+>
+
+  <hr:UILuaView class="general-items-inventory">
+
+    <VisualElement class="inventory-container">
+      <Label text="Materials" class="card-header" name="card_header" />
+
+      <VisualElement class="tabs-container">
+        <VisualElement class="tab-icon" name="monsters_tab"/>
+        <VisualElement class="tab-icon" name="eggs_tab"/>
+        <VisualElement class="tab-icon" name="materials_tab"/>
+        <VisualElement class="tab-icon" name="recipes_tab"/>
+      </VisualElement>
+
+      <hr:UIScrollView class="leaderboard" name="_inventoryScrollView">
+        <!-- Ranks will be added here -->
+      </hr:UIScrollView>
+      
+      <VisualElement class="info-container">
+
+        <Image name="info_image" />
+
+        <VisualElement class="info-text" name="info_text">
+          <Label text="item" name="info_name" />
+          <Label text="this is an item that does something" name="info_description" />
+          <VisualElement name="crafting_info">
+            <VisualElement name="ingredients">
+            </VisualElement>
+            <Label text="CRAFT" name="craft_button" />
+          </VisualElement>
+        </VisualElement>
+
+      </VisualElement>
+    </VisualElement>
+
+  </hr:UILuaView>
+
+</UXML>

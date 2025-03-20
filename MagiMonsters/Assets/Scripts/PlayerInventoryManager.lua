@@ -77,7 +77,7 @@ function self:ServerStart()
 
     end)
     scene.PlayerJoined:Connect(function(scene, player)
-        print("Player Joined: " .. player.name .. " Getting Items")
+        print("Player Joined: " .. player.user.id .. " Getting Items")
         GetAllPlayerItems_From_API(player, 100, nil, {}, UpdatePlayerInventory)
 
         

@@ -11,4 +11,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Template/Scenes/HomeRoom.unity
     guid: 81019e48319f5794e8f0c00f646b7453
-  m_configObjects: {}
+  m_configObjects:
+    com.unity.addressableassets: {fileID: 11400000, guid: a9d62b0db9c32844bb2f8474b87dae06,
+      type: 2}
