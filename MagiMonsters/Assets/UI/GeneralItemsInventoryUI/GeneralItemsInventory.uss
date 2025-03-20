@@ -39,7 +39,8 @@
     font-size: 32px;
     padding: 0;
     margin: 0;
-    margin-top: 25px;
+    margin-top: 20px;
+    margin-bottom: 10px;
 }
 
 .tabs-container {
@@ -79,6 +80,8 @@
 
     width:  280px;
     height: 130px;
+
+    flex-grow: 1;
 
     align-self: center;
     margin-bottom: 0px;
@@ -139,7 +142,7 @@
     background-color:rgb(233, 227, 255);
 
     width:  280px;
-    height: 180px;
+    height: auto;
 
     align-self: center;
     margin-bottom: 10px;
@@ -168,7 +171,7 @@
 }
 
 .info-text {
-    width:  180px;
+    width:  185px;
     height: auto;
     border-color:rgb(182, 172, 217);
     border-radius: 2px;
@@ -182,7 +185,7 @@
 }
 
 #info_description {
-    font-size: 9px;
+    font-size: 11px;
     padding: 0;
     padding-bottom: 4px;
     margin: 0;
@@ -236,14 +239,14 @@
 }
 
 .material-name {
-    font-size: 9px;
+    font-size: 11px;
     padding: 0;
     margin: 0;
     margin-left: 4px;
 }
 
 .material-amount {
-    font-size: 9px;
+    font-size: 11px;
     padding: 0;
     margin: 0;
     margin-left: auto;

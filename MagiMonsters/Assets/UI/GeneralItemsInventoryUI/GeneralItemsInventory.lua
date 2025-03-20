@@ -99,7 +99,7 @@ local testRecipes = {
         description = "A potion that revives a fallen ally.",
         materials = {
             {id = "wild_berries", amount = 1},
-            {id = "glowing_moss", amount = 1}
+            {id = "fire_essence", amount = 1}
         }
     },
 }
