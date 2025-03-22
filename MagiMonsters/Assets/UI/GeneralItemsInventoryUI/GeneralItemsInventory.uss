@@ -1,14 +1,26 @@
 :root {
     --font-muesou-1000: url("project://database/Assets/UI/Fonts/MuseoSansRounded1000 SDF.asset");
     --font-comic: url("project://database/Assets/UI/Fonts/Hey Comic SDF.asset");
+
+    --color-default-text: #e5e1e8;
+    --color-dark-green:rgb(11, 82, 25);
+
+    --item-slot-bg: url("project://database/Assets/LayerLab/GUI Pro-FantasyRPG/ResourcesData/Sprites/Component/Frame/frame_listframe_00_Demo_n.png");
+    --window-bg-1: url("project://database/Assets/LayerLab/GUI Pro-FantasyRPG/ResourcesData/Sprites/Component/Popup/popup_00_frame.png");
+    
+    --basic-button: url("project://database/Assets/LayerLab/GUI Pro-FantasyRPG/ResourcesData/Sprites/Component/Button/btn_sqeure_01.png");
+    --green-button: url("project://database/Assets/LayerLab/GUI Pro-FantasyRPG/ResourcesData/Sprites/Component/Button/btn_rectangle_01_n_green.png");
+    
+    --basic-ribbon-bg: url("project://database/Assets/LayerLab/GUI Pro-FantasyRPG/ResourcesData/Sprites/Component/Label/label_ribbon_02_Demo.png");
 }
+
 
 .general-items-inventory {
     position: absolute;
     width:  100%;
     height: 100%;
 
-    color: #0f2c38;
+    color: var(--color-default-text);
     font-size: 18px;
     letter-spacing: 3px;
     -unity-font-definition: var(--font-muesou-1000);
@@ -30,22 +42,34 @@
     translate: 0 -50%;
 
     border-radius: 10px;
+}
 
-    background-color: white;
+.card-header-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
 
+    width: 100%;
+    height: 56px;
+
+    margin-bottom: 10px;
+
+    background-image: var(--basic-ribbon-bg);
+    -unity-slice-scale: 0.5;
 }
 
 .card-header {
+    position: absolute;
     font-size: 32px;
     padding: 0;
-    margin: 0;
-    margin-top: 20px;
-    margin-bottom: 10px;
+    top: -1px;
 }
 
 .tabs-container {
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
+    align-items: center;
     flex-direction: row;
 
     width: 100%;
@@ -55,28 +79,60 @@
     margin-bottom: 10px;
 }
 
+.tab-button {
+    width:  60px;
+    height: 48px;
+
+    margin: 6px;
+
+    background-image: var(--basic-button);
+    -unity-slice-scale: 0.4;
+}
+
 .tab-icon {
-    width:  42px;
-    height: 42px;
+    position: absolute;
+    align-self: center;
 
-    background-color: #e9e3ff;
-    border-radius: 10px;
-    border-color:rgb(182, 172, 217);
-    border-width: 2px;
+    top: -10px;
+    width:  48px;
+    height: 48px;
+
+    margin: auto;
 }
 
-#materials_tab {
-    background-image: url("project://database/Assets/UI/Textures/GeneralItemsInventoryUI/TabIcons/Materials.png");
+.tab-label {
+    display: none;
+    font-size: 11px;
+    padding: 0;
+    margin: 0;
+    margin-top: 24px;
 }
 
-#recipes_tab {
-    background-image: url("project://database/Assets/UI/Textures/GeneralItemsInventoryUI/TabIcons/Recipes.png");
+#materials_icon {
+    background-image: url("project://database/Assets/LayerLab/GUI Pro-FantasyRPG/ResourcesData/Sprites/Component/Icon_EquipIcons_(x2)/Shadow/EquipIcons_512/equip_icon_fish.png");
+}
+
+#recipes_icon {
+    background-image: url("project://database/Assets/LayerLab/GUI Pro-FantasyRPG/ResourcesData/Sprites/Component/Icon_EquipIcons_(x2)/Shadow/EquipIcons_512/equip_icon_potion_red_4.png");
+}
+
+#eggs_icon {
+    background-image: url("project://database/Assets/Art/Sprites/Egg_Air.png");
+}
+
+#monsters_icon {
+    background-image: url("project://database/Assets/Art/Sprites/Earth/Terrakita/GeoHowl.png");
+    top: -16px;
+    width:  56px;
+    height: 56px;
 }
 
 .leaderboard {
+    
     position: relative;
     flex-grow: 0;
-    background-color:rgb(233, 227, 255);
+    /*background-color:rgb(233, 227, 255);*/
+    background-image: var(--window-bg-1);
 
     width:  280px;
     height: 130px;
@@ -86,17 +142,14 @@
     align-self: center;
     margin-bottom: 0px;
     border-radius: 6px;
-    padding: 0 5px;
+    padding: 15px;
 
-    border-color:rgb(182, 172, 217);
-    border-width: 2px;
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-    border-bottom-width: 1px;
+    -unity-slice-scale: 0.3;
 
 }
 
 .inventory-item {
+
     width: 100%;
     height: 40px;
 
@@ -106,9 +159,14 @@
     flex-direction: row;
     align-items: center;
 
+    /*
     border-color:rgb(182, 172, 217);
     border-radius: 2px;
     border-bottom-width: 2px;
+    */
+
+    background-image: var(--item-slot-bg);
+    -unity-slice-scale: 0.25;
 }
 
 .inventory-item-image {
@@ -139,7 +197,6 @@
 .info-container {
     position: relative;
     flex-grow: 0;
-    background-color:rgb(233, 227, 255);
 
     width:  280px;
     height: auto;
@@ -149,7 +206,6 @@
     border-radius: 6px;
     padding: 5px;
 
-    border-color:rgb(182, 172, 217);
     border-width: 2px;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
@@ -159,15 +215,14 @@
 
     justify-content: space-around;
     align-items: center;
+
+    background-image: var(--window-bg-1);
+    -unity-slice-scale: 0.3;
 }
 
 #info_image {
     width:  64px;
     height: 64px;
-    background-color: white;
-    border-color:rgb(182, 172, 217);
-    border-radius: 2px;
-    border-width: 2px;
 }
 
 .info-text {
@@ -254,14 +309,14 @@
 }
 
 #craft_button {
+    font-size: 16px;
     width:  70px;
     height: 30px;
-
-    background-color:rgb(227, 255, 245);
-    border-radius: 10px;
-    border-color:rgb(172, 217, 201);
-    border-width: 2px;
     margin: auto;
+    margin-bottom: 2px;
+
+    color: var(--color-dark-green);
+    background-image: var(--green-button);
 }
 
 .scroll-view__content-container {
@@ -284,7 +339,7 @@
 }
 
 .scroll-bar__thumb {
-    background-color: rgba(0,0,255,1);
+    background-color: white;
     border-radius: 5px;
 }
 

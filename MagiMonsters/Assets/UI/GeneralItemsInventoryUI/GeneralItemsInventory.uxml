@@ -10,13 +10,29 @@
   <hr:UILuaView class="general-items-inventory">
 
     <VisualElement class="inventory-container">
-      <Label text="Materials" class="card-header" name="card_header" />
+      <VisualElement class="card-header-container">
+        <Label text="Materials" class="card-header" name="card_header" />
+      </VisualElement>
 
       <VisualElement class="tabs-container">
-        <VisualElement class="tab-icon" name="monsters_tab"/>
-        <VisualElement class="tab-icon" name="eggs_tab"/>
-        <VisualElement class="tab-icon" name="materials_tab"/>
-        <VisualElement class="tab-icon" name="recipes_tab"/>
+
+        <VisualElement class="tab-button" name="monsters_tab">
+          <VisualElement class="tab-icon" name="monsters_icon"/>
+          <Label text="Monsters" name="monsters_tab_label" class="tab-label" />
+        </VisualElement>
+        <VisualElement class="tab-button" name="eggs_tab">
+          <VisualElement class="tab-icon" name="eggs_icon"/>
+          <Label text="Eggs" name="eggs_tab_label" class="tab-label" />
+        </VisualElement>
+        <VisualElement class="tab-button" name="materials_tab">
+          <VisualElement class="tab-icon" name="materials_icon"/>
+          <Label text="Materials" name="materials_tab_label" class="tab-label" />
+        </VisualElement>
+        <VisualElement class="tab-button" name="recipes_tab">
+          <VisualElement class="tab-icon" name="recipes_icon"/>
+          <Label text="Cooking" name="cooking_tab_label" class="tab-label" />
+        </VisualElement>
+
       </VisualElement>
 
       <hr:UIScrollView class="leaderboard" name="_inventoryScrollView">

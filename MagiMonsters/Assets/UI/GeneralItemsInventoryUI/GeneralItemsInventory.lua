@@ -169,15 +169,13 @@ function CreateRecipe(recipe)
     _itemName:AddToClassList("inventory-item-name")
     _itemName.text = recipe.displayName
 
-    local _materialsContainer = VisualElement.new()
-    _materialsContainer:AddToClassList("materials-container")
-
-    local _craftButton = Label.new()
-    _craftButton:AddToClassList("craft-button")
-    _craftButton.text = "Craft"
+    local _itemAmount = Label.new()
+    _itemAmount:AddToClassList("inventory-item-amount")
+    _itemAmount.text = "x1"
 
     _newItem:Add(_itemImage)
     _newItem:Add(_itemName)
+    _newItem:Add(_itemAmount)
 
     _inventoryScrollView:Add(_newItem)
 
