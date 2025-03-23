@@ -38,6 +38,17 @@ function TrackPlayers(game, characterCallback)
         players[player] = nil
     end)
 end
+
+function GetItemAmountFromInv(player, itemID)
+    local _playerInv = players[player].playerInventory.value
+    for i, item in ipairs(_playerInv) do
+        if item.id == itemID then
+            return item.amount
+        end
+    end
+    return 0
+end
+
 ------------- CLIENT -------------
 
 function self:ClientAwake()

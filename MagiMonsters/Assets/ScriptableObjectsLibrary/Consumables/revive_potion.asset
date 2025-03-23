@@ -28,7 +28,7 @@ MonoBehaviour:
   - tree_sap
   m_recipeMaterialAmounts:
   - 3
-  - 1
+  - 5
   - 1
   references:
     version: 2

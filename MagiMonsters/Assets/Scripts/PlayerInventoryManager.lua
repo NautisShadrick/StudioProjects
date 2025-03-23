@@ -4,8 +4,11 @@ local purchaseItemReq = Event.new("PurchaseItemRequest")
 
 local requestFirstMonsterRequest = Event.new("RequestFirstMonsterRequest")
 
+local tryCraftRequest = Event.new("TryCraftRequest")
+
 local playerTracker = require("PlayerTracker")
 local monsterLibrary = require("MonsterLibrary")
+local itemLibrary = require("ItemLibrary")
 
 ------------ Client ------------
 
@@ -16,6 +19,10 @@ end
 
 function PurchaseItem(id : string, price : number, quantity : number)
     purchaseItemReq:FireServer(id, price, quantity)
+end
+
+function TryCraft(id : string)
+    tryCraftRequest:FireServer(id)
 end
 
 
@@ -83,6 +90,27 @@ function self:ServerStart()
         
         --Timer.After(1, function() GivePlayerItem(player, "free_daub", 2) end)
         --Timer.After(1, function() GivePlayerItem(player, "Tokens", 1500) end)
+
+    end)
+
+    tryCraftRequest:Connect(function(player: Player, consumableId: string)
+        local playerInfo = playerTracker.players[player]
+        local playerInventory = playerInfo.playerInventory.value
+
+        local consumableData = itemLibrary.GetConsumableByID(consumableId)
+        local itemMaterials = consumableData.GetMaterials()
+        local canCraft = true
+        for i, material in ipairs(itemMaterials) do
+            if playerTracker.GetItemAmountFromInv(player, material.id) < material.amount then
+                canCraft = false
+                return
+            end
+        end
+
+        for each, material in itemMaterials do
+            TakePlayerItem(player, material.id, material.amount)
+        end
+        GivePlayerItem(player, consumableId, 1)
 
     end)
 
