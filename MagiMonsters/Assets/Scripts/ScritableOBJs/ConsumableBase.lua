@@ -19,7 +19,7 @@ local recipeMaterialIDs: {string} = {}
 --!SerializeField
 local recipeMaterialAmounts: {number} = {}
 
-function GetRecipe()
+function GetMaterials()
     local recipe = {}
     for i, id in ipairs(recipeMaterialIDs) do
         table.insert(recipe, {id = id, amount = recipeMaterialAmounts[i]})

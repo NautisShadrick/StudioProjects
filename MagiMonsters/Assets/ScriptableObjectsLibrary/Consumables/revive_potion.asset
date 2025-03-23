@@ -10,24 +10,24 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8c10f75524124c614004d05a7729c97a, type: 3}
-  m_Name: minorHealthPotion
+  m_Name: revive_potion
   m_EditorClassIdentifier: 
   _script: {fileID: -974389366465450183, guid: 36cff7809ecd4cb4fadbd08fcdf6c9af, type: 3}
   _networkId: 3486118838
   _properties: []
-  m_id: minor_health_potion
-  m_displayName: Minor Health Potion
-  m_sprite: {fileID: 2800000, guid: d7602f9f5723148d99e01fc956ee65e3, type: 3}
-  m_description: Heals your monster a small amount
+  m_id: revive_potion
+  m_displayName: Revive Potion
+  m_sprite: {fileID: 2800000, guid: 42fcb9cb0cddc4ec180679194587a81c, type: 3}
+  m_description: Revives a KO'd Monster
   m_element: 
   m_rarity: 0
   m_value: 100
   m_recipeMaterialIDs:
-  - mushrooms
-  - fresh_herbs
+  - wild_berries
+  - glowing_moss
   - tree_sap
   m_recipeMaterialAmounts:
-  - 2
+  - 3
   - 1
   - 1
   references:

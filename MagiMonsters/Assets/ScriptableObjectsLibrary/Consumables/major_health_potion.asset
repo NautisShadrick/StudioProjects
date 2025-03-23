@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c10f75524124c614004d05a7729c97a, type: 3}
+  m_Name: major_health_potion
+  m_EditorClassIdentifier: 
+  _script: {fileID: -974389366465450183, guid: 36cff7809ecd4cb4fadbd08fcdf6c9af, type: 3}
+  _networkId: 3486118838
+  _properties: []
+  m_id: major_health_potion
+  m_displayName: Major Health Potion
+  m_sprite: {fileID: 2800000, guid: 65553a37b5b4a4b128159477951f9318, type: 3}
+  m_description: Heals your monster a large amount
+  m_element: 
+  m_rarity: 0
+  m_value: 250
+  m_recipeMaterialIDs:
+  - mushrooms
+  - tree_sap
+  m_recipeMaterialAmounts:
+  - 3
+  - 2
+  references:
+    version: 2
+    RefIds: []

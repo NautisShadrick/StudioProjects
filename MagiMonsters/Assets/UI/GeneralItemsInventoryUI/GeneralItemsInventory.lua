@@ -71,46 +71,26 @@ function PopulateInventory(items)
     _inventoryScrollView:Clear()
 
     for i, item in ipairs(items) do
-        CreateItem(item)
+        local _isItem = itemLibrary.GetItemByID(item.id)
+        if _isItem then CreateItem(item) end
     end
-
 end
 
-local testRecipes = {
-    health_potion_small = {
-        displayName = "Small Health Potion",
-        description = "A small potion that restores a small amount of health.",
-        materials = {
-            {id = "mushrooms", amount = 2},
-            {id = "fresh_herbs", amount = 1},
-            {id = "tree_sap", amount = 1},
-        }
-    },
-    mana_potion_small = {
-        displayName = "Small Mana Potion",
-        description = "A small potion that restores a small amount of mana.",
-        materials = {
-            {id = "tree_sap", amount = 1},
-            {id = "mushrooms", amount = 1}
-        }
-    },
-    revive_potion = {
-        displayName = "Revive Potion",
-        description = "A potion that revives a fallen ally.",
-        materials = {
-            {id = "wild_berries", amount = 1},
-            {id = "fire_essence", amount = 1}
-        }
-    },
+local Recipes = {
+    "minor_health_potion",
+    "major_health_potion",
+    "revive_potion",
 }
 
 function SetItemInfoRecipe(recipe)
-    local itemName = recipe.displayName or "item name"
-    local itemDesc = recipe.description or "item description"
-    local itemMaterials = recipe.materials
+    local itemName = recipe.GetDisplayName() or "item name"
+    local itemDesc = recipe.GetDescription() or "item description"
+    local itemMaterials = recipe.GetMaterials()
+    local itemSprite = recipe.GetSprite()
 
     info_name.text = itemName
     info_description.text = itemDesc
+    info_image.image = itemSprite
 
     ingredients:Clear()
     
@@ -156,22 +136,22 @@ function SetItemInfoMaterial(item)
     craft_button:EnableInClassList("hidden", true)
 end
 
-function CreateRecipe(recipe)
-    print("Creating Recipe: ", recipe.displayName)
+function CreateRecipe(recipe, ownedAmount)
+    print("Creating Recipe: ", recipe.GetDisplayName())
     local _newItem = VisualElement.new()
     _newItem:AddToClassList("inventory-item")
 
     local _itemImage = Image.new()
     _itemImage:AddToClassList("inventory-item-image")
-    --_itemImage.image = recipe.GetSprite()
+    _itemImage.image = recipe.GetSprite()
 
     local _itemName = Label.new()
     _itemName:AddToClassList("inventory-item-name")
-    _itemName.text = recipe.displayName
+    _itemName.text = recipe.GetDisplayName()
 
     local _itemAmount = Label.new()
     _itemAmount:AddToClassList("inventory-item-amount")
-    _itemAmount.text = "x1"
+    _itemAmount.text = "x" .. ownedAmount
 
     _newItem:Add(_itemImage)
     _newItem:Add(_itemName)
@@ -186,11 +166,18 @@ function CreateRecipe(recipe)
     return _newItem
 end
 
-function PopulateRecipies(recipes)
+function PopulateRecipies(recipes, playerInv)
     _inventoryScrollView:Clear()
 
-    for id, recipe in recipes do
-        CreateRecipe(recipe)
+    for id, recipeID in recipes do
+        local ownedAmount = 0
+        for i, item in ipairs(playerInv) do
+            print(item.id, recipeID)
+            if item.id == recipeID then
+                ownedAmount = item.amount
+            end
+        end
+        CreateRecipe(itemLibrary.GetConsumableByID(recipeID), ownedAmount)
     end
 end
 
@@ -209,5 +196,5 @@ end)
 
 recipes_tab:RegisterPressCallback(function()
     card_header.text = "Recipes"
-    PopulateRecipies(testRecipes)
+    PopulateRecipies(Recipes, playerTracker.players[client.localPlayer].playerInventory.value)
 end)
