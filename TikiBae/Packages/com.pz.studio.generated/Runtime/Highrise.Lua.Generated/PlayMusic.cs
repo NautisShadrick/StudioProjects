@@ -33,10 +33,10 @@ namespace Highrise.Lua.Generated
         [Tooltip("Audio shader music to play. To create an Audio Shader, right click an audio file then go to Create->Highrise->Audio->Audio Shader")]
         [SerializeField] public Highrise.AudioShader _musicAudioShader = default;
         [SerializeField] public System.Boolean _loopMusic = true;
-        [SerializeField] public System.Boolean _fadeIn = true;
         [Header("Common Music Settings")]
         [Range(0,1)]
         [SerializeField] public System.Double _volume = 1;
+        [SerializeField] public System.Boolean _fadeIn = true;
 
         protected override SerializedPropertyValue[] SerializeProperties()
         {
@@ -49,8 +49,8 @@ namespace Highrise.Lua.Generated
                 CreateSerializedProperty(_script.GetPropertyAt(1), _musicURL),
                 CreateSerializedProperty(_script.GetPropertyAt(2), _musicAudioShader),
                 CreateSerializedProperty(_script.GetPropertyAt(3), _loopMusic),
-                CreateSerializedProperty(_script.GetPropertyAt(4), _fadeIn),
-                CreateSerializedProperty(_script.GetPropertyAt(5), _volume),
+                CreateSerializedProperty(_script.GetPropertyAt(4), _volume),
+                CreateSerializedProperty(_script.GetPropertyAt(5), _fadeIn),
             };
         }
     }

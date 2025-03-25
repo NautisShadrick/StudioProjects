@@ -48,9 +48,6 @@ function AddToBoats(player_pairs, soloPlayer)
         local player1 = pair[1]
         local player2 = pair[2]
 
-        player1.character:PlayEmote("sit-idle-cute", true)
-        player2.character:PlayEmote("sit-idle-cute", true)
-
         -- Create Boat
         local boatObj = GameObject.Instantiate(boatPrefab)
         table.insert(boatTable, boatObj)
@@ -60,6 +57,9 @@ function AddToBoats(player_pairs, soloPlayer)
         local boatController = boatObj:GetComponent(BoatController)
         local pointA, pointB = boatController.GetPoints()
 
+        player1.character:Teleport(Vector3.new(0, 0, 0))
+        player2.character:Teleport(Vector3.new(0, 0, 0))
+
         -- Set Players to Boat
         if soloPlayer ~= client.localPlayer then characterController.options.enabled = false end
 
@@ -67,7 +67,6 @@ function AddToBoats(player_pairs, soloPlayer)
         player1.character.gameObject:GetComponent(NavMeshAgent).enabled = false
         player2.character.gameObject:GetComponent(NavMeshAgent).enabled = false
 
-        -- Attach Players to Boat points
         player1.character.gameObject.transform.parent = pointA
         player2.character.gameObject.transform.parent = pointB
 
@@ -86,14 +85,14 @@ function AddToBoats(player_pairs, soloPlayer)
         player1.character.gameObject.transform.localRotation = Quaternion.Euler(0, 0, 0)
         player2.character.gameObject.transform.localRotation = Quaternion.Euler(0, 0, 0)
 
-
-        print(player1.character.gameObject.transform.localPosition.x, player1.character.gameObject.transform.localPosition.y, player1.character.gameObject.transform.localPosition.z)
-
         if player1 == client.localPlayer then
             myCurrentPair = player2
         elseif player2 == client.localPlayer then
             myCurrentPair = player1
         end
+
+        player1.character:PlayEmote("sit-idle-cute", true)
+        player2.character:PlayEmote("sit-idle-cute", true)
 
     end
 end
