@@ -1,7 +1,13 @@
 :root {
+    --font-muesou-1000: url("project://database/Assets/UI/Fonts/MuseoSansRounded1000 SDF.asset");
     --font-comic: url("project://database/Assets/UI/Fonts/Hey Comic SDF.asset");
-}
 
+    --monster-info-bg: url("project://database/Assets/LayerLab/GUI Pro-FantasyRPG/ResourcesData/Sprites/Component/Frame/frame_stageframe_02_Demo_n.png");
+
+    --basic-button: url("project://database/Assets/LayerLab/GUI Pro-FantasyRPG/ResourcesData/Sprites/Component/Button/btn_sqeure_01.png");
+    --gray-button: url("project://database/Assets/LayerLab/GUI Pro-FantasyRPG/ResourcesData/Sprites/Component/Button/btn_rectangle_01_n_gray.png");
+    --yellow-button: url("project://database/Assets/LayerLab/GUI Pro-FantasyRPG/ResourcesData/Sprites/Component/Button/btn_rectangle_01_n_yellow.png");
+}
 .four-button-menu {
     position: absolute;
     width: 100%;
@@ -9,7 +15,7 @@
     margin: 0;
     padding: 0;
 
-    color: #0f2c38;
+    color: #1f0230
     font-size: 18px;
     letter-spacing: 3px;
     -unity-font-definition: var(--font-comic);
@@ -33,8 +39,13 @@
 
     padding: 0 10px;
 
-    background-color: white;
-    border-radius: 10px;
+    
+    background-image: var(--basic-button);
+    -unity-slice-scale: .5;
+
+    color: #dbcce1;
+
+    font-size: 18px;
 }
 
 #buttons_root {
@@ -58,11 +69,10 @@
 
     margin: 10px;
     padding: 0;
+    padding-bottom: 4px;
 
-    border-radius: 25px;
-    border-bottom-width: 5px;
-    background-color: white;
-    border-color: #dbeef5;
+    background-image: var(--gray-button);
+    -unity-slice-scale: 0.6;
 }
 
 .button-icon {
@@ -93,8 +103,8 @@
 }
 
 .lightning {
-    background-color: #fff34a;
-    border-color: #efc410;
+    color: #4d1a07;
+    background-image: var(--yellow-button);
 }
 
 .earth {

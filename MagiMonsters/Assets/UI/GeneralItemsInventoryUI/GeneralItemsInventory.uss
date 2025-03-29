@@ -7,7 +7,9 @@
 
     --item-slot-bg: url("project://database/Assets/LayerLab/GUI Pro-FantasyRPG/ResourcesData/Sprites/Component/Frame/frame_listframe_00_Demo_n.png");
     --window-bg-1: url("project://database/Assets/LayerLab/GUI Pro-FantasyRPG/ResourcesData/Sprites/Component/Popup/popup_00_frame.png");
-    
+
+    --close-button: url("project://database/Assets/UI/Icons/icon_close.png");
+
     --basic-button: url("project://database/Assets/LayerLab/GUI Pro-FantasyRPG/ResourcesData/Sprites/Component/Button/btn_sqeure_01.png");
     --green-button: url("project://database/Assets/LayerLab/GUI Pro-FantasyRPG/ResourcesData/Sprites/Component/Button/btn_rectangle_01_n_green.png");
     
@@ -42,6 +44,16 @@
     translate: 0 -50%;
 
     border-radius: 10px;
+}
+
+#close_button {
+    position: absolute;
+    width:  48px;
+    height: 48px;
+    background-image: var(--close-button);
+
+    right: -30px;
+    top:   -30px;
 }
 
 .card-header-container {

@@ -1,6 +1,9 @@
 --!Type(UI)
 
 --!Bind
+local close_button : VisualElement = nil
+
+--!Bind
 local card_header : Label = nil
 
 --!Bind
@@ -214,6 +217,10 @@ function self:Start()
         elseif currentTab == 2 then PopulateRecipies(Recipes, newInv) end
     end)
 end
+
+close_button:RegisterPressCallback(function()
+    self.gameObject:SetActive(false)
+end)
 
 materials_tab:RegisterPressCallback(function()
     currentTab = 1

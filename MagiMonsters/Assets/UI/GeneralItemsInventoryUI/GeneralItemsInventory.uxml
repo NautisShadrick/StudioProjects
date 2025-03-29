@@ -10,6 +10,7 @@
   <hr:UILuaView class="general-items-inventory">
 
     <VisualElement class="inventory-container">
+
       <VisualElement class="card-header-container">
         <Label text="Materials" class="card-header" name="card_header" />
       </VisualElement>
@@ -54,6 +55,9 @@
         </VisualElement>
 
       </VisualElement>
+
+      <VisualElement name="close_button"/>
+
     </VisualElement>
 
   </hr:UILuaView>

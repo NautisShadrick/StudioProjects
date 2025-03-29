@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1949039378511156393}
   - component: {fileID: 2227052576974718805}
   - component: {fileID: 775140814266078491}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Sparkles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4850,7 +4850,7 @@ GameObject:
   - component: {fileID: 3190729749515832476}
   - component: {fileID: 3378592621527272034}
   - component: {fileID: 6338464438468886513}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Creature
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4929,7 +4929,7 @@ GameObject:
   - component: {fileID: 1372046985015134187}
   - component: {fileID: 6627583802916556936}
   - component: {fileID: 8347538784508902787}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9762,7 +9762,7 @@ GameObject:
   - component: {fileID: 3466923670041880988}
   - component: {fileID: 2891265420305205830}
   - component: {fileID: 5952817595787785690}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Quad
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9867,7 +9867,7 @@ GameObject:
   - component: {fileID: 5908814310344235799}
   - component: {fileID: 6956354163311545868}
   - component: {fileID: 266896651227467477}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Glow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14706,7 +14706,7 @@ GameObject:
   - component: {fileID: 6376359363295769999}
   - component: {fileID: 6661558330007001850}
   - component: {fileID: 385876038529495967}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: ExplodeParticle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19605,7 +19605,7 @@ GameObject:
   - component: {fileID: 8316516541703278672}
   - component: {fileID: 57776805611650446}
   - component: {fileID: 2568356855313352661}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19732,7 +19732,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1830445490306566141}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: FairyObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19767,7 +19767,7 @@ GameObject:
   - component: {fileID: 1249968548478606081}
   - component: {fileID: 765748778414454091}
   - component: {fileID: 4694416833337817396}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: WorldMonster
   m_TagString: Untagged
   m_Icon: {fileID: 0}
