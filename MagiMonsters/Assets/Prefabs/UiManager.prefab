@@ -489,6 +489,7 @@ MonoBehaviour:
   m_TimerUIObject: {fileID: 8345891835854296656}
   m_HatcherySelectionObj: {fileID: 9066574064346609443}
   m_NameMonsterUIObj: {fileID: 8388557913614058472}
+  m_GeneralInventoryUIObj: {fileID: 172761032916056505}
   references:
     version: 2
     RefIds:

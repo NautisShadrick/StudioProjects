@@ -216,10 +216,12 @@ function self:Start()
         if currentTab == 1 then PopulateInventory(newInv)
         elseif currentTab == 2 then PopulateRecipies(Recipes, newInv) end
     end)
+
+    uiManager.CloseGeneralInventoryUI()
 end
 
 close_button:RegisterPressCallback(function()
-    self.gameObject:SetActive(false)
+    uiManager.CloseGeneralInventoryUI()
 end)
 
 materials_tab:RegisterPressCallback(function()

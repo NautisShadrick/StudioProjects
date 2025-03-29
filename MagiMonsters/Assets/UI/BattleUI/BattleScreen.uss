@@ -15,7 +15,7 @@
     width: 100%;
     height: 100%;
 
-    color: #dbcce1;
+    color:rgb(232, 221, 236);
     font-size: 18px;
     letter-spacing: 3px;
     -unity-font-definition: var(--font-muesou-1000);

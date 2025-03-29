@@ -43,7 +43,7 @@
     background-image: var(--basic-button);
     -unity-slice-scale: .5;
 
-    color: #dbcce1;
+    color: rgb(232, 221, 236);
 
     font-size: 18px;
 }
