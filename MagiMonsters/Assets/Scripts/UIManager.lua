@@ -128,7 +128,6 @@ function self:ClientStart()
     cameraManager.SwitchCamera(0)
 
     ResponseChosenEvent:Connect(DialougeResponseHandler)
-
 end
 
 function EndBattle()
@@ -150,8 +149,8 @@ end
 
 function OpenHatcherySelection(slotId)
     currentSlotId = slotId
-    HatcherySelectionObj:SetActive(true)
-    HatcherSelectionUI.GenerateCollection()
+    GeneralInventoryUIObj:SetActive(true)
+    GeneralInventoryUI.SetSection(2)
 end
 
 function CloseHatcherySelection()

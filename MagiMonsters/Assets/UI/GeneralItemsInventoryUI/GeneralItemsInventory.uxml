@@ -40,7 +40,7 @@
         <!-- Ranks will be added here -->
       </hr:UIScrollView>
       
-      <VisualElement class="info-container">
+      <VisualElement class="info-container" name="info_container">
 
         <Image name="info_image" />
 

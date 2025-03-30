@@ -702,6 +702,7 @@ GameObject:
   - component: {fileID: 1280248056}
   - component: {fileID: 1280248055}
   - component: {fileID: 1280248065}
+  - component: {fileID: 1280248066}
   m_Layer: 0
   m_Name: Modules
   m_TagString: Untagged
@@ -960,6 +961,43 @@ MonoBehaviour:
   _uiOutput: 0
   _uiOutputSettings:
     rid: -2
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
+--- !u!114 &1280248066
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1280248054}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cee62df5c6e74d913159158059b3f298, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _networkId: 0
+  _script: {fileID: -974389366465450183, guid: 74392d207c384d448b861555e36cf24d, type: 3}
+  _properties: []
+  _uiOutput: 0
+  _uiOutputSettings:
+    rid: -2
+  m_itemDatas:
+  - {fileID: 11400000, guid: 574e49a72bfe37f4ca59244ffccd38f0, type: 2}
+  - {fileID: 11400000, guid: 62ef21b3564dfab4aa60b6bf13d45577, type: 2}
+  - {fileID: 11400000, guid: 9fae709f03259fa4abfdb5cad51deb27, type: 2}
+  - {fileID: 11400000, guid: 3c39be51da56716449f8295aa4be58b1, type: 2}
+  - {fileID: 11400000, guid: a0434c3c6669f82488b21567e41e5f02, type: 2}
+  - {fileID: 11400000, guid: 3d80de357cea2bc47a96da9bc8518ed5, type: 2}
+  - {fileID: 11400000, guid: f53a3e2012c999d468ae603fc4b90543, type: 2}
+  - {fileID: 11400000, guid: c6d25f4fd5473df42a213020fe1f6776, type: 2}
+  - {fileID: 11400000, guid: cfbde7d5cbd23e44f9fb8ab96a7817d4, type: 2}
+  m_consumableDatas:
+  - {fileID: 11400000, guid: f15629208355fa747a82544517eb5518, type: 2}
+  - {fileID: 11400000, guid: e7742a84e2c6a30499ce1ce9dd403442, type: 2}
+  - {fileID: 11400000, guid: 68470acde0df21042a648ce55e03baef, type: 2}
   references:
     version: 2
     RefIds:
