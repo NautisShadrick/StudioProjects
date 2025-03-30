@@ -109,7 +109,7 @@ function CreatEggItem(eggIndex, egg)
     _newegg:RegisterPressCallback(function()
         print("egg Clicked")
         uiManager.SelectEggForHatchery(eggIndex)
-        uiManager.CloseHatcherySelection()
+        uiManager.CloseGeneralInventoryUI()
     end)
 
     return _newegg

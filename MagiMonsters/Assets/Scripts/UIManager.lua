@@ -12,8 +12,6 @@ local ResultsLabelObj: GameObject = nil
 --!SerializeField
 local TimerUIObject: GameObject = nil
 --!SerializeField
-local HatcherySelectionObj: GameObject = nil
---!SerializeField
 local NameMonsterUIObj: GameObject = nil
 --!SerializeField
 local GeneralInventoryUIObj: GameObject = nil
@@ -23,7 +21,6 @@ timerUI = nil
 local BattleScreenUI: BattleScreen = nil
 local FourButtonUI: FourButtonMenu = nil
 local ResultsLabelUI: ResultsUI = nil
-local HatcherSelectionUI: HatcherySelectionUI = nil
 local GeneralInventoryUI: GeneralItemsInventory = nil
 local nameMonsterUI = nil
 
@@ -95,12 +92,9 @@ function self:ClientStart()
     BattleScreenUI = BattleScreenOBJ:GetComponent(BattleScreen)
     FourButtonUI = FourButtonOBJ:GetComponent(FourButtonMenu)
     ResultsLabelUI = ResultsLabelObj:GetComponent(ResultsUI)
-    HatcherSelectionUI = HatcherySelectionObj:GetComponent(HatcherySelectionUI)
     nameMonsterUI = NameMonsterUIObj:GetComponent(NameMonsterUI)
     GeneralInventoryUI = GeneralInventoryUIObj:GetComponent(GeneralItemsInventory)
-
-    CloseHatcherySelection()
-
+    
     BattleDataModule.ActionEvent:Connect(function(turn, playerHealth, playerMana, enemyHealth, enemyMaxHealth, enemyMana, enemyMaxMana, actionName)
         BattleScreenUI.UpdateStats(turn, playerHealth, playerMana, enemyHealth, enemyMaxHealth, enemyMana, enemyMaxMana)
         ResultsLabelUI.ShowPopup(actionName)
@@ -151,10 +145,6 @@ function OpenHatcherySelection(slotId)
     currentSlotId = slotId
     GeneralInventoryUIObj:SetActive(true)
     GeneralInventoryUI.SetSection(2)
-end
-
-function CloseHatcherySelection()
-    HatcherySelectionObj:SetActive(false)
 end
 
 function SelectEggForHatchery(eggId)
