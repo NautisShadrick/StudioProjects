@@ -18,15 +18,15 @@ using Highrise.Lua;
 
 namespace Highrise.Lua.Generated
 {
-    [AddComponentMenu("Lua/GameManager")]
-    [LuaRegisterType(0x64f367123469100e, typeof(LuaBehaviour))]
-    public class GameManager : LuaBehaviourThunk
+    [AddComponentMenu("Lua/RewardParticle")]
+    [LuaRegisterType(0x47ac0d873a575b14, typeof(LuaBehaviour))]
+    public class RewardParticle : LuaBehaviourThunk
     {
-        private const string s_scriptGUID = "f3bd7b9868e247c44b2954b0a437ae13";
+        private const string s_scriptGUID = "0927e5fadc3b0bf41b6b2f1d59698d54";
         public override string ScriptGUID => s_scriptGUID;
 
-        [LuaScriptPropertyAttribute("23cd905668bc38c409bff901e234a5e8")]
-        [SerializeField] public System.Collections.Generic.List<UnityEngine.Object> m_LootTables = default;
+        [SerializeField] public UnityEngine.Texture m_starSprite = default;
+        [SerializeField] public UnityEngine.GameObject m_testAnchor = default;
 
         protected override SerializedPropertyValue[] SerializeProperties()
         {
@@ -35,7 +35,9 @@ namespace Highrise.Lua.Generated
 
             return new SerializedPropertyValue[]
             {
-                CreateSerializedProperty(_script.GetPropertyAt(0), m_LootTables),
+                CreateSerializedProperty(_script.GetPropertyAt(0), m_starSprite),
+                CreateSerializedProperty(_script.GetPropertyAt(1), m_testAnchor),
+                CreateSerializedProperty(_script.GetPropertyAt(2), null),
             };
         }
     }

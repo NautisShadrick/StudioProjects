@@ -32,6 +32,7 @@ namespace Highrise.Lua.Generated
         [SerializeField] public UnityEngine.GameObject m_TimerUIObject = default;
         [SerializeField] public UnityEngine.GameObject m_NameMonsterUIObj = default;
         [SerializeField] public UnityEngine.GameObject m_GeneralInventoryUIObj = default;
+        [SerializeField] public UnityEngine.GameObject m_RewardParticleUIObj = default;
 
         protected override SerializedPropertyValue[] SerializeProperties()
         {
@@ -47,6 +48,7 @@ namespace Highrise.Lua.Generated
                 CreateSerializedProperty(_script.GetPropertyAt(4), m_TimerUIObject),
                 CreateSerializedProperty(_script.GetPropertyAt(5), m_NameMonsterUIObj),
                 CreateSerializedProperty(_script.GetPropertyAt(6), m_GeneralInventoryUIObj),
+                CreateSerializedProperty(_script.GetPropertyAt(7), m_RewardParticleUIObj),
             };
         }
     }

@@ -44,8 +44,8 @@ function self:Awake()
         timerUI.PlayTimer(duration)
 
         characterController.options.enabled = false
+        gameManager.Search(objectType, duration)
         Timer.After(duration, function()
-            gameManager.Search(objectType)
             characterController.options.enabled = true
         end)
 

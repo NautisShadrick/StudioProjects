@@ -30,7 +30,9 @@ MonoBehaviour:
     LoadingImage: {fileID: 2800000, guid: 6f9235fd7c31aea498918ab44c186b79, type: 3}
   _highQualityAvatars: 0
   _hideVirtualPlayerScenes: 1
-  _defaultPlayerProfileId: 0
   _useRemoteServer: 0
   _remoteServerUserIds: []
   _checkStudioUpdatesOnLaunch: 1
+  _enableSceneButtons: 1
+  _enableSceneGuides: 1
+  _switchLayoutOnPlayMode: 0

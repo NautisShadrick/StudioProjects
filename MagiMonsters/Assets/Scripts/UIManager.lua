@@ -15,6 +15,8 @@ local TimerUIObject: GameObject = nil
 local NameMonsterUIObj: GameObject = nil
 --!SerializeField
 local GeneralInventoryUIObj: GameObject = nil
+--!SerializeField
+local RewardParticleUIObj: GameObject = nil
 
 timerUI = nil
 
@@ -22,6 +24,7 @@ local BattleScreenUI: BattleScreen = nil
 local FourButtonUI: FourButtonMenu = nil
 local ResultsLabelUI: ResultsUI = nil
 local GeneralInventoryUI: GeneralItemsInventory = nil
+local RewardParticleUI: RewardParticle = nil
 local nameMonsterUI = nil
 
 ResponseChosenEvent = Event.new("ResponseChosenEvent")
@@ -94,6 +97,7 @@ function self:ClientStart()
     ResultsLabelUI = ResultsLabelObj:GetComponent(ResultsUI)
     nameMonsterUI = NameMonsterUIObj:GetComponent(NameMonsterUI)
     GeneralInventoryUI = GeneralInventoryUIObj:GetComponent(GeneralItemsInventory)
+    RewardParticleUI = RewardParticleUIObj:GetComponent(RewardParticle)
     
     BattleDataModule.ActionEvent:Connect(function(turn, playerHealth, playerMana, enemyHealth, enemyMaxHealth, enemyMana, enemyMaxMana, actionName)
         BattleScreenUI.UpdateStats(turn, playerHealth, playerMana, enemyHealth, enemyMaxHealth, enemyMana, enemyMaxMana)
@@ -122,6 +126,10 @@ function self:ClientStart()
     cameraManager.SwitchCamera(0)
 
     ResponseChosenEvent:Connect(DialougeResponseHandler)
+end
+
+function DisplaySearchLoot(Items)
+    RewardParticleUI.CollectItemsAnimation(Items)
 end
 
 function EndBattle()

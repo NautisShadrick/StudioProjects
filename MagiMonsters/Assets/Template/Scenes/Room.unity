@@ -260,7 +260,7 @@ MonoBehaviour:
   _uiOutputSettings:
     rid: -2
   m_cameraPivotHeight: 2.5
-  m_initalDistanceFromPivot: 7.5
+  m_initalDistanceFromPivot: 11
   m_minDistanceFromPivot: 3
   m_maxDistanceFromPivot: 25
   m_cameraOffset: {x: 0, y: 0.5, z: 0}
@@ -312,6 +312,12 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2008864649}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1283853905 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7950559464790902814, guid: f993c63d323c76d41953796ce8db0bd1,
+    type: 3}
+  m_PrefabInstance: {fileID: 619486530}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1332807716
 GameObject:
   m_ObjectHideFlags: 0
@@ -987,6 +993,17 @@ PrefabInstance:
       propertyPath: m_battleCamera
       value: 
       objectReference: {fileID: 134142090}
+    - target: {fileID: 2098573578490959452, guid: a027266dae85afc478cca74e8f0939e3,
+        type: 3}
+      propertyPath: m_LootTables.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2098573578490959452, guid: a027266dae85afc478cca74e8f0939e3,
+        type: 3}
+      propertyPath: m_LootTables.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: b5ba7285a8b8e3240b3eae970cfded89,
+        type: 2}
     - target: {fileID: 4060968002756853733, guid: a027266dae85afc478cca74e8f0939e3,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1050,11 +1067,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1019296394383095956, guid: bc8c539dc51b48c41b3e95d796ae1756,
+    - target: {fileID: 1002415469471523233, guid: bc8c539dc51b48c41b3e95d796ae1756,
         type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
+      propertyPath: m_testAnchor
+      value: 
+      objectReference: {fileID: 1283853905}
     - target: {fileID: 2645774871667250413, guid: bc8c539dc51b48c41b3e95d796ae1756,
         type: 3}
       propertyPath: m_LocalPosition.x

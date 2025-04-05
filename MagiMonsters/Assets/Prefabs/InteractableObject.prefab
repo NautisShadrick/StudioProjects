@@ -123,7 +123,7 @@ MonoBehaviour:
   _uiOutput: 0
   _uiOutputSettings:
     rid: -2
-  m_objectType: forest
+  m_objectType: forest_1
   m_timerPoint: {fileID: 916311581503358483}
   m_duration: 5
   references:

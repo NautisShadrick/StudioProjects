@@ -1,15 +1,25 @@
 --!Type(Module)
 
+--!SerializeField
+local LootTables : {DropLootTable} = {}
+
 local StartBattleRequest = Event.new("StartBattleRequest")
 local DoActionRequest = Event.new("DoActionRequest")
 
 local SwapMonsterRequest = Event.new("SwapMonsterRequest")
+
+local SearchRequest = Event.new("SearchRequest")
+local SearchResponse = Event.new("SearchResponse")
 
 local playerTracker = require("PlayerTracker")
 local monsterLibrary = require("MonsterLibrary")
 local battleModule = require("BattleData")
 
 local uiManager = require("UIManager")
+
+local lootTableMap = {
+    ["forest_1"] = 1
+}
 
 -----------------------
 --    CLIENT SIDE    --
@@ -37,12 +47,17 @@ function StartNewBattle(enemy: string)
     uiManager.InitializeBattle(enemy)
 end
 
-function Search(objectType: string)
+function Search(objectType: string, duration: number)
     print("Searching through", objectType)
-    StartNewBattle("Zapkit")
+    SearchRequest:FireServer(objectType, duration)
 end
 
 function self:ClientAwake()
+
+    SearchResponse:Connect(function(lootTable)
+        uiManager.DisplaySearchLoot(lootTable)
+    end)
+
 end
 
 -----------------------
@@ -52,6 +67,7 @@ end
 function self:ServerAwake()
 
     local playerBattles = {}
+    local searchesByPlayer = {}
 
     StartBattleRequest:Connect(function(player, enemy)
         playerBattles[player] = nil
@@ -82,7 +98,31 @@ function self:ServerAwake()
         playerBattles[player]:SwapMonster()
     end)
 
+    SearchRequest:Connect(function(player, objectType, duration)
+        
+        if searchesByPlayer[player] then
+            print("Player is already searching")
+            return
+        end
+        searchesByPlayer[player] = true
+        Timer.After(duration, function()
+
+            local _lootTableObject = LootTables[lootTableMap[objectType]]
+
+            local _lootTable = _lootTableObject.GenerateLoot(10)
+        
+            for i, loot in ipairs(_lootTable) do
+                print("Loot ID: " .. loot.id .. ", Amount: " .. loot.amount)
+            end
+
+            searchesByPlayer[player] = nil
+            SearchResponse:FireClient(player, _lootTable)
+        end)
+
+    end)
+
     server.PlayerDisconnected:Connect(function(player)
         playerBattles[player] = nil
+        searchesByPlayer[player] = nil
     end)
 end
