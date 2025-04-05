@@ -16,12 +16,10 @@ MonoBehaviour:
   _networkId: 1899205169
   _properties: []
   m_lootTableIDS:
-  - 
-  - fire_essence
+  - fire_essance
   - wild_berries
   - ash
   m_lootTableAmounts:
-  - 0
   - 1
   - 1
   - 1
@@ -29,7 +27,6 @@ MonoBehaviour:
   - 25
   - 25
   - 30
-  - 20
   references:
     version: 2
     RefIds: []

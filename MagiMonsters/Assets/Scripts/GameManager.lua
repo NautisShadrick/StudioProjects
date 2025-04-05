@@ -12,8 +12,10 @@ local SearchRequest = Event.new("SearchRequest")
 local SearchResponse = Event.new("SearchResponse")
 
 local playerTracker = require("PlayerTracker")
+local itemLibrary = require("ItemLibrary")
 local monsterLibrary = require("MonsterLibrary")
 local battleModule = require("BattleData")
+local playerInventoryManager = require("PlayerInventoryManager")
 
 local uiManager = require("UIManager")
 
@@ -109,7 +111,7 @@ function self:ServerAwake()
 
             local _lootTableObject = LootTables[lootTableMap[objectType]]
 
-            local _lootTable = _lootTableObject.GenerateLoot(10)
+            local _lootTable = _lootTableObject.GenerateLoot(math.random(1, 5))
         
             for i, loot in ipairs(_lootTable) do
                 print("Loot ID: " .. loot.id .. ", Amount: " .. loot.amount)
@@ -117,6 +119,14 @@ function self:ServerAwake()
 
             searchesByPlayer[player] = nil
             SearchResponse:FireClient(player, _lootTable)
+
+            for i, item in ipairs(_lootTable) do
+                local itemData = itemLibrary.GetItemByID(item.id)
+                if itemData then
+                    playerInventoryManager.GivePlayerItem(player, item.id, item.amount)
+                end
+            end
+
         end)
 
     end)

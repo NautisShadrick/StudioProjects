@@ -8,7 +8,8 @@ local uiManager = require("UIManager")
 
 
 tablet_button:RegisterPressCallback(function()
-    uiManager.SwitchSceneRequest("home")
+    --uiManager.SwitchSceneRequest("home")
+    uiManager.OpenGeneralInventoryUI()
 end)
 
 scene.PlayerJoined:Connect(function(scene, player)

@@ -7,7 +7,7 @@ local consumableDatas : {ConsumableBase} = {}
 
 function GetItemByID(id: string)
     for _, item in ipairs(itemDatas) do
-        print(item.GetID(), id)
+        --print(item.GetID(), id)
         if id == item.GetID() then
             return item
         end

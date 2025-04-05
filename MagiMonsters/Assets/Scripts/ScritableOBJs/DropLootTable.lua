@@ -35,9 +35,6 @@ function GenerateLoot(numberOfLoot : number)
             cumulativeWeight = cumulativeWeight + loot.weight
 
             if randomValue <= cumulativeWeight then
-                if loot.id == "" or loot.amount == 0 then
-                    break
-                end
                 local lootID = loot.id
                 local lootAmount = loot.amount
 
