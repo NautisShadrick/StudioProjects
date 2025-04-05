@@ -18,13 +18,14 @@ using Highrise.Lua;
 
 namespace Highrise.Lua.Generated
 {
-    [AddComponentMenu("Lua/MainHud")]
-    [LuaRegisterType(0xd5a13bb10850b031, typeof(LuaBehaviour))]
-    public class MainHud : LuaBehaviourThunk
+    [AddComponentMenu("Lua/HudButtons")]
+    [LuaRegisterType(0x2d969c13a34cc4ef, typeof(LuaBehaviour))]
+    public class HudButtons : LuaBehaviourThunk
     {
-        private const string s_scriptGUID = "23794028634a4214a83b57ee94f1caaa";
+        private const string s_scriptGUID = "1055ebde19d1db64fa9f4d63b8ee4447";
         public override string ScriptGUID => s_scriptGUID;
 
+        [SerializeField] public System.Collections.Generic.List<UnityEngine.Texture> m_buttonIcons = default;
 
         protected override SerializedPropertyValue[] SerializeProperties()
         {
@@ -33,7 +34,10 @@ namespace Highrise.Lua.Generated
 
             return new SerializedPropertyValue[]
             {
-                CreateSerializedProperty(_script.GetPropertyAt(0), null),
+                CreateSerializedProperty(_script.GetPropertyAt(0), m_buttonIcons),
+                CreateSerializedProperty(_script.GetPropertyAt(1), null),
+                CreateSerializedProperty(_script.GetPropertyAt(2), null),
+                CreateSerializedProperty(_script.GetPropertyAt(3), null),
             };
         }
     }

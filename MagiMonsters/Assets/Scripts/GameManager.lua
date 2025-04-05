@@ -3,13 +3,14 @@
 --!SerializeField
 local LootTables : {DropLootTable} = {}
 
-local StartBattleRequest = Event.new("StartBattleRequest")
+local StartBattleEvent = Event.new("StartBattleEvent")
 local DoActionRequest = Event.new("DoActionRequest")
 
 local SwapMonsterRequest = Event.new("SwapMonsterRequest")
 
 local SearchRequest = Event.new("SearchRequest")
 local SearchResponse = Event.new("SearchResponse")
+
 
 local playerTracker = require("PlayerTracker")
 local itemLibrary = require("ItemLibrary")
@@ -44,8 +45,7 @@ function ClientDoAction(action: string)
     DoActionRequest:FireServer(action)
 end
 
-function StartNewBattle(enemy: string)
-    StartBattleRequest:FireServer(enemy)
+function StartNewBattleClient(enemy)
     uiManager.InitializeBattle(enemy)
 end
 
@@ -60,21 +60,25 @@ function self:ClientAwake()
         uiManager.DisplaySearchLoot(lootTable)
     end)
 
+    StartBattleEvent:Connect(function(enemy)
+        StartNewBattleClient(enemy)
+    end)
+
 end
 
 -----------------------
 --    SERVER SIDE    --
 -----------------------
 
+local playerBattles = {}
+local searchesByPlayer = {}
+
+function StartBattleServer(player, enemy)
+    playerBattles[player] = nil
+    playerBattles[player] = battleModule.Battle:new(player, playerTracker.players[player].monsterCollection.value[playerTracker.players[player].currentMosnterIndex.value], monsterLibrary.GetDefaultMonsterData(enemy))
+end
+
 function self:ServerAwake()
-
-    local playerBattles = {}
-    local searchesByPlayer = {}
-
-    StartBattleRequest:Connect(function(player, enemy)
-        playerBattles[player] = nil
-        playerBattles[player] = battleModule.Battle:new(player, playerTracker.players[player].monsterCollection.value[playerTracker.players[player].currentMosnterIndex.value], monsterLibrary.GetDefaultMonsterData(enemy))
-    end)
 
     DoActionRequest:Connect(function(player, action)
         if not playerBattles[player] then
@@ -109,23 +113,36 @@ function self:ServerAwake()
         searchesByPlayer[player] = true
         Timer.After(duration, function()
 
-            local _lootTableObject = LootTables[lootTableMap[objectType]]
+            local _foundMonster = math.random() > 0.7 and true or false
+            if _foundMonster then
+                local _enemy = "Zapkit"
+                -- FOUND A MONSTER
+                StartBattleServer(player, _enemy)
+                StartBattleEvent:FireClient(player, _enemy)
+            else
 
-            local _lootTable = _lootTableObject.GenerateLoot(math.random(1, 5))
-        
-            for i, loot in ipairs(_lootTable) do
-                print("Loot ID: " .. loot.id .. ", Amount: " .. loot.amount)
+                -- FOUND LOOT
+
+                local _lootTableObject = LootTables[lootTableMap[objectType]]
+
+                local _lootTable = _lootTableObject.GenerateLoot(math.random(1, 5))
+            
+                for i, loot in ipairs(_lootTable) do
+                    print("Loot ID: " .. loot.id .. ", Amount: " .. loot.amount)
+                end
+    
+                SearchResponse:FireClient(player, _lootTable)
+    
+                for i, item in ipairs(_lootTable) do
+                    local itemData = itemLibrary.GetItemByID(item.id)
+                    if itemData then
+                        playerInventoryManager.GivePlayerItem(player, item.id, item.amount)
+                    end
+                end
+
             end
 
             searchesByPlayer[player] = nil
-            SearchResponse:FireClient(player, _lootTable)
-
-            for i, item in ipairs(_lootTable) do
-                local itemData = itemLibrary.GetItemByID(item.id)
-                if itemData then
-                    playerInventoryManager.GivePlayerItem(player, item.id, item.amount)
-                end
-            end
 
         end)
 

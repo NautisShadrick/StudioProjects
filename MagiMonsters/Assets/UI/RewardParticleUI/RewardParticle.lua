@@ -149,5 +149,5 @@ function SpawnRewardLabel(message, startElement)
 end
 
 function CollectItemsAnimation(Items)
-    CreatAnimatedItemElements(Items, reward_particles, UI.hud:Q("tablet_button"))
+    CreatAnimatedItemElements(Items, reward_particles, UI.hud:Q("inv_button"))
 end

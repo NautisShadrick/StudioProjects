@@ -7,9 +7,9 @@
     xsi:noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd"
 >
 
-  <hr:UILuaView class="main-hud" picking-mode="Ignore">
-    <VisualElement class="tablet-button" name="tablet_button">
-    </VisualElement>
+  <hr:UILuaView name="hud_buttons" class="hud-buttons" picking-mode="Ignore">
+    <VisualElement name="left_container" picking-mode="Ignore"/>
+    <VisualElement name="right_container" picking-mode="Ignore"/>
   </hr:UILuaView>
 
 </UXML>

@@ -17,6 +17,8 @@ local NameMonsterUIObj: GameObject = nil
 local GeneralInventoryUIObj: GameObject = nil
 --!SerializeField
 local RewardParticleUIObj: GameObject = nil
+--!SerializeField
+local HudButtonsObj: GameObject = nil
 
 timerUI = nil
 
@@ -25,6 +27,7 @@ local FourButtonUI: FourButtonMenu = nil
 local ResultsLabelUI: ResultsUI = nil
 local GeneralInventoryUI: GeneralItemsInventory = nil
 local RewardParticleUI: RewardParticle = nil
+local HudButtonsUI: HudButtons = nil
 local nameMonsterUI = nil
 
 ResponseChosenEvent = Event.new("ResponseChosenEvent")
@@ -78,6 +81,8 @@ function DialougeResponseHandler(responseID)
 end
 
 function InitializeBattle(enemy: string)
+    HudButtonsObj:SetActive(false)
+
     FourButtonOBJ:SetActive(true)
     BattleScreenOBJ:SetActive(true)
 
@@ -98,6 +103,7 @@ function self:ClientStart()
     nameMonsterUI = NameMonsterUIObj:GetComponent(NameMonsterUI)
     GeneralInventoryUI = GeneralInventoryUIObj:GetComponent(GeneralItemsInventory)
     RewardParticleUI = RewardParticleUIObj:GetComponent(RewardParticle)
+    HudButtonsUI = HudButtonsObj:GetComponent(HudButtons)
     
     BattleDataModule.ActionEvent:Connect(function(turn, playerHealth, playerMana, enemyHealth, enemyMaxHealth, enemyMana, enemyMaxMana, actionName)
         BattleScreenUI.UpdateStats(turn, playerHealth, playerMana, enemyHealth, enemyMaxHealth, enemyMana, enemyMaxMana)
@@ -139,6 +145,7 @@ function EndBattle()
 
     cameraManager.SwitchCamera(0)
     battlGroundManager.EndBattleGrounds()
+    HudButtonsObj:SetActive(true)
 end
 
 function SwitchSceneRequest(scene)
@@ -153,6 +160,7 @@ function OpenHatcherySelection(slotId)
     currentSlotId = slotId
     GeneralInventoryUIObj:SetActive(true)
     GeneralInventoryUI.SetSection(2)
+    HudButtonsObj:SetActive(false)
 end
 
 function SelectEggForHatchery(eggId)
@@ -168,8 +176,10 @@ end
 
 function OpenGeneralInventoryUI()
     GeneralInventoryUIObj:SetActive(true)
+    HudButtonsObj:SetActive(false)
 end
 
 function CloseGeneralInventoryUI()
     GeneralInventoryUIObj:SetActive(false)
+    HudButtonsObj:SetActive(true)
 end

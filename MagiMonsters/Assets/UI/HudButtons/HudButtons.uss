@@ -1,0 +1,90 @@
+:root {
+    --font-muesou-1000: url("project://database/Assets/UI/Fonts/MuseoSansRounded1000 SDF.asset");
+    --font-comic: url("project://database/Assets/UI/Fonts/Hey Comic SDF.asset");
+
+    --color-default-text: #e5e1e8;
+    --color-dark-green:rgb(11, 82, 25);
+
+    --item-slot-bg: url("project://database/Assets/LayerLab/GUI Pro-FantasyRPG/ResourcesData/Sprites/Component/Frame/frame_listframe_00_Demo_n.png");
+    --window-bg-1: url("project://database/Assets/LayerLab/GUI Pro-FantasyRPG/ResourcesData/Sprites/Component/Popup/popup_00_frame.png");
+
+    --close-button: url("project://database/Assets/UI/Icons/icon_close.png");
+
+    --basic-button: url("project://database/Assets/LayerLab/GUI Pro-FantasyRPG/ResourcesData/Sprites/Component/Button/btn_sqeure_01.png");
+    --green-button: url("project://database/Assets/LayerLab/GUI Pro-FantasyRPG/ResourcesData/Sprites/Component/Button/btn_rectangle_01_n_green.png");
+    
+    --basic-ribbon-bg: url("project://database/Assets/LayerLab/GUI Pro-FantasyRPG/ResourcesData/Sprites/Component/Label/label_ribbon_02_Demo.png");
+}
+
+
+
+.hud-buttons {
+    width: 100%;
+    height: 100%;
+
+    padding: 0;
+    padding-top: 80px;
+
+    flex-direction: row;
+
+    color: var(--color-default-text);
+    font-size: 13px;
+    letter-spacing: 3px;
+    -unity-font-definition: var(--font-muesou-1000);
+    -unity-text-align: middle-center;
+}
+
+.button-container {
+    position: relative;
+    align-items: center;
+    justify-content: center;
+
+    width: 64px;
+    height: 64px;
+
+    margin-bottom: 15px;
+    margin-right: 20px;
+
+    border-radius: 20px;
+}
+
+.button-icon {
+    width: 48px;
+    height: 48px;
+}
+
+.button-label {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+
+    width: 116px;
+    height: 30px;
+
+    background-image: var(--basic-ribbon-bg);
+    -unity-slice-scale: 0.25;
+
+    padding: 0;
+    padding-bottom: 6px;
+
+    bottom: -10px;
+
+    scale: 0.75;
+
+}
+.right-side {
+    margin-left: auto;
+}
+
+.left-side {
+    margin-right: auto;
+}
+
+#left_container {
+    width: 50%;
+}
+#right_container {
+    width: 50%;
+}
