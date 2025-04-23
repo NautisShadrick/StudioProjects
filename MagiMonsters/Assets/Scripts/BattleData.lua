@@ -6,6 +6,7 @@ EndBattleEvent = Event.new("EndBattleEvent")
 local playerTracker = require("PlayerTracker")
 local actionLibrary = require("ActionLibrary")
 local monsterLibrary = require("MonsterLibrary")
+local gameManager = require("GameManager")
 
 export type battleObject = {
     player: Player,
@@ -37,6 +38,9 @@ end
 
 function Battle:EndBattle(_winner)
     EndBattleEvent:FireClient(self.player, _winner)
+    if _winner == self.player then
+        gameManager.HandleBattleVictory(self.player, self.enemy)
+    end
 end
 
 function Battle:DoAction(actionID: string)

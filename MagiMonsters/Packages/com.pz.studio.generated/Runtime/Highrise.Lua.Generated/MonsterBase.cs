@@ -31,6 +31,8 @@ namespace Highrise.Lua.Generated
         [SerializeField] public System.Double m_MaxMana = 0;
         [SerializeField] public System.Collections.Generic.List<System.String> m_MonsterActions = default;
         [SerializeField] public UnityEngine.Texture m_MonsterSprite = default;
+        [LuaScriptPropertyAttribute("23cd905668bc38c409bff901e234a5e8")]
+        [SerializeField] public UnityEngine.Object m_MonsterLootTable = default;
 
         protected override SerializedPropertyValue[] SerializeProperties()
         {
@@ -45,6 +47,7 @@ namespace Highrise.Lua.Generated
                 CreateSerializedProperty(_script.GetPropertyAt(3), m_MaxMana),
                 CreateSerializedProperty(_script.GetPropertyAt(4), m_MonsterActions),
                 CreateSerializedProperty(_script.GetPropertyAt(5), m_MonsterSprite),
+                CreateSerializedProperty(_script.GetPropertyAt(6), m_MonsterLootTable),
             };
         }
     }

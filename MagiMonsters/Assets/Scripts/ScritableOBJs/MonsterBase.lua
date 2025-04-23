@@ -12,6 +12,8 @@ local MaxMana: number = 0
 local MonsterActions: {string} = {}
 --!SerializeField
 local MonsterSprite: Texture = nil
+--!SerializeField
+local MonsterLootTable: DropLootTable = nil
 
 function GetName()
     return MonsterName
@@ -35,4 +37,8 @@ end
 
 function GetSprite()
     return MonsterSprite
+end
+
+function GetLootTable()
+    return MonsterLootTable
 end

@@ -39,7 +39,8 @@ function GetDefaultMonsterData(monsterName: string): MonsterData
         currentMana = monsters[monsterName].GetMaxMana(),
         level = 1,
         actionIDs = monsters[monsterName].GetActions(),
-        monsterSprite = monsters[monsterName].GetSprite()
+        monsterSprite = monsters[monsterName].GetSprite(),
+        lootTable = monsters[monsterName].GetLootTable()
     }
 end
 

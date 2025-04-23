@@ -78,6 +78,25 @@ function StartBattleServer(player, enemy)
     playerBattles[player] = battleModule.Battle:new(player, playerTracker.players[player].monsterCollection.value[playerTracker.players[player].currentMosnterIndex.value], monsterLibrary.GetDefaultMonsterData(enemy))
 end
 
+function HandleBattleVictory(player, monster)
+    print("Battle Victory")
+    print(player.name, monster.speciesName)
+
+    -- FOUND LOOT
+    local _lootTableObject = monsterLibrary.GetDefaultMonsterData(monster.speciesName).lootTable
+    local _lootTable = _lootTableObject.GenerateLoot(math.random(1, 5))
+
+    for i, item in ipairs(_lootTable) do
+        local itemData = itemLibrary.GetItemByID(item.id)
+        if itemData then
+            playerInventoryManager.GivePlayerItem(player, item.id, item.amount)
+        end
+    end
+
+    SearchResponse:FireClient(player, _lootTable)
+
+end
+
 function self:ServerAwake()
 
     DoActionRequest:Connect(function(player, action)
@@ -127,9 +146,9 @@ function self:ServerAwake()
 
                 local _lootTable = _lootTableObject.GenerateLoot(math.random(1, 5))
             
-                for i, loot in ipairs(_lootTable) do
-                    print("Loot ID: " .. loot.id .. ", Amount: " .. loot.amount)
-                end
+                --for i, loot in ipairs(_lootTable) do
+                --    print("Loot ID: " .. loot.id .. ", Amount: " .. loot.amount)
+                --end
     
                 SearchResponse:FireClient(player, _lootTable)
     

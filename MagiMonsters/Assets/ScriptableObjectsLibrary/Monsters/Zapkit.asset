@@ -24,6 +24,7 @@ MonoBehaviour:
   - LightningLash
   - Bite
   m_MonsterSprite: {fileID: 2800000, guid: 04ebee1494742f344ab74eb7e6a358df, type: 3}
+  m_MonsterLootTable: {fileID: 11400000, guid: b5ba7285a8b8e3240b3eae970cfded89, type: 2}
   references:
     version: 2
     RefIds: []
