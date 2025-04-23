@@ -19,6 +19,8 @@ local GeneralInventoryUIObj: GameObject = nil
 local RewardParticleUIObj: GameObject = nil
 --!SerializeField
 local HudButtonsObj: GameObject = nil
+--!SerializeField
+local itemReceivedNotificationObj: GameObject = nil
 
 timerUI = nil
 
@@ -29,6 +31,7 @@ local GeneralInventoryUI: GeneralItemsInventory = nil
 local RewardParticleUI: RewardParticle = nil
 local HudButtonsUI: HudButtons = nil
 local nameMonsterUI = nil
+local itemsReceivedNotificationUI: ItemsReceivedNotification = nil
 
 ResponseChosenEvent = Event.new("ResponseChosenEvent")
 
@@ -104,6 +107,7 @@ function self:ClientStart()
     GeneralInventoryUI = GeneralInventoryUIObj:GetComponent(GeneralItemsInventory)
     RewardParticleUI = RewardParticleUIObj:GetComponent(RewardParticle)
     HudButtonsUI = HudButtonsObj:GetComponent(HudButtons)
+    itemsReceivedNotificationUI = itemReceivedNotificationObj:GetComponent(ItemsReceivedNotification)
     
     BattleDataModule.ActionEvent:Connect(function(turn, playerHealth, playerMana, enemyHealth, enemyMaxHealth, enemyMana, enemyMaxMana, actionName)
         BattleScreenUI.UpdateStats(turn, playerHealth, playerMana, enemyHealth, enemyMaxHealth, enemyMana, enemyMaxMana)
@@ -136,6 +140,7 @@ end
 
 function DisplaySearchLoot(Items)
     RewardParticleUI.CollectItemsAnimation(Items)
+    itemsReceivedNotificationUI.DisplayItems(Items)
 end
 
 function EndBattle()
