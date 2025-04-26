@@ -17,7 +17,7 @@ MonoBehaviour:
   _properties: []
   m_id: zap_shroom
   m_displayName: Zap Shroom
-  m_sprite: {fileID: 2800000, guid: 566367136c9730f41afe5f17fd934257, type: 3}
+  m_sprite: {fileID: 2800000, guid: a6df181ff841b4ae7a10f20e349e30ce, type: 3}
   m_description: A zippy mushroom with strong conductivity
   m_element: 
   m_rarity: 0

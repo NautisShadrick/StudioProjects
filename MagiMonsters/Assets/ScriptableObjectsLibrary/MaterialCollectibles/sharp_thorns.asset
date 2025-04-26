@@ -17,7 +17,7 @@ MonoBehaviour:
   _properties: []
   m_id: sharp_thorns
   m_displayName: Sharp Thorns
-  m_sprite: {fileID: 2800000, guid: b57cb2962bf0cba4fac36d0d5936689c, type: 3}
+  m_sprite: {fileID: 2800000, guid: 7e48c7cdeeb450e41bcb72841c6af805, type: 3}
   m_description: Jagged thorns that add a prickly effect to potions.
   m_element: 
   m_rarity: 0

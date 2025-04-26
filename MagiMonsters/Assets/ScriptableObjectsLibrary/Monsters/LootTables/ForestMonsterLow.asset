@@ -16,9 +16,9 @@ MonoBehaviour:
   _networkId: 1899205169
   _properties: []
   m_lootTableIDS:
-  - fire_essance
+  - fresh_herbs
   - wild_berries
-  - ash
+  - mushrooms
   m_lootTableAmounts:
   - 1
   - 1

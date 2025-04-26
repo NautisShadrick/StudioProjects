@@ -936,6 +936,11 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[3]
       value: 
       objectReference: {fileID: 2100000, guid: 6e59a1d605566574d873730ffd5c0635, type: 2}
+    - target: {fileID: 235283921227717600, guid: ef4ebf6da19d52d4d91e3b4b7cc07761,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 644616823007552707, guid: ef4ebf6da19d52d4d91e3b4b7cc07761,
         type: 3}
       propertyPath: m_Materials.Array.data[3]
@@ -950,6 +955,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: MapExport
+      objectReference: {fileID: 0}
+    - target: {fileID: 1636532648683774559, guid: ef4ebf6da19d52d4d91e3b4b7cc07761,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3494743897221288795, guid: ef4ebf6da19d52d4d91e3b4b7cc07761,
         type: 3}

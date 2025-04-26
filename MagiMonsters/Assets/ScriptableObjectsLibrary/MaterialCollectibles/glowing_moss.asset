@@ -17,7 +17,7 @@ MonoBehaviour:
   _properties: []
   m_id: glowing_moss
   m_displayName: Glowing Moss
-  m_sprite: {fileID: 2800000, guid: b57cb2962bf0cba4fac36d0d5936689c, type: 3}
+  m_sprite: {fileID: 2800000, guid: 2569896226ecf504e9444b4ff3ed97bc, type: 3}
   m_description: A bioluminescent moss that faintly pulses in the dark.
   m_element: 
   m_rarity: 0

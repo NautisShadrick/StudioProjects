@@ -17,7 +17,7 @@ MonoBehaviour:
   _properties: []
   m_id: wild_berries
   m_displayName: Wild Berries
-  m_sprite: {fileID: 2800000, guid: b57cb2962bf0cba4fac36d0d5936689c, type: 3}
+  m_sprite: {fileID: 2800000, guid: 3253fa76732996a4ebd349e09ac92f92, type: 3}
   m_description: 'Sweet and tangy berries loved by many monsters. '
   m_element: 
   m_rarity: 0
