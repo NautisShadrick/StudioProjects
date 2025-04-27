@@ -27,7 +27,11 @@
       </VisualElement>
 
       <VisualElement name="rewards_container">
-        <VisualElement name="rewards_header"> <Label name="rewards_header_title"/> </VisualElement>
+        <VisualElement name="rewards_header">
+          <VisualElement name="rewards_header_frame_left"/>
+          <Label name="rewards_header_title" text="REWARDS"/>
+          <VisualElement name="rewards_header_frame_right"/>
+        </VisualElement>
         <VisualElement name="rewards_list"/>
       </VisualElement>
 

@@ -19,7 +19,7 @@ MonoBehaviour:
   m_displayName: Tree Sap
   m_sprite: {fileID: 2800000, guid: d04a7f2b5ba7cf44d863b602aada520e, type: 3}
   m_description: A thick, amber-like resin with strong adhesive properties.
-  m_element: 
+  m_element: life
   m_rarity: 0
   m_value: 10
   references:

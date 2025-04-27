@@ -19,7 +19,7 @@ MonoBehaviour:
   m_displayName: Mushrooms
   m_sprite: {fileID: 2800000, guid: 0308e26b8129e6a4e90a28028c2fc773, type: 3}
   m_description: A spongy fungus with mild restorative properties.
-  m_element: 
+  m_element: life
   m_rarity: 0
   m_value: 10
   references:

@@ -17,6 +17,14 @@
     --bar-container-sprite: url("project://database/Assets/LayerLab/GUI Pro-FantasyRPG/ResourcesData/Sprites/Component/Slider/slider_icontype_03_frame.png");
     --xp-bar-sprite: url("project://database/Assets/LayerLab/GUI Pro-FantasyRPG/ResourcesData/Sprites/Component/Slider/slider_icontype_03_fill_1.png");
     --level-bg-sprite: url("project://database/Assets/LayerLab/GUI Pro-FantasyRPG/ResourcesData/Sprites/Component/Slider/slider_icontype_03_icon_l.png");
+
+    --reward-frame-left: url("project://database/Assets/LayerLab/GUI Pro-FantasyRPG/ResourcesData/Sprites/Component/Frame/frame_linetextframe_00_1.png");
+    --reward-frame-right: url("project://database/Assets/LayerLab/GUI Pro-FantasyRPG/ResourcesData/Sprites/Component/Frame/frame_linetextframe_00_2.png");
+
+    --reward-box-default: url("project://database/Assets/LayerLab/GUI Pro-FantasyRPG/ResourcesData/Sprites/Component/Frame/frame_itemframe_01_White1.png");
+
+    --reward-box-life: url("project://database/Assets/LayerLab/GUI Pro-FantasyRPG/ResourcesData/Sprites/Component/Frame/frame_itemframe_01_frame_green1.png");
+    --reward-glow-life: url("project://database/Assets/LayerLab/GUI Pro-FantasyRPG/ResourcesData/Sprites/Component/Frame/frame_itemframe_01_frame_green2.png");
 }
 
 .post-battle-screen {
@@ -36,15 +44,15 @@
     width: 100%;
     height: 100%;
 
-    background-color: rgba(0, 0, 0, 0.75);
+    background-color: rgba(0, 0, 0, .8);
 
     scale: 2;
 }
 
 #center_container{
     position: absolute;
-    width:  350px;
-    height: 450px;
+    width:  360px;
+    height: 475px;
 
     align-self: center;
     justify-content: center;
@@ -154,8 +162,8 @@
     margin: 0;
 
     left: 50%;
-    top: 50%;
-    translate: -50%;
+    top: 4px;
+    translate: -50% 0;
 
     color: white;
 }
@@ -164,7 +172,6 @@
     display: flex;
     flex-shrink: 0;
     flex-grow: 1;
-    justify-content: center;
     align-items: center;
     flex-direction: column;
 
@@ -175,17 +182,49 @@
     margin-top: 10px;
 }
 
+#rewards_header {
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+#rewards_header_frame_left{
+    width: 100%;
+    height: 9px;
+    background-image: var(--reward-frame-left);
+    -unity-slice-scale: .5;
+    -unity-background-image-tint-color: #e6c97a;
+}
+#rewards_header_title{
+    font-size: 13px;
+    color: #e6c97a;
+    margin: 0 10px;
+    padding: 0;
+}
+#rewards_header_frame_right{
+    width: 100%;
+    height: 9px;
+    background-image: var(--reward-frame-right);
+    -unity-slice-scale: .5;
+    -unity-background-image-tint-color: #e6c97a;
+}
+
 #monsters_container {
     display: flex;
     flex-shrink: 1;
     flex-grow: 0;
-    justify-content: center;
-    align-items: center;
     flex-direction: row;
 
+    justify-content: center;
+    align-items: center;
 
-    width: 100%;
+    width:  100%;
     height: 100%;
+
+    flex-wrap: wrap;
+
+    padding-top: 25px;
 }
 
 #continue_buttons_container {
@@ -234,4 +273,141 @@
     padding: 0;
     margin-bottom: 4px;
     color: #005539;
+}
+
+
+
+/* Rewards Classes */
+
+#rewards_list{
+    margin-top: 10px;
+    flex-direction: row;
+}
+
+.reward-item{
+    width:  58px;
+    height: 58px;
+    background-image: var(--reward-box-default);
+    margin: 0 4px;
+}
+
+.item-sprite{
+    width:  100%;
+    height: 100%;
+
+    scale: 0.7;
+}
+
+.item-amount{
+    position: absolute;
+    font-size: 18px;
+    padding: 0;
+    margin: 0;
+
+    left: 50%;
+    bottom: -8px;
+    translate: -50% 0;
+
+    color: white;
+}
+
+.bg-life{
+    background-image: var(--reward-box-life);
+}
+
+.glow-life{
+    position: absolute;
+    width:  100%;
+    height: 100%;
+    background-image: var(--reward-glow-life);
+}
+
+
+
+/*   MONSTER XP BARS   */
+.monster-xp-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row-reverse;
+
+    width: 150px;
+    height: 48px;
+
+    margin: 0 14px;
+}
+.xp-bar{
+    display: flex;
+    width: 200px;
+    height: 32px;
+
+    background-image: var(--bar-container-sprite);
+    -unity-slice-scale: .55;
+    scale: .75;
+
+}
+.xp-bar-holder{
+    position: absolute;
+    width: 100%;
+    height: 22px;
+
+    top: 3px;
+    border-radius: 2px;
+
+    scale: .91;
+}
+.xp-bar-fill{
+    position: absolute;
+    width: 43%;
+    height: 20px;
+
+    top: 50%;
+    border-radius: 2px;
+    translate: 0 -50%;
+
+    background-image: var(--xp-bar-sprite);
+}
+.xp-bar-text{
+    position: absolute;
+    font-size: 16px;
+    padding: 0;
+    margin: 0;
+
+    left: 50%;
+    top: 4px;
+    translate: -50% 0;
+
+    color: white;
+}
+.monster-sprite{
+    position: absolute;
+    width:  48px;
+    height: 48px;
+
+    left: -10px;
+    top: -12px;
+}
+.monster-level-container{
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+
+    width:  64px;
+    height: 64px;
+
+    background-image: var(--level-bg-sprite);
+
+    right: -26px;
+    top: -12px;
+
+    scale: .6;
+}
+.monster-level{
+    position: absolute;
+    font-size: 28px;
+    padding: 0;
+    margin: 0;
+    top: 13px;
 }
