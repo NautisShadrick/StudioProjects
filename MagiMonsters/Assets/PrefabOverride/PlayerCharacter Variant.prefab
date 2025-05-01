@@ -66,40 +66,5 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 1126692865400699833, guid: 257a642d7e8bdee4fb0dd92a56ff9b1b,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 6102230854530190717}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 257a642d7e8bdee4fb0dd92a56ff9b1b, type: 3}
---- !u!1 &140431238558062411 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1126692865400699833, guid: 257a642d7e8bdee4fb0dd92a56ff9b1b,
-    type: 3}
-  m_PrefabInstance: {fileID: 1031386190729964786}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &6102230854530190717
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 140431238558062411}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a6fce24ac19156b1230a9ab7e9d416dc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _networkId: 0
-  _script: {fileID: -974389366465450183, guid: 1c23e29f7b4e566499d59a62530b1609, type: 3}
-  _properties: []
-  _uiOutput: 0
-  _uiOutputSettings:
-    rid: -2
-  m_worldMonsterPrefab: {fileID: 7664140620905302668, guid: fc8c999c6cb9e4d4992c7bb2e2a3bf76,
-    type: 3}
-  references:
-    version: 2
-    RefIds:
-    - rid: -2
-      type: {class: , ns: , asm: }

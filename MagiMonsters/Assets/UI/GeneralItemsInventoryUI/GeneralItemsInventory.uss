@@ -189,8 +189,26 @@
     flex-shrink: 0;
 }
 
+.inventory-monster-image {
+    width:  36px;
+    height: 36px;
+
+    margin-left: 2px;
+    flex-shrink: 0;
+}
+
+
 .inventory-item-name {
     font-size: 13px;
+
+    padding: 0;
+    margin: 0;
+    margin-left: 4px;
+
+}
+
+.inventory-monster-name {
+    font-size: 16px;
 
     padding: 0;
     margin: 0;
@@ -306,14 +324,14 @@
 }
 
 .material-name {
-    font-size: 11px;
+    font-size: 9px;
     padding: 0;
     margin: 0;
     margin-left: 4px;
 }
 
 .material-amount {
-    font-size: 11px;
+    font-size: 9px;
     padding: 0;
     margin: 0;
     margin-left: auto;

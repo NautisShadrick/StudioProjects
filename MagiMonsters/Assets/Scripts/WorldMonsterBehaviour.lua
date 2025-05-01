@@ -14,6 +14,8 @@ local ExplodeParticle : ParticleSystem = nil
 --!SerializeField
 local CreatureSprite : GameObject = nil
 
+local monsterLibrary = require("MonsterLibrary")
+
 
 local navAgent = nil
 local mainCamera = nil
@@ -24,8 +26,6 @@ local isFairy = true
 function self:Start()
     navAgent = self.gameObject:GetComponent(NavMeshAgent)
     mainCamera = Camera.main
-
-
 end
 
 function self:Update()
@@ -97,4 +97,8 @@ end
 
 function SetCharacter(character)
     myCharacter = character
+end
+
+function SetSprite(type)
+    CreatureSprite:GetComponent(Renderer).material.mainTexture = monsterLibrary.monsters[type].GetSprite()
 end

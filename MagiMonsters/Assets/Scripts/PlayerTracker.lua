@@ -8,6 +8,8 @@ local playercount = 0
 local actionLibrary = require("ActionLibrary")
 local monsterLibrary = require("MonsterLibrary")
 
+local worldMonsterSpawner = require("WorldMonsterSpawner")
+
 ------------ Player Tracking ------------
 function TrackPlayers(game, characterCallback)
     game.PlayerConnected:Connect(function(player)
@@ -19,6 +21,7 @@ function TrackPlayers(game, characterCallback)
             hatcheryData = TableValue.new("HatcheryData"..player.user.id, {}),
             eggCollection = TableValue.new("EggCollection"..player.user.id, {}),
             playerInventory = TableValue.new("PlayerInventory"..player.user.id, {}),
+            equippedMonsterType = StringValue.new("EquippedMonsterType"..player.user.id, ""),
         }
 
         player.CharacterChanged:Connect(function(player, character) 
@@ -57,6 +60,13 @@ function self:ClientAwake()
         local character = playerinfo.player.character
 
         GetDefaultMonsterDataRequest:FireServer()
+
+        playerinfo.equippedMonsterType.Changed:Connect(function(monsterType)
+            print("Equipped monster type changed to: ", monsterType, player.name)
+            if monsterType ~= "" then
+                worldMonsterSpawner.SpawnWorldMonster(player, playerinfo.equippedMonsterType.value)
+            end
+        end)
     end
 
     TrackPlayers(client, OnCharacterInstantiate)

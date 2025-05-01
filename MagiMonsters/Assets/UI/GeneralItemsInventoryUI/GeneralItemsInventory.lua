@@ -7,6 +7,8 @@ local close_button : VisualElement = nil
 local card_header : Label = nil
 
 --!Bind
+local monsters_tab : VisualElement = nil
+--!Bind
 local eggs_tab : VisualElement = nil
 --!Bind
 local materials_tab : VisualElement = nil
@@ -45,6 +47,8 @@ local Tween = TweenModule.Tween
 
 local currentSelection = nil
 local canCraft = false
+
+local currentSelectedMonster = nil
 
 local currentTab = 3
 
@@ -115,6 +119,37 @@ function CreatEggItem(eggIndex, egg)
     return _newegg
 end
 
+function CreateMonsterEntry(playerMonsterInfo, defaultMonsterSpeciesData, index)
+    local _newMonster = VisualElement.new()
+    _newMonster:AddToClassList("inventory-item")
+
+    local _monsterImage = Image.new()
+    _monsterImage:AddToClassList("inventory-monster-image")
+    _monsterImage.image = defaultMonsterSpeciesData.GetSprite()
+
+    local _monsterName = Label.new()
+    _monsterName:AddToClassList("inventory-monster-name")
+    _monsterName.text = playerMonsterInfo.name
+
+    local _monsterLevel = Label.new()
+    _monsterLevel:AddToClassList("inventory-item-amount")
+    _monsterLevel.text = "Lv." .. 1
+
+    _newMonster:Add(_monsterImage)
+    _newMonster:Add(_monsterName)
+    _newMonster:Add(_monsterLevel)
+
+    _inventoryScrollView:Add(_newMonster)
+
+    _newMonster:RegisterPressCallback(function()
+        SetItemInfoMonster(playerMonsterInfo, defaultMonsterSpeciesData)
+        currentSelectedMonster = index
+        currentSelection = nil
+    end)
+
+    return _newMonster
+end
+
 
 local Recipes = {
     "minor_health_potion",
@@ -165,9 +200,9 @@ function SetItemInfoRecipe(recipe)
             _materialAmount:AddToClassList("material-missing")
             -- This Material is lacking
         end
-
     end
 
+    craft_button.text = "CRAFT"
     craft_button:EnableInClassList("hidden", false)
 
 end
@@ -184,6 +219,56 @@ function SetItemInfoMaterial(item)
     ingredients:Clear()
 
     craft_button:EnableInClassList("hidden", true)
+end
+
+
+function SetItemInfoMonster(playerMonsterInfo, defaultMonsterSpeciesData)
+    local itemName = playerMonsterInfo.name or "monster name"
+    local itemDesc = defaultMonsterSpeciesData.GetName() or "monster type"
+    local itemSprite = defaultMonsterSpeciesData.GetSprite()
+    local monsterActions = playerMonsterInfo.actionIDs or defaultMonsterSpeciesData.GetActions()
+
+
+    info_name.text = itemName
+    info_description.text = itemDesc
+    info_image.image = itemSprite
+
+    ingredients:Clear()
+    
+    canCraft = true
+    craft_button.style.opacity = 1
+    for i, action in ipairs(monsterActions) do
+        local _newAction = VisualElement.new()
+        _newAction:AddToClassList("material-item")
+
+        local _actionImage = Image.new()
+        _actionImage:AddToClassList("material-image")
+        _actionImage.image = uiManager.elementsIconsMap[actionLibrary.actions[action].GetActionElement()]
+
+        local _actionName = Label.new()
+        _actionName:AddToClassList("material-name")
+        _actionName.text = actionLibrary.actions[action].GetActionName()
+
+        local _actionAmount = Label.new()
+        _actionAmount:AddToClassList("material-amount")
+        _actionAmount.text = actionLibrary.actions[action].GetActionManaCost() .. "mp"
+        
+        local _actionDamage = Label.new()
+        _actionDamage:AddToClassList("material-amount")
+        _actionDamage.text = actionLibrary.actions[action].GetActionDamage() .. "dmg"
+
+        _newAction:Add(_actionImage)
+        _newAction:Add(_actionName)
+        _newAction:Add(_actionAmount)
+        _newAction:Add(_actionDamage)
+
+        ingredients:Add(_newAction)
+        
+    end
+
+    craft_button.text = "EQUIP"
+    craft_button:EnableInClassList("hidden", false)
+
 end
 
 function CreateRecipe(recipe, ownedAmount)
@@ -228,6 +313,7 @@ function PopulateInventory(items)
         local _isItem = itemLibrary.GetItemByID(item.id)
         if _isItem then CreateItem(item) end
     end
+    currentSelectedMonster = nil
 end
 
 function PopulateRecipies(recipes, playerInv)
@@ -238,12 +324,15 @@ function PopulateRecipies(recipes, playerInv)
         for i, item in ipairs(playerInv) do
             if item.id == recipeID then
                 ownedAmount = item.amount
+
             end
         end
         CreateRecipe(itemLibrary.GetConsumableByID(recipeID), ownedAmount)
     end
 
     SetItemInfoRecipe(itemLibrary.GetConsumableByID(recipes[1]))
+    currentSelection = itemLibrary.GetConsumableByID(recipes[1])
+    currentSelectedMonster = nil
 end
 
 function PopulateEggs(eggs)
@@ -253,6 +342,26 @@ function PopulateEggs(eggs)
     for i, _egg in ipairs(eggs) do
         local newItem = CreatEggItem(i, _egg)
         _inventoryScrollView:Add(newItem)
+    end
+
+end
+
+function PopulateMonsters(monsters)
+    _inventoryScrollView:Clear()
+
+    for i, monster in ipairs(monsters) do
+
+        if i == 1 then
+            SetItemInfoMonster(monster, monsterLibrary.monsters[monster.speciesName])
+            currentSelectedMonster = i
+            currentSelection = nil
+        end
+        
+        local monsterData = monsterLibrary.monsters[monster.speciesName]
+        if monsterData then
+            local newItem = CreateMonsterEntry(monster, monsterData, i)
+            _inventoryScrollView:Add(newItem)
+        end
     end
 
 end
@@ -270,7 +379,13 @@ end
 
 function SetSection(section)
     print("Setting Section: ", section)
-    if section == 2 then
+    if section == 1 then
+        --print("Setting Section: Monsters")
+        currentTab = 1
+        card_header.text = "My Monsters"
+        PopulateMonsters(playerTracker.players[client.localPlayer].monsterCollection.value)
+        info_container:EnableInClassList("hidden", false)
+    elseif section == 2 then
         print("Setting Section: Eggs")
         currentTab = 2
         card_header.text = "Monster Eggs"
@@ -293,6 +408,10 @@ close_button:RegisterPressCallback(function()
     uiManager.CloseGeneralInventoryUI()
 end)
 
+monsters_tab:RegisterPressCallback(function()
+    SetSection(1)
+end)
+
 eggs_tab:RegisterPressCallback(function()
     SetSection(2)
 end)
@@ -309,5 +428,10 @@ craft_button:RegisterPressCallback(function()
     local currentSelectionIsRecipe = typeof(currentSelection) == "ConsumableBase"
     if currentSelectionIsRecipe and canCraft then
         inventoryManager.TryCraft(currentSelection.GetID())
+    end
+
+    if currentSelectedMonster then
+        print("Equipping Monster: ", currentSelectedMonster)
+        gameManager.EquipMonster(currentSelectedMonster)
     end
 end)

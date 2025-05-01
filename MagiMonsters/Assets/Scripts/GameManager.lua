@@ -36,6 +36,10 @@ function SwapMonster(monsterIndex: number)
     SwapMonsterRequest:FireServer(monsterIndex)
 end
 
+function EquipMonster(monsterIndex: number)
+    SwapMonsterRequest:FireServer(monsterIndex)
+end
+
 function ClientDoAction(action: string)
     if uiManager.currentBattleTurn ~= 0 then
         print("Not your turn")
@@ -115,6 +119,7 @@ function self:ServerAwake()
 
     SwapMonsterRequest:Connect(function(player, monsterIndex)
         playerTracker.players[player].currentMosnterIndex.value = monsterIndex
+        playerTracker.players[player].equippedMonsterType.value = playerTracker.players[player].monsterCollection.value[monsterIndex].speciesName
 
         if not playerBattles[player] then
             print("Player is not in a battle")
