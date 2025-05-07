@@ -1,6 +1,10 @@
 --!Type(UI)
 
 --!Bind
+local player_xp_container : VisualElement = nil
+--!Bind
+local rewards_container : VisualElement = nil
+--!Bind
 local rewards_list : VisualElement = nil
 --!Bind
 local monsters_container : VisualElement = nil
@@ -31,6 +35,111 @@ local monsterXPChanges = {
     {monster = "Zapkit", name = "Shockrah", toXP = 200, fromXP = 100, Level = 2, maxXP = 500},
     {monster = "Zapkit", name = "Flash", toXP = 200, fromXP = 100, Level = 2, maxXP = 500},
 }
+
+local ContinueButtonPremiumPopInTween = Tween:new(
+0.2,
+1,
+.5,
+false,
+false,
+TweenModule.Easing.easeOutBack,
+function(value, t)
+    -- Tween update callback
+    continue_button_premium.style.opacity = StyleFloat.new(math.min(t*2,1))
+    continue_button_premium.style.scale = StyleScale.new(Vector2.new(value, value))
+end,
+function()
+    -- Tween complete callback
+    continue_button_premium.style.scale = StyleScale.new(Vector2.new(1, 1))
+    continue_button_premium.style.opacity = StyleFloat.new(1.0)
+
+    
+end
+)
+local ContinueButtonPopInTween = Tween:new(
+    0.2,
+    1,
+    .5,
+    false,
+    false,
+    TweenModule.Easing.easeOutBack,
+    function(value, t)
+        -- Tween update callback
+        continue_button.style.opacity = StyleFloat.new(math.min(t*2,1))
+        continue_button.style.scale = StyleScale.new(Vector2.new(value, value))
+    end,
+    function()
+        -- Tween complete callback
+        continue_button.style.scale = StyleScale.new(Vector2.new(1, 1))
+        continue_button.style.opacity = StyleFloat.new(1.0)
+        ContinueButtonPremiumPopInTween:start()
+    end
+)
+local MonstersPopInTween = Tween:new(
+    0.2,
+    1,
+    .5,
+    false,
+    false,
+    TweenModule.Easing.easeOutBack,
+    function(value, t)
+        -- Tween update callback
+        monsters_container.style.opacity = StyleFloat.new(math.min(t*2,1))
+        monsters_container.style.scale = StyleScale.new(Vector2.new(value, value))
+    end,
+    function()
+        -- Tween complete callback
+        monsters_container.style.scale = StyleScale.new(Vector2.new(1, 1))
+        monsters_container.style.opacity = StyleFloat.new(1.0)
+
+        Timer.After(1, function()
+            ContinueButtonPopInTween:start()
+        end)
+    end
+)
+local RewardsPopInTween = Tween:new(
+    0.2,
+    1,
+    .5,
+    false,
+    false,
+    TweenModule.Easing.easeOutBack,
+    function(value, t)
+        -- Tween update callback
+        rewards_container.style.opacity = StyleFloat.new(math.min(t*2,1))
+        rewards_container.style.scale = StyleScale.new(Vector2.new(value, value))
+    end,
+    function()
+        -- Tween complete callback
+        rewards_container.style.scale = StyleScale.new(Vector2.new(1, 1))
+        rewards_container.style.opacity = StyleFloat.new(1.0)
+
+        Timer.After(1, function()
+            MonstersPopInTween:start()
+        end)
+    end
+)
+local PlayerXPPopInTween = Tween:new(
+    0.2,
+    1,
+    .5,
+    false,
+    false,
+    TweenModule.Easing.easeOutBack,
+    function(value, t)
+        -- Tween update callback
+        player_xp_container.style.opacity = StyleFloat.new(math.min(t*2,1))
+        player_xp_container.style.scale = StyleScale.new(Vector2.new(value, value))
+    end,
+    function()
+        -- Tween complete callback
+        player_xp_container.style.scale = StyleScale.new(Vector2.new(1, 1))
+        player_xp_container.style.opacity = StyleFloat.new(1.0)
+        Timer.After(1, function()
+            RewardsPopInTween:start()
+        end)
+    end
+)
 
 function CreateRewardItem(item, amount)
 
@@ -75,6 +184,26 @@ function CreateRewardItem(item, amount)
 
     rewards_list:Add(_item)
 
+    local ItemPopInTween = Tween:new(
+        0.2,
+        1,
+        .5,
+        false,
+        false,
+        TweenModule.Easing.easeOutBack,
+        function(value, t)
+            -- Tween update callback
+            _item.style.opacity = StyleFloat.new(math.min(t*2,1))
+            _item.style.scale = StyleScale.new(Vector2.new(value, value))
+        end,
+        function()
+            -- Tween complete callback
+            _item.style.scale = StyleScale.new(Vector2.new(1, 1))
+            _item.style.opacity = StyleFloat.new(1.0)
+        end
+    )
+    ItemPopInTween:start()
+
     return _item
 end
 
@@ -83,8 +212,16 @@ function PopulateRewardsList(rewards)
         return
     end
 
-    for i, reward in rewards do
-        local item = CreateRewardItem(reward.id, reward.amount)
+    --Create an index based table for the rewards
+    local iRewards = {}
+    for _, reward in rewards do
+        table.insert(iRewards, reward)
+    end
+
+    for i, reward in iRewards do
+        Timer.After(i * .5, function()
+            local item = CreateRewardItem(reward.id, reward.amount)
+        end)
     end
 end
 
@@ -127,21 +264,60 @@ function CreateXpBar(name, toXP, fromXP, Level, maxXP, sprite)
     monsterXPContainer:Add(xpBar)
     monsterXPContainer:Add(monsterSprite)
 
+    local ItemPopInTween = Tween:new(
+        0.2,
+        1,
+        .5,
+        false,
+        false,
+        TweenModule.Easing.easeOutBack,
+        function(value, t)
+            -- Tween update callback
+            monsterXPContainer.style.opacity = StyleFloat.new(math.min(t*2,1))
+            monsterXPContainer.style.scale = StyleScale.new(Vector2.new(value, value))
+        end,
+        function()
+            -- Tween complete callback
+            monsterXPContainer.style.scale = StyleScale.new(Vector2.new(1, 1))
+            monsterXPContainer.style.opacity = StyleFloat.new(1.0)
+        end
+    )
+    ItemPopInTween:start()
+
 
     return monsterXPContainer
 end
 
 function PopulateXpBars(_monsterXPChanges)
     for i, monsterXP in _monsterXPChanges do
-        local monsterData = monsterLibrary.GetDefaultMonsterData(monsterXP.monster)
-        if monsterData ~= nil then
+        Timer.After(i * .5, function()
+            local monsterData = monsterLibrary.GetDefaultMonsterData(monsterXP.monster)
+            if monsterData ~= nil then
             local xpBar = CreateXpBar(monsterXP.name, monsterXP.toXP, monsterXP.fromXP, monsterXP.Level, monsterXP.maxXP, monsterData.monsterSprite)
             -- Add xpBar to the UI
-        end
+            end
+        end)
     end
 end
 
 function InitializePostBattle(loot)
+
+    player_xp_container.style.scale = StyleScale.new(Vector2.new(0.01,0.01))
+    player_xp_container.style.opacity = StyleFloat.new(0.0)
+
+    rewards_container.style.scale = StyleScale.new(Vector2.new(0.01,0.01))
+    rewards_container.style.opacity = StyleFloat.new(0.0)
+
+    monsters_container.style.scale = StyleScale.new(Vector2.new(0.01,0.01))
+    monsters_container.style.opacity = StyleFloat.new(0.0)
+
+    continue_button.style.scale = StyleScale.new(Vector2.new(0.01,0.01))
+    continue_button.style.opacity = StyleFloat.new(0.0)
+
+    continue_button_premium.style.scale = StyleScale.new(Vector2.new(0.01,0.01))
+    continue_button_premium.style.opacity = StyleFloat.new(0.0)
+
+    PlayerXPPopInTween:start()
 
     -- Clear previous rewards and XP bars
     rewards_list:Clear()
@@ -156,8 +332,8 @@ function InitializePostBattle(loot)
         stackedLoot[reward.id].amount = stackedLoot[reward.id].amount + reward.amount
     end
 
-    if stackedLoot ~= {} then PopulateRewardsList(stackedLoot) end
-    PopulateXpBars(monsterXPChanges)
+    Timer.After(1.6, function() if stackedLoot ~= {} then PopulateRewardsList(stackedLoot) end end)
+    Timer.After(2.5, function() PopulateXpBars(monsterXPChanges) end)
 end
 
 function self:Start()
