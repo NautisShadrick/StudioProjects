@@ -228,45 +228,50 @@ function SetItemInfoMonster(playerMonsterInfo, defaultMonsterSpeciesData)
     local itemSprite = defaultMonsterSpeciesData.GetSprite()
     local monsterActions = playerMonsterInfo.actionIDs or defaultMonsterSpeciesData.GetActions()
 
+    local currentHealth = playerMonsterInfo.currentHealth or -1
+    local maxHealth = playerMonsterInfo.maxHealth or -1
+    local currentMana = playerMonsterInfo.currentMana or -1
+    local maxMana = playerMonsterInfo.maxMana or -1
+    local level = playerMonsterInfo.level or -1
 
     info_name.text = itemName
     info_description.text = itemDesc
     info_image.image = itemSprite
 
     ingredients:Clear()
-    
-    canCraft = true
     craft_button.style.opacity = 1
-    for i, action in ipairs(monsterActions) do
-        local _newAction = VisualElement.new()
-        _newAction:AddToClassList("material-item")
 
-        local _actionImage = Image.new()
-        _actionImage:AddToClassList("material-image")
-        _actionImage.image = uiManager.elementsIconsMap[actionLibrary.actions[action].GetActionElement()]
+    local basicStats = {
+        {nil, "HP", currentHealth, maxHealth},
+        {nil, "MP", currentMana, maxMana},
+        {nil, "XP", "x", "y"},
+    }
 
-        local _actionName = Label.new()
-        _actionName:AddToClassList("material-name")
-        _actionName.text = actionLibrary.actions[action].GetActionName()
+    for i, stat in ipairs(basicStats) do
+        local _newStat = VisualElement.new()
+        _newStat:AddToClassList("material-item")
 
-        local _actionAmount = Label.new()
-        _actionAmount:AddToClassList("material-amount")
-        _actionAmount.text = actionLibrary.actions[action].GetActionManaCost() .. "mp"
-        
-        local _actionDamage = Label.new()
-        _actionDamage:AddToClassList("material-amount")
-        _actionDamage.text = actionLibrary.actions[action].GetActionDamage() .. "dmg"
+        local _statImage = Image.new()
+        _statImage:AddToClassList("material-image")
+        _statImage.image = stat[1]
 
-        _newAction:Add(_actionImage)
-        _newAction:Add(_actionName)
-        _newAction:Add(_actionAmount)
-        _newAction:Add(_actionDamage)
+        local _statName = Label.new()
+        _statName:AddToClassList("material-name")
+        _statName.text = stat[2]
 
-        ingredients:Add(_newAction)
+        local _statAmount = Label.new()
+        _statAmount:AddToClassList("material-amount")
+        _statAmount.text = tostring(stat[3]) .. " / " .. tostring(stat[4])
+
+        _newStat:Add(_statImage)
+        _newStat:Add(_statName)
+        _newStat:Add(_statAmount)
+
+        ingredients:Add(_newStat)
         
     end
 
-    craft_button.text = "EQUIP"
+    craft_button.text = "Manage"
     craft_button:EnableInClassList("hidden", false)
 
 end

@@ -7,6 +7,8 @@
     --healthbar-bg: url("project://database/Assets/LayerLab/GUI Pro-FantasyRPG/ResourcesData/Sprites/Component/Slider/slider_icontype_00_bot_fill_yellow.png");
 
     --basic-button: url("project://database/Assets/LayerLab/GUI Pro-FantasyRPG/ResourcesData/Sprites/Component/Button/btn_sqeure_01.png");
+    --basic-button-left: url("project://database/Assets/LayerLab/GUI Pro-FantasyRPG/ResourcesData/Sprites/Component/Button/btn_sqeure_01_left.png");
+    --basic-button-right: url("project://database/Assets/LayerLab/GUI Pro-FantasyRPG/ResourcesData/Sprites/Component/Button/btn_sqeure_01_right.png");
     --gray-button: url("project://database/Assets/LayerLab/GUI Pro-FantasyRPG/ResourcesData/Sprites/Component/Button/btn_rectangle_01_n_gray.png");
     --yellow-button: url("project://database/Assets/LayerLab/GUI Pro-FantasyRPG/ResourcesData/Sprites/Component/Button/btn_rectangle_01_n_yellow.png");
 }
@@ -14,6 +16,8 @@
 .battle-screen {
     width: 100%;
     height: 100%;
+
+    max-width: 500px;
 
     color:rgb(232, 221, 236);
     font-size: 18px;
@@ -38,7 +42,7 @@
     flex-direction: column;
 
     right: 10px;
-    bottom: 140px;
+    bottom: 118px;
 
     background-image: var(--monster-info-bg);
     -unity-slice-scale: .3;

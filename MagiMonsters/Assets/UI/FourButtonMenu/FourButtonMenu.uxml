@@ -9,7 +9,11 @@
 
   <hr:UILuaView name="four_button_menu" class="four-button-menu" picking-mode="Ignore">
     <Label name="back_button" text="back"/>
-    <VisualElement name="buttons_root"/>
+    <VisualElement name="buttons_container">
+      <VisualElement name="left_button"/>
+      <VisualElement name="buttons_root"/>
+      <VisualElement name="right_button"/>
+    </VisualElement>
   </hr:UILuaView>
 
 </UXML>

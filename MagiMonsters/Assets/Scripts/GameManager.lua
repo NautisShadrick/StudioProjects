@@ -137,7 +137,7 @@ function self:ServerAwake()
         searchesByPlayer[player] = true
         Timer.After(duration, function()
 
-            local _foundMonster = math.random() > 0.7 and true or false
+            local _foundMonster = true --math.random() > 0.7 and true or false
             if _foundMonster then
                 local _enemy = "Zapkit"
                 -- FOUND A MONSTER
