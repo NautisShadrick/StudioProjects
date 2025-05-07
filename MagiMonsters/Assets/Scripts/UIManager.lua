@@ -21,6 +21,8 @@ local RewardParticleUIObj: GameObject = nil
 local HudButtonsObj: GameObject = nil
 --!SerializeField
 local itemReceivedNotificationObj: GameObject = nil
+--!SerializeField
+local postBattleScreenObj: GameObject = nil
 
 timerUI = nil
 
@@ -32,6 +34,7 @@ local RewardParticleUI: RewardParticle = nil
 local HudButtonsUI: HudButtons = nil
 local nameMonsterUI = nil
 local itemsReceivedNotificationUI: ItemsReceivedNotification = nil
+local postBattleScreenUI: PostBattleScreen = nil
 
 ResponseChosenEvent = Event.new("ResponseChosenEvent")
 
@@ -108,7 +111,8 @@ function self:ClientStart()
     RewardParticleUI = RewardParticleUIObj:GetComponent(RewardParticle)
     HudButtonsUI = HudButtonsObj:GetComponent(HudButtons)
     itemsReceivedNotificationUI = itemReceivedNotificationObj:GetComponent(ItemsReceivedNotification)
-    
+    postBattleScreenUI = postBattleScreenObj:GetComponent(PostBattleScreen)
+
     BattleDataModule.ActionEvent:Connect(function(turn, playerHealth, playerMana, enemyHealth, enemyMaxHealth, enemyMana, enemyMaxMana, actionName)
         BattleScreenUI.UpdateStats(turn, playerHealth, playerMana, enemyHealth, enemyMaxHealth, enemyMana, enemyMaxMana)
         ResultsLabelUI.ShowPopup(actionName)
@@ -133,6 +137,8 @@ function self:ClientStart()
     end)
     EndBattle()
 
+    gameManager.VictoryResponse:Connect(DisplayPostbattleScreen)
+
     cameraManager.SwitchCamera(0)
 
     ResponseChosenEvent:Connect(DialougeResponseHandler)
@@ -141,6 +147,13 @@ end
 function DisplaySearchLoot(Items)
     RewardParticleUI.CollectItemsAnimation(Items)
     itemsReceivedNotificationUI.DisplayItems(Items)
+end
+
+function DisplayPostbattleScreen(loot)
+    print(typeof(loot))
+    print(#loot)
+    postBattleScreenObj:SetActive(true)
+    postBattleScreenUI.InitializePostBattle(loot)
 end
 
 function EndBattle()

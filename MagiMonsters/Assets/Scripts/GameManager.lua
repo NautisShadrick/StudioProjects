@@ -10,6 +10,7 @@ local SwapMonsterRequest = Event.new("SwapMonsterRequest")
 
 local SearchRequest = Event.new("SearchRequest")
 local SearchResponse = Event.new("SearchResponse")
+VictoryResponse = Event.new("VictoryResponse")
 
 
 local playerTracker = require("PlayerTracker")
@@ -97,7 +98,7 @@ function HandleBattleVictory(player, monster)
         end
     end
 
-    SearchResponse:FireClient(player, _lootTable)
+    VictoryResponse:FireClient(player, _lootTable)
 
 end
 

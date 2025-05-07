@@ -4,17 +4,24 @@
 local rewards_list : VisualElement = nil
 --!Bind
 local monsters_container : VisualElement = nil
+--!Bind
+local continue_button : Label = nil
+--!Bind
+local continue_button_premium : Label = nil
 
 local itemLibrary = require("ItemLibrary")
 local uiManager = require("UIManager")
 local monsterLibrary = require("MonsterLibrary")
 
+local TweenModule = require("TweenModule")
+local Tween = TweenModule.Tween
+
 local testRewards = {
-    {item = "wild_berries", amount = 5},
-    {item = "fresh_herbs", amount = 3},
-    {item = "sharp_thorns", amount = 1},
-    {item = "mushrooms", amount = 2},
-    {item = "tree_sap", amount = 1},
+    {id = "wild_berries", amount = 5},
+    {id = "fresh_herbs", amount = 3},
+    {id = "sharp_thorns", amount = 1},
+    {id = "mushrooms", amount = 2},
+    {id = "tree_sap", amount = 1},
 }
 
 local monsterXPChanges = {
@@ -77,7 +84,7 @@ function PopulateRewardsList(rewards)
     end
 
     for i, reward in rewards do
-        local item = CreateRewardItem(reward.item, reward.amount)
+        local item = CreateRewardItem(reward.id, reward.amount)
     end
 end
 
@@ -134,7 +141,32 @@ function PopulateXpBars(_monsterXPChanges)
     end
 end
 
-function self:Start()
-    PopulateRewardsList(testRewards)
+function InitializePostBattle(loot)
+
+    -- Clear previous rewards and XP bars
+    rewards_list:Clear()
+    monsters_container:Clear()
+
+    -- Stack all rewards with the same ID together into a new loot table
+    local stackedLoot = {}
+    for i, reward in loot do
+        if stackedLoot[reward.id] == nil then
+            stackedLoot[reward.id] = {id = reward.id, amount = 0}
+        end
+        stackedLoot[reward.id].amount = stackedLoot[reward.id].amount + reward.amount
+    end
+
+    if stackedLoot ~= {} then PopulateRewardsList(stackedLoot) end
     PopulateXpBars(monsterXPChanges)
 end
+
+function self:Start()
+    self.gameObject:SetActive(false)
+end
+
+continue_button:RegisterPressCallback(function()
+    self.gameObject:SetActive(false)
+end)
+continue_button_premium:RegisterPressCallback(function()
+    self.gameObject:SetActive(false)
+end)
