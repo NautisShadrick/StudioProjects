@@ -24,6 +24,7 @@ local playerTracker = require("PlayerTracker")
 local gameManger = require("GameManager")
 local actionLibrary = require("ActionLibrary")
 local monsterLibrary = require("MonsterLibrary")
+local itemLibrary = require("ItemLibrary")
 local uiManager = require("UIManager")
 
 function CreateButton(button: menuButton)
@@ -117,6 +118,41 @@ end
 
 local ItemsButtonCallback = function()
     print("Items Button Pressed")
+    local _availableItemButtons : {menuButton} = {}
+    local _playerItems = playerTracker.GetPlayerInventory()
+
+    for i = 1, math.ceil(#_playerItems / 4) * 4 do
+        local item = _playerItems[i]
+        if item then
+            local itemData = itemLibrary.GetConsumableByID(item.id)
+            if itemData then
+                table.insert(
+                    _availableItemButtons,
+                    {
+                        title = itemData.GetDisplayName(),
+                        elementID = itemData.GetElement(),
+                        callback = function() print("Used item", itemData.GetDisplayName()) end
+                    }
+                )
+            end
+        else
+            table.insert(
+                _availableItemButtons,
+                {
+                    title = "-",
+                    elementID = nil,
+                    callback = function() end
+                }
+            )
+        end
+    end
+
+    print("Available items: ", #_availableItemButtons)
+    for i, item in ipairs(_availableItemButtons) do print(typeof(item)) end
+
+    currentButtonsPage = 0
+    currentTotalButtons = _availableItemButtons
+    UpdateButtons(_availableItemButtons)
 end
 
 local MonstersButtonCallback = function()
@@ -162,10 +198,6 @@ Menu_One =
     {title = "Items", elementID = nil, callback = ItemsButtonCallback},
     {title = "Monsters", elementID = nil, callback = MonstersButtonCallback},
     {title = "Flee", elementID = nil, callback = FleeButtonCallback},
-    {title = "extra_1", elementID = nil, callback = function() end},
-    {title = "extra_2", elementID = nil, callback = function() end},
-    {title = "extra_3", elementID = nil, callback = function() end},
-    {title = "extra_4", elementID = nil, callback = function() end}
 }
 
 currentTotalButtons = Menu_One

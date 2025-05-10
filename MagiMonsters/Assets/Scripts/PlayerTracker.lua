@@ -52,6 +52,10 @@ function GetItemAmountFromInv(player, itemID)
     return 0
 end
 
+function GetPlayerInventory()
+    return players[client.localPlayer].playerInventory.value
+end
+
 ------------- CLIENT -------------
 
 function self:ClientAwake()
