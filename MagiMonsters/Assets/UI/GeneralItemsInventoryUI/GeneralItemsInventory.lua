@@ -119,9 +119,13 @@ function CreatEggItem(eggIndex, egg)
     return _newegg
 end
 
-function CreateMonsterEntry(playerMonsterInfo, defaultMonsterSpeciesData, index)
+function CreateMonsterEntry(playerMonsterInfo, defaultMonsterSpeciesData, index, _isEquipped)
     local _newMonster = VisualElement.new()
     _newMonster:AddToClassList("inventory-item")
+    if _isEquipped then
+        _newMonster:RemoveFromClassList("inventory-item")
+        _newMonster:AddToClassList("inventory-item-selected")
+    end
 
     local _monsterImage = Image.new()
     _monsterImage:AddToClassList("inventory-monster-image")
@@ -356,7 +360,7 @@ function PopulateMonsters(monsters)
 
     for i, monster in ipairs(monsters) do
 
-        if i == 1 then
+        if i == playerTracker.players[client.localPlayer].currentMosnterIndex.value then
             SetItemInfoMonster(monster, monsterLibrary.monsters[monster.speciesName])
             currentSelectedMonster = i
             currentSelection = nil
@@ -364,9 +368,17 @@ function PopulateMonsters(monsters)
         
         local monsterData = monsterLibrary.monsters[monster.speciesName]
         if monsterData then
-            local newItem = CreateMonsterEntry(monster, monsterData, i)
+            -- Check if this is the currently equipped monster
+            local _isEquipped = false
+            local _currentMonsterIndex = playerTracker.players[client.localPlayer].currentMosnterIndex.value
+            if i == _currentMonsterIndex then
+                _isEquipped = true
+            end
+
+            local newItem = CreateMonsterEntry(monster, monsterData, i, _isEquipped)
             _inventoryScrollView:Add(newItem)
         end
+
     end
 
 end
@@ -377,6 +389,12 @@ function self:Start()
     playerTracker.players[client.localPlayer].playerInventory.Changed:Connect(function(newInv, oldInv)
         if currentTab == 3 then PopulateInventory(newInv)
         elseif currentTab == 4 then PopulateRecipies(Recipes, newInv) end
+    end)
+
+    playerTracker.players[client.localPlayer].currentMosnterIndex.Changed:Connect(function(newIndex, oldIndex)
+        if currentTab == 1 then
+            SetSection(1)
+        end
     end)
 
     uiManager.CloseGeneralInventoryUI()

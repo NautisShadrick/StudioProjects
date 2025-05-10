@@ -6,6 +6,7 @@
     --color-dark-green:rgb(11, 82, 25);
 
     --item-slot-bg: url("project://database/Assets/LayerLab/GUI Pro-FantasyRPG/ResourcesData/Sprites/Component/Frame/frame_listframe_00_Demo_n.png");
+    --item-selected-bg: url("project://database/Assets/LayerLab/GUI Pro-FantasyRPG/ResourcesData/Sprites/Component/Button/btn_rectangle_01_n_yellow.png");
     --window-bg-1: url("project://database/Assets/LayerLab/GUI Pro-FantasyRPG/ResourcesData/Sprites/Component/Popup/popup_00_frame.png");
 
     --close-button: url("project://database/Assets/UI/Icons/icon_close.png");
@@ -179,6 +180,27 @@
 
     background-image: var(--item-slot-bg);
     -unity-slice-scale: 0.25;
+}
+
+.inventory-item-selected {
+    width: 100%;
+    height: 40px;
+
+    margin: 0;
+
+
+    flex-direction: row;
+    align-items: center;
+
+    /*
+    border-color:rgb(182, 172, 217);
+    border-radius: 2px;
+    border-bottom-width: 2px;
+    */
+
+    background-image: var(--item-selected-bg);
+    -unity-slice-scale: 0.25;
+    color: #4c0800;
 }
 
 .inventory-item-image {
