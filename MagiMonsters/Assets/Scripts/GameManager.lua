@@ -7,6 +7,7 @@ local StartBattleEvent = Event.new("StartBattleEvent")
 local DoActionRequest = Event.new("DoActionRequest")
 local SwapMonsterRequest = Event.new("SwapMonsterRequest")
 local UseItemRequest = Event.new("UseItemRequest")
+local FleeRequest = Event.new("FleeRequest")
 
 local SearchRequest = Event.new("SearchRequest")
 local SearchResponse = Event.new("SearchResponse")
@@ -28,6 +29,15 @@ local lootTableMap = {
 -----------------------
 --    CLIENT SIDE    --
 -----------------------
+
+function Flee()
+    if uiManager.currentBattleTurn ~= 0 then
+        print("Not your turn")
+        return
+    end
+    print("Fleeing")
+    FleeRequest:FireServer()
+end
 
 function UseItem(itemID: string)
     if uiManager.currentBattleTurn ~= 0 then
@@ -160,6 +170,20 @@ function self:ServerAwake()
         else
             print("Item not found")
         end
+    end)
+
+    FleeRequest:Connect(function(player)
+        if not playerBattles[player] then
+            print("Player is not in a battle")
+            return
+        end
+
+        if playerBattles[player].turn ~= 0 then
+            print("Not your turn")
+            return
+        end
+
+        playerBattles[player]:EndBattle(playerBattles[player].enemy)
     end)
 
     SearchRequest:Connect(function(player, objectType, duration)

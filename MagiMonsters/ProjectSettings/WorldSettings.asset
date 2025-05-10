@@ -33,6 +33,6 @@ MonoBehaviour:
   _useRemoteServer: 0
   _remoteServerUserIds: []
   _checkStudioUpdatesOnLaunch: 1
-  _enableSceneButtons: 1
+  _enableSceneButtons: 0
   _enableSceneGuides: 1
   _switchLayoutOnPlayMode: 0

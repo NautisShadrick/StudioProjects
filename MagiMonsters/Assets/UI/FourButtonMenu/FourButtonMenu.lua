@@ -204,7 +204,7 @@ local MonstersButtonCallback = function()
 end
 
 local FleeButtonCallback = function()
-    print("Flee Button Pressed")
+    gameManger.Flee()
 end
 
 Menu_One =

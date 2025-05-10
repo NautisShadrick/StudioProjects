@@ -195,6 +195,7 @@ end
 function OpenGeneralInventoryUI()
     GeneralInventoryUIObj:SetActive(true)
     HudButtonsObj:SetActive(false)
+    GeneralInventoryUI.SetSection(3)
 end
 
 function CloseGeneralInventoryUI()
