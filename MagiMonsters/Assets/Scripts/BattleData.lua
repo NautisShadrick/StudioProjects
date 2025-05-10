@@ -42,6 +42,7 @@ function Battle:EndBattle(_winner)
     if _winner == self.player then
         gameManager.HandleBattleVictory(self.player, self.enemy)
     end
+    gameManager.HandleBattleEnd(self.player)
 end
 
 function Battle:DoAction(actionID: string)

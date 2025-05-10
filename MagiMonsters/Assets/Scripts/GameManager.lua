@@ -111,6 +111,10 @@ function HandleBattleVictory(player, monster)
 
 end
 
+function HandleBattleEnd(player)
+    playerBattles[player] = nil
+end
+
 function self:ServerAwake()
 
     DoActionRequest:Connect(function(player, action)
