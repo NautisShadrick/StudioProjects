@@ -50,7 +50,14 @@ local canCraft = false
 
 local currentSelectedMonster = nil
 
+local Recipes = {
+    "minor_health_potion",
+    "major_health_potion",
+    "revive_potion",
+}
+
 local currentTab = 3
+local lastSlectedRecipe = Recipes[1]
 
 -- 1 : Materials, 2 : Consumables, 3 : Monsters
 
@@ -155,11 +162,7 @@ function CreateMonsterEntry(playerMonsterInfo, defaultMonsterSpeciesData, index,
 end
 
 
-local Recipes = {
-    "minor_health_potion",
-    "major_health_potion",
-    "revive_potion",
-}
+
 
 function SetItemInfoRecipe(recipe)
     local itemName = recipe.GetDisplayName() or "item name"
@@ -306,6 +309,7 @@ function CreateRecipe(recipe, ownedAmount)
     _newItem:RegisterPressCallback(function()
         SetItemInfoRecipe(recipe)
         currentSelection = recipe
+        lastSlectedRecipe = recipe.GetID()
     end)
 
     return _newItem
@@ -339,8 +343,8 @@ function PopulateRecipies(recipes, playerInv)
         CreateRecipe(itemLibrary.GetConsumableByID(recipeID), ownedAmount)
     end
 
-    SetItemInfoRecipe(itemLibrary.GetConsumableByID(recipes[1]))
-    currentSelection = itemLibrary.GetConsumableByID(recipes[1])
+    SetItemInfoRecipe(itemLibrary.GetConsumableByID(lastSlectedRecipe))
+    currentSelection = itemLibrary.GetConsumableByID(lastSlectedRecipe)
     currentSelectedMonster = nil
 end
 
