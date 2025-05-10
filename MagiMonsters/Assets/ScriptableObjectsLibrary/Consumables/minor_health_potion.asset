@@ -22,6 +22,8 @@ MonoBehaviour:
   m_element: 
   m_rarity: 0
   m_value: 100
+  m_effect: heal
+  m_strength: 50
   m_recipeMaterialIDs:
   - mushrooms
   - tree_sap

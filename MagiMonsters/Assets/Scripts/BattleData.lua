@@ -6,6 +6,7 @@ EndBattleEvent = Event.new("EndBattleEvent")
 local playerTracker = require("PlayerTracker")
 local actionLibrary = require("ActionLibrary")
 local monsterLibrary = require("MonsterLibrary")
+local itemLibrary = require("ItemLibrary")
 local gameManager = require("GameManager")
 
 export type battleObject = {
@@ -120,6 +121,34 @@ function Battle:SwapMonster()
         return
     end
 
+    if self.turn == 1 then
+        Timer.After(2, function() self:DoAction(self.enemy.actionIDs[math.random(1,#self.enemy.actionIDs)]) end)
+    end
+end
+
+function Battle:UseItem(itemID: string)
+    local itemData = itemLibrary.GetConsumableByID(itemID)
+    local _effect = itemData.GetEffect()
+    local _strength = itemData.GetStrength()
+
+    if _effect == "heal" then
+        self.playerMonster.currentHealth = math.min(self.playerMonster.currentHealth + _strength, self.playerMonster.maxHealth)
+
+        -- 0 for player, 1 for enemy
+        self.turn = 1
+
+        ActionEvent:FireClient(self.player,
+        self.turn,
+        self.playerMonster.currentHealth,
+        self.playerMonster.currentMana,
+        self.enemy.currentHealth,
+        self.enemy.maxHealth,
+        self.enemy.currentMana,
+        self.enemy.maxMana,
+        itemData.GetDisplayName())
+        playerTracker.SetHealthInCollection(self.player, self.playerMonster.currentHealth)
+    end
+    
     if self.turn == 1 then
         Timer.After(2, function() self:DoAction(self.enemy.actionIDs[math.random(1,#self.enemy.actionIDs)]) end)
     end

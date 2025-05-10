@@ -11,6 +11,8 @@ local left_button: VisualElement = nil
 --!Bind
 local right_button: VisualElement = nil
 
+local refreshEvent = Event.new("RefreshEvent")
+
 local currentButtonsPage = 0
 local currentTotalButtons = {}
 
@@ -79,6 +81,12 @@ function UpdateButtons(buttons:{menuButton})
     --end
 end
 
+function UseItemButton(itemID: string)
+    print("Using item", itemID)
+    gameManger.UseItem(itemID)
+    refreshEvent:Fire("Items")
+end
+
 local FightButtonCallback = function()
     print("Fight Button Pressed")
     local _availableActionButtons : {menuButton} = {}
@@ -121,20 +129,27 @@ local ItemsButtonCallback = function()
     local _availableItemButtons : {menuButton} = {}
     local _playerItems = playerTracker.GetPlayerInventory()
 
-    for i = 1, math.ceil(#_playerItems / 4) * 4 do
-        local item = _playerItems[i]
-        if item then
-            local itemData = itemLibrary.GetConsumableByID(item.id)
-            if itemData then
-                table.insert(
-                    _availableItemButtons,
-                    {
-                        title = itemData.GetDisplayName(),
-                        elementID = itemData.GetElement(),
-                        callback = function() print("Used item", itemData.GetDisplayName()) end
-                    }
-                )
-            end
+    local _playerConsumables = {}
+    for j, item in ipairs(_playerItems) do
+        local itemData = itemLibrary.GetConsumableByID(item.id)
+        if itemData then
+            table.insert(_playerConsumables, itemData)
+        end
+    end
+
+    for i = 1, math.ceil(#_playerConsumables / 4) * 4 do
+        local itemData = _playerConsumables[i]
+        if itemData then
+            table.insert(
+                _availableItemButtons,
+                {
+                    title = itemData.GetDisplayName(),
+                    elementID = itemData.GetElement(),
+                    callback = function()
+                        UseItemButton(itemData.GetID())
+                    end
+                }
+            )
         else
             table.insert(
                 _availableItemButtons,
@@ -221,3 +236,13 @@ right_button:RegisterPressCallback(function()
     currentButtonsPage = currentButtonsPage + 1
     UpdateButtons(currentTotalButtons)
 end)
+
+function self:Start()
+    refreshEvent:Connect(function(event)
+        if event == "Items" then
+            ItemsButtonCallback()
+        elseif event == "Monsters" then
+            MonstersButtonCallback()
+        end
+    end)
+end

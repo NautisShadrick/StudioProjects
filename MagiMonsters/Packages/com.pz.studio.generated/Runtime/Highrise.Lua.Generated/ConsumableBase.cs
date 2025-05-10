@@ -32,6 +32,8 @@ namespace Highrise.Lua.Generated
         [SerializeField] public System.String m_element = "";
         [SerializeField] public System.Double m_rarity = 0;
         [SerializeField] public System.Double m_value = 0;
+        [SerializeField] public System.String m_effect = "";
+        [SerializeField] public System.Double m_strength = 0;
         [SerializeField] public System.Collections.Generic.List<System.String> m_recipeMaterialIDs = default;
         [SerializeField] public System.Collections.Generic.List<System.Double> m_recipeMaterialAmounts = default;
 
@@ -49,8 +51,10 @@ namespace Highrise.Lua.Generated
                 CreateSerializedProperty(_script.GetPropertyAt(4), m_element),
                 CreateSerializedProperty(_script.GetPropertyAt(5), m_rarity),
                 CreateSerializedProperty(_script.GetPropertyAt(6), m_value),
-                CreateSerializedProperty(_script.GetPropertyAt(7), m_recipeMaterialIDs),
-                CreateSerializedProperty(_script.GetPropertyAt(8), m_recipeMaterialAmounts),
+                CreateSerializedProperty(_script.GetPropertyAt(7), m_effect),
+                CreateSerializedProperty(_script.GetPropertyAt(8), m_strength),
+                CreateSerializedProperty(_script.GetPropertyAt(9), m_recipeMaterialIDs),
+                CreateSerializedProperty(_script.GetPropertyAt(10), m_recipeMaterialAmounts),
             };
         }
     }

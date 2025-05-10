@@ -5,8 +5,8 @@ local LootTables : {DropLootTable} = {}
 
 local StartBattleEvent = Event.new("StartBattleEvent")
 local DoActionRequest = Event.new("DoActionRequest")
-
 local SwapMonsterRequest = Event.new("SwapMonsterRequest")
+local UseItemRequest = Event.new("UseItemRequest")
 
 local SearchRequest = Event.new("SearchRequest")
 local SearchResponse = Event.new("SearchResponse")
@@ -28,6 +28,15 @@ local lootTableMap = {
 -----------------------
 --    CLIENT SIDE    --
 -----------------------
+
+function UseItem(itemID: string)
+    if uiManager.currentBattleTurn ~= 0 then
+        print("Not your turn")
+        return
+    end
+    print("Using item", itemID)
+    UseItemRequest:FireServer(itemID)
+end
 
 function SwapMonster(monsterIndex: number)
     if uiManager.currentBattleTurn ~= 0 then
@@ -127,6 +136,26 @@ function self:ServerAwake()
             return
         end
         playerBattles[player]:SwapMonster()
+    end)
+
+    UseItemRequest:Connect(function(player, itemID)
+        if not playerBattles[player] then
+            print("Player is not in a battle")
+            return
+        end
+
+        if playerBattles[player].turn ~= 0 then
+            print("Not your turn")
+            return
+        end
+
+        local itemData = itemLibrary.GetConsumableByID(itemID)
+        if itemData then
+            playerInventoryManager.TakePlayerItem(player, itemID, 1)
+            playerBattles[player]:UseItem(itemID)
+        else
+            print("Item not found")
+        end
     end)
 
     SearchRequest:Connect(function(player, objectType, duration)

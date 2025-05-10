@@ -15,6 +15,10 @@ local rarity: number = 0
 --!SerializeField
 local value: number = 0
 --!SerializeField
+local effect: string = ""
+--!SerializeField
+local strength: number = 0
+--!SerializeField
 local recipeMaterialIDs: {string} = {}
 --!SerializeField
 local recipeMaterialAmounts: {number} = {}
@@ -53,6 +57,14 @@ end
 
 function GetValue()
     return value
+end
+
+function GetEffect()
+    return effect
+end
+
+function GetStrength()
+    return strength
 end
 
 function GetItemData()
