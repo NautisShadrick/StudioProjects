@@ -101,11 +101,11 @@ local FightButtonCallback = function()
                 _availableActionButtons, 
                 {
                     title = actionID,
-                    elementID = actionLibrary.actions[actionID].GetActionElement(),
+                    elementID = actionLibrary.GetActionByID(actionID).GetActionElement(),
                     callback = function() gameManger.ClientDoAction(actionID) end
                 }
             )
-            print(actionLibrary.actions[actionID].GetActionElement())
+            --print(actionLibrary.GetActionByID(actionID).GetActionElement())
 
         else
             table.insert(

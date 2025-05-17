@@ -47,7 +47,7 @@ end
 
 function Battle:DoAction(actionID: string)
 
-    local action = actionLibrary.actions[actionID]
+    local action = actionLibrary.GetActionByID(actionID)
 
     local _target : monsterLibrary.MonsterData
     local _attacker : monsterLibrary.MonsterData

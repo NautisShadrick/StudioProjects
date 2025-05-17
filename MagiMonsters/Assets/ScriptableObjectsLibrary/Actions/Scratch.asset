@@ -15,6 +15,7 @@ MonoBehaviour:
   _script: {fileID: -974389366465450183, guid: 6bbfc1ed25f4b2e4b845f812887c8ece, type: 3}
   _networkId: 1180867059
   _properties: []
+  m_actionID: scratch
   m_actionName: Scratch
   m_actionElement: 
   m_actionDamage: 10

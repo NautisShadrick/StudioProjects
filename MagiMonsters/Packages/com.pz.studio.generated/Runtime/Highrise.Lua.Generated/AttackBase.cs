@@ -15,6 +15,7 @@ using UnityEngine;
 using Highrise.Client;
 using Highrise.Studio;
 using Highrise.Lua;
+using UnityEditor;
 
 namespace Highrise.Lua.Generated
 {
@@ -25,6 +26,7 @@ namespace Highrise.Lua.Generated
         private const string s_scriptGUID = "6bbfc1ed25f4b2e4b845f812887c8ece";
         public override string ScriptGUID => s_scriptGUID;
 
+        [SerializeField] public System.String m_actionID = "";
         [SerializeField] public System.String m_actionName = "";
         [SerializeField] public System.String m_actionElement = "";
         [SerializeField] public System.Double m_actionDamage = 0;
@@ -37,12 +39,21 @@ namespace Highrise.Lua.Generated
 
             return new SerializedPropertyValue[]
             {
-                CreateSerializedProperty(_script.GetPropertyAt(0), m_actionName),
-                CreateSerializedProperty(_script.GetPropertyAt(1), m_actionElement),
-                CreateSerializedProperty(_script.GetPropertyAt(2), m_actionDamage),
-                CreateSerializedProperty(_script.GetPropertyAt(3), m_actionManaCost),
+                CreateSerializedProperty(_script.GetPropertyAt(0), m_actionID),
+                CreateSerializedProperty(_script.GetPropertyAt(1), m_actionName),
+                CreateSerializedProperty(_script.GetPropertyAt(2), m_actionElement),
+                CreateSerializedProperty(_script.GetPropertyAt(3), m_actionDamage),
+                CreateSerializedProperty(_script.GetPropertyAt(4), m_actionManaCost),
             };
         }
+        
+#if HR_STUDIO
+        [MenuItem("CONTEXT/AttackBase/Edit Script")]
+        private static void EditScript()
+        {
+            VisualStudioCodeOpener.OpenPath(AssetDatabase.GUIDToAssetPath(s_scriptGUID));
+        }
+#endif
     }
 }
 

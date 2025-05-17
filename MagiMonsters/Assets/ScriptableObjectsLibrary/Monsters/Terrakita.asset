@@ -20,9 +20,9 @@ MonoBehaviour:
   m_MaxHP: 250
   m_MaxMana: 50
   m_MonsterActions:
-  - Bark
-  - Bite
-  - Tackle
+  - bark
+  - bite
+  - tackle
   m_MonsterSprite: {fileID: 2800000, guid: f0e17b13bfd472243a8fb2c8264431fe, type: 3}
   m_MonsterLootTable: {fileID: 11400000, guid: b5ba7285a8b8e3240b3eae970cfded89, type: 2}
   references:

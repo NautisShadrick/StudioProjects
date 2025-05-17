@@ -1,6 +1,8 @@
 --!Type(ScriptableObject)
 
 --!SerializeField
+local actionID: string = ""
+--!SerializeField
 local actionName: string = ""
 --!SerializeField
 local actionElement: string = ""
@@ -8,6 +10,10 @@ local actionElement: string = ""
 local actionDamage: number = 0
 --!SerializeField
 local actionManaCost: number = 0
+
+function GetID()
+    return actionID
+end
 
 function GetActionName()
     return actionName

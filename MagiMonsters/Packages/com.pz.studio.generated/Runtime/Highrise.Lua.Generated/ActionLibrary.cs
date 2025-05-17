@@ -15,6 +15,7 @@ using UnityEngine;
 using Highrise.Client;
 using Highrise.Studio;
 using Highrise.Lua;
+using UnityEditor;
 
 namespace Highrise.Lua.Generated
 {
@@ -26,17 +27,7 @@ namespace Highrise.Lua.Generated
         public override string ScriptGUID => s_scriptGUID;
 
         [LuaScriptPropertyAttribute("6bbfc1ed25f4b2e4b845f812887c8ece")]
-        [SerializeField] public UnityEngine.Object m_Bark = default;
-        [LuaScriptPropertyAttribute("6bbfc1ed25f4b2e4b845f812887c8ece")]
-        [SerializeField] public UnityEngine.Object m_Bite = default;
-        [LuaScriptPropertyAttribute("6bbfc1ed25f4b2e4b845f812887c8ece")]
-        [SerializeField] public UnityEngine.Object m_Scratch = default;
-        [LuaScriptPropertyAttribute("6bbfc1ed25f4b2e4b845f812887c8ece")]
-        [SerializeField] public UnityEngine.Object m_Tackle = default;
-        [LuaScriptPropertyAttribute("6bbfc1ed25f4b2e4b845f812887c8ece")]
-        [SerializeField] public UnityEngine.Object m_LightningLash = default;
-        [LuaScriptPropertyAttribute("6bbfc1ed25f4b2e4b845f812887c8ece")]
-        [SerializeField] public UnityEngine.Object m_SwapMonster = default;
+        [SerializeField] public System.Collections.Generic.List<UnityEngine.Object> m_actionDatas = default;
 
         protected override SerializedPropertyValue[] SerializeProperties()
         {
@@ -45,14 +36,17 @@ namespace Highrise.Lua.Generated
 
             return new SerializedPropertyValue[]
             {
-                CreateSerializedProperty(_script.GetPropertyAt(0), m_Bark),
-                CreateSerializedProperty(_script.GetPropertyAt(1), m_Bite),
-                CreateSerializedProperty(_script.GetPropertyAt(2), m_Scratch),
-                CreateSerializedProperty(_script.GetPropertyAt(3), m_Tackle),
-                CreateSerializedProperty(_script.GetPropertyAt(4), m_LightningLash),
-                CreateSerializedProperty(_script.GetPropertyAt(5), m_SwapMonster),
+                CreateSerializedProperty(_script.GetPropertyAt(0), m_actionDatas),
             };
         }
+        
+#if HR_STUDIO
+        [MenuItem("CONTEXT/ActionLibrary/Edit Script")]
+        private static void EditScript()
+        {
+            VisualStudioCodeOpener.OpenPath(AssetDatabase.GUIDToAssetPath(s_scriptGUID));
+        }
+#endif
     }
 }
 
