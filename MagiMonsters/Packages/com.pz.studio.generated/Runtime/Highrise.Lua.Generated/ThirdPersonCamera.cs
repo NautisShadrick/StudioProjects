@@ -15,6 +15,7 @@ using UnityEngine;
 using Highrise.Client;
 using Highrise.Studio;
 using Highrise.Lua;
+using UnityEditor;
 
 namespace Highrise.Lua.Generated
 {
@@ -25,23 +26,56 @@ namespace Highrise.Lua.Generated
         private const string s_scriptGUID = "28961782db12e774c850c8f79f628237";
         public override string ScriptGUID => s_scriptGUID;
 
-        [SerializeField] public System.Double m_cameraPivotHeight = 2.5;
-        [SerializeField] public System.Double m_initalDistanceFromPivot = 7.5;
-        [SerializeField] public System.Double m_minDistanceFromPivot = 3;
-        [SerializeField] public System.Double m_maxDistanceFromPivot = 25;
-        [SerializeField] public UnityEngine.Vector3 m_cameraOffset = new Vector3(0.75f, 0.5f, 0f);
-        [SerializeField] public System.Boolean m_EnableMaxPitch = true;
-        [SerializeField] public System.Boolean m_EnableMaxYaw = false;
-        [SerializeField] public System.Double m_initialPitch = 10;
-        [SerializeField] public System.Double m_minPitch = -5;
-        [SerializeField] public System.Double m_maxPitch = 30;
-        [SerializeField] public System.Double m_minYaw = -360;
-        [SerializeField] public System.Double m_maxYaw = 360;
-        [SerializeField] public System.Double m_touchRotationSensitivity = 0.4;
-        [SerializeField] public System.Double m_mouseRotationSensitivity = 0.4;
-        [SerializeField] public System.Double m_rotationSmoothing = 1;
-        [SerializeField] public System.Double m_touchZoomSensitivity = 5;
-        [SerializeField] public System.Double m_FOV = 60;
+        [Tooltip("The height of the point over the player the camera will pivot around")]
+        [SerializeField] public System.Double _cameraHeight = 2.5;
+        [Tooltip("Initial distance from pivot")]
+        [SerializeField] public System.Double _startZoom = 7.5;
+        [Tooltip("Minimum allowable zoom")]
+        [SerializeField] public System.Double _minimumZoom = 3;
+        [Tooltip("Maximum allowable zoom")]
+        [SerializeField] public System.Double _maximumZoom = 25;
+        [SerializeField] public UnityEngine.Vector3 _offset = new Vector3(0f, 0f, 0f);
+        [Tooltip("Whether the camera can rotate around the X axis (Up and Down)")]
+        [SerializeField] public System.Boolean _pitchEnabled = true;
+        [Tooltip("The initial X rotation of the camera")]
+        [SerializeField] public System.Double _pitchStart = 5;
+        [Tooltip("The minimum X rotation the camera can have (Upwards)")]
+        [SerializeField] public System.Double _pitchMin = -2;
+        [Tooltip("The maximum X rotation the camera can have (Downwards)")]
+        [SerializeField] public System.Double _pitchMax = 30;
+        [Tooltip("Whether the camera can rotate around the Y axis (Left and Right)")]
+        [SerializeField] public System.Boolean _yawEnabled = false;
+        [Tooltip("The minimum Y rotation the camera can have (Left)")]
+        [SerializeField] public System.Double _yawMin = -360;
+        [Tooltip("The maximum Y rotation the camera can have (Right)")]
+        [SerializeField] public System.Double _yawMax = 360;
+        [Tooltip("Camera rotation sensitivity (1 = slow, 10 = fast)")]
+        [Range(1,10)]
+        [SerializeField] public System.Double _rotationSensitivity = 2;
+        [Tooltip("Whether the camera should avoid clipping through obstacles")]
+        [SerializeField] public System.Boolean _enableCollisionAvoidance = true;
+        [Tooltip("Offset applied to avoid clipping through obstacles")]
+        [SerializeField] public System.Double _collisionOffset = 0.2;
+        [Tooltip("Maximum distance from obstacles")]
+        [SerializeField] public System.Double _obstacleDistanceMinFar = 3;
+        [SerializeField] public System.Double _obstacleDistanceMinNear = 0;
+        [Tooltip("Maximum distance for raycasting")]
+        [SerializeField] public System.Double _rayDistanceMaxFar = 10;
+        [Tooltip("Minimum distance for raycasting")]
+        [SerializeField] public System.Double _rayDistanceMinNear = 0.1;
+        [Tooltip("Enable first-person view when zoomed in enough")]
+        [SerializeField] public System.Boolean _enableFirstPerson = true;
+        [Tooltip("Field of View in third-person mode (degrees)")]
+        [Range(30,90)]
+        [SerializeField] public System.Double _thirdPersonFOV = 60;
+        [Tooltip("Field of View in first-person mode (degrees)")]
+        [Range(60,120)]
+        [SerializeField] public System.Double _firstPersonFOV = 60;
+        [Tooltip("Enable transition between first and third person")]
+        [SerializeField] public System.Boolean _enableSmoothTransition = true;
+        [Tooltip("How quickly the FOV transitions between first and third person (higher = faster)")]
+        [Range(1,10)]
+        [SerializeField] public System.Double _FOVTransitionSpeed = 3;
 
         protected override SerializedPropertyValue[] SerializeProperties()
         {
@@ -50,25 +84,40 @@ namespace Highrise.Lua.Generated
 
             return new SerializedPropertyValue[]
             {
-                CreateSerializedProperty(_script.GetPropertyAt(0), m_cameraPivotHeight),
-                CreateSerializedProperty(_script.GetPropertyAt(1), m_initalDistanceFromPivot),
-                CreateSerializedProperty(_script.GetPropertyAt(2), m_minDistanceFromPivot),
-                CreateSerializedProperty(_script.GetPropertyAt(3), m_maxDistanceFromPivot),
-                CreateSerializedProperty(_script.GetPropertyAt(4), m_cameraOffset),
-                CreateSerializedProperty(_script.GetPropertyAt(5), m_EnableMaxPitch),
-                CreateSerializedProperty(_script.GetPropertyAt(6), m_EnableMaxYaw),
-                CreateSerializedProperty(_script.GetPropertyAt(7), m_initialPitch),
-                CreateSerializedProperty(_script.GetPropertyAt(8), m_minPitch),
-                CreateSerializedProperty(_script.GetPropertyAt(9), m_maxPitch),
-                CreateSerializedProperty(_script.GetPropertyAt(10), m_minYaw),
-                CreateSerializedProperty(_script.GetPropertyAt(11), m_maxYaw),
-                CreateSerializedProperty(_script.GetPropertyAt(12), m_touchRotationSensitivity),
-                CreateSerializedProperty(_script.GetPropertyAt(13), m_mouseRotationSensitivity),
-                CreateSerializedProperty(_script.GetPropertyAt(14), m_rotationSmoothing),
-                CreateSerializedProperty(_script.GetPropertyAt(15), m_touchZoomSensitivity),
-                CreateSerializedProperty(_script.GetPropertyAt(16), m_FOV),
+                CreateSerializedProperty(_script.GetPropertyAt(0), _cameraHeight),
+                CreateSerializedProperty(_script.GetPropertyAt(1), _startZoom),
+                CreateSerializedProperty(_script.GetPropertyAt(2), _minimumZoom),
+                CreateSerializedProperty(_script.GetPropertyAt(3), _maximumZoom),
+                CreateSerializedProperty(_script.GetPropertyAt(4), _offset),
+                CreateSerializedProperty(_script.GetPropertyAt(5), _pitchEnabled),
+                CreateSerializedProperty(_script.GetPropertyAt(6), _pitchStart),
+                CreateSerializedProperty(_script.GetPropertyAt(7), _pitchMin),
+                CreateSerializedProperty(_script.GetPropertyAt(8), _pitchMax),
+                CreateSerializedProperty(_script.GetPropertyAt(9), _yawEnabled),
+                CreateSerializedProperty(_script.GetPropertyAt(10), _yawMin),
+                CreateSerializedProperty(_script.GetPropertyAt(11), _yawMax),
+                CreateSerializedProperty(_script.GetPropertyAt(12), _rotationSensitivity),
+                CreateSerializedProperty(_script.GetPropertyAt(13), _enableCollisionAvoidance),
+                CreateSerializedProperty(_script.GetPropertyAt(14), _collisionOffset),
+                CreateSerializedProperty(_script.GetPropertyAt(15), _obstacleDistanceMinFar),
+                CreateSerializedProperty(_script.GetPropertyAt(16), _obstacleDistanceMinNear),
+                CreateSerializedProperty(_script.GetPropertyAt(17), _rayDistanceMaxFar),
+                CreateSerializedProperty(_script.GetPropertyAt(18), _rayDistanceMinNear),
+                CreateSerializedProperty(_script.GetPropertyAt(19), _enableFirstPerson),
+                CreateSerializedProperty(_script.GetPropertyAt(20), _thirdPersonFOV),
+                CreateSerializedProperty(_script.GetPropertyAt(21), _firstPersonFOV),
+                CreateSerializedProperty(_script.GetPropertyAt(22), _enableSmoothTransition),
+                CreateSerializedProperty(_script.GetPropertyAt(23), _FOVTransitionSpeed),
             };
         }
+        
+#if HR_STUDIO
+        [MenuItem("CONTEXT/ThirdPersonCamera/Edit Script")]
+        private static void EditScript()
+        {
+            VisualStudioCodeOpener.OpenPath(AssetDatabase.GUIDToAssetPath(s_scriptGUID));
+        }
+#endif
     }
 }
 

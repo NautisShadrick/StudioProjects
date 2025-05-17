@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UXML
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="UnityEngine.UIElements"
+    xmlns:hr="Highrise.UI"
+    xmlns:editor="UnityEditor.UIElements"
+    xsi:noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd"
+>
+
+  <hr:UILuaView class="monster-info">
+
+  
+    <VisualElement class="inventory-container">
+
+      <VisualElement class="card-header-container">
+        <Label text="Materials" class="card-header" name="card_header" />
+      </VisualElement>
+
+      <VisualElement class="tabs-container">
+
+        <VisualElement class="tab-button" name="monster_one_tab">
+          <VisualElement class="tab-icon" name="monster_one_icon"/>
+        </VisualElement>
+        <VisualElement class="tab-button" name="monster_two_tab">
+          <VisualElement class="tab-icon" name="monster_two_icon"/>
+        </VisualElement>
+        <VisualElement class="tab-button" name="monster_three_tab">
+          <VisualElement class="tab-icon" name="monster_three_icon"/>
+        </VisualElement>
+        <VisualElement class="tab-button" name="monster_four_tab">
+          <VisualElement class="tab-icon" name="monster_four_icon"/>
+        </VisualElement>
+
+      </VisualElement>
+
+      <VisualElement name="monster_information_container">
+        
+        <Image name="monster_image" />
+
+        <VisualElement name="level_buttons_conatiner">
+
+          <VisualElement name="level_up_button">
+            <Label text="Level Up!" class="button-title"/>
+            <VisualElement name="level_up_cost_container" class="button-cost">
+              <Label text="150" class="cost-label"/>
+              <Image class="scales-icon-button" />
+            </VisualElement>
+          </VisualElement>
+
+          <VisualElement name="evolve_button">
+            <Label text="Evolve!" class="button-title"/>
+            <VisualElement name="evolve_cost_container" class="button-cost">
+              <Label text="2500" class="cost-label"/>
+              <Image class="scales-icon-button" />
+            </VisualElement>
+          </VisualElement>
+        </VisualElement>
+
+        <VisualElement name="actions_and_stats_container">
+          <hr:UIScrollView class="actions" name="_actionScrollView">
+            <!-- Ranks will be added here -->
+          </hr:UIScrollView>
+          <VisualElement class="stat-container" name="stat_container">
+          </VisualElement>
+        </VisualElement>
+
+      </VisualElement>
+
+      <VisualElement name="close_button"/>
+
+    </VisualElement>
+
+  </hr:UILuaView>
+
+</UXML>

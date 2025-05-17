@@ -1241,6 +1241,61 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1092795078}
   m_Mesh: {fileID: 6800249751854360846, guid: 8c065d3a5b3248b41b1789df51177b56, type: 3}
+--- !u!1 &1154768204
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1154768205}
+  - component: {fileID: 1154768206}
+  m_Layer: 0
+  m_Name: MonsterInfo
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1154768205
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1154768204}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -2.5362105, y: -12.788082, z: 54.586903}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1154768206
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1154768204}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbbb27b10b8ce731014a847e7fb9e245, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _networkId: 0
+  _script: {fileID: -974389366465450183, guid: 41642764b153e7e4bb9584abc566e290, type: 3}
+  _properties: []
+  _uiOutput: 3
+  _uiOutputSettings:
+    rid: -2
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
 --- !u!1 &1218821422 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7494135311037265500, guid: 4db44322431f6d6439fa69e352e81b67,
@@ -1265,23 +1320,30 @@ MonoBehaviour:
   _uiOutput: 0
   _uiOutputSettings:
     rid: -2
-  m_cameraPivotHeight: 2.5
-  m_initalDistanceFromPivot: 11
-  m_minDistanceFromPivot: 3
-  m_maxDistanceFromPivot: 25
-  m_cameraOffset: {x: 0, y: 0.5, z: 0}
-  m_EnableMaxPitch: 1
-  m_EnableMaxYaw: 0
-  m_initialPitch: 10
-  m_minPitch: -5
-  m_maxPitch: 30
-  m_minYaw: -360
-  m_maxYaw: 360
-  m_touchRotationSensitivity: 0.4
-  m_mouseRotationSensitivity: 0.4
-  m_rotationSmoothing: 1
-  m_touchZoomSensitivity: 5
-  m_FOV: 60
+  _cameraHeight: 2.5
+  _startZoom: 7.5
+  _minimumZoom: 3
+  _maximumZoom: 25
+  _offset: {x: 0, y: 0, z: 0}
+  _pitchEnabled: 1
+  _pitchStart: 5
+  _pitchMin: -2
+  _pitchMax: 65
+  _yawEnabled: 0
+  _yawMin: -360
+  _yawMax: 360
+  _rotationSensitivity: 2
+  _enableCollisionAvoidance: 0
+  _collisionOffset: 0.2
+  _obstacleDistanceMinFar: 3
+  _obstacleDistanceMinNear: 0
+  _rayDistanceMaxFar: 10
+  _rayDistanceMinNear: 0.1
+  _enableFirstPerson: 1
+  _thirdPersonFOV: 60
+  _firstPersonFOV: 60
+  _enableSmoothTransition: 1
+  _FOVTransitionSpeed: 3
   references:
     version: 2
     RefIds:
@@ -1945,6 +2007,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3551931345751937580, guid: 4db44322431f6d6439fa69e352e81b67,
+        type: 3}
+      propertyPath: m_centerOnCharacterWhenSpawned
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5279981243723839846, guid: 4db44322431f6d6439fa69e352e81b67,
         type: 3}
@@ -3145,3 +3212,4 @@ SceneRoots:
   - {fileID: 2116782578}
   - {fileID: 619486530}
   - {fileID: 359873931}
+  - {fileID: 1154768205}

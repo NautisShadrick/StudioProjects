@@ -19,11 +19,11 @@ using UnityEditor;
 
 namespace Highrise.Lua.Generated
 {
-    [AddComponentMenu("Lua/DialogueUI")]
-    [LuaRegisterType(0x4f9816926ed30021, typeof(LuaBehaviour))]
-    public class DialogueUI : LuaBehaviourThunk
+    [AddComponentMenu("Lua/MonsterInfo")]
+    [LuaRegisterType(0x5001e3920fe3c169, typeof(LuaBehaviour))]
+    public class MonsterInfo : LuaBehaviourThunk
     {
-        private const string s_scriptGUID = "0759c86ed3245a742b8ac420b4388f53";
+        private const string s_scriptGUID = "41642764b153e7e4bb9584abc566e290";
         public override string ScriptGUID => s_scriptGUID;
 
 
@@ -34,17 +34,11 @@ namespace Highrise.Lua.Generated
 
             return new SerializedPropertyValue[]
             {
-                CreateSerializedProperty(_script.GetPropertyAt(0), null),
-                CreateSerializedProperty(_script.GetPropertyAt(1), null),
-                CreateSerializedProperty(_script.GetPropertyAt(2), null),
-                CreateSerializedProperty(_script.GetPropertyAt(3), null),
-                CreateSerializedProperty(_script.GetPropertyAt(4), null),
-                CreateSerializedProperty(_script.GetPropertyAt(5), null),
             };
         }
         
 #if HR_STUDIO
-        [MenuItem("CONTEXT/DialogueUI/Edit Script")]
+        [MenuItem("CONTEXT/MonsterInfo/Edit Script")]
         private static void EditScript()
         {
             VisualStudioCodeOpener.OpenPath(AssetDatabase.GUIDToAssetPath(s_scriptGUID));
