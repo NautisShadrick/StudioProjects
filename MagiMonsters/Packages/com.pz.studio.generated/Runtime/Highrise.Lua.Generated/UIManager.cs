@@ -15,6 +15,7 @@ using UnityEngine;
 using Highrise.Client;
 using Highrise.Studio;
 using Highrise.Lua;
+using UnityEditor;
 
 namespace Highrise.Lua.Generated
 {
@@ -26,12 +27,14 @@ namespace Highrise.Lua.Generated
         public override string ScriptGUID => s_scriptGUID;
 
         [SerializeField] public System.Collections.Generic.List<UnityEngine.Texture> m_elementsIcons = default;
+        [SerializeField] public System.Collections.Generic.List<UnityEngine.Texture> m_statIcons = default;
         [SerializeField] public UnityEngine.GameObject m_BattleScreenOBJ = default;
         [SerializeField] public UnityEngine.GameObject m_FourButtonOBJ = default;
         [SerializeField] public UnityEngine.GameObject m_ResultsLabelObj = default;
         [SerializeField] public UnityEngine.GameObject m_TimerUIObject = default;
         [SerializeField] public UnityEngine.GameObject m_NameMonsterUIObj = default;
         [SerializeField] public UnityEngine.GameObject m_GeneralInventoryUIObj = default;
+        [SerializeField] public UnityEngine.GameObject m_MonsterInfoUIObj = default;
         [SerializeField] public UnityEngine.GameObject m_RewardParticleUIObj = default;
         [SerializeField] public UnityEngine.GameObject m_HudButtonsObj = default;
         [SerializeField] public UnityEngine.GameObject m_itemReceivedNotificationObj = default;
@@ -45,18 +48,28 @@ namespace Highrise.Lua.Generated
             return new SerializedPropertyValue[]
             {
                 CreateSerializedProperty(_script.GetPropertyAt(0), m_elementsIcons),
-                CreateSerializedProperty(_script.GetPropertyAt(1), m_BattleScreenOBJ),
-                CreateSerializedProperty(_script.GetPropertyAt(2), m_FourButtonOBJ),
-                CreateSerializedProperty(_script.GetPropertyAt(3), m_ResultsLabelObj),
-                CreateSerializedProperty(_script.GetPropertyAt(4), m_TimerUIObject),
-                CreateSerializedProperty(_script.GetPropertyAt(5), m_NameMonsterUIObj),
-                CreateSerializedProperty(_script.GetPropertyAt(6), m_GeneralInventoryUIObj),
-                CreateSerializedProperty(_script.GetPropertyAt(7), m_RewardParticleUIObj),
-                CreateSerializedProperty(_script.GetPropertyAt(8), m_HudButtonsObj),
-                CreateSerializedProperty(_script.GetPropertyAt(9), m_itemReceivedNotificationObj),
-                CreateSerializedProperty(_script.GetPropertyAt(10), m_postBattleScreenObj),
+                CreateSerializedProperty(_script.GetPropertyAt(1), m_statIcons),
+                CreateSerializedProperty(_script.GetPropertyAt(2), m_BattleScreenOBJ),
+                CreateSerializedProperty(_script.GetPropertyAt(3), m_FourButtonOBJ),
+                CreateSerializedProperty(_script.GetPropertyAt(4), m_ResultsLabelObj),
+                CreateSerializedProperty(_script.GetPropertyAt(5), m_TimerUIObject),
+                CreateSerializedProperty(_script.GetPropertyAt(6), m_NameMonsterUIObj),
+                CreateSerializedProperty(_script.GetPropertyAt(7), m_GeneralInventoryUIObj),
+                CreateSerializedProperty(_script.GetPropertyAt(8), m_MonsterInfoUIObj),
+                CreateSerializedProperty(_script.GetPropertyAt(9), m_RewardParticleUIObj),
+                CreateSerializedProperty(_script.GetPropertyAt(10), m_HudButtonsObj),
+                CreateSerializedProperty(_script.GetPropertyAt(11), m_itemReceivedNotificationObj),
+                CreateSerializedProperty(_script.GetPropertyAt(12), m_postBattleScreenObj),
             };
         }
+        
+#if HR_STUDIO
+        [MenuItem("CONTEXT/UIManager/Edit Script")]
+        private static void EditScript()
+        {
+            VisualStudioCodeOpener.OpenPath(AssetDatabase.GUIDToAssetPath(s_scriptGUID));
+        }
+#endif
     }
 }
 

@@ -50,7 +50,10 @@
           <VisualElement name="crafting_info">
             <VisualElement name="ingredients">
             </VisualElement>
-            <Label text="CRAFT" name="craft_button" />
+            <VisualElement name="inv_buttons">
+              <Label text="CRAFT" name="craft_button" />
+              <Label text="EQUIP" name="equip_button" />
+            </VisualElement>
           </VisualElement>
         </VisualElement>
 

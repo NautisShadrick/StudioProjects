@@ -112,22 +112,6 @@
     margin: auto;
 }
 
-#monster_one_icon {
-    background-image: url("project://database/Assets/LayerLab/GUI Pro-FantasyRPG/ResourcesData/Sprites/Component/Icon_EquipIcons_(x2)/Shadow/EquipIcons_512/equip_icon_fish.png");
-}
-
-#monster_two_icon {
-    background-image: url("project://database/Assets/LayerLab/GUI Pro-FantasyRPG/ResourcesData/Sprites/Component/Icon_EquipIcons_(x2)/Shadow/EquipIcons_512/equip_icon_potion_red_4.png");
-}
-
-#monster_three_icon {
-    background-image: url("project://database/Assets/Art/Sprites/Egg_Air.png");
-}
-
-#monster_four_icon {
-    background-image: url("project://database/Assets/Art/Sprites/Earth/Terrakita/GeoHowl.png");
-}
-
 #monster_information_container {
         
     position: relative;
@@ -153,7 +137,6 @@
 #monster_image {
     width:  128px;
     height: 128px;
-    background-color: rgba(0,0,0,.5);
     flex-grow: 1;
     flex-shrink: 0;
     margin: 0;
@@ -171,8 +154,6 @@
 
     flex-grow: 1;
     flex-shrink: 0;
-
-    background-color: rgba(0,0,0,0.2);
 }
 
 #level_up_button{
@@ -285,18 +266,35 @@
     /*background-color:blue;*/
     background-image: var(--window-bg-1);
 
-    width:  80px;
+    width:  98px;
     height: 100%;
 
     align-self: center;
     margin-bottom: 0px;
     border-radius: 6px;
-    padding: 15px;
+    padding: 10px;
 
     -unity-slice-scale: 0.3;
 }
 
-.inventory-item {
+.stat-entry{
+    flex-direction: row;
+    justify-content: space-between;
+    translate: -2px 0px;
+}
+
+.stat-image{
+    width:  26px;
+    height: 26px;
+}
+
+.stat-value{
+    margin:0;
+    padding:0;
+    font-size: 13px;
+}
+
+.inventory-action {
 
     width: 100%;
     height: 40px;
@@ -317,28 +315,7 @@
     -unity-slice-scale: 0.25;
 }
 
-.inventory-item-selected {
-    width: 100%;
-    height: 40px;
-
-    margin: 0;
-
-
-    flex-direction: row;
-    align-items: center;
-
-    /*
-    border-color:rgb(182, 172, 217);
-    border-radius: 2px;
-    border-bottom-width: 2px;
-    */
-
-    background-image: var(--item-selected-bg);
-    -unity-slice-scale: 0.25;
-    color: #4c0800;
-}
-
-.inventory-item-image {
+.inventory-action-image {
     width:  28px;
     height: 28px;
 
@@ -346,168 +323,13 @@
     flex-shrink: 0;
 }
 
-.inventory-monster-image {
-    width:  36px;
-    height: 36px;
-
-    margin-left: 2px;
-    flex-shrink: 0;
-}
-
-
-.inventory-item-name {
+.inventory-action-name {
     font-size: 13px;
 
     padding: 0;
     margin: 0;
     margin-left: 4px;
 
-}
-
-.inventory-monster-name {
-    font-size: 16px;
-
-    padding: 0;
-    margin: 0;
-    margin-left: 4px;
-
-}
-
-.inventory-item-amount {
-    position: absolute;
-    right: 10px;
-
-    padding: 0;
-    margin: 0;
-}
-
-.info-container {
-    position: relative;
-    flex-grow: 0;
-
-    width:  280px;
-    height: auto;
-
-    align-self: center;
-    margin-bottom: 10px;
-    border-radius: 6px;
-    padding: 5px;
-
-    border-width: 2px;
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-    border-top-width: 1px;
-
-    flex-direction: row;
-
-    justify-content: space-around;
-    align-items: center;
-
-    background-image: var(--window-bg-1);
-    -unity-slice-scale: 0.3;
-}
-
-#info_image {
-    width:  64px;
-    height: 64px;
-}
-
-.info-text {
-    width:  185px;
-    height: auto;
-    border-color:rgb(182, 172, 217);
-    border-radius: 2px;
-}
-
-#info_name {
-    font-size: 16px;
-    padding: 0;
-    margin: 5px;
-    margin-bottom: 5px;
-}
-
-#info_description {
-    font-size: 11px;
-    padding: 0;
-    padding-bottom: 4px;
-    margin: 0;
-
-    white-space: normal;
-}
-
-#crafting_info {
-    display: flex;
-    justify-content: flex-start;
-    flex-direction: column;
-
-    margin-left: 5px;
-    margin-top: auto;
-    margin-bottom:0;
-}
-
-#ingredients {
-    display: flex;
-    justify-content: flex-start;
-    flex-direction: column;
-
-    margin-left: 5px;
-    margin-bottom: 5px;
-
-    border-color:rgb(182, 172, 217);
-    border-radius: 2px;
-    border-top-width: 2px;
-
-}
-
-.material-item {
-    height: 28px;
-    width:  100%;
-
-    margin: 0;
-    padding: 0;
-
-    flex-direction: row;
-
-    align-items: center;
-    justify-content: flex-start;
-
-}
-
-.material-image {
-    width:  16px;
-    height: 16px;
-    flex-shrink: 0;
-    margin-left: 5px;
-}
-
-.material-name {
-    font-size: 9px;
-    padding: 0;
-    margin: 0;
-    margin-left: 4px;
-}
-
-.material-amount {
-    font-size: 9px;
-    padding: 0;
-    margin: 0;
-    margin-left: auto;
-    margin-right: 5px;
-}
-
-.material-missing {
-    color: red;
-}
-
-#craft_button {
-    font-size: 16px;
-    width:  70px;
-    height: 30px;
-    margin: auto;
-    margin-bottom: 2px;
-
-    color: var(--color-dark-green);
-    background-image: var(--green-button);
 }
 
 .scroll-view__content-container {

@@ -447,6 +447,62 @@ MonoBehaviour:
   m_IgnoreFromBuild: 1
   m_ApplyToChildren: 1
   m_AffectedAgents: ffffffff
+--- !u!1 &6261956035663497623
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1598453429264550986}
+  - component: {fileID: 2929682719507115226}
+  m_Layer: 0
+  m_Name: MonsterInfo
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1598453429264550986
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6261956035663497623}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -2.5362105, y: -12.788082, z: 54.586903}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2645774871667250413}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2929682719507115226
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6261956035663497623}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbbb27b10b8ce731014a847e7fb9e245, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _networkId: 0
+  _script: {fileID: -974389366465450183, guid: 41642764b153e7e4bb9584abc566e290, type: 3}
+  _properties: []
+  _uiOutput: 3
+  _uiOutputSettings:
+    rid: -2
+  m_noElementIcon: {fileID: 2800000, guid: 4ece7d4ccd1bd7d41a929ac84de2d243, type: 3}
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
 --- !u!1 &6518621778439480170
 GameObject:
   m_ObjectHideFlags: 0
@@ -560,6 +616,7 @@ Transform:
   - {fileID: 9183169276837361333}
   - {fileID: 4031538757278106099}
   - {fileID: 367256322665920807}
+  - {fileID: 1598453429264550986}
   - {fileID: 8765748334721530489}
   - {fileID: 3100528679949138583}
   - {fileID: 1033455267176750918}
@@ -597,12 +654,19 @@ MonoBehaviour:
   - {fileID: 2800000, guid: 76b0235c523b817409c120ec9294742c, type: 3}
   - {fileID: 2800000, guid: 2f69f56da88c0a14a831d5c443ef6870, type: 3}
   - {fileID: 2800000, guid: 02007c0f99e735643ad365e515cafa0a, type: 3}
+  m_statIcons:
+  - {fileID: 2800000, guid: 018501d2101304c16b2ab6cf10b3c6d9, type: 3}
+  - {fileID: 2800000, guid: c9bc5e3064a97453dba7076fb0ea8726, type: 3}
+  - {fileID: 2800000, guid: ab327baca5df44de1be9b0bf3fba03a9, type: 3}
+  - {fileID: 2800000, guid: 1f12d9e968f7946548af5731089e348f, type: 3}
+  - {fileID: 2800000, guid: 56113d77198ca4e7db0a78aab2221a77, type: 3}
   m_BattleScreenOBJ: {fileID: 1615819229369455585}
   m_FourButtonOBJ: {fileID: 4975101498769006391}
   m_ResultsLabelObj: {fileID: 6518621778439480170}
   m_TimerUIObject: {fileID: 8345891835854296656}
   m_NameMonsterUIObj: {fileID: 8388557913614058472}
   m_GeneralInventoryUIObj: {fileID: 172761032916056505}
+  m_MonsterInfoUIObj: {fileID: 6261956035663497623}
   m_RewardParticleUIObj: {fileID: 4119303145434610718}
   m_HudButtonsObj: {fileID: 8448215622072488766}
   m_itemReceivedNotificationObj: {fileID: 2025476158723418721}

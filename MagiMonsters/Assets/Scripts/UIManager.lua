@@ -4,6 +4,9 @@
 local elementsIcons: {Texture} = nil
 
 --!SerializeField
+local statIcons: {Texture} = nil
+
+--!SerializeField
 local BattleScreenOBJ: GameObject = nil
 --!SerializeField
 local FourButtonOBJ: GameObject = nil
@@ -15,6 +18,8 @@ local TimerUIObject: GameObject = nil
 local NameMonsterUIObj: GameObject = nil
 --!SerializeField
 local GeneralInventoryUIObj: GameObject = nil
+--!SerializeField
+local MonsterInfoUIObj: GameObject = nil
 --!SerializeField
 local RewardParticleUIObj: GameObject = nil
 --!SerializeField
@@ -30,6 +35,7 @@ local BattleScreenUI: BattleScreen = nil
 local FourButtonUI: FourButtonMenu = nil
 local ResultsLabelUI: ResultsUI = nil
 local GeneralInventoryUI: GeneralItemsInventory = nil
+local MonsterInfoUI: MonsterInfo = nil
 local RewardParticleUI: RewardParticle = nil
 local HudButtonsUI: HudButtons = nil
 local nameMonsterUI = nil
@@ -66,6 +72,18 @@ elementsIconsMap = {
     sand = 11,
     water = 12
 }
+
+statIconsMap = {
+    health = 1,
+    mana = 2,
+    attack = 3,
+    defense = 4,
+    accuracy = 5,
+}
+
+function GetStatIcon(stat)
+    return statIcons[statIconsMap[stat]]
+end
 
 function GetIcon(mapID)
     return elementsIcons[elementsIconsMap[mapID]]
@@ -112,6 +130,7 @@ function self:ClientStart()
     HudButtonsUI = HudButtonsObj:GetComponent(HudButtons)
     itemsReceivedNotificationUI = itemReceivedNotificationObj:GetComponent(ItemsReceivedNotification)
     postBattleScreenUI = postBattleScreenObj:GetComponent(PostBattleScreen)
+    MonsterInfoUI = MonsterInfoUIObj:GetComponent(MonsterInfo)
 
     BattleDataModule.ActionEvent:Connect(function(turn, playerHealth, playerMana, enemyHealth, enemyMaxHealth, enemyMana, enemyMaxMana, actionName)
         BattleScreenUI.UpdateStats(turn, playerHealth, playerMana, enemyHealth, enemyMaxHealth, enemyMana, enemyMaxMana)
@@ -201,4 +220,15 @@ end
 function CloseGeneralInventoryUI()
     GeneralInventoryUIObj:SetActive(false)
     HudButtonsObj:SetActive(true)
+end
+
+function OpenMonsterInfoUI(playerMonsterIndex)
+    HudButtonsObj:SetActive(false)
+    MonsterInfoUIObj:SetActive(true)
+    MonsterInfoUI.InitializeUI(playerMonsterIndex)
+end
+
+function CloseMonsterInfoUI()
+    HudButtonsObj:SetActive(true)
+    MonsterInfoUIObj:SetActive(false)
 end

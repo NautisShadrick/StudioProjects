@@ -10,5 +10,6 @@ function GetActionByID(id: string)
             return action
         end
     end
+    print("Action not found: " .. id)
     return nil
 end

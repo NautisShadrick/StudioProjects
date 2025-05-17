@@ -33,6 +33,8 @@ local ingredients : VisualElement = nil
 
 --!Bind
 local craft_button : Label = nil
+--!Bind
+local equip_button : Label = nil
 
 local playerTracker = require("PlayerTracker")
 local monsterLibrary = require("MonsterLibrary")
@@ -160,8 +162,6 @@ function CreateMonsterEntry(playerMonsterInfo, defaultMonsterSpeciesData, index,
 
     return _newMonster
 end
-
-
 
 
 function SetItemInfoRecipe(recipe)
@@ -406,12 +406,14 @@ end
 
 function SetSection(section)
     print("Setting Section: ", section)
+    equip_button.style.display = DisplayStyle.None
     if section == 1 then
         --print("Setting Section: Monsters")
         currentTab = 1
         card_header.text = "My Monsters"
         PopulateMonsters(playerTracker.players[client.localPlayer].monsterCollection.value)
         info_container:EnableInClassList("hidden", false)
+        equip_button.style.display = DisplayStyle.Flex
     elseif section == 2 then
         print("Setting Section: Eggs")
         currentTab = 2
@@ -457,6 +459,14 @@ craft_button:RegisterPressCallback(function()
         inventoryManager.TryCraft(currentSelection.GetID())
     end
 
+    if currentSelectedMonster then
+        print("Equipping Monster: ", currentSelectedMonster)
+        uiManager.CloseGeneralInventoryUI()
+        uiManager.OpenMonsterInfoUI(currentSelectedMonster)
+    end
+end)
+
+equip_button:RegisterPressCallback(function()
     if currentSelectedMonster then
         print("Equipping Monster: ", currentSelectedMonster)
         gameManager.EquipMonster(currentSelectedMonster)

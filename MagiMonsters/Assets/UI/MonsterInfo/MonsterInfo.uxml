@@ -13,22 +13,22 @@
     <VisualElement class="inventory-container">
 
       <VisualElement class="card-header-container">
-        <Label text="Materials" class="card-header" name="card_header" />
+        <Label text="Name" class="card-header" name="card_header" />
       </VisualElement>
 
       <VisualElement class="tabs-container">
 
         <VisualElement class="tab-button" name="monster_one_tab">
-          <VisualElement class="tab-icon" name="monster_one_icon"/>
+          <Image class="tab-icon" name="monster_one_icon"/>
         </VisualElement>
         <VisualElement class="tab-button" name="monster_two_tab">
-          <VisualElement class="tab-icon" name="monster_two_icon"/>
+          <Image class="tab-icon" name="monster_two_icon"/>
         </VisualElement>
         <VisualElement class="tab-button" name="monster_three_tab">
-          <VisualElement class="tab-icon" name="monster_three_icon"/>
+          <Image class="tab-icon" name="monster_three_icon"/>
         </VisualElement>
         <VisualElement class="tab-button" name="monster_four_tab">
-          <VisualElement class="tab-icon" name="monster_four_icon"/>
+          <Image class="tab-icon" name="monster_four_icon"/>
         </VisualElement>
 
       </VisualElement>

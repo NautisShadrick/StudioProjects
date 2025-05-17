@@ -26,6 +26,7 @@ namespace Highrise.Lua.Generated
         private const string s_scriptGUID = "41642764b153e7e4bb9584abc566e290";
         public override string ScriptGUID => s_scriptGUID;
 
+        [SerializeField] public UnityEngine.Texture m_noElementIcon = default;
 
         protected override SerializedPropertyValue[] SerializeProperties()
         {
@@ -34,7 +35,20 @@ namespace Highrise.Lua.Generated
 
             return new SerializedPropertyValue[]
             {
-                CreateSerializedProperty(_script.GetPropertyAt(0), null),
+                CreateSerializedProperty(_script.GetPropertyAt(0), m_noElementIcon),
+                CreateSerializedProperty(_script.GetPropertyAt(1), null),
+                CreateSerializedProperty(_script.GetPropertyAt(2), null),
+                CreateSerializedProperty(_script.GetPropertyAt(3), null),
+                CreateSerializedProperty(_script.GetPropertyAt(4), null),
+                CreateSerializedProperty(_script.GetPropertyAt(5), null),
+                CreateSerializedProperty(_script.GetPropertyAt(6), null),
+                CreateSerializedProperty(_script.GetPropertyAt(7), null),
+                CreateSerializedProperty(_script.GetPropertyAt(8), null),
+                CreateSerializedProperty(_script.GetPropertyAt(9), null),
+                CreateSerializedProperty(_script.GetPropertyAt(10), null),
+                CreateSerializedProperty(_script.GetPropertyAt(11), null),
+                CreateSerializedProperty(_script.GetPropertyAt(12), null),
+                CreateSerializedProperty(_script.GetPropertyAt(13), null),
             };
         }
         
