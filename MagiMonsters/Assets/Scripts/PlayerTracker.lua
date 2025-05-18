@@ -16,6 +16,7 @@ function TrackPlayers(game, characterCallback)
         playercount = playercount + 1
         players[player] = {
             player = player,
+            currentMonsterTeam = TableValue.new("CurrentMonsterTeam"..player.user.id, {}),
             monsterCollection = TableValue.new("MonsterCollection"..player.user.id, {}),
             currentMosnterIndex = NumberValue.new("CurrentMonsterIndex"..player.user.id, 1),
             hatcheryData = TableValue.new("HatcheryData"..player.user.id, {}),
@@ -86,9 +87,16 @@ end
 
 ------------- SERVER -------------
 
+-- player monster team is a table of indexes to the monster collection e.g {1,2,3,4} monsters [1] [2] [3] [4] in the monster collection
+
 function SavePlayerMonstersToStorage(player: Player)
     local _monsterCollection = players[player].monsterCollection.value
     Storage.SetPlayerValue(player, "monster_colletion", _monsterCollection)
+end
+
+function SavePlayerTeamToStorage(player: Player)
+    local _currentMonsterTeam = players[player].currentMonsterTeam.value
+    Storage.SetPlayerValue(player, "current_Monster_Team", _currentMonsterTeam)
 end
 
 function GetPlayerMonstersFromStorage(player: Player)
@@ -97,6 +105,26 @@ function GetPlayerMonstersFromStorage(player: Player)
             return
         end
         players[player].monsterCollection.value = monsterCollection
+
+        Storage.GetPlayerValue(player, "current_Monster_Team", function(currentMonsterTeam)
+            if currentMonsterTeam == nil or {} then 
+                --if the player has no team, set it to the first 4 monsters in the collection, also account for the case where the player has less than 4 monsters
+                currentMonsterTeam = {}
+                print(#monsterCollection)
+                if #monsterCollection == 0 then return end
+                local _tempCollection = monsterCollection
+                for i = 1, math.min(4, #_tempCollection) do
+                    table.insert(currentMonsterTeam, i)
+                end
+
+                players[player].currentMonsterTeam.value = currentMonsterTeam
+
+                -- now save the new team to storage
+                SavePlayerTeamToStorage(player)
+
+            end
+            players[player].currentMonsterTeam.value = currentMonsterTeam
+        end)
     end)
 
     Storage.GetPlayerValue(player, "egg_collection", function(eggCollection)
