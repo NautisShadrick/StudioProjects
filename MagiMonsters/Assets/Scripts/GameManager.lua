@@ -125,6 +125,17 @@ function HandleBattleEnd(player)
     playerBattles[player] = nil
 end
 
+function HandleSwap(player, monsterIndex)
+        playerTracker.players[player].currentMosnterIndex.value = monsterIndex
+        playerTracker.players[player].equippedMonsterType.value = playerTracker.players[player].monsterCollection.value[monsterIndex].speciesName
+
+        if not playerBattles[player] then
+            print("Player is not in a battle")
+            return
+        end
+        playerBattles[player]:SwapMonster()
+    end
+
 function self:ServerAwake()
 
     DoActionRequest:Connect(function(player, action)
@@ -141,16 +152,7 @@ function self:ServerAwake()
         playerBattles[player]:DoAction(action)
     end)
 
-    SwapMonsterRequest:Connect(function(player, monsterIndex)
-        playerTracker.players[player].currentMosnterIndex.value = monsterIndex
-        playerTracker.players[player].equippedMonsterType.value = playerTracker.players[player].monsterCollection.value[monsterIndex].speciesName
-
-        if not playerBattles[player] then
-            print("Player is not in a battle")
-            return
-        end
-        playerBattles[player]:SwapMonster()
-    end)
+    SwapMonsterRequest:Connect(HandleSwap)
 
     UseItemRequest:Connect(function(player, itemID)
         if not playerBattles[player] then

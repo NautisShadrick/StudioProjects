@@ -11,6 +11,8 @@ local playercount = 0
 local actionLibrary = require("ActionLibrary")
 local monsterLibrary = require("MonsterLibrary")
 
+local gameManager = require("GameManager")
+
 local worldMonsterSpawner = require("WorldMonsterSpawner")
 
 ------------ Player Tracking ------------
@@ -169,7 +171,17 @@ function SetHealthInCollection(player: Player, hp: number)
 end
 
 function self:ServerAwake()
-    TrackPlayers(server)
+    TrackPlayers(server, function(playerinfo)
+        local player = playerinfo.player
+        local character = playerinfo.player.character
+
+        playerinfo.currentMonsterTeam.Changed:Connect(function(team)
+            if #team < 1 then return end
+            if playerinfo.currentMosnterIndex.value == team[1] then return end
+            gameManager.HandleSwap(player, team[1])
+        end)
+
+    end)
 
     GetDefaultMonsterDataRequest:Connect(function(player)
         print("setting monster data for: ", player.name)
