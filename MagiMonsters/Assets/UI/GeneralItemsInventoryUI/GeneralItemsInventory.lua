@@ -362,7 +362,10 @@ end
 function PopulateMonsters(monsters)
     _inventoryScrollView:Clear()
 
-    for i, monster in ipairs(monsters) do
+    for i, monsterRef in ipairs(monsters) do
+
+        local monster = monsterRef[1]
+        local monsterIndex = monsterRef[2]
 
         if i == playerTracker.players[client.localPlayer].currentMosnterIndex.value then
             SetItemInfoMonster(monster, monsterLibrary.monsters[monster.speciesName])
@@ -375,11 +378,11 @@ function PopulateMonsters(monsters)
             -- Check if this is the currently equipped monster
             local _isEquipped = false
             local _currentMonsterIndex = playerTracker.players[client.localPlayer].currentMosnterIndex.value
-            if i == _currentMonsterIndex then
+            if monsterIndex == _currentMonsterIndex then
                 _isEquipped = true
             end
 
-            local newItem = CreateMonsterEntry(monster, monsterData, i, _isEquipped)
+            local newItem = CreateMonsterEntry(monster, monsterData, monsterIndex, _isEquipped)
             _inventoryScrollView:Add(newItem)
         end
 
@@ -417,7 +420,7 @@ function SetSection(section)
         local _currentMonsterCollection = playerTracker.players[client.localPlayer].monsterCollection.value
         local _currentMonsters = {}
         for i, monsterIndex in ipairs(_currentMonsterTeam) do
-            table.insert(_currentMonsters, _currentMonsterCollection[monsterIndex])
+            table.insert(_currentMonsters, {_currentMonsterCollection[monsterIndex], monsterIndex})
         end
         PopulateMonsters(_currentMonsters)
 

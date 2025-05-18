@@ -325,7 +325,7 @@
 }
 
 .material-item {
-    height: 28px;
+    height: 16px;
     width:  100%;
 
     margin: 0;
