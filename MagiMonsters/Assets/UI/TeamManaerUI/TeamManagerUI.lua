@@ -126,7 +126,9 @@ end
 function self:Start()
     PopulateCollection(testCollection)
     PopulateTeam(testTeam)
+    uiManager.CloseTeamManagerUI()
 end
 
 close_button:RegisterPressCallback(function()
+    uiManager.CloseTeamManagerUI()
 end)

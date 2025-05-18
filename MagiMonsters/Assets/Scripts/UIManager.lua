@@ -28,6 +28,8 @@ local HudButtonsObj: GameObject = nil
 local itemReceivedNotificationObj: GameObject = nil
 --!SerializeField
 local postBattleScreenObj: GameObject = nil
+--!SerializeField
+local TeamManagerUIObj: GameObject = nil
 
 timerUI = nil
 
@@ -41,6 +43,7 @@ local HudButtonsUI: HudButtons = nil
 local nameMonsterUI = nil
 local itemsReceivedNotificationUI: ItemsReceivedNotification = nil
 local postBattleScreenUI: PostBattleScreen = nil
+local teamManagerUI: TeamManagerUI = nil
 
 ResponseChosenEvent = Event.new("ResponseChosenEvent")
 
@@ -131,6 +134,7 @@ function self:ClientStart()
     itemsReceivedNotificationUI = itemReceivedNotificationObj:GetComponent(ItemsReceivedNotification)
     postBattleScreenUI = postBattleScreenObj:GetComponent(PostBattleScreen)
     MonsterInfoUI = MonsterInfoUIObj:GetComponent(MonsterInfo)
+    teamManagerUI = TeamManagerUIObj:GetComponent(TeamManagerUI)
 
     BattleDataModule.ActionEvent:Connect(function(turn, playerHealth, playerMana, enemyHealth, enemyMaxHealth, enemyMana, enemyMaxMana, actionName)
         BattleScreenUI.UpdateStats(turn, playerHealth, playerMana, enemyHealth, enemyMaxHealth, enemyMana, enemyMaxMana)
@@ -231,4 +235,15 @@ end
 function CloseMonsterInfoUI()
     HudButtonsObj:SetActive(true)
     MonsterInfoUIObj:SetActive(false)
+end
+
+function OpenTeamManagerUI()
+    HudButtonsObj:SetActive(false)
+    TeamManagerUIObj:SetActive(true)
+    --teamManagerUI.InitializeUI()
+end
+
+function CloseTeamManagerUI()
+    HudButtonsObj:SetActive(true)
+    TeamManagerUIObj:SetActive(false)
 end

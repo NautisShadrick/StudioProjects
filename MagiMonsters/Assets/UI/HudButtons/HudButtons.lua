@@ -49,4 +49,9 @@ function self:Start()
         uiManager.OpenGeneralInventoryUI()
     end)
     inventoryButton.name = "inv_button"
+
+    collectionButton = CreateHudButton("Collection", buttonIcons[2], "right", function()
+        uiManager.OpenTeamManagerUI()
+    end)
+    collectionButton.name = "coll_button"
 end

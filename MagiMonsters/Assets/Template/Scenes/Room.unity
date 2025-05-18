@@ -1919,6 +1919,12 @@ MonoBehaviour:
   m_IgnoreFromBuild: 1
   m_ApplyToChildren: 1
   m_AffectedAgents: ffffffff
+--- !u!4 &1534914976 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2645774871667250413, guid: bc8c539dc51b48c41b3e95d796ae1756,
+    type: 3}
+  m_PrefabInstance: {fileID: 6093947815311530456}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1537116707
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2304,12 +2310,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1989101567}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -6.14, y: 0.607, z: 12.058}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1534914976}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1989101569
 MonoBehaviour:
@@ -3174,6 +3180,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 142825629437475977, guid: bc8c539dc51b48c41b3e95d796ae1756,
+        type: 3}
+      propertyPath: m_TeamManagerUIObj
+      value: 
+      objectReference: {fileID: 1989101567}
     - target: {fileID: 1002415469471523233, guid: bc8c539dc51b48c41b3e95d796ae1756,
         type: 3}
       propertyPath: m_testAnchor
@@ -3229,6 +3240,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4415258377595093548, guid: bc8c539dc51b48c41b3e95d796ae1756,
+        type: 3}
+      propertyPath: m_buttonIcons.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4415258377595093548, guid: bc8c539dc51b48c41b3e95d796ae1756,
+        type: 3}
+      propertyPath: m_buttonIcons.Array.data[1]
+      value: 
+      objectReference: {fileID: 2800000, guid: cf960ce370afb4a9fb70d79e696fd6ef, type: 3}
     - target: {fileID: 8238442016364255094, guid: bc8c539dc51b48c41b3e95d796ae1756,
         type: 3}
       propertyPath: m_Name
@@ -3236,7 +3257,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 2645774871667250413, guid: bc8c539dc51b48c41b3e95d796ae1756,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1989101568}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bc8c539dc51b48c41b3e95d796ae1756, type: 3}
 --- !u!1001 &7795586414868047810
@@ -3322,4 +3347,3 @@ SceneRoots:
   - {fileID: 619486530}
   - {fileID: 359873931}
   - {fileID: 239601439}
-  - {fileID: 1989101568}

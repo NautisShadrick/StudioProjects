@@ -39,6 +39,7 @@ namespace Highrise.Lua.Generated
         [SerializeField] public UnityEngine.GameObject m_HudButtonsObj = default;
         [SerializeField] public UnityEngine.GameObject m_itemReceivedNotificationObj = default;
         [SerializeField] public UnityEngine.GameObject m_postBattleScreenObj = default;
+        [SerializeField] public UnityEngine.GameObject m_TeamManagerUIObj = default;
 
         protected override SerializedPropertyValue[] SerializeProperties()
         {
@@ -60,6 +61,7 @@ namespace Highrise.Lua.Generated
                 CreateSerializedProperty(_script.GetPropertyAt(10), m_HudButtonsObj),
                 CreateSerializedProperty(_script.GetPropertyAt(11), m_itemReceivedNotificationObj),
                 CreateSerializedProperty(_script.GetPropertyAt(12), m_postBattleScreenObj),
+                CreateSerializedProperty(_script.GetPropertyAt(13), m_TeamManagerUIObj),
             };
         }
         

@@ -578,6 +578,61 @@ MonoBehaviour:
   m_IgnoreFromBuild: 1
   m_ApplyToChildren: 1
   m_AffectedAgents: ffffffff
+--- !u!1 &6776030188267490612
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3934207207497820581}
+  - component: {fileID: 8606672899323990225}
+  m_Layer: 0
+  m_Name: TeamManageUI
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3934207207497820581
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6776030188267490612}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -6.14, y: 0.607, z: 12.058}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2645774871667250413}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8606672899323990225
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6776030188267490612}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55835f1ca5579e3142770d8f2ec9f1fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _networkId: 0
+  _script: {fileID: -974389366465450183, guid: ef5c5fc91f889ee4f8a80d5a9416f12e, type: 3}
+  _properties: []
+  _uiOutput: 3
+  _uiOutputSettings:
+    rid: -2
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
 --- !u!1 &8238442016364255094
 GameObject:
   m_ObjectHideFlags: 0
@@ -621,6 +676,7 @@ Transform:
   - {fileID: 3100528679949138583}
   - {fileID: 1033455267176750918}
   - {fileID: 7945932685513634801}
+  - {fileID: 3934207207497820581}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &142825629437475977
@@ -671,6 +727,7 @@ MonoBehaviour:
   m_HudButtonsObj: {fileID: 8448215622072488766}
   m_itemReceivedNotificationObj: {fileID: 2025476158723418721}
   m_postBattleScreenObj: {fileID: 2021790027963486777}
+  m_TeamManagerUIObj: {fileID: 6776030188267490612}
   references:
     version: 2
     RefIds:
@@ -960,6 +1017,7 @@ MonoBehaviour:
     rid: -2
   m_buttonIcons:
   - {fileID: 2800000, guid: 1b5cdbcd2092f4f899f7881fb26c6755, type: 3}
+  - {fileID: 2800000, guid: 557771912a6fa4f89b3d49536216b714, type: 3}
   references:
     version: 2
     RefIds:
