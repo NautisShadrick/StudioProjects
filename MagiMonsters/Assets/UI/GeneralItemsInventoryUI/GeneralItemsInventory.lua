@@ -411,7 +411,16 @@ function SetSection(section)
         --print("Setting Section: Monsters")
         currentTab = 1
         card_header.text = "My Monsters"
-        PopulateMonsters(playerTracker.players[client.localPlayer].monsterCollection.value)
+
+        --Get only the monsters on the players current team
+        local _currentMonsterTeam = playerTracker.players[client.localPlayer].currentMonsterTeam.value
+        local _currentMonsterCollection = playerTracker.players[client.localPlayer].monsterCollection.value
+        local _currentMonsters = {}
+        for i, monsterIndex in ipairs(_currentMonsterTeam) do
+            table.insert(_currentMonsters, _currentMonsterCollection[monsterIndex])
+        end
+        PopulateMonsters(_currentMonsters)
+
         info_container:EnableInClassList("hidden", false)
         equip_button.style.display = DisplayStyle.Flex
     elseif section == 2 then

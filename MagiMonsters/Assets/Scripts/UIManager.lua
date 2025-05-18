@@ -240,7 +240,7 @@ end
 function OpenTeamManagerUI()
     HudButtonsObj:SetActive(false)
     TeamManagerUIObj:SetActive(true)
-    --teamManagerUI.InitializeUI()
+    teamManagerUI.InitializeTeamManagerUI()
 end
 
 function CloseTeamManagerUI()
