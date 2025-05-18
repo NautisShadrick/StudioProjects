@@ -33,6 +33,7 @@ local monster_three_icon : Image = nil
 local monster_four_icon  : Image = nil
 
 local _tabs = {monster_one_tab, monster_two_tab, monster_three_tab, monster_four_tab}
+local _tabIndexes = {1, 2, 3, 4}
 local _images = {monster_one_icon, monster_two_icon, monster_three_icon, monster_four_icon}
 
 local playerTracker = require("PlayerTracker")
@@ -110,18 +111,23 @@ end
 
 function SetTabs()
     local playerMonsters = playerTracker.players[client.localPlayer].monsterCollection.value
-    local _team = {}
+    local playerTeam = playerTracker.players[client.localPlayer].currentMonsterTeam.value
 
+    local _currentMonsters = {}
     for i = 1, 4 do
-        local _monster = playerMonsters[i]
-        if _monster then table.insert(_team, _monster) end
+        local _monster = playerTeam[i]
+        if _monster then
+            table.insert(_currentMonsters, {playerMonsters[_monster], playerTeam[i]})
+        end
     end
     
     for i = 1, 4 do
-        local _monster = _team[i]
-        if _monster then
+        local _monsterRef = _currentMonsters[i]
+        if _monsterRef then
+            local _monster = _monsterRef[1]
             _tabs[i].style.display = DisplayStyle.Flex
             _images[i].image = monsterLibrary.GetDefaultMonsterData(_monster.speciesName).monsterSprite
+            _tabIndexes[i] = _monsterRef[2]
         else
             _tabs[i].style.display = DisplayStyle.None
         end
@@ -183,6 +189,7 @@ end)
 
 for i, tab in ipairs(_tabs) do
     tab:RegisterPressCallback(function()
-        InitializeUI(i)
+        print(_tabIndexes[i])
+        InitializeUI(_tabIndexes[i])
     end)
 end

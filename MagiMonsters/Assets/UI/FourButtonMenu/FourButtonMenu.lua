@@ -172,7 +172,7 @@ end
 
 local MonstersButtonCallback = function()
     print("Monsters Button Pressed")
-    local _myMonsters = playerTracker.GetPlayerMonsterCollection()
+    local _myMonsters = playerTracker.GetPlayerTeamMonsters()
     local _monsterButtons : {menuButton} = {}
     
     for i = 1, 4 do

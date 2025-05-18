@@ -88,6 +88,18 @@ function GetPlayerMonsterCollection()
     return players[client.localPlayer].monsterCollection.value
 end
 
+function GetPlayerTeamMonsters()
+    local _currentMonsterTeam = players[client.localPlayer].currentMonsterTeam.value
+    local _monsterCollection = players[client.localPlayer].monsterCollection.value
+    local _tempCollection = {}
+
+    for i, monsterIndex in ipairs(_currentMonsterTeam) do
+        table.insert(_tempCollection, _monsterCollection[monsterIndex])
+    end
+
+    return _tempCollection
+end
+
 function AddMonsterToTeam(index)
     addMonsterToTeamRequest:FireServer(index)
 end
@@ -117,7 +129,7 @@ function GetPlayerMonstersFromStorage(player: Player)
         players[player].monsterCollection.value = monsterCollection
 
         Storage.GetPlayerValue(player, "current_Monster_Team", function(currentMonsterTeam)
-            if currentMonsterTeam == nil or {} then 
+            if currentMonsterTeam == nil or #currentMonsterTeam < 1 then 
                 --if the player has no team, set it to the first 4 monsters in the collection, also account for the case where the player has less than 4 monsters
                 currentMonsterTeam = {}
                 print(#monsterCollection)
