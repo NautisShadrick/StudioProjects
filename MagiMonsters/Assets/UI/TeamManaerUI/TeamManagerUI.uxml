@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UXML
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="UnityEngine.UIElements"
+    xmlns:hr="Highrise.UI"
+    xmlns:editor="UnityEditor.UIElements"
+    xsi:noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd"
+>
+
+  <hr:UILuaView class="team-manager-u-i">
+
+    <VisualElement class="inventory-container">
+      <VisualElement class="card-header-container">
+        <Label text="Team" class="card-header" name="card_header" />
+      </VisualElement>
+
+      <VisualElement name="active_team_container">
+      </VisualElement>
+
+      <VisualElement name="moneter_collection_manager">
+
+        <VisualElement name="rewards_header">
+          <VisualElement name="rewards_header_frame_left"/>
+          <Label name="rewards_header_title" text="COLLECTION"/>
+          <VisualElement name="rewards_header_frame_right"/>
+        </VisualElement>
+
+        <hr:UIScrollView class="monsters" name="_monsterScrollView">
+            <!-- Ranks will be added here -->
+        </hr:UIScrollView>
+      </VisualElement>
+
+      <VisualElement name="close_button"/>
+    </VisualElement>
+  </hr:UILuaView>
+
+</UXML>
