@@ -307,6 +307,74 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 137571927}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &239601439
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 3361734356793669776, guid: 2408d897dc410c04186da978fac3743b,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -6.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 3361734356793669776, guid: 2408d897dc410c04186da978fac3743b,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3361734356793669776, guid: 2408d897dc410c04186da978fac3743b,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 11.92
+      objectReference: {fileID: 0}
+    - target: {fileID: 3361734356793669776, guid: 2408d897dc410c04186da978fac3743b,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3361734356793669776, guid: 2408d897dc410c04186da978fac3743b,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3361734356793669776, guid: 2408d897dc410c04186da978fac3743b,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3361734356793669776, guid: 2408d897dc410c04186da978fac3743b,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3361734356793669776, guid: 2408d897dc410c04186da978fac3743b,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3361734356793669776, guid: 2408d897dc410c04186da978fac3743b,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3361734356793669776, guid: 2408d897dc410c04186da978fac3743b,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7733988222536522216, guid: 2408d897dc410c04186da978fac3743b,
+        type: 3}
+      propertyPath: m_Name
+      value: HatcherySlot
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 2408d897dc410c04186da978fac3743b, type: 3}
 --- !u!1001 &243382762
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1268,7 +1336,7 @@ MonoBehaviour:
   _cameraHeight: 2.5
   _startZoom: 7.5
   _minimumZoom: 3
-  _maximumZoom: 25
+  _maximumZoom: 35
   _offset: {x: 0, y: 0, z: 0}
   _pitchEnabled: 1
   _pitchStart: 5
@@ -3198,3 +3266,4 @@ SceneRoots:
   - {fileID: 2116782578}
   - {fileID: 619486530}
   - {fileID: 359873931}
+  - {fileID: 239601439}

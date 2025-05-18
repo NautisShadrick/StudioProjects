@@ -3,7 +3,6 @@
 goHomeRequest = Event.new("GoHomeRequest")
 leaveHomeRequest = Event.new("LeaveHomeRequest")
 
-
 function self:ServerStart()
 
     goHomeRequest:Connect(function(player)

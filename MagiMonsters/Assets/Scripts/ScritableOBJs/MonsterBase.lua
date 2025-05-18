@@ -42,3 +42,29 @@ end
 function GetLootTable()
     return MonsterLootTable
 end
+
+function GetBaseStatsByLevel(level)
+    local baseStats = {
+    {
+        name = "health",
+        value = 100,
+    },
+    {
+        name = "mana",
+        value = 60,
+    },
+    {
+        name = "attack",
+        value = 50,
+    },
+    {
+        name = "defense",
+        value = 30,
+    },
+    {
+        name = "accuracy",
+        value = 10,
+    },
+}
+    return baseStats
+end

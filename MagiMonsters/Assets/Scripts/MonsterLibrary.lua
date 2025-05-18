@@ -53,6 +53,7 @@ function GetStorageMonsterData(monsterName: string)
         maxMana = monsters[monsterName].GetMaxMana(),
         currentMana = monsters[monsterName].GetMaxMana(),
         level = 1,
-        actionIDs = monsters[monsterName].GetActions()
+        actionIDs = monsters[monsterName].GetActions(),
+        stats = monsters[monsterName].GetBaseStatsByLevel(1),
     }
 end

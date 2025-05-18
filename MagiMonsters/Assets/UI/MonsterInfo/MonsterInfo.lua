@@ -163,10 +163,10 @@ function InitializeUI(playerMonsterIndex)
     local playerMonster = playerTracker.players[client.localPlayer].monsterCollection.value[playerMonsterIndex]
     local _monsterSprite = monsterLibrary.GetDefaultMonsterData(playerMonster.speciesName).monsterSprite
     local _actions = playerMonster.actionIDs
-    --local _stats = playerMonster.stats
+    local _stats = playerMonster.stats
 
     PopulateActions(_actions)
-    PopulateStats(testStats)
+    PopulateStats(_stats)
     monster_image.image = _monsterSprite
     card_header.text = playerMonster.name
 
