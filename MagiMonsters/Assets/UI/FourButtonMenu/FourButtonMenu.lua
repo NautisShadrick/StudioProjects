@@ -183,7 +183,7 @@ local MonstersButtonCallback = function()
                 {
                 title = monster.name,
                 elementID = monsterLibrary.monsters[monster.speciesName].GetElement(),
-                callback = function() gameManger.SwapMonster(i) end
+                callback = function() gameManger.SwapMonster(playerTracker.players[client.localPlayer].currentMonsterTeam.value[i]) end
                 }
             )
         else
