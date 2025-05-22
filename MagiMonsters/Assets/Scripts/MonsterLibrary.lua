@@ -1,20 +1,22 @@
 --!Type(Module)
 
 --!SerializeField
-local Zapkit: MonsterBase = nil
---!SerializeField
-local Terrakita: MonsterBase = nil
+local MonsterDatas: {MonsterBase} = {}
 
 --!SerializeField
 local airEggSprite: Texture = nil
+--!SerializeField
+local earthEggSprite: Texture = nil
+--!SerializeField
+local waterEggSprite: Texture = nil
 
 monsters = {
-    Zapkit = Zapkit,
-    Terrakita = Terrakita
 }
 
 eggSprites = {
-    ["air"] = airEggSprite
+    ["air"] = airEggSprite,
+    ["earth"] = earthEggSprite,
+    ["water"] = waterEggSprite,
 }
 
 export type MonsterData = {
@@ -28,6 +30,13 @@ export type MonsterData = {
     actionIDs: {string},
     monsterSprite: Texture
 }
+
+function AddMonstersToTable()
+    for _, monsterData in pairs(MonsterDatas) do
+        print("Adding monster: " .. monsterData.GetName())
+        monsters[monsterData.GetName()] = monsterData
+    end
+end
 
 function GetDefaultMonsterData(monsterName: string): MonsterData
     return {
@@ -56,4 +65,8 @@ function GetStorageMonsterData(monsterName: string)
         actionIDs = monsters[monsterName].GetActions(),
         stats = monsters[monsterName].GetBaseStatsByLevel(1),
     }
+end
+
+function self:Start()
+    AddMonstersToTable()
 end

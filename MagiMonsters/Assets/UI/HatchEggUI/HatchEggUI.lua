@@ -38,8 +38,16 @@ local hatch_egg_text : Label = nil
 --!Bind
 local continue_text : Label = nil
 
+local monsterName = ""
+local monsterSprite = nil
+
 local canTap = false
 local state = 0
+local slotID = 0
+
+local playerTracker = require("PlayerTracker")
+local monsterLibrary = require("MonsterLibrary")
+local uiManager = require("UIManager")
 
 local TweenModule = require("TweenModule")
 local Tween = TweenModule.Tween
@@ -186,14 +194,79 @@ local crackFadeInTween = Tween:new(
     end
 )
 
-function InitializeHatchingUI()
+local eggPopInTween = Tween:new(
+    0.01,
+    1,
+    0.75,
+    false,
+    false,
+    Easing.easeOutBack,
+    function(value)
+        egg_sprite.style.scale = StyleScale.new(Vector2.new(value, value))
+    end,
+    function()
+        egg_sprite.style.scale = StyleScale.new(Vector2.new(1, 1))
+    end
+)
+
+
+function GetMonsterInSlot(slotId)
+    local playerinfo = playerTracker.players[client.localPlayer]
+    local _hatcheryData = playerinfo.hatcheryData.value
+    for i, _hatcherySlot in ipairs(_hatcheryData) do
+        if _hatcherySlot.slotId == slotId then
+            return _hatcherySlot.monster
+        end
+    end
+    return nil
 end
 
-function self:Start()
+function InitializeHatchingUI(slotId)
+
+    slotID = slotId
+    
+    local _monster = GetMonsterInSlot(slotId)
+    if _monster == nil then
+        print("No monster in slot")
+        uiManager.CloseHatchEggUI()
+        return
+    end
+
+    local monsterData : MonsterBase = monsterLibrary.monsters[_monster]
+    if monsterData == nil then
+        print("No monster data")
+        uiManager.CloseHatchEggUI()
+        return
+    end
+
+    eggSprite = monsterLibrary.eggSprites[monsterData.GetElement()]
+    if eggSprite == nil then
+        print("No egg sprite")
+        uiManager.CloseHatchEggUI()
+        return
+    end
+
+    monsterSprite = monsterData.GetSprite()
+    monsterName = monsterData.GetName()
+
+    local elementBG = uiManager.GetBG(monsterData.GetElement())
+    click_off.style.backgroundImage = elementBG
+
+
+    hatch_egg_text.text = "Hatch Your Egg!"
+    egg_sprite.image = eggSprite
+
+    cracks_sprite.style.display = DisplayStyle.Flex
+    egg_sprite.style.display = DisplayStyle.Flex
+
     egg_particle.image = particleTex
     glowRotateTween:start()
     click_off.style.opacity = 0
     egg_particle.style.opacity = 0
+
+    cracks_sprite.image = cracks[0]
+
+
     egg_container.style.translate = StyleTranslate.new(Translate.new(Length.new(0), Length.new(-500)))
     glow_sprite.style.scale = StyleScale.new(Vector2.new(0.01, 0.01))
     hatch_egg_text.style.scale = StyleScale.new(Vector2.new(0.01, 0.01))
@@ -201,28 +274,45 @@ function self:Start()
 
     continue_text.text = ""
 
-    Timer.After(1, function()
-        bgFadeInTween:start()
-        Timer.After(0.25, function()
-            Timer.After(.2, function() glowPopInTween:start() end)
-            eggFallInTween:start()
-        end)
+    bgFadeInTween:start()
+    Timer.After(0.25, function()
+        Timer.After(.2, function() glowPopInTween:start() end)
+        eggFallInTween:start()
     end)
+
+end
+
+function self:Start()
+    uiManager.CloseHatchEggUI()
 end
 
 egg_container:RegisterPressCallback(function()
     if canTap then
-        tapParticle:Play()
-        eggShakeTween:start()
         state = state + 1
         if state == 1 then
             crackFadeInTween:start()
         end
-
         if state < 3 then
-            cracks_sprite.image = cracks[state]
+            tapParticle:Play()
+            eggShakeTween:start()
+            cracks_sprite.image = cracks[state+1]
         else
-            print("egg hatched")
+            cracks_sprite.style.display = DisplayStyle.None
+            hatchParticle:Play(true)
+
+            hatch_egg_text.text = monsterName .. "!"
+            egg_sprite.image = monsterSprite
+            eggPopInTween:start()
+            continue_text.text = "Tap to continue..."
+        end
+        if state >= 4 then
+            state = 0
+            canTap = false
+            eggShakeTween:stop()
+            eggIdleTween:stop()
+            textPopInTween:stop()
+            uiManager.CloseHatchEggUI()
+            uiManager.OpenNameMonsterUI(slotID)
         end
     end
 end)

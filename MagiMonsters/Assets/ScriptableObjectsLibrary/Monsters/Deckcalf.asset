@@ -10,20 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 68287dfd3b38f641a16e496b7427f8ff, type: 3}
-  m_Name: Terrakita
+  m_Name: Deckcalf
   m_EditorClassIdentifier: 
   _script: {fileID: -974389366465450183, guid: d2f77d2881e7f6941bb149becef8f82a, type: 3}
-  _networkId: 3526040400
+  _networkId: 2635439608
   _properties: []
-  m_MonsterName: Terrakita
-  m_MonsterElement: earth
-  m_MaxHP: 250
-  m_MaxMana: 50
+  m_MonsterName: Deckcalf
+  m_MonsterElement: water
+  m_MaxHP: 150
+  m_MaxMana: 100
   m_MonsterActions:
-  - bark
-  - bite
+  - scratch
   - tackle
-  m_MonsterSprite: {fileID: 2800000, guid: 9c4f4a3f2f6e6c2478ded2cc74a4db44, type: 3}
+  - bite
+  m_MonsterSprite: {fileID: 2800000, guid: 84aaca0a9f1ceb84c870422cc67a1a31, type: 3}
   m_MonsterLootTable: {fileID: 11400000, guid: b5ba7285a8b8e3240b3eae970cfded89, type: 2}
   references:
     version: 2

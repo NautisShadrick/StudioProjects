@@ -2,7 +2,7 @@
     --font-comic: url("project://database/Assets/UI/Fonts/MuseoSansRounded-900 SDF.asset");
     --image-glow-sprite: url("project://database/Assets/UI/Icons/glow_sprite.png");
 
-    --image-testBG: url("project://database/Assets/Art/Sprites/sky_egg_bg.png");
+    --image-testBG: url("project://database/Assets/Art/Sprites/water_egg_bg.png");
     --image-testEgg: url("project://database/Assets/Art/Sprites/Egg_Air.png");
     --image-testEggCracks: url("project://database/Assets/Art/Sprites/Egg_Crack_2.png");
     --basic-ribbon-bg: url("project://database/Assets/LayerLab/GUI Pro-FantasyRPG/ResourcesData/Sprites/Component/Label/label_ribbon_02_Demo.png");
@@ -64,7 +64,6 @@
     position: absolute;
     width: 100%;
     height: 100%;
-    background-image: var(--image-testEgg);
 }
 
 #cracks_sprite{

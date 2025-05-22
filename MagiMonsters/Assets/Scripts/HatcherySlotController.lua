@@ -28,7 +28,8 @@ function self:Start()
             if isReady then
                 -- Hatch Monster
                 print("Hatching Monster")
-                uiManager.OpenNameMonsterUI(slotId)
+                --uiManager.OpenNameMonsterUI(slotId)
+                uiManager.OpenHatchEggUI(slotId)
             else
                 print("Egg is not ready yet")
                 -- Show info

@@ -27,10 +27,10 @@ namespace Highrise.Lua.Generated
         public override string ScriptGUID => s_scriptGUID;
 
         [LuaScriptPropertyAttribute("d2f77d2881e7f6941bb149becef8f82a")]
-        [SerializeField] public UnityEngine.Object m_Zapkit = default;
-        [LuaScriptPropertyAttribute("d2f77d2881e7f6941bb149becef8f82a")]
-        [SerializeField] public UnityEngine.Object m_Terrakita = default;
+        [SerializeField] public System.Collections.Generic.List<UnityEngine.Object> m_MonsterDatas = default;
         [SerializeField] public UnityEngine.Texture m_airEggSprite = default;
+        [SerializeField] public UnityEngine.Texture m_earthEggSprite = default;
+        [SerializeField] public UnityEngine.Texture m_waterEggSprite = default;
 
         protected override SerializedPropertyValue[] SerializeProperties()
         {
@@ -39,9 +39,10 @@ namespace Highrise.Lua.Generated
 
             return new SerializedPropertyValue[]
             {
-                CreateSerializedProperty(_script.GetPropertyAt(0), m_Zapkit),
-                CreateSerializedProperty(_script.GetPropertyAt(1), m_Terrakita),
-                CreateSerializedProperty(_script.GetPropertyAt(2), m_airEggSprite),
+                CreateSerializedProperty(_script.GetPropertyAt(0), m_MonsterDatas),
+                CreateSerializedProperty(_script.GetPropertyAt(1), m_airEggSprite),
+                CreateSerializedProperty(_script.GetPropertyAt(2), m_earthEggSprite),
+                CreateSerializedProperty(_script.GetPropertyAt(3), m_waterEggSprite),
             };
         }
         

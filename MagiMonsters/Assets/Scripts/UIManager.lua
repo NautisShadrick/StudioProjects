@@ -2,6 +2,8 @@
 
 --!SerializeField
 local elementsIcons: {Texture} = nil
+--!SerializeField
+local elementsBGs: {Texture2D} = nil
 
 --!SerializeField
 local statIcons: {Texture} = nil
@@ -30,6 +32,8 @@ local itemReceivedNotificationObj: GameObject = nil
 local postBattleScreenObj: GameObject = nil
 --!SerializeField
 local TeamManagerUIObj: GameObject = nil
+--!SerializeField
+local HatchEggUIObj: GameObject = nil
 
 timerUI = nil
 
@@ -44,6 +48,7 @@ local nameMonsterUI = nil
 local itemsReceivedNotificationUI: ItemsReceivedNotification = nil
 local postBattleScreenUI: PostBattleScreen = nil
 local teamManagerUI: TeamManagerUI = nil
+local hatchEggUI: HatchEggUI = nil
 
 ResponseChosenEvent = Event.new("ResponseChosenEvent")
 
@@ -76,6 +81,21 @@ elementsIconsMap = {
     water = 12
 }
 
+elementsBGsMap = {
+    air = 1,
+    water = 2,
+    earth = 3,
+    fire = 4,
+    ice = 5,
+    life = 6,
+    lightning = 7,
+    metal = 8,
+    mist = 9,
+    phsycic = 10,
+    sand = 11,
+    death = 12
+}
+
 statIconsMap = {
     health = 1,
     mana = 2,
@@ -90,6 +110,10 @@ end
 
 function GetIcon(mapID)
     return elementsIcons[elementsIconsMap[mapID]]
+end
+
+function GetBG(mapID)
+    return elementsBGs[elementsBGsMap[mapID]]
 end
 
 function DialougeResponseHandler(responseID)
@@ -135,6 +159,7 @@ function self:ClientStart()
     postBattleScreenUI = postBattleScreenObj:GetComponent(PostBattleScreen)
     MonsterInfoUI = MonsterInfoUIObj:GetComponent(MonsterInfo)
     teamManagerUI = TeamManagerUIObj:GetComponent(TeamManagerUI)
+    hatchEggUI = HatchEggUIObj:GetComponent(HatchEggUI)
 
     BattleDataModule.ActionEvent:Connect(function(turn, playerHealth, playerMana, enemyHealth, enemyMaxHealth, enemyMana, enemyMaxMana, actionName)
         BattleScreenUI.UpdateStats(turn, playerHealth, playerMana, enemyHealth, enemyMaxHealth, enemyMana, enemyMaxMana)
@@ -211,7 +236,6 @@ end
 function OpenNameMonsterUI(slotId)
     currentHatchingSlotId = slotId
     NameMonsterUIObj:SetActive(true)
-    print(typeof(nameMonsterUI))
     nameMonsterUI.InitializeUI(slotId)
 end
 
@@ -246,4 +270,13 @@ end
 function CloseTeamManagerUI()
     HudButtonsObj:SetActive(true)
     TeamManagerUIObj:SetActive(false)
+end
+
+function OpenHatchEggUI(slotId)
+    HatchEggUIObj:SetActive(true)
+    hatchEggUI.InitializeHatchingUI(slotId)
+end
+
+function CloseHatchEggUI()
+    HatchEggUIObj:SetActive(false)
 end
