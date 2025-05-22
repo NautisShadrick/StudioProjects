@@ -53,6 +53,13 @@
     justify-content: center;
 }
 
+#egg_particle{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    scale: 2;
+}
+
 #egg_sprite{
     position: absolute;
     width: 100%;

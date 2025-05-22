@@ -12,6 +12,7 @@
 
     <VisualElement name="reward_container">
       <VisualElement name="glow_sprite" />
+      <Image name="egg_particle" picking-mode="Ignore" />
       <VisualElement name="egg_container">
         <Image name="egg_sprite" picking-mode="Ignore" />
         <Image name="cracks_sprite" picking-mode="Ignore" />

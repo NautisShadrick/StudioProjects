@@ -29,6 +29,10 @@ namespace Highrise.Lua.Generated
         [SerializeField] public UnityEngine.AnimationCurve m_fallInAnimationCurve = default;
         [SerializeField] public UnityEngine.AnimationCurve m_eggShakeAnimationCurve = default;
         [SerializeField] public System.Collections.Generic.List<UnityEngine.Texture> m_cracks = default;
+        [SerializeField] public UnityEngine.Texture m_particleTex = default;
+        [SerializeField] public UnityEngine.ParticleSystem m_idleParticle = default;
+        [SerializeField] public UnityEngine.ParticleSystem m_tapParticle = default;
+        [SerializeField] public UnityEngine.ParticleSystem m_hatchParticle = default;
 
         protected override SerializedPropertyValue[] SerializeProperties()
         {
@@ -40,14 +44,19 @@ namespace Highrise.Lua.Generated
                 CreateSerializedProperty(_script.GetPropertyAt(0), m_fallInAnimationCurve),
                 CreateSerializedProperty(_script.GetPropertyAt(1), m_eggShakeAnimationCurve),
                 CreateSerializedProperty(_script.GetPropertyAt(2), m_cracks),
-                CreateSerializedProperty(_script.GetPropertyAt(3), null),
-                CreateSerializedProperty(_script.GetPropertyAt(4), null),
-                CreateSerializedProperty(_script.GetPropertyAt(5), null),
-                CreateSerializedProperty(_script.GetPropertyAt(6), null),
+                CreateSerializedProperty(_script.GetPropertyAt(3), m_particleTex),
+                CreateSerializedProperty(_script.GetPropertyAt(4), m_idleParticle),
+                CreateSerializedProperty(_script.GetPropertyAt(5), m_tapParticle),
+                CreateSerializedProperty(_script.GetPropertyAt(6), m_hatchParticle),
                 CreateSerializedProperty(_script.GetPropertyAt(7), null),
                 CreateSerializedProperty(_script.GetPropertyAt(8), null),
                 CreateSerializedProperty(_script.GetPropertyAt(9), null),
                 CreateSerializedProperty(_script.GetPropertyAt(10), null),
+                CreateSerializedProperty(_script.GetPropertyAt(11), null),
+                CreateSerializedProperty(_script.GetPropertyAt(12), null),
+                CreateSerializedProperty(_script.GetPropertyAt(13), null),
+                CreateSerializedProperty(_script.GetPropertyAt(14), null),
+                CreateSerializedProperty(_script.GetPropertyAt(15), null),
             };
         }
         

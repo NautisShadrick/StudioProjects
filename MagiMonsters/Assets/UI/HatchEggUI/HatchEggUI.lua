@@ -7,6 +7,15 @@ local eggShakeAnimationCurve : AnimationCurve = nil
 
 --!SerializeField
 local cracks : {Texture} = {}
+--!SerializeField
+local particleTex : Texture = nil
+
+--!SerializeField
+local idleParticle: ParticleSystem = nil
+--!SerializeField
+local tapParticle: ParticleSystem = nil
+--!SerializeField
+local hatchParticle: ParticleSystem = nil
 
 --!Bind
 local click_off: VisualElement = nil
@@ -17,6 +26,8 @@ local reward_container: VisualElement = nil
 local glow_sprite : VisualElement = nil
 --!Bind
 local egg_container: VisualElement = nil
+--!Bind
+local egg_particle: Image = nil
 --!Bind
 local egg_sprite : Image = nil
 --!Bind
@@ -72,9 +83,11 @@ local glowPopInTween = Tween:new(
     Easing.easeOutBack,
     function(value)
         glow_sprite.style.scale = StyleScale.new(Vector2.new(value, value))
+        egg_particle.style.opacity = value
     end,
     function()
         glow_sprite.style.scale = StyleScale.new(Vector2.new(1, 1))
+        egg_particle.style.opacity = 1
     end
 )
 
@@ -139,9 +152,7 @@ local eggFallInTween = Tween:new(
         eggIdleTween:start()
         egg_container.style.translate = StyleTranslate.new(Translate.new(Length.new(0), Length.new(0)))
         canTap = true
-        Timer.After(0.5, function()
-            textPopInTween:start()
-        end)
+        textPopInTween:start()
     end
 )
 
@@ -179,12 +190,16 @@ function InitializeHatchingUI()
 end
 
 function self:Start()
+    egg_particle.image = particleTex
     glowRotateTween:start()
     click_off.style.opacity = 0
+    egg_particle.style.opacity = 0
     egg_container.style.translate = StyleTranslate.new(Translate.new(Length.new(0), Length.new(-500)))
     glow_sprite.style.scale = StyleScale.new(Vector2.new(0.01, 0.01))
     hatch_egg_text.style.scale = StyleScale.new(Vector2.new(0.01, 0.01))
     continue_text.style.scale = StyleScale.new(Vector2.new(0.01, 0.01))
+
+    continue_text.text = ""
 
     Timer.After(1, function()
         bgFadeInTween:start()
@@ -197,6 +212,7 @@ end
 
 egg_container:RegisterPressCallback(function()
     if canTap then
+        tapParticle:Play()
         eggShakeTween:start()
         state = state + 1
         if state == 1 then
