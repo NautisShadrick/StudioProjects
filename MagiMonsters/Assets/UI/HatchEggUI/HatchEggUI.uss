@@ -1,0 +1,96 @@
+:root {
+    --font-comic: url("project://database/Assets/UI/Fonts/MuseoSansRounded-900 SDF.asset");
+    --image-glow-sprite: url("project://database/Assets/UI/Icons/glow_sprite.png");
+
+    --image-testBG: url("project://database/Assets/Art/Sprites/sky_egg_bg.png");
+    --image-testEgg: url("project://database/Assets/Art/Sprites/Egg_Air.png");
+    --image-testEggCracks: url("project://database/Assets/Art/Sprites/Egg_Crack_2.png");
+    --basic-ribbon-bg: url("project://database/Assets/LayerLab/GUI Pro-FantasyRPG/ResourcesData/Sprites/Component/Label/label_ribbon_02_Demo.png");
+
+}
+
+.hatch-egg-u-i {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+
+    
+    white-space: wrap;    
+
+    color: white;
+    font-size: 28px;
+    -unity-font-definition: var(--font-comic);
+    -unity-text-align: middle-center;
+    -unity-text-outline-color: rgba(0,0,0,.7);
+    -unity-text-outline-width: 0px;
+    text-shadow: 0 5 0  #083c6b;
+    -unity-font-style: bold;
+
+    align-items: center;
+    justify-content: center;
+}
+
+#reward_container{
+    width: 350px;
+    height: 350px;
+    align-items: center;
+    justify-content: center;
+}
+
+#glow_sprite{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image: var(--image-glow-sprite);
+    translate: 0px 10px;
+}
+
+#egg_container{
+    position: absolute;
+    width:  75%;
+    height: 75%;
+    align-items: center;
+    justify-content: center;
+}
+
+#egg_sprite{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image: var(--image-testEgg);
+}
+
+#cracks_sprite{
+    position: absolute;
+    width:  220%;
+    height: 220%;
+    /*background-image: var(--image-testEggCracks);*/
+}
+
+#click_off {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image: var(--image-testBG);
+    /*background-color: rgba(0,0,0,.5);*/
+    scale: 1.5;
+}
+
+#hatch_egg_text{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+
+    width: 90%;
+    height: 64px;
+
+    padding-bottom: 20px;
+
+    background-image: var(--basic-ribbon-bg);
+    -unity-slice-scale: 0.5;
+}
+
+#continue_text{
+    font-size: 13px;
+}
