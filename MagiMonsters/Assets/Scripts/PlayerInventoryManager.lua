@@ -55,6 +55,8 @@ function GivePlayerMonster(player, monsterSpecies, monsterName)
     table.insert(monsterCollection, monsterData)
     playerTracker.players[player].monsterCollection.value = monsterCollection
     playerTracker.SavePlayerMonstersToStorage(player)
+
+    playerTracker.AddMonsterToTeamHandler(player, #monsterCollection)
 end
 
 function self:ServerStart()

@@ -170,6 +170,28 @@ function SetHealthInCollection(player: Player, hp: number)
     players[player].monsterCollection.value = _tempCollection
 end
 
+function AddMonsterToTeamHandler(player, index)
+    print("Adding monster to team: ", index)
+    local _currentMonsterTeam = players[player].currentMonsterTeam.value
+    local _monsterCollection = players[player].monsterCollection.value
+
+    if #_currentMonsterTeam == 4 then print("Team is Full") return end
+
+    for i, monsterIndex in ipairs(_currentMonsterTeam) do
+        if monsterIndex == index then
+            return
+        end
+    end
+
+    table.insert(_currentMonsterTeam, index)
+
+    players[player].currentMonsterTeam.value = _currentMonsterTeam
+
+    SavePlayerTeamToStorage(player)
+
+    gameManager.HandleSwap(player, _currentMonsterTeam[1])
+end
+    
 function self:ServerAwake()
     TrackPlayers(server, function(playerinfo)
         local player = playerinfo.player
@@ -207,23 +229,5 @@ function self:ServerAwake()
         SavePlayerTeamToStorage(player)
     end)
 
-    addMonsterToTeamRequest:Connect(function(player, index)
-        print("Adding monster to team: ", index)
-        local _currentMonsterTeam = players[player].currentMonsterTeam.value
-        local _monsterCollection = players[player].monsterCollection.value
-
-        if #_currentMonsterTeam == 4 then print("Team is Full") return end
-
-        for i, monsterIndex in ipairs(_currentMonsterTeam) do
-            if monsterIndex == index then
-                return
-            end
-        end
-
-        table.insert(_currentMonsterTeam, index)
-
-        players[player].currentMonsterTeam.value = _currentMonsterTeam
-
-        SavePlayerTeamToStorage(player)
-    end)
+    addMonsterToTeamRequest:Connect(AddMonsterToTeamHandler)
 end
