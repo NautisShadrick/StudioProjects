@@ -130,6 +130,21 @@ local eggIdleTween = Tween:new(
         egg_container.style.translate = StyleTranslate.new(Translate.new(Length.new(0), Length.new(0)))
     end
 )
+local monsterIdleTween = Tween:new(
+    -20,
+    -40,
+    3,
+    true,
+    true,
+    Easing.easeInOutQuad,
+    function(value)
+        egg_container.style.translate = StyleTranslate.new(Translate.new(Length.new(0), Length.new(value)))
+    end,
+    function()
+        egg_container.style.translate = StyleTranslate.new(Translate.new(Length.new(0), Length.new(0)))
+    end
+)
+
 
 local eggShakeTween = Tween:new(
     -8,
@@ -163,6 +178,7 @@ local eggFallInTween = Tween:new(
         textPopInTween:start()
     end
 )
+
 
 
 local crackIdleTween = Tween:new(
@@ -304,6 +320,8 @@ egg_container:RegisterPressCallback(function()
             egg_sprite.image = monsterSprite
             eggPopInTween:start()
             continue_text.text = "Tap to continue..."
+            eggIdleTween:stop()
+            monsterIdleTween:start()
         end
         if state >= 4 then
             state = 0

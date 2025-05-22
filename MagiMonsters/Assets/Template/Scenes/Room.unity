@@ -315,6 +315,12 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2633921706460016287, guid: 2408d897dc410c04186da978fac3743b,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: afb8314004473764fb6d38370c70b594,
+        type: 3}
     - target: {fileID: 3361734356793669776, guid: 2408d897dc410c04186da978fac3743b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -365,6 +371,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4315013404118556782, guid: 2408d897dc410c04186da978fac3743b,
+        type: 3}
+      propertyPath: m_icon
+      value: 
+      objectReference: {fileID: 2800000, guid: afb8314004473764fb6d38370c70b594, type: 3}
     - target: {fileID: 7733988222536522216, guid: 2408d897dc410c04186da978fac3743b,
         type: 3}
       propertyPath: m_Name
@@ -3140,7 +3151,7 @@ PrefabInstance:
     - target: {fileID: 264351108550546545, guid: a027266dae85afc478cca74e8f0939e3,
         type: 3}
       propertyPath: m_MonsterDatas.Array.size
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 264351108550546545, guid: a027266dae85afc478cca74e8f0939e3,
         type: 3}
@@ -3159,6 +3170,12 @@ PrefabInstance:
       propertyPath: m_MonsterDatas.Array.data[2]
       value: 
       objectReference: {fileID: 11400000, guid: f5cfd14e36466df4f8358e334fe09e10,
+        type: 2}
+    - target: {fileID: 264351108550546545, guid: a027266dae85afc478cca74e8f0939e3,
+        type: 3}
+      propertyPath: m_MonsterDatas.Array.data[3]
+      value: 
+      objectReference: {fileID: 11400000, guid: 761d0ddcb1de06d47b5dd37b247c2204,
         type: 2}
     - target: {fileID: 682356066812382596, guid: a027266dae85afc478cca74e8f0939e3,
         type: 3}

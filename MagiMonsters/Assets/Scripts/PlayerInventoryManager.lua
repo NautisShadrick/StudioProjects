@@ -65,7 +65,7 @@ function self:ServerStart()
 
         if #monsterCollection > 0 or #eggCollection > 0 then print("Someone trying to reclaim freebies, like a chump") return end
 
-        local _newEggData = {monster = "Deckcalf", totalDuration = 5}
+        local _newEggData = {monster = "Deckkit", totalDuration = 5}
         GivePlayerEgg(player, _newEggData)
     end)
 
