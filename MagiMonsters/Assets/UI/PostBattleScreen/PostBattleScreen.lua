@@ -1,8 +1,6 @@
 --!Type(UI)
 
 --!Bind
-local player_xp_container : VisualElement = nil
---!Bind
 local rewards_container : VisualElement = nil
 --!Bind
 local rewards_list : VisualElement = nil
@@ -116,27 +114,6 @@ local RewardsPopInTween = Tween:new(
 
         Timer.After(1, function()
             MonstersPopInTween:start()
-        end)
-    end
-)
-local PlayerXPPopInTween = Tween:new(
-    0.2,
-    1,
-    .5,
-    false,
-    false,
-    TweenModule.Easing.easeOutBack,
-    function(value, t)
-        -- Tween update callback
-        player_xp_container.style.opacity = StyleFloat.new(math.min(t*2,1))
-        player_xp_container.style.scale = StyleScale.new(Vector2.new(value, value))
-    end,
-    function()
-        -- Tween complete callback
-        player_xp_container.style.scale = StyleScale.new(Vector2.new(1, 1))
-        player_xp_container.style.opacity = StyleFloat.new(1.0)
-        Timer.After(1, function()
-            RewardsPopInTween:start()
         end)
     end
 )
@@ -302,9 +279,6 @@ end
 
 function InitializePostBattle(loot)
 
-    player_xp_container.style.scale = StyleScale.new(Vector2.new(0.01,0.01))
-    player_xp_container.style.opacity = StyleFloat.new(0.0)
-
     rewards_container.style.scale = StyleScale.new(Vector2.new(0.01,0.01))
     rewards_container.style.opacity = StyleFloat.new(0.0)
 
@@ -316,8 +290,8 @@ function InitializePostBattle(loot)
 
     continue_button_premium.style.scale = StyleScale.new(Vector2.new(0.01,0.01))
     continue_button_premium.style.opacity = StyleFloat.new(0.0)
-
-    PlayerXPPopInTween:start()
+    
+    RewardsPopInTween:start()
 
     -- Clear previous rewards and XP bars
     rewards_list:Clear()
@@ -331,6 +305,7 @@ function InitializePostBattle(loot)
         end
         stackedLoot[reward.id].amount = stackedLoot[reward.id].amount + reward.amount
     end
+
 
     Timer.After(1.6, function() if stackedLoot ~= {} then PopulateRewardsList(stackedLoot) end end)
     Timer.After(2.5, function() PopulateXpBars(monsterXPChanges) end)

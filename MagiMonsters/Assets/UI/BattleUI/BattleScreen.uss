@@ -74,7 +74,7 @@
 
 .healthbar__container {
     width: 90%;
-    height: 15px;
+    height: 16px;
 
     flex-direction: row;
     flex-wrap: wrap;
@@ -93,12 +93,18 @@
     font-size: 14px;
     left: 50%;
     top: 50%;
-    translate: -50%;
+    translate: -50% -10px;
 
     padding: 0;
     margin: 0;
 
-    color: #4c0800;
+    color: #ffffff;
+    -unity-font-definition: var(--font-comic);
+    -unity-text-align: middle-center;
+    -unity-text-outline-color: rgba(0,0,0,.7);
+    -unity-text-outline-width: .5px;
+    text-shadow: 0 3 0 rgba(0,0,0,0.5);
+    -unity-font-style: bold;
 }
 
 .player__mp__text {

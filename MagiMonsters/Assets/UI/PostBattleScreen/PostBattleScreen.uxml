@@ -16,16 +16,6 @@
         <Label text="Victory!" class="header" name="header" />
       </VisualElement>
 
-      <VisualElement name="player_xp_container">
-        <VisualElement name="player_xp_bar_container">
-          <VisualElement name="player_xp_bar_holder"> <VisualElement name="player_xp_bar"/> </VisualElement>
-          <Label name="player_xp_text" text="250/500" />
-        </VisualElement>
-        <VisualElement name="player_level_container">
-          <Label name="player_level_text" text="3"/>
-        </VisualElement>
-      </VisualElement>
-
       <VisualElement name="rewards_container">
         <VisualElement name="rewards_header">
           <VisualElement name="rewards_header_frame_left"/>

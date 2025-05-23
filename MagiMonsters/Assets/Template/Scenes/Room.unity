@@ -3151,10 +3151,25 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 264351108550546545, guid: a027266dae85afc478cca74e8f0939e3,
         type: 3}
+      propertyPath: m_airEggTex
+      value: 
+      objectReference: {fileID: 2800000, guid: 302a395c23cb1d648a016ca1e211f7e1, type: 3}
+    - target: {fileID: 264351108550546545, guid: a027266dae85afc478cca74e8f0939e3,
+        type: 3}
+      propertyPath: m_earthEggTex
+      value: 
+      objectReference: {fileID: 2800000, guid: e0459e0014b7c3944a144661e1281b14, type: 3}
+    - target: {fileID: 264351108550546545, guid: a027266dae85afc478cca74e8f0939e3,
+        type: 3}
       propertyPath: m_airEggSprite
       value: 
       objectReference: {fileID: 21300000, guid: 302a395c23cb1d648a016ca1e211f7e1,
         type: 3}
+    - target: {fileID: 264351108550546545, guid: a027266dae85afc478cca74e8f0939e3,
+        type: 3}
+      propertyPath: m_waterEggTexe
+      value: 
+      objectReference: {fileID: 2800000, guid: afb8314004473764fb6d38370c70b594, type: 3}
     - target: {fileID: 264351108550546545, guid: a027266dae85afc478cca74e8f0939e3,
         type: 3}
       propertyPath: m_earthEggSprite
