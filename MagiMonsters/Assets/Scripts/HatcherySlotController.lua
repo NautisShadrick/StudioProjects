@@ -6,16 +6,30 @@ local eggSlot : GameObject = nil
 local meterUI : GameObject = nil
 --!SerializeField
 local slotId : number = 1
+--!SerializeField
+local eggSprite : SpriteRenderer = nil
 
 local playerTracker = require("PlayerTracker")
 local hatcheryController = require("HatcheryController")
 local uiManager = require("UIManager")
+local monsterLibrary = require("MonsterLibrary")
 
 local tapHandler = nil
 local meterUIScript = nil
 
 local hasEgg = false
 local isReady = false
+
+function GetMonsterDataInSlot(slotId)
+    local playerinfo = playerTracker.players[client.localPlayer]
+    local _hatcheryData = playerinfo.hatcheryData.value
+    for i, _hatcherySlot in ipairs(_hatcheryData) do
+        if _hatcherySlot.slotId == slotId then
+            return monsterLibrary.monsters[_hatcherySlot.monster]
+        end
+    end
+    return nil
+end
 
 function self:Start()
     meterUIScript = meterUI:GetComponent(HealthBarUI)
@@ -43,6 +57,12 @@ function self:Start()
             meterUI:SetActive(true)
             meterUIScript.SyncToRemainingTime(timeRemaining, totalDuration)
             eggSlot:SetActive(true)
+
+            local monsterData = GetMonsterDataInSlot(slotId)
+            local element = monsterData.GetElement()
+
+            eggSprite.sprite = monsterLibrary.eggSprites[element]
+            meterUIScript.SetIcon(monsterLibrary.eggTextures[element])
             
             hasEgg = true
             if timeRemaining <= 0 then

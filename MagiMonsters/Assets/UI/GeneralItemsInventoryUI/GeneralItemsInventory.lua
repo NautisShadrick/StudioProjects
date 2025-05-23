@@ -103,7 +103,7 @@ function CreatEggItem(eggIndex, egg)
 
     local _eggImage = Image.new()
     _eggImage:AddToClassList("inventory-item-image")
-    _eggImage.image = monsterLibrary.eggSprites["air"]
+    _eggImage.image = monsterLibrary.eggTextures["air"]
 
     local _eggName = Label.new()
     _eggName:AddToClassList("inventory-item-name")

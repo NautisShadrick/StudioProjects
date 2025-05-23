@@ -80,6 +80,11 @@ function SyncToRemainingTime(timeRemaining, totalDuration)
     healthBarTween:start()
 end
 
+function SetIcon(newIcon)
+    icon = newIcon
+    heart_icon.image = icon
+end
+
 function self:Awake()
     heart_icon.image = icon
     print(typeof(TweenModule))

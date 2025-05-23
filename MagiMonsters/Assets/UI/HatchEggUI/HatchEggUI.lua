@@ -255,7 +255,7 @@ function InitializeHatchingUI(slotId)
         return
     end
 
-    eggSprite = monsterLibrary.eggSprites[monsterData.GetElement()]
+    eggSprite = monsterLibrary.eggTextures[monsterData.GetElement()]
     if eggSprite == nil then
         print("No egg sprite")
         uiManager.CloseHatchEggUI()

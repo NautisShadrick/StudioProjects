@@ -4,19 +4,31 @@
 local MonsterDatas: {MonsterBase} = {}
 
 --!SerializeField
-local airEggSprite: Texture = nil
+local airEggSprite: Sprite = nil
 --!SerializeField
-local earthEggSprite: Texture = nil
+local earthEggSprite: Sprite = nil
 --!SerializeField
-local waterEggSprite: Texture = nil
+local waterEggSprite: Sprite = nil
+--!SerializeField
+local airEggTex: Texture = nil
+--!SerializeField
+local earthEggTex: Texture = nil
+--!SerializeField
+local waterEggTexe: Texture = nil
 
-monsters = {
+monsters = { 
 }
 
 eggSprites = {
     ["air"] = airEggSprite,
     ["earth"] = earthEggSprite,
     ["water"] = waterEggSprite,
+}
+
+eggTextures = {
+    ["air"] = airEggTex,
+    ["earth"] = earthEggTex,
+    ["water"] = waterEggTexe,
 }
 
 export type MonsterData = {

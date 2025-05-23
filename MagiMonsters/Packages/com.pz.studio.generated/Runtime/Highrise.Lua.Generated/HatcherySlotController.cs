@@ -29,6 +29,7 @@ namespace Highrise.Lua.Generated
         [SerializeField] public UnityEngine.GameObject m_eggSlot = default;
         [SerializeField] public UnityEngine.GameObject m_meterUI = default;
         [SerializeField] public System.Double m_slotId = 1;
+        [SerializeField] public UnityEngine.SpriteRenderer m_eggSprite = default;
 
         protected override SerializedPropertyValue[] SerializeProperties()
         {
@@ -40,6 +41,7 @@ namespace Highrise.Lua.Generated
                 CreateSerializedProperty(_script.GetPropertyAt(0), m_eggSlot),
                 CreateSerializedProperty(_script.GetPropertyAt(1), m_meterUI),
                 CreateSerializedProperty(_script.GetPropertyAt(2), m_slotId),
+                CreateSerializedProperty(_script.GetPropertyAt(3), m_eggSprite),
             };
         }
         
