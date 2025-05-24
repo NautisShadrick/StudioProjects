@@ -44,7 +44,7 @@ function InitializeBattle(enemy: string, customName)
     enemy_healthbar_fill.style.width = StyleLength.new(Length.Percent((_enemyMonsterData.currentHealth / _enemyMonsterData.maxHealth)*100))
 end
 
-function UpdateStats(turn, playerHealth, playerMana, enemyHealth, enemyMaxHealth, enemyMana, enemyMaxMana)
+function UpdateStats(turn, playerHealth, playerMana, enemyHealth, enemyMaxHealth, enemyMana, enemyMaxMana, enemyCreature)
 
     playerHealth = math.max(0, playerHealth)
     playerMana = math.max(0, playerMana)
@@ -63,4 +63,6 @@ function UpdateStats(turn, playerHealth, playerMana, enemyHealth, enemyMaxHealth
     enemy_hp.text = enemyHealth.."/"..enemyMaxHealth
     enemy_mp.text = "mp:" .. enemyMana.."/"..enemyMaxMana
     enemy_healthbar_fill.style.width = StyleLength.new(Length.Percent((enemyHealth / enemyMaxHealth)*100))
+
+    if enemyCreature then enemy_name.text = enemyCreature.name or enemyCreature.speciesName end
 end

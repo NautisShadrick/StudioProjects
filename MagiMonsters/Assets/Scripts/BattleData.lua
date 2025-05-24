@@ -1,13 +1,11 @@
 --!Type(Module)
 
-ActionEvent = Event.new("ActionEvent")
-EndBattleEvent = Event.new("EndBattleEvent")
-
 local playerTracker = require("PlayerTracker")
 local actionLibrary = require("ActionLibrary")
 local monsterLibrary = require("MonsterLibrary")
 local itemLibrary = require("ItemLibrary")
 local gameManager = require("GameManager")
+local uiManager = require("UIManager")
 
 export type battleObject = {
     player: Player,
@@ -38,11 +36,15 @@ function Battle:GetStats()
 end
 
 function Battle:EndBattle(_winner)
-    EndBattleEvent:FireClient(self.player, _winner)
+    uiManager.EndBattleEvent:FireClient(self.player, _winner)
     if _winner == self.player then
         gameManager.HandleBattleVictory(self.player, self.enemy)
     end
     gameManager.HandleBattleEnd(self.player)
+end
+
+function Battle:Flee(player: Player)
+    self:EndBattle(self.enemy)
 end
 
 function Battle:BotTurn()
@@ -74,7 +76,7 @@ function Battle:BotTurn()
     if not highestManaCostAction then
         print("Enemy has no actions to perform, skipping turn...")
         self.turn = 0 -- Switch back to player turn
-            ActionEvent:FireClient(self.player,
+            uiManager.ActionEvent:FireClient(self.player,
             self.turn,
             self.playerMonster.currentHealth,
             self.playerMonster.currentMana,
@@ -123,7 +125,7 @@ function Battle:DoAction(actionID: string)
     -- 0 for player, 1 for enemy
     self.turn = self.turn == 0 and 1 or 0
 
-    ActionEvent:FireClient(self.player,
+    uiManager.ActionEvent:FireClient(self.player,
     self.turn,
     self.playerMonster.currentHealth,
     self.playerMonster.currentMana,
@@ -152,7 +154,7 @@ function Battle:SwapMonster()
     -- 0 for player, 1 for enemy
     self.turn = self.turn == 0 and 1 or 0
 
-    ActionEvent:FireClient(self.player,
+    uiManager.ActionEvent:FireClient(self.player,
     self.turn,
     self.playerMonster.currentHealth,
     self.playerMonster.currentMana,
@@ -184,7 +186,7 @@ function Battle:UseItem(itemID: string)
         -- 0 for player, 1 for enemy
         self.turn = 1
 
-        ActionEvent:FireClient(self.player,
+        uiManager.ActionEvent:FireClient(self.player,
         self.turn,
         self.playerMonster.currentHealth,
         self.playerMonster.currentMana,

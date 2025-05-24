@@ -9,6 +9,8 @@ local SwapMonsterRequest = Event.new("SwapMonsterRequest")
 local UseItemRequest = Event.new("UseItemRequest")
 local FleeRequest = Event.new("FleeRequest")
 
+myTurnIndexClient = 0
+
 StartPlayerVersusPlayerBattleRequest = Event.new("StartPlayerVersusPlayerBattleRequest")
 
 local SearchRequest = Event.new("SearchRequest")
@@ -34,7 +36,7 @@ local lootTableMap = {
 -----------------------
 
 function Flee()
-    if uiManager.currentBattleTurn ~= 0 then
+    if uiManager.currentBattleTurn ~= myTurnIndexClient then
         print("Not your turn")
         return
     end
@@ -43,7 +45,7 @@ function Flee()
 end
 
 function UseItem(itemID: string)
-    if uiManager.currentBattleTurn ~= 0 then
+    if uiManager.currentBattleTurn ~= myTurnIndexClient then
         print("Not your turn")
         return
     end
@@ -52,7 +54,7 @@ function UseItem(itemID: string)
 end
 
 function SwapMonster(monsterIndex: number)
-    if uiManager.currentBattleTurn ~= 0 then
+    if uiManager.currentBattleTurn ~= myTurnIndexClient then
         print("Not your turn")
         return
     end
@@ -64,7 +66,7 @@ function EquipMonster(monsterIndex: number)
 end
 
 function ClientDoAction(action: string)
-    if uiManager.currentBattleTurn ~= 0 then
+    if uiManager.currentBattleTurn ~= myTurnIndexClient then
         print("Not your turn")
         return
     end
@@ -72,8 +74,9 @@ function ClientDoAction(action: string)
     DoActionRequest:FireServer(action)
 end
 
-function StartNewBattleClient(enemyID, customName)
+function StartNewBattleClient(enemyID, turnIndex, customName)
     uiManager.InitializeBattle(enemyID, customName)
+    myTurnIndexClient = turnIndex
 end
 
 function Search(objectType: string, duration: number)
@@ -87,8 +90,8 @@ function self:ClientAwake()
         uiManager.DisplaySearchLoot(lootTable)
     end)
 
-    StartBattleEvent:Connect(function(enemyID, customName)
-        StartNewBattleClient(enemyID, customName)
+    StartBattleEvent:Connect(function(enemyID, turnIndex, customName)
+        StartNewBattleClient(enemyID, turnIndex, customName)
     end)
 
 end
@@ -99,21 +102,27 @@ end
 
 local playerBattles = {}
 local searchesByPlayer = {}
+local turnIndexbyPlayer = {}
 
 function StartBattleServer(player, enemy)
     playerBattles[player] = nil
     playerBattles[player] = battleModule.Battle:new(player, playerTracker.players[player].monsterCollection.value[playerTracker.players[player].currentMosnterIndex.value], monsterLibrary.GetDefaultMonsterData(enemy))
+    turnIndexbyPlayer[player] = 0
 end
 
 function StartBattlePVP(playerChallenger, playerChallenged, playerChallengerMonster, playerChallengedMonster)
     playerBattles[playerChallenger] = nil
     playerBattles[playerChallenged] = nil
 
-    playerBattles[playerChallenger] = battleModule.Battle:new(playerChallenger, playerChallengerMonster, playerChallengedMonster)
-    playerBattles[playerChallenged] = battleModule.Battle:new(playerChallenged, playerChallengedMonster, playerChallengerMonster)
+    local _newPVPBattle = pvpBattleModule.PVPBattle:new(playerChallenger, playerChallengerMonster, playerChallenged, playerChallengedMonster)
+    playerBattles[playerChallenger] = _newPVPBattle
+    playerBattles[playerChallenged] = _newPVPBattle
 
-    StartBattleEvent:FireClient(playerChallenger, playerChallengedMonster.speciesName, playerChallengedMonster.name)
-    StartBattleEvent:FireClient(playerChallenged, playerChallengerMonster.speciesName, playerChallengerMonster.name)
+    turnIndexbyPlayer[playerChallenger] = 0
+    turnIndexbyPlayer[playerChallenged] = 1
+
+    StartBattleEvent:FireClient(playerChallenger, playerChallengedMonster.speciesName, turnIndexbyPlayer[playerChallenger], playerChallengedMonster.name)
+    StartBattleEvent:FireClient(playerChallenged, playerChallengerMonster.speciesName, turnIndexbyPlayer[playerChallenged], playerChallengerMonster.name)
 end
 
 function HandleBattleVictory(player, monster)
@@ -158,7 +167,8 @@ function self:ServerAwake()
             return
         end
 
-        if playerBattles[player].turn ~= 0 then
+
+        if playerBattles[player].turn ~= turnIndexbyPlayer[player] then
             print("Not your turn")
             return
         end
@@ -174,7 +184,7 @@ function self:ServerAwake()
             return
         end
 
-        if playerBattles[player].turn ~= 0 then
+        if playerBattles[player].turn ~= turnIndexbyPlayer[player] then
             print("Not your turn")
             return
         end
@@ -194,12 +204,12 @@ function self:ServerAwake()
             return
         end
 
-        if playerBattles[player].turn ~= 0 then
+        if playerBattles[player].turn ~= turnIndexbyPlayer[player] then
             print("Not your turn")
             return
         end
 
-        playerBattles[player]:EndBattle(playerBattles[player].enemy)
+        playerBattles[player]:Flee(player)
     end)
 
     StartPlayerVersusPlayerBattleRequest:Connect(function(playerChallenger, playerChallenged)
@@ -233,7 +243,7 @@ function self:ServerAwake()
                 local _enemy = "Zapkit"
                 -- FOUND A MONSTER
                 StartBattleServer(player, _enemy)
-                StartBattleEvent:FireClient(player, _enemy)
+                StartBattleEvent:FireClient(player, _enemy, turnIndexbyPlayer[player])
             else
 
                 -- FOUND LOOT
@@ -266,5 +276,6 @@ function self:ServerAwake()
     server.PlayerDisconnected:Connect(function(player)
         playerBattles[player] = nil
         searchesByPlayer[player] = nil
+        turnIndexbyPlayer[player] = nil
     end)
 end

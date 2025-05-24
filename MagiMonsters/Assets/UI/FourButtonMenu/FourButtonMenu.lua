@@ -162,9 +162,6 @@ local ItemsButtonCallback = function()
         end
     end
 
-    print("Available items: ", #_availableItemButtons)
-    for i, item in ipairs(_availableItemButtons) do print(typeof(item)) end
-
     currentButtonsPage = 0
     currentTotalButtons = _availableItemButtons
     UpdateButtons(_availableItemButtons)

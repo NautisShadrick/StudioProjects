@@ -15,6 +15,8 @@ local enemyCreature: GameObject = nil
 local playerTracker = require("PlayerTracker")
 local monsterLibrary = require("MonsterLibrary")
 local battleData = require("BattleData")
+local uiManager = require("UIManager")
+local gameManager = require("GameManager")
 
 local playerCreatureScript
 local enemyCreatureScript
@@ -28,7 +30,7 @@ function GetEnemyCreature()
     return enemyCreature.transform.parent.gameObject:GetComponent(BattleCreatureScript)
 end
 
-function InitializeBattleGrounds(playerCreatureID: string, enemyCreatureID)
+function InitializeBattleGrounds(playerCreatureID: string, enemyCreatureID: string, customName)
     enemyCreatureID = enemyCreatureID or currentEnemyCreatureID
     currentEnemyCreatureID = enemyCreatureID
 
@@ -57,9 +59,9 @@ function self:ClientStart()
     playerCreatureScript = playerCreature.transform.parent.gameObject:GetComponent(BattleCreatureScript)
     enemyCreatureScript = enemyCreature.transform.parent.gameObject:GetComponent(BattleCreatureScript)
 
-    battleData.ActionEvent:Connect(function(turn, playerHealth, playerMana, enemyHealth, enemyMaxHealth, enemyMana, enemyMaxMana, actionName)
+    uiManager.ActionEvent:Connect(function(turn, playerHealth, playerMana, enemyHealth, enemyMaxHealth, enemyMana, enemyMaxMana, actionName, enemyCreature)
 
-        if turn == 0 then -- Was Enemy Action
+        if turn == gameManager.myTurnIndexClient then -- Was Enemy Action
             enemyCreatureScript.playTrigger("attack")
             Timer.After(.5, function() playerCreatureScript.playTrigger("hurt") end)
         else -- Was Player Action
@@ -67,7 +69,12 @@ function self:ClientStart()
             Timer.After(.5, function() enemyCreatureScript.playTrigger("hurt") end)
         end
 
-        InitializeBattleGrounds(playerTracker.players[client.localPlayer].monsterCollection.value[playerTracker.players[client.localPlayer].currentMosnterIndex.value].speciesName)
+        if enemyCreature then
+            InitializeBattleGrounds(playerTracker.players[client.localPlayer].monsterCollection.value[playerTracker.players[client.localPlayer].currentMosnterIndex.value].speciesName, enemyCreature.speciesName, enemyCreature.name)
+        else
+            InitializeBattleGrounds(playerTracker.players[client.localPlayer].monsterCollection.value[playerTracker.players[client.localPlayer].currentMosnterIndex.value].speciesName, currentEnemyCreatureID)
+        end
+
         
     end)
 end

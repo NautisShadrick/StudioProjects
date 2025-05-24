@@ -52,6 +52,9 @@ local hatchEggUI: HatchEggUI = nil
 
 ResponseChosenEvent = Event.new("ResponseChosenEvent")
 
+ActionEvent = Event.new("ActionEvent")
+EndBattleEvent = Event.new("EndBattleEvent")
+
 local hatcheryController = require("HatcheryController")
 local BattleDataModule = require("BattleData")
 local cameraManager = require("CameraManager")
@@ -161,18 +164,14 @@ function self:ClientStart()
     teamManagerUI = TeamManagerUIObj:GetComponent(TeamManagerUI)
     hatchEggUI = HatchEggUIObj:GetComponent(HatchEggUI)
 
-    BattleDataModule.ActionEvent:Connect(function(turn, playerHealth, playerMana, enemyHealth, enemyMaxHealth, enemyMana, enemyMaxMana, actionName)
-        BattleScreenUI.UpdateStats(turn, playerHealth, playerMana, enemyHealth, enemyMaxHealth, enemyMana, enemyMaxMana)
+    ActionEvent:Connect(function(turn, playerHealth, playerMana, enemyHealth, enemyMaxHealth, enemyMana, enemyMaxMana, actionName, enemyCreature)
+        BattleScreenUI.UpdateStats(turn, playerHealth, playerMana, enemyHealth, enemyMaxHealth, enemyMana, enemyMaxMana, enemyCreature)
         ResultsLabelUI.ShowPopup(actionName)
 
-        if turn == 0 then
-            Timer.After(1, function() currentBattleTurn = turn end)
-        else
-            currentBattleTurn = turn
-        end
+        Timer.After(1, function() currentBattleTurn = turn end)
     end)
 
-    BattleDataModule.EndBattleEvent:Connect(function(winner)
+    EndBattleEvent:Connect(function(winner)
         local _gameOverText = winner == client.localPlayer and "You Win!" or "You Lose!"
         ResultsLabelUI.ShowPopup(_gameOverText)
 
