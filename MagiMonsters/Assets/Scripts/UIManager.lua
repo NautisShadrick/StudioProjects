@@ -131,18 +131,18 @@ function DialougeResponseHandler(responseID)
     end
 end
 
-function InitializeBattle(enemy: string)
+function InitializeBattle(enemyID: string, customName)
     HudButtonsObj:SetActive(false)
 
     FourButtonOBJ:SetActive(true)
     BattleScreenOBJ:SetActive(true)
 
     FourButtonUI.UpdateButtons(FourButtonUI.Menu_One)
-    BattleScreenUI.InitializeBattle(enemy)
+    BattleScreenUI.InitializeBattle(enemyID, customName)
 
     cameraManager.SwitchCamera(1)
 
-    battlGroundManager.InitializeBattleGrounds(playerTracker.players[client.localPlayer].monsterCollection.value[playerTracker.players[client.localPlayer].currentMosnterIndex.value].speciesName, enemy)
+    battlGroundManager.InitializeBattleGrounds(playerTracker.players[client.localPlayer].monsterCollection.value[playerTracker.players[client.localPlayer].currentMosnterIndex.value].speciesName, enemyID)
 end
 
 function self:ClientStart()

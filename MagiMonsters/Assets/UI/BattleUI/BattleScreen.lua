@@ -27,7 +27,7 @@ local enemy_mp: Label = nil
 local playerTracker = require("PlayerTracker")
 local monsterLibrary = require("MonsterLibrary")
 
-function InitializeBattle(enemy: string)
+function InitializeBattle(enemy: string, customName)
     local _playerMonsterData = playerTracker.players[client.localPlayer].monsterCollection.value[playerTracker.players[client.localPlayer].currentMosnterIndex.value]
     local _enemyMonsterData = monsterLibrary.GetDefaultMonsterData(enemy)
 
@@ -37,7 +37,7 @@ function InitializeBattle(enemy: string)
     player_mp.text = "mp: " .. _playerMonsterData.currentMana.."/".._playerMonsterData.maxMana
     player_healthbar_fill.style.width = StyleLength.new(Length.Percent((_playerMonsterData.currentHealth / _playerMonsterData.maxHealth)*100))
 
-    enemy_name.text = _enemyMonsterData.name
+    enemy_name.text = customName or _enemyMonsterData.name
     --enemy_level.text = "Lvl. ".._enemyMonsterData.level
     enemy_hp.text = _enemyMonsterData.currentHealth.."/".._enemyMonsterData.maxHealth
     enemy_mp.text = "mp: " .. _enemyMonsterData.currentMana.."/".._enemyMonsterData.maxMana

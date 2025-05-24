@@ -20,6 +20,7 @@ local playerTracker = require("PlayerTracker")
 local itemLibrary = require("ItemLibrary")
 local monsterLibrary = require("MonsterLibrary")
 local battleModule = require("BattleData")
+local pvpBattleModule = require("PVPBattleData")
 local playerInventoryManager = require("PlayerInventoryManager")
 
 local uiManager = require("UIManager")
@@ -71,8 +72,8 @@ function ClientDoAction(action: string)
     DoActionRequest:FireServer(action)
 end
 
-function StartNewBattleClient(enemy)
-    uiManager.InitializeBattle(enemy)
+function StartNewBattleClient(enemyID, customName)
+    uiManager.InitializeBattle(enemyID, customName)
 end
 
 function Search(objectType: string, duration: number)
@@ -86,8 +87,8 @@ function self:ClientAwake()
         uiManager.DisplaySearchLoot(lootTable)
     end)
 
-    StartBattleEvent:Connect(function(enemy)
-        StartNewBattleClient(enemy)
+    StartBattleEvent:Connect(function(enemyID, customName)
+        StartNewBattleClient(enemyID, customName)
     end)
 
 end
@@ -111,8 +112,8 @@ function StartBattlePVP(playerChallenger, playerChallenged, playerChallengerMons
     playerBattles[playerChallenger] = battleModule.Battle:new(playerChallenger, playerChallengerMonster, playerChallengedMonster)
     playerBattles[playerChallenged] = battleModule.Battle:new(playerChallenged, playerChallengedMonster, playerChallengerMonster)
 
-    StartBattleEvent:FireClient(playerChallenger, playerChallengedMonster.speciesName)
-    StartBattleEvent:FireClient(playerChallenged, playerChallengerMonster.speciesName)
+    StartBattleEvent:FireClient(playerChallenger, playerChallengedMonster.speciesName, playerChallengedMonster.name)
+    StartBattleEvent:FireClient(playerChallenged, playerChallengerMonster.speciesName, playerChallengerMonster.name)
 end
 
 function HandleBattleVictory(player, monster)
