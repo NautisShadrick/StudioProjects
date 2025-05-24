@@ -79,6 +79,6 @@ function GetStorageMonsterData(monsterName: string)
     }
 end
 
-function self:Start()
+function self:Awake()
     AddMonstersToTable()
 end

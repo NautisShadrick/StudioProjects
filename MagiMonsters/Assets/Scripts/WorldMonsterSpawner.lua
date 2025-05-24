@@ -7,6 +7,8 @@ local worldMonstersByPlayer = {}
 
 function SpawnWorldMonster(player, type)
 
+    print("Spawning world monster for player: ", player.name, " of type: ", type)
+
     if worldMonstersByPlayer[player] ~= nil then
         Object.Destroy(worldMonstersByPlayer[player])
         worldMonstersByPlayer[player] = nil
@@ -24,6 +26,7 @@ end
 function self:ClientStart()
 
     scene.PlayerLeft:Connect(function(scene, player)
+        Object.Destroy(worldMonstersByPlayer[player])
         worldMonstersByPlayer[player] = nil
     end)
 end
