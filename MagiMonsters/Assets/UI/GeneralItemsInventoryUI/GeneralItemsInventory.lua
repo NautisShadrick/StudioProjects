@@ -98,12 +98,14 @@ end
 
 function CreatEggItem(eggIndex, egg)
 
+    local monsterData = monsterLibrary.monsters[egg.monster]
+
     local _newegg = VisualElement.new()
     _newegg:AddToClassList("inventory-item")
 
     local _eggImage = Image.new()
     _eggImage:AddToClassList("inventory-item-image")
-    _eggImage.image = monsterLibrary.eggTextures["air"]
+    _eggImage.image = monsterLibrary.eggTextures[monsterData.GetElement()]
 
     local _eggName = Label.new()
     _eggName:AddToClassList("inventory-item-name")

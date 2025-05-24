@@ -10,6 +10,7 @@
     --gray-button: url("project://database/Assets/LayerLab/GUI Pro-FantasyRPG/ResourcesData/Sprites/Component/Button/btn_rectangle_01_n_gray.png");
     --yellow-button: url("project://database/Assets/LayerLab/GUI Pro-FantasyRPG/ResourcesData/Sprites/Component/Button/btn_rectangle_01_n_yellow.png");
     --brown-button: url("project://database/Assets/LayerLab/GUI Pro-FantasyRPG/ResourcesData/Sprites/Component/Button/btn_rectangle_01_n_brown.png");
+    --blue-button: url("project://database/Assets/LayerLab/GUI Pro-FantasyRPG/ResourcesData/Sprites/Component/Button/btn_rectangle_01_n_blue.png");
 }
 .four-button-menu {
     position: absolute;
@@ -150,4 +151,9 @@
 .earth {
     color:rgb(29, 15, 8);
     background-image: var(--brown-button);
+}
+
+.water {
+    color: #0b2956;
+    background-image: var(--blue-button);
 }
