@@ -45,6 +45,50 @@ function Battle:EndBattle(_winner)
     gameManager.HandleBattleEnd(self.player)
 end
 
+function Battle:BotTurn()
+
+    -- Get enemy mana
+    local enemyMana = self.enemy.currentMana
+    -- Get enemy actions
+    local enemyActions = self.enemy.actionIDs
+    local ActionsByCost = {}
+    for _, actionID in ipairs(enemyActions) do
+        local action = actionLibrary.GetActionByID(actionID)
+        if action then
+            local manaCost = action.GetActionManaCost()
+            if manaCost <= enemyMana then
+                table.insert(ActionsByCost, {actionID = actionID, manaCost = manaCost})
+            end
+        end
+    end
+    -- Get most expensive action that can be afforded
+    local highestManaCostAction = nil
+    local highestManaCost = 0
+    for _, actionData in ipairs(ActionsByCost) do
+        if actionData.manaCost > highestManaCost then
+            highestManaCost = actionData.manaCost
+            highestManaCostAction = actionData.actionID
+        end
+    end
+    -- If no action can be afforded, return
+    if not highestManaCostAction then
+        print("Enemy has no actions to perform, skipping turn...")
+        self.turn = 0 -- Switch back to player turn
+            ActionEvent:FireClient(self.player,
+            self.turn,
+            self.playerMonster.currentHealth,
+            self.playerMonster.currentMana,
+            self.enemy.currentHealth,
+            self.enemy.maxHealth,
+            self.enemy.currentMana,
+            self.enemy.maxMana,
+            "Skipped Turn")
+        return
+    end
+
+    local success = self:DoAction(highestManaCostAction)
+end
+
 function Battle:DoAction(actionID: string)
 
     local action = actionLibrary.GetActionByID(actionID)
@@ -62,7 +106,7 @@ function Battle:DoAction(actionID: string)
 
     if _attacker.currentMana < action.GetActionManaCost() then
         print(_attacker.name.." does not have enough mana to use "..action.GetActionName())
-        return
+        return false
     end
 
     _attacker.currentMana = _attacker.currentMana - action.GetActionManaCost()
@@ -92,12 +136,14 @@ function Battle:DoAction(actionID: string)
     if self.playerMonster.currentHealth <= 0 or self.enemy.currentHealth <= 0 then
         local _winner = self.playerMonster.currentHealth > 0 and self.player or self.enemy
         self:EndBattle(_winner)
-        return
+        return true
     end
 
     if self.turn == 1 then
-        Timer.After(2, function() self:DoAction(self.enemy.actionIDs[math.random(1,#self.enemy.actionIDs)]) end)
+        Timer.After(2, function() self:BotTurn() end)
     end
+
+    return true
 
 end
 
@@ -123,7 +169,7 @@ function Battle:SwapMonster()
     end
 
     if self.turn == 1 then
-        Timer.After(2, function() self:DoAction(self.enemy.actionIDs[math.random(1,#self.enemy.actionIDs)]) end)
+        Timer.After(2, function() self:BotTurn() end)
     end
 end
 
@@ -151,7 +197,7 @@ function Battle:UseItem(itemID: string)
     end
     
     if self.turn == 1 then
-        Timer.After(2, function() self:DoAction(self.enemy.actionIDs[math.random(1,#self.enemy.actionIDs)]) end)
+        Timer.After(2, function() self:BotTurn() end)
     end
 end
 

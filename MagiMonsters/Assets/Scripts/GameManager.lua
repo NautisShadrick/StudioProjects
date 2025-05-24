@@ -9,6 +9,8 @@ local SwapMonsterRequest = Event.new("SwapMonsterRequest")
 local UseItemRequest = Event.new("UseItemRequest")
 local FleeRequest = Event.new("FleeRequest")
 
+StartPlayerVersusPlayerBattleRequest = Event.new("StartPlayerVersusPlayerBattleRequest")
+
 local SearchRequest = Event.new("SearchRequest")
 local SearchResponse = Event.new("SearchResponse")
 VictoryResponse = Event.new("VictoryResponse")
@@ -102,6 +104,17 @@ function StartBattleServer(player, enemy)
     playerBattles[player] = battleModule.Battle:new(player, playerTracker.players[player].monsterCollection.value[playerTracker.players[player].currentMosnterIndex.value], monsterLibrary.GetDefaultMonsterData(enemy))
 end
 
+function StartBattlePVP(playerChallenger, playerChallenged, playerChallengerMonster, playerChallengedMonster)
+    playerBattles[playerChallenger] = nil
+    playerBattles[playerChallenged] = nil
+
+    playerBattles[playerChallenger] = battleModule.Battle:new(playerChallenger, playerChallengerMonster, playerChallengedMonster)
+    playerBattles[playerChallenged] = battleModule.Battle:new(playerChallenged, playerChallengedMonster, playerChallengerMonster)
+
+    StartBattleEvent:FireClient(playerChallenger, playerChallengedMonster.speciesName)
+    StartBattleEvent:FireClient(playerChallenged, playerChallengerMonster.speciesName)
+end
+
 function HandleBattleVictory(player, monster)
     print("Battle Victory")
     print(player.name, monster.speciesName)
@@ -126,15 +139,15 @@ function HandleBattleEnd(player)
 end
 
 function HandleSwap(player, monsterIndex)
-        playerTracker.players[player].currentMosnterIndex.value = monsterIndex
-        playerTracker.players[player].equippedMonsterType.value = playerTracker.players[player].monsterCollection.value[monsterIndex].speciesName
+    playerTracker.players[player].currentMosnterIndex.value = monsterIndex
+    playerTracker.players[player].equippedMonsterType.value = playerTracker.players[player].monsterCollection.value[monsterIndex].speciesName
 
-        if not playerBattles[player] then
-            print("Player is not in a battle")
-            return
-        end
-        playerBattles[player]:SwapMonster()
+    if not playerBattles[player] then
+        print("Player is not in a battle")
+        return
     end
+    playerBattles[player]:SwapMonster()
+end
 
 function self:ServerAwake()
 
@@ -186,6 +199,23 @@ function self:ServerAwake()
         end
 
         playerBattles[player]:EndBattle(playerBattles[player].enemy)
+    end)
+
+    StartPlayerVersusPlayerBattleRequest:Connect(function(playerChallenger, playerChallenged)
+        if playerBattles[playerChallenger] or playerBattles[playerChallenged] then
+            print("One of the players is already in a battle")
+            return
+        end
+
+        local playerChallengerMonster = playerTracker.players[playerChallenger].monsterCollection.value[playerTracker.players[playerChallenger].currentMosnterIndex.value]
+        local playerChallengedMonster = playerTracker.players[playerChallenged].monsterCollection.value[playerTracker.players[playerChallenged].currentMosnterIndex.value]
+
+        if not playerChallengerMonster or not playerChallengedMonster then
+            print("One of the players does not have a monster")
+            return
+        end
+
+        StartBattlePVP(playerChallenger, playerChallenged, playerChallengerMonster, playerChallengedMonster)
     end)
 
     SearchRequest:Connect(function(player, objectType, duration)

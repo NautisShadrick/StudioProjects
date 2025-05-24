@@ -1,5 +1,8 @@
 --!Type(Module)
 
+--!SerializeField
+local playerTapHandlerObject : GameObject = nil
+
 local GetDefaultMonsterDataRequest = Event.new("GetDefaultMonsterDataRequest")
 
 local removeMonsterFromTeamRequest = Event.new("RemoveMonsterFromTeamRequest")
@@ -64,6 +67,11 @@ end
 
 ------------- CLIENT -------------
 
+function PlayerTapped(player, playerinfo)
+    print(client.localPlayer.name, " tapped on ", player.name)
+    gameManager.StartPlayerVersusPlayerBattleRequest:FireServer(player)
+end
+
 function self:ClientAwake()
     function OnCharacterInstantiate(playerinfo)
         local player = playerinfo.player
@@ -77,6 +85,16 @@ function self:ClientAwake()
                 worldMonsterSpawner.SpawnWorldMonster(player, playerinfo.equippedMonsterType.value)
             end
         end)
+
+        local _playerTappHandlerOBJ = GameObject.Instantiate(playerTapHandlerObject)
+        _playerTappHandlerOBJ.transform.parent = character.transform
+        _playerTappHandlerOBJ.name = "PlayerTapHandler_"..player.name
+        _playerTappHandlerOBJ.transform.localPosition = Vector3.zero
+        local _playerTapHandler = _playerTappHandlerOBJ:GetComponent(TapHandler)
+        _playerTapHandler.Tapped:Connect(function()
+            PlayerTapped(player, playerinfo)
+        end)
+
     end
 
     TrackPlayers(client, OnCharacterInstantiate)
