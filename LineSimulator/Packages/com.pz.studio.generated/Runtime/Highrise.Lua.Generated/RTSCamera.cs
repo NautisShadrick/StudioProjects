@@ -1,6 +1,6 @@
 /*
 
-    Copyright (c) 2024 Pocketz World. All rights reserved.
+    Copyright (c) 2025 Pocketz World. All rights reserved.
 
     This is a generated file, do not edit!
 
@@ -15,6 +15,7 @@ using UnityEngine;
 using Highrise.Client;
 using Highrise.Studio;
 using Highrise.Lua;
+using UnityEditor;
 
 namespace Highrise.Lua.Generated
 {
@@ -38,6 +39,7 @@ namespace Highrise.Lua.Generated
         [Tooltip("0 means no centering, as you approach 1 the centering will get faster, 1 means immediate centering")]
         [Range(0,1)]
         [SerializeField] public System.Double m_centerOnCharacterWhenMovingSpeed = 0;
+        [SerializeField] public System.Boolean m_orthographic = false;
         [SerializeField] public System.Boolean m_keepPlayerInView = false;
         [SerializeField] public System.Double m_keepPlayerInViewPanDuration = 0.5;
 
@@ -57,10 +59,19 @@ namespace Highrise.Lua.Generated
                 CreateSerializedProperty(_script.GetPropertyAt(6), m_yaw),
                 CreateSerializedProperty(_script.GetPropertyAt(7), m_centerOnCharacterWhenSpawned),
                 CreateSerializedProperty(_script.GetPropertyAt(8), m_centerOnCharacterWhenMovingSpeed),
-                CreateSerializedProperty(_script.GetPropertyAt(9), m_keepPlayerInView),
-                CreateSerializedProperty(_script.GetPropertyAt(10), m_keepPlayerInViewPanDuration),
+                CreateSerializedProperty(_script.GetPropertyAt(9), m_orthographic),
+                CreateSerializedProperty(_script.GetPropertyAt(10), m_keepPlayerInView),
+                CreateSerializedProperty(_script.GetPropertyAt(11), m_keepPlayerInViewPanDuration),
             };
         }
+        
+#if HR_STUDIO
+        [MenuItem("CONTEXT/RTSCamera/Edit Script")]
+        private static void EditScript()
+        {
+            VisualStudioCodeOpener.OpenPath(AssetDatabase.GUIDToAssetPath(s_scriptGUID));
+        }
+#endif
     }
 }
 

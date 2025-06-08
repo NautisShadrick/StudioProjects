@@ -233,7 +233,7 @@ function self:ClientAwake()
 
         local _particle = GameObject.Instantiate(toiletPartyParticle)
         _particle.transform.position = Vector3.new(12, 6.25, 2)
-        for eaach, sound in ipairs(toiletPartySounds) do
+        for each, sound in ipairs(toiletPartySounds) do
             Audio:PlayShader(sound)
         end
 
