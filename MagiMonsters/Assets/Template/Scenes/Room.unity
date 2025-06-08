@@ -1306,7 +1306,7 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 1599188571}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1218821423
+--- !u!114 &1218821428
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1315,39 +1315,26 @@ MonoBehaviour:
   m_GameObject: {fileID: 1218821422}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9249175761cde7a1728fc82225bd82e2, type: 3}
+  m_Script: {fileID: 11500000, guid: 529d9fbf1c773b41e1753d31c5cac176, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _networkId: 0
-  _script: {fileID: -974389366465450183, guid: 28961782db12e774c850c8f79f628237, type: 3}
+  _script: {fileID: -974389366465450183, guid: e8429f6aa6a83b945baa3de47f15c1a3, type: 3}
   _properties: []
   _uiOutput: 0
   _uiOutputSettings:
     rid: -2
-  _cameraHeight: 2.5
-  _startZoom: 15
-  _minimumZoom: 3
-  _maximumZoom: 35
-  _offset: {x: 0, y: 0, z: 0}
-  _pitchEnabled: 1
-  _pitchStart: 5
-  _pitchMin: -2
-  _pitchMax: 65
-  _yawEnabled: 0
-  _yawMin: -360
-  _yawMax: 360
-  _rotationSensitivity: 2
-  _enableCollisionAvoidance: 0
-  _collisionOffset: 0.2
-  _obstacleDistanceMinFar: 3
-  _obstacleDistanceMinNear: 0
-  _rayDistanceMaxFar: 10
-  _rayDistanceMinNear: 0.1
-  _enableFirstPerson: 1
-  _thirdPersonFOV: 60
-  _firstPersonFOV: 60
-  _enableSmoothTransition: 1
-  _FOVTransitionSpeed: 3
+  m_zoom: 15
+  m_zoomMin: 10
+  m_zoomMax: 50
+  m_allowRotation: 1
+  m_pitch: 30
+  m_yaw: 45
+  m_centerOnCharacterWhenSpawned: 1
+  m_centerOnCharacterWhenMovingSpeed: 0.8700000047683716
+  m_orthographic: 0
+  m_keepPlayerInView: 0
+  m_keepPlayerInViewPanDuration: 0.5
   references:
     version: 2
     RefIds:
@@ -2026,6 +2013,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3551931345751937580, guid: 4db44322431f6d6439fa69e352e81b67,
         type: 3}
+      propertyPath: m_orthographic
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3551931345751937580, guid: 4db44322431f6d6439fa69e352e81b67,
+        type: 3}
       propertyPath: m_centerOnCharacterWhenSpawned
       value: 1
       objectReference: {fileID: 0}
@@ -2106,7 +2098,7 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7494135311037265500, guid: 4db44322431f6d6439fa69e352e81b67,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1218821423}
+      addedObject: {fileID: 1218821428}
   m_SourcePrefab: {fileID: 100100000, guid: 4db44322431f6d6439fa69e352e81b67, type: 3}
 --- !u!1001 &1612802964
 PrefabInstance:
