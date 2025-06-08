@@ -8,5 +8,6 @@ Welcome to the GitHub repo for projects created during my **Highrise Studio** st
 - **Code Snippets**: Scripts and reusable mechanics.
 
 ## Join the Community
+- **Join my Discord**: [Shadrick Aniamtion Official Discord](https://discord.gg/6hqdZs7G2D)
 - **Watch live**: [Twitch](https://www.twitch.tv/nautisshadrick/about)
-- **Chat with us**: [Highrise Studio Official Discord](https://discord.com/channels/890228388311228456/1232433486699167804)
+- **Join the Highrise developer community**: [Highrise Studio Official Discord](https://discord.com/channels/890228388311228456/1232433486699167804)
