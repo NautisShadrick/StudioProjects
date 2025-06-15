@@ -24429,7 +24429,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2583983826495627400}
   - component: {fileID: 916163146225917522}
-  - component: {fileID: 4988741297287138760}
   - component: {fileID: 9187266315702718650}
   m_Layer: 0
   m_Name: ParticleRenderCamera
@@ -24504,14 +24503,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!81 &4988741297287138760
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8178480638393179701}
-  m_Enabled: 1
 --- !u!114 &9187266315702718650
 MonoBehaviour:
   m_ObjectHideFlags: 0
