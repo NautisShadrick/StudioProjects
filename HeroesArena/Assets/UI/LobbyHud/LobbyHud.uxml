@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UXML
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="UnityEngine.UIElements"
+    xmlns:hr="Highrise.UI"
+    xmlns:editor="UnityEditor.UIElements"
+    xsi:noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd"
+>
+
+  <hr:UILuaView class="lobby-hud" picking-mode="Ignore">
+    <VisualElement name="join_button_container" picking-mode="Ignore">
+      <Label name="join_button_hover" text="0/7 players"/>
+      <VisualElement name="join_button">
+        <Label name="join_button_text" text="!Join"/>
+      </VisualElement>
+    </VisualElement>
+  </hr:UILuaView>
+
+</UXML>

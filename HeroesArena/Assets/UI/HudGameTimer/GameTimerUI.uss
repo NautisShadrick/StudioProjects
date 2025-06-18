@@ -1,0 +1,65 @@
+:root {
+    --font-muesou-1000: url("project://database/Assets/UI/Fonts/MuseoSansRounded1000 SDF.asset");
+    --font-comic: url("project://database/Assets/UI/Fonts/Hey Comic SDF.asset");
+
+    --gree-dark-text: #035939;
+
+    --timer-icon: url("project://database/Assets/LayerLab/GUI Pro-FantasyRPG/ResourcesData/Sprites/Component/Icon_Icons_(Original)/icon_hourglass.png");
+
+
+    --basic-button: url("project://database/Assets/LayerLab/GUI Pro-FantasyRPG/ResourcesData/Sprites/Component/Button/btn_sqeure_01.png");
+    --basic-button-left: url("project://database/Assets/LayerLab/GUI Pro-FantasyRPG/ResourcesData/Sprites/Component/Button/btn_sqeure_01_left.png");
+    --basic-button-right: url("project://database/Assets/LayerLab/GUI Pro-FantasyRPG/ResourcesData/Sprites/Component/Button/btn_sqeure_01_right.png");
+    --gray-button: url("project://database/Assets/LayerLab/GUI Pro-FantasyRPG/ResourcesData/Sprites/Component/Button/btn_rectangle_01_n_gray.png");
+    --yellow-button: url("project://database/Assets/LayerLab/GUI Pro-FantasyRPG/ResourcesData/Sprites/Component/Button/btn_rectangle_01_n_yellow.png");
+    --green-button: url("project://database/Assets/LayerLab/GUI Pro-FantasyRPG/ResourcesData/Sprites/Component/Button/btn_rectangle_01_n_green.png");
+}
+
+.game-timer-u-i {
+    position: absolute;
+    width: 100%;
+
+    top: 10px;
+
+    align-items: center;
+
+    color:rgb(255, 255, 255);
+
+    letter-spacing: -6%;
+    color: white;
+    font-size: 20px;
+    -unity-font-definition: var(--font-comic);
+    font-size: 24px;
+}
+
+#game_timer_container {
+    width: 250px;
+    height: 30px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+#game_time_icon {
+    width:  45px;
+    height: 62px;
+    background-image: var(--timer-icon);
+}
+
+#game_time_label {
+    position: absolute;
+
+
+    align-self: center;
+    top: 30px;
+
+    margin: 0;
+    padding: 0px 4px;
+
+/*
+    background-color:rgba(44, 41, 60, 1);
+    border-color: rgba(152, 136, 216, 1);
+    border-width: 1px;
+    border-radius: 8px;
+*/
+}

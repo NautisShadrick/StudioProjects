@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UXML
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="UnityEngine.UIElements"
+    xmlns:hr="Highrise.UI"
+    xmlns:editor="UnityEditor.UIElements"
+    xsi:noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd"
+>
+
+  <hr:UILuaView class="game-timer-u-i">
+    <VisualElement name="game_timer_container">
+      <VisualElement name="game_time_icon" />
+      <Label name="game_time_label" text="00" />
+    </VisualElement>
+  </hr:UILuaView>
+
+</UXML>
