@@ -137,7 +137,7 @@ function UpdateHand()
 end
 
 function self:Start()
-    for i = 1, 3 do
+    for i = 1, 6 do
         CreateCard()
     end
     UpdateHand()
