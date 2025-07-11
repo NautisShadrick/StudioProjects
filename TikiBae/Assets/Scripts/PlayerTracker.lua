@@ -13,7 +13,7 @@ function TrackPlayers(game, characterCallback)
         playercount = playercount + 1
         players[player] = {
             player = player,
-            matches = TableValue.new("matches"..player.user.id, {}),
+            matches = TableValue.new("matches"..player.user.id, {}, player),
         }
 
         player.CharacterChanged:Connect(function(player, character) 

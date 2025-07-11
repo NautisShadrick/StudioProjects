@@ -15,6 +15,7 @@ using UnityEngine;
 using Highrise.Client;
 using Highrise.Studio;
 using Highrise.Lua;
+using UnityEditor;
 
 namespace Highrise.Lua.Generated
 {
@@ -30,6 +31,8 @@ namespace Highrise.Lua.Generated
         [SerializeField] public System.Double _targetFollowDistance = 1;
         [SerializeField] public System.Boolean _useNavmesh = true;
         [SerializeField] public System.Boolean _teleportIfNoPath = true;
+        [SerializeField] public System.Boolean _teleportIfTooFar = true;
+        [SerializeField] public System.Double _teleportDistance = 20;
         [Header("Idle Wander Settings")]
         [SerializeField] public System.Boolean _shouldIdleWander = true;
         [SerializeField] public System.Double _percentToWander = 0.67;
@@ -48,13 +51,23 @@ namespace Highrise.Lua.Generated
                 CreateSerializedProperty(_script.GetPropertyAt(1), _targetFollowDistance),
                 CreateSerializedProperty(_script.GetPropertyAt(2), _useNavmesh),
                 CreateSerializedProperty(_script.GetPropertyAt(3), _teleportIfNoPath),
-                CreateSerializedProperty(_script.GetPropertyAt(4), _shouldIdleWander),
-                CreateSerializedProperty(_script.GetPropertyAt(5), _percentToWander),
-                CreateSerializedProperty(_script.GetPropertyAt(6), _minTimeBeforeWander),
-                CreateSerializedProperty(_script.GetPropertyAt(7), _maxTimeBeforeWander),
-                CreateSerializedProperty(_script.GetPropertyAt(8), _idleAnimationsToPlay),
+                CreateSerializedProperty(_script.GetPropertyAt(4), _teleportIfTooFar),
+                CreateSerializedProperty(_script.GetPropertyAt(5), _teleportDistance),
+                CreateSerializedProperty(_script.GetPropertyAt(6), _shouldIdleWander),
+                CreateSerializedProperty(_script.GetPropertyAt(7), _percentToWander),
+                CreateSerializedProperty(_script.GetPropertyAt(8), _minTimeBeforeWander),
+                CreateSerializedProperty(_script.GetPropertyAt(9), _maxTimeBeforeWander),
+                CreateSerializedProperty(_script.GetPropertyAt(10), _idleAnimationsToPlay),
             };
         }
+        
+#if HR_STUDIO
+        [MenuItem("CONTEXT/PetFollowBehavior/Edit Script")]
+        private static void EditScript()
+        {
+            VisualStudioCodeOpener.OpenPath(AssetDatabase.GUIDToAssetPath(s_scriptGUID));
+        }
+#endif
     }
 }
 

@@ -15,6 +15,7 @@ using UnityEngine;
 using Highrise.Client;
 using Highrise.Studio;
 using Highrise.Lua;
+using UnityEditor;
 
 namespace Highrise.Lua.Generated
 {
@@ -26,8 +27,6 @@ namespace Highrise.Lua.Generated
         public override string ScriptGUID => s_scriptGUID;
 
         [SerializeField] public UnityEngine.GameObject _characterPrefab = default;
-        [SerializeField] public UnityEngine.GameObject _defaultPetTraitBehavior = default;
-        [SerializeField] public System.Collections.Generic.List<UnityEngine.GameObject> _petTraitBehaviors = default;
 
         protected override SerializedPropertyValue[] SerializeProperties()
         {
@@ -37,10 +36,16 @@ namespace Highrise.Lua.Generated
             return new SerializedPropertyValue[]
             {
                 CreateSerializedProperty(_script.GetPropertyAt(0), _characterPrefab),
-                CreateSerializedProperty(_script.GetPropertyAt(1), _defaultPetTraitBehavior),
-                CreateSerializedProperty(_script.GetPropertyAt(2), _petTraitBehaviors),
             };
         }
+        
+#if HR_STUDIO
+        [MenuItem("CONTEXT/PetCharacterController/Edit Script")]
+        private static void EditScript()
+        {
+            VisualStudioCodeOpener.OpenPath(AssetDatabase.GUIDToAssetPath(s_scriptGUID));
+        }
+#endif
     }
 }
 

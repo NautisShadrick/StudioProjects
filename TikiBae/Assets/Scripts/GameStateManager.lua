@@ -3,7 +3,7 @@
 --!SerializeField
 local boatPrefab : GameObject = nil
 --!SerializeField
-local stateDuration : number = 15
+local stateDuration : number = 60
 --!SerializeField
 local mainCamera : Camera = nil
 

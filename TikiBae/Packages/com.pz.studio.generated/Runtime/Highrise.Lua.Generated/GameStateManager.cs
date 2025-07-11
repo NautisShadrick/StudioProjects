@@ -15,6 +15,7 @@ using UnityEngine;
 using Highrise.Client;
 using Highrise.Studio;
 using Highrise.Lua;
+using UnityEditor;
 
 namespace Highrise.Lua.Generated
 {
@@ -26,7 +27,7 @@ namespace Highrise.Lua.Generated
         public override string ScriptGUID => s_scriptGUID;
 
         [SerializeField] public UnityEngine.GameObject m_boatPrefab = default;
-        [SerializeField] public System.Double m_stateDuration = 15;
+        [SerializeField] public System.Double m_stateDuration = 60;
         [SerializeField] public UnityEngine.Camera m_mainCamera = default;
 
         protected override SerializedPropertyValue[] SerializeProperties()
@@ -41,6 +42,14 @@ namespace Highrise.Lua.Generated
                 CreateSerializedProperty(_script.GetPropertyAt(2), m_mainCamera),
             };
         }
+        
+#if HR_STUDIO
+        [MenuItem("CONTEXT/GameStateManager/Edit Script")]
+        private static void EditScript()
+        {
+            VisualStudioCodeOpener.OpenPath(AssetDatabase.GUIDToAssetPath(s_scriptGUID));
+        }
+#endif
     }
 }
 
