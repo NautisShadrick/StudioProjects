@@ -8,10 +8,6 @@ local _ranklist : UIScrollView = nil -- Do not touch this line
 --!Bind
 local _closeButton : VisualElement = nil -- Do not touch this line
 
---!Bind
-local local_rewards_container : VisualElement = nil -- Do not touch this line
---!Bind
-local local_rewards_label : Label = nil -- Do not touch this line
 
 --!Bind
 local click_off : VisualElement = nil -- Do not touch this line

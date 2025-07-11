@@ -73,7 +73,7 @@ function ShuffleTable(t)
     end
 end
 
-function SeperatePlayersIntoRandomPairs()
+function SeparatePlayersIntoRandomPairs()
     local playerList = {}
     for player, playerinfo in pairs(players) do
         table.insert(playerList, player)
@@ -110,7 +110,7 @@ function self:ServerAwake()
     TeleportRequest:Connect(TeleportPlayerServer)
 
     Timer.After(2,function()
-        local playerPairs, soloPlayer = SeperatePlayersIntoRandomPairs()
+        local playerPairs, soloPlayer = SeparatePlayersIntoRandomPairs()
         for i, pair in ipairs(playerPairs) do
             local player1 = pair[1]
             local player2 = pair[2]

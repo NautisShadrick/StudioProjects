@@ -57,18 +57,26 @@ function AddToBoats(player_pairs, soloPlayer)
         local boatController = boatObj:GetComponent(BoatController)
         local pointA, pointB = boatController.GetPoints()
 
-        player1.character:Teleport(Vector3.new(0, 0, 0))
-        player2.character:Teleport(Vector3.new(0, 0, 0))
+        -- Disable character controllers for players in boats
+        if player1 == client.localPlayer or player2 == client.localPlayer then 
+            characterController.options.enabled = false 
+        end
 
-        -- Set Players to Boat
-        if soloPlayer ~= client.localPlayer then characterController.options.enabled = false end
-
-        -- Disable NavMeshAgent
+        -- Disable NavMeshAgent first
         player1.character.gameObject:GetComponent(NavMeshAgent).enabled = false
         player2.character.gameObject:GetComponent(NavMeshAgent).enabled = false
 
+        -- Set Players to Boat parent first
         player1.character.gameObject.transform.parent = pointA
         player2.character.gameObject.transform.parent = pointB
+
+        -- Set Player local Positions after parenting
+        player1.character.gameObject.transform.localPosition = Vector3.new(0, 0, 0)
+        player2.character.gameObject.transform.localPosition = Vector3.new(0, 0, 0)
+
+        -- Set Player Rotations
+        player1.character.gameObject.transform.localRotation = Quaternion.Euler(0, 0, 0)
+        player2.character.gameObject.transform.localRotation = Quaternion.Euler(0, 0, 0)
 
         --Offset the camera
         camScript.UpdateOffsets(Vector3.new(0, -1, 0))
@@ -76,14 +84,6 @@ function AddToBoats(player_pairs, soloPlayer)
         --Lower the chat bubbles
         player1.character.transform:GetChild(0).transform.localPosition = Vector3.new(0, 2, 0)
         player2.character.transform:GetChild(0).transform.localPosition = Vector3.new(0, 2, 0)
-
-        -- Set Player Positions
-        player1.character.gameObject.transform.localPosition = Vector3.new(0, 0, 0)
-        player2.character.gameObject.transform.localPosition = Vector3.new(0, 0, 0)
-
-        -- Set Player Rotations
-        player1.character.gameObject.transform.localRotation = Quaternion.Euler(0, 0, 0)
-        player2.character.gameObject.transform.localRotation = Quaternion.Euler(0, 0, 0)
 
         if player1 == client.localPlayer then
             myCurrentPair = player2
@@ -197,7 +197,7 @@ function StartBoatRide()
     playerPairMatesByPlayer = {}
     choicesByPlayer = {}
 
-    local player_pairs, solo_player = playerTracker.SeperatePlayersIntoRandomPairs()
+    local player_pairs, solo_player = playerTracker.SeparatePlayersIntoRandomPairs()
     local newPairInfo = {
         player_pairs = player_pairs,
         solo_player = solo_player
