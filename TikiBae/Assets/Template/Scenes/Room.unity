@@ -20,12 +20,12 @@ RenderSettings:
   m_FogDensity: 0.005
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
-  m_AmbientSkyColor: {r: 0.085826114, g: 0.007843147, b: 0.37254903, a: 1}
+  m_AmbientSkyColor: {r: 0.16989844, g: 0.06274511, b: 0.59607846, a: 1}
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
   m_AmbientIntensity: 0.37
   m_AmbientMode: 3
-  m_SubtractiveShadowColor: {r: 0.007843138, g: 0.07058824, b: 0.37254903, a: 1}
+  m_SubtractiveShadowColor: {r: 0.08627451, g: 0.007843138, b: 0.37254903, a: 1}
   m_SkyboxMaterial: {fileID: 2100000, guid: 1412465bc71ce7942b5b8fe743be9333, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
@@ -14295,7 +14295,7 @@ MonoBehaviour:
     rid: -2
   m_boatPrefab: {fileID: 4668738752416053395, guid: 60380bc1e9e223f4bb4c05615f15d524,
     type: 3}
-  m_stateDuration: 10
+  m_stateDuration: 60
   m_mainCamera: {fileID: 1734549975}
   references:
     version: 2
@@ -28227,6 +28227,74 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &1334477038
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1519970865942917430, guid: 015b5f784fe0ec04f92e9794c3277853,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1519970865942917430, guid: 015b5f784fe0ec04f92e9794c3277853,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1519970865942917430, guid: 015b5f784fe0ec04f92e9794c3277853,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1519970865942917430, guid: 015b5f784fe0ec04f92e9794c3277853,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1519970865942917430, guid: 015b5f784fe0ec04f92e9794c3277853,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1519970865942917430, guid: 015b5f784fe0ec04f92e9794c3277853,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1519970865942917430, guid: 015b5f784fe0ec04f92e9794c3277853,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1519970865942917430, guid: 015b5f784fe0ec04f92e9794c3277853,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1519970865942917430, guid: 015b5f784fe0ec04f92e9794c3277853,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1519970865942917430, guid: 015b5f784fe0ec04f92e9794c3277853,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2575761808839591153, guid: 015b5f784fe0ec04f92e9794c3277853,
+        type: 3}
+      propertyPath: m_Name
+      value: ServerStartup
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 015b5f784fe0ec04f92e9794c3277853, type: 3}
 --- !u!4 &1347874769 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6791689603306655776, guid: ab5a0568d2a8dbf43976d9e2c640a4fc,
@@ -40937,3 +41005,4 @@ SceneRoots:
   - {fileID: 991538924}
   - {fileID: 1560548009}
   - {fileID: 261295986}
+  - {fileID: 1334477038}
