@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &1
+MonoBehaviour:
+  m_ObjectHideFlags: 53
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 123689159, guid: a1d32ecfae27fdc4a8347da428bbc54a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _version: 1
+  _publishedId: 
+  _worldPrefab: {fileID: 9171886453793455768, guid: 569fdf5ca373dfb43bac53ec5237b9a6,
+    type: 3}
+  _scenePrefab: {fileID: 8457444051872364791, guid: 4ea8fc71d0d33aa4794e860bd8a9318a,
+    type: 3}
+  _hideVirtualPlayerScenes: 1
+  _scenes:
+  - Name: Room
+    Scene: {fileID: 102900000, guid: 3d97b014f52721147ba461f2a8133078, type: 3}
+    LoadingImage: {fileID: 2800000, guid: 6f9235fd7c31aea498918ab44c186b79, type: 3}

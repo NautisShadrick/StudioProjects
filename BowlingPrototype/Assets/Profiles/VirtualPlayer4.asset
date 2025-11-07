@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1247912247, guid: a1d32ecfae27fdc4a8347da428bbc54a, type: 3}
+  m_Name: VirtualPlayer4
+  m_EditorClassIdentifier: 
+  _name: VirtualPlayer4
+  _id: 0000000158d6f2447feab021
+  _outfit: {fileID: 11400000, guid: 5e24921de2768ee408606ce4267a4afc, type: 2}
+  _isSubscriber: 0
+  _isAgeVerifiedAbove18: 0
+  _petName: 
+  _petId: ee06f84442624faf33da9bc2
+  _petOutfit: {fileID: 0}
+  _serverPort: -1
