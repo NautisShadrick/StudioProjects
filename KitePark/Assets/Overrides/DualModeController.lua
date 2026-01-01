@@ -1115,30 +1115,6 @@ function HandleTap(tap)
         ReleaseLocalAnchor(true)
     end
 
-    --print("No tap handler found, processing as movement tap")
-    --print("Hit object: " .. hit.collider.gameObject.name .. " with tag " .. hit.collider.gameObject.tag)
-
-    if hit.collider:CompareTag("Water") then
-        --print("Tapped on water surface")
-        if Vector3.Distance(hit.point, character.transform.position) <= 16 then
-            if Vector3.Distance(hit.point, character.transform.position) <= 8 then
-                --print("Tapped on water within 12 units, performing tap action directly")
-                tapHandlerPointEvent:Fire(hit.gameObject, hit.point)
-            else
-                -- Find the nearest NavMesh point for the calculated position
-                local navMeshPosition = GetNearestNavMeshPoint(hit.point)
-                if navMeshPosition then
-                    -- Move the character to the NavMesh position and perform the action when arriving
-                    --print("Tapped on water within 16 units, moving to NavMesh point before performing tap action")
-                    TapMoveTo(navMeshPosition, function()
-                        tapHandlerPointEvent:Fire(hit.gameObject, hit.point)
-                    end)
-                end
-            end
-        end
-        return
-    end
-
     -- Characters should block movement taps
     character = hit.collider.gameObject:GetComponentInParent(Character)
     if character then

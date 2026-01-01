@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UXML
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="UnityEngine.UIElements"
+    xmlns:hr="Highrise.UI"
+    xmlns:editor="UnityEditor.UIElements"
+    xsi:noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd"
+>
+  <hr:UILuaView class="wind-compass" picking-mode="Ignore">
+    <VisualElement name="_compassContainer" class="compass-container" picking-mode="Ignore">
+      <VisualElement name="_arrowContainer" class="arrow-container" picking-mode="Ignore">
+        <hr:UIImage name="_arrow" class="arrow" picking-mode="Ignore"/>
+      </VisualElement>
+      <Label name="_strengthLabel" text="0.0" class="strength-label" picking-mode="Ignore"/>
+    </VisualElement>
+  </hr:UILuaView>
+</UXML>
