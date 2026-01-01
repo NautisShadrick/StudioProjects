@@ -2,6 +2,10 @@
 
 --!SerializeField
 local kitePrefabs : {GameObject} = {}
+--!SerializeField
+local duckKitePrefab : GameObject = nil
+--!SerializeField
+local dragonKitePrefab : GameObject = nil
 
 --------------------------------
 ------     CONSTANTS      ------
@@ -76,8 +80,18 @@ function UpdateKite(player, newKite, oldKite)
     print("Player " .. player.name .. " changed kite to index: " .. kiteIndex)
     -- Spawn NewKite for Player
     print(typeof(kitePrefabs[kiteIndex]))
-    if kitePrefabs[kiteIndex] then
-        local kiteInstance = GameObject.Instantiate(kitePrefabs[kiteIndex])
+
+    local _kiteTospawn = kitePrefabs[kiteIndex]
+    if newKite == -1 then
+        _kiteTospawn = duckKitePrefab
+    end
+
+    if newKite == -2 then
+        _kiteTospawn = dragonKitePrefab
+    end
+
+    if _kiteTospawn then
+        local kiteInstance = GameObject.Instantiate(_kiteTospawn)
         kiteInstance.name = "Kite_" .. player.name
         playerinfo.myKite = kiteInstance:GetComponent(KiteController)
         playerinfo.myKite.SetPlayer(player)
@@ -96,7 +110,6 @@ function self:ClientAwake()
 
         -- Subscribe to line length changes
         playerinfo.lineLength.Changed:Connect(function(newVal, oldVal)
-            print(player.name .. " line length changed to: " .. newVal)
             if playerinfo.myKite then
                 playerinfo.myKite.SetLineLength(newVal)
             end
@@ -110,10 +123,22 @@ end
 function self:ServerAwake()
     TrackPlayers(server, function(playerInfo)
         local player = playerInfo.player
+
+        playerInfo.playerKite.value = math.random(1, #kitePrefabs)
+
+        if player.name:lower() == "sourpatchsid" then
+            playerInfo.playerKite.value = -1
+            print("Assigned duck kite to " .. player.name)
+        end
+
+        if player.name:lower() == "nautisshadrick" then
+            playerInfo.playerKite.value = -2
+            print("Assigned dragon kite to " .. player.name)
+        end
+
     end)
 
     ChangeLengthRequest:Connect(function(player, newLength)
-        print("Received line length change request from " .. player.name .. " to length: " .. newLength)
         local _playerInfo = players[player]
         if _playerInfo and _playerInfo.lineLength then
             local _clampedLength = math.max(MIN_LINE_LENGTH, math.min(MAX_LINE_LENGTH, newLength))

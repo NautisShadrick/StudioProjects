@@ -1,5 +1,8 @@
 --!Type(Module)
 
+--!SerializeField
+local bgMusicClip : AudioShader = nil
+
 local _cachedLocalPlayerPosition: Vector3 = Vector3.zero
 local _cachedCameraRotation: Quaternion = Quaternion.identity
 
@@ -27,4 +30,10 @@ end
 
 function self:ClientUpdate()
     CacheValues()
+end
+
+function self:ClientAwake()
+    if bgMusicClip then
+        Audio:PlayMusic(bgMusicClip, 1)
+    end
 end

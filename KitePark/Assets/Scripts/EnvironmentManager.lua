@@ -1,6 +1,12 @@
 --!Type(Module)
 
 --------------------------------
+------  SERIALIZED FIELDS  ------
+--------------------------------
+--!SerializeField
+local windParticles: Transform = nil
+
+--------------------------------
 ------     WIND SETTINGS   ------
 --------------------------------
 MAIN_WIND_DIRECTION = Vector3.new(0.3, 1, 0.1).normalized
@@ -54,4 +60,12 @@ end
 --------------------------------
 function self:ClientUpdate()
     windTime = windTime + Time.deltaTime
+
+    -- Rotate wind particles to match wind direction (Y axis only, stay level)
+    if windParticles then
+        local _wind = GetCurrentWind()
+        local _yAngle = math.atan2(_wind.x, _wind.z) * (180 / math.pi)
+        local _currentRot = windParticles.eulerAngles
+        windParticles.eulerAngles = Vector3.new(_currentRot.x, _yAngle, _currentRot.z)
+    end
 end
