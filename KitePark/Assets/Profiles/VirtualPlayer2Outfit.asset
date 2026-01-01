@@ -15,48 +15,77 @@ MonoBehaviour:
   _skeletonId: 
   _items:
   - _descriptorId: body-flesh
-    _paletteId: 7
-    _styleIndex: 0
-  - _descriptorId: eyebrow-n_basic2018newbrows14
-    _paletteId: 1
-    _styleIndex: 0
-  - _descriptorId: eye-n_basic2018femaleovalslant
-    _paletteId: 7
-    _styleIndex: 0
-  - _descriptorId: nose-n_basic2018newnose03
-    _paletteId: -1
-    _styleIndex: 0
-  - _descriptorId: mouth-basic2018fullround
-    _paletteId: 6
-    _styleIndex: 0
-  - _descriptorId: freckle-n_basic2018freckle04
-    _paletteId: -1
-    _styleIndex: 0
-  - _descriptorId: freckle-n_basic2018freckle22
-    _paletteId: -1
-    _styleIndex: 0
-  - _descriptorId: hair_front-n_malenew29
-    _paletteId: 29
-    _styleIndex: 0
-  - _descriptorId: hair_back-n_malenew29
-    _paletteId: 29
-    _styleIndex: 0
-  - _descriptorId: face_hair-n_newbasicfacehairupper06
-    _paletteId: 1
-    _styleIndex: 0
-  - _descriptorId: face_hair-n_newbasicfacehairlower04
-    _paletteId: 1
-    _styleIndex: 0
-  - _descriptorId: shirt-n_room32019slouchyredtrackjacket
-    _paletteId: -1
-    _styleIndex: 0
-  - _descriptorId: earrings-n_room12019goldhoops
-    _paletteId: -1
-    _styleIndex: 0
-  - _descriptorId: pants-n_room32019baggytrackpantsgreycamo
-    _paletteId: -1
-    _styleIndex: 0
-  - _descriptorId: shoes-n_room12019hightopsred
-    _paletteId: -1
-    _styleIndex: 0
+    _paletteId: 0
+  - _descriptorId: eyebrow-n_michimacchiattobrandgrab2022fadedstraightbrows
+    _paletteId: 2
+  - _descriptorId: freckle-n_doodlekitchen2024makeupvalentine
+    _paletteId: 0
+  - _descriptorId: freckle-n_anywayyouwantitudcgrab2023chuxchublushfreckles
+    _paletteId: 0
+  - _descriptorId: freckle-n_muthurcosmeticsbrand2022highlight
+    _paletteId: 0
+  - _descriptorId: freckle-n_doodlekitchen2024makeupvalentinespeckle
+    _paletteId: 0
+  - _descriptorId: freckle-n_doodlekitchen2025kiss
+    _paletteId: 0
+  - _descriptorId: mouth-n_michimacchiattobrandgrab2022plumppout
+    _paletteId: 0
+  - _descriptorId: tattoo-n_udcaccessorisegrabtwo2022butterflypiercingjadeyxo
+    _paletteId: 0
+  - _descriptorId: necklace-n_jewelriseudcparticrewards2024brynnsbsnecklace
+    _paletteId: 0
+  - _descriptorId: eye-n_mockeririseapaloozaudc2023femeyes
+    _paletteId: 37
+  - _descriptorId: glasses-n_doodlekitchen2025lashsinupper
+    _paletteId: 0
+  - _descriptorId: glasses-n_muthurwildy2k2022leftmuthurlash
+    _paletteId: 0
+  - _descriptorId: hat-n_muthursoakedgrab2024_lashesunder
+    _paletteId: 0
+  - _descriptorId: humanoid-size-default
+    _paletteId: 0
+  - _descriptorId: bag-n_springflingevntrwrds12024littletrufflesduckydarlingsduckgold
+    _paletteId: 0
+  - _descriptorId: freckle-n_doodlekitchen2025egirltats2
+    _paletteId: 0
+  - _descriptorId: bag-n_doodlekitchen2024idollzmanicurekitty
+    _paletteId: 0
+  - _descriptorId: nose-n_doodlekitchen2025noserich
+    _paletteId: 0
+  - _descriptorId: hair_front-n_doodlekitchen2024hairsnow1
+    _paletteId: 63
+  - _descriptorId: hair_back-n_doodlekitchen2025richgirlhair4
+    _paletteId: 63
+  - _descriptorId: gloves-n_decadessale202100moodring
+    _paletteId: 0
+  - _descriptorId: eye-n_tomsinfinitelenses2024fullspectrum
+    _paletteId: 0
+  - _descriptorId: eye-eye-n_doodlekitchen2025lensrich5
+    _paletteId: 0
+  - _descriptorId: hat-n_woodlandsenchant2025caterpillar
+    _paletteId: 0
+  - _descriptorId: shoes-n_snoopfeet
+    _paletteId: 0
+  - _descriptorId: bag-n_2016demonshoulderdemon
+    _paletteId: 0
+  - _descriptorId: sock-n_bowsandlacegrab22024anklebow
+    _paletteId: 0
+  - _descriptorId: sock-n_lightfairyrewards2022rufflesocks
+    _paletteId: 0
+  - _descriptorId: hat-n_jewelryshopplayerdesign2021gaugedears_1
+    _paletteId: 0
+  - _descriptorId: shirt-n_vintagevault2023scoopedneckgrey
+    _paletteId: 0
+  - _descriptorId: skirt-n_doodlekitchen2025egirlskirt2
+    _paletteId: 0
+  - _descriptorId: tattoo-n_doodlekitchen2024thicbodtatted3
+    _paletteId: 0
+  - _descriptorId: tattoo-n_muthurcosmeticsbrand2022glitterspray
+    _paletteId: 0
+  - _descriptorId: glasses-n_room12019halfrimwhite
+    _paletteId: 0
+  - _descriptorId: bag-n_onceuponatimegrab2023swordharness
+    _paletteId: 0
+  - _descriptorId: hat-n_prankrewardsrecolor2021iBatarianabigribbon_1
+    _paletteId: 0
   _includeFallbacks: 1

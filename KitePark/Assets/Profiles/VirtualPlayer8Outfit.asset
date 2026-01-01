@@ -16,41 +16,28 @@ MonoBehaviour:
   _items:
   - _descriptorId: body-flesh
     _paletteId: 33
-    _styleIndex: 0
   - _descriptorId: eye-n_basic2018malerounddroopy
     _paletteId: 1
-    _styleIndex: 0
   - _descriptorId: eyebrow-n_basic2018newbrows04
     _paletteId: 0
-    _styleIndex: 0
   - _descriptorId: nose-n_basic2018newnose16
     _paletteId: -1
-    _styleIndex: 0
   - _descriptorId: mouth-basic2018smirk
     _paletteId: -1
-    _styleIndex: 0
   - _descriptorId: hair_front-n_malenew11
     _paletteId: 5
-    _styleIndex: 0
   - _descriptorId: hair_back-n_malenew11
     _paletteId: 5
-    _styleIndex: 0
   - _descriptorId: shirt-n_room22019tuckedtstripes
     _paletteId: -1
-    _styleIndex: 0
   - _descriptorId: watch-n_room32019blackwatch
     _paletteId: -1
-    _styleIndex: 0
   - _descriptorId: handbag-n_room32019skateboardxo
     _paletteId: -1
-    _styleIndex: 0
   - _descriptorId: glasses-n_room32019smallshades
     _paletteId: -1
-    _styleIndex: 0
   - _descriptorId: pants-n_room22019techpantscamo
     _paletteId: -1
-    _styleIndex: 0
   - _descriptorId: shoes-n_converse
     _paletteId: -1
-    _styleIndex: 0
   _includeFallbacks: 1

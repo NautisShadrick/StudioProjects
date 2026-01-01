@@ -32,12 +32,17 @@ local lastPlayerPos: Vector3 = Vector3.zero
 local playerVelocity: Vector3 = Vector3.zero
 local isInitialized: boolean = false
 local lineRenderer: LineRenderer = nil
+local assignedPlayer: Player = nil
 
 --------------------------------
 ------  LOCAL FUNCTIONS   ------
 --------------------------------
+local function getPlayer(): Player
+    return assignedPlayer or client.localPlayer
+end
+
 local function getPlayerPosition(): Vector3
-    local _player = client.localPlayer
+    local _player = getPlayer()
     if not _player or not _player.character then
         return Vector3.zero
     end
@@ -62,7 +67,7 @@ local function constrainToLineLength(kitePos: Vector3, anchorPos: Vector3): Vect
 end
 
 local function isPlayerMoving(): boolean
-    local _player = client.localPlayer
+    local _player = getPlayer()
     if not _player or not _player.character then
         return false
     end
@@ -70,7 +75,7 @@ local function isPlayerMoving(): boolean
 end
 
 local function getPlayerHandPosition(): Vector3
-    local _player = client.localPlayer
+    local _player = getPlayer()
     if not _player or not _player.character then
         return Vector3.zero
     end
@@ -123,6 +128,14 @@ local function updateLineRenderer(kitePos: Vector3)
 end
 
 --------------------------------
+------  PUBLIC FUNCTIONS  ------
+--------------------------------
+function SetPlayer(player: Player)
+    assignedPlayer = player
+    isInitialized = false
+end
+
+--------------------------------
 ------  LIFECYCLE HOOKS   ------
 --------------------------------
 function self:Start()
@@ -134,7 +147,7 @@ function self:Start()
         lineRenderer.endWidth = 0.02
     end
 
-    local _player = client.localPlayer
+    local _player = getPlayer()
     if _player and _player.character then
         lastPlayerPos = getPlayerPosition()
         local _anchor = getAnchorPoint()
@@ -145,7 +158,7 @@ function self:Start()
 end
 
 function self:Update()
-    local _player = client.localPlayer
+    local _player = getPlayer()
     if not _player or not _player.character then
         return
     end

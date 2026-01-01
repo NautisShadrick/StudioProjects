@@ -12,14 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 1247912247, guid: a1d32ecfae27fdc4a8347da428bbc54a, type: 3}
   m_Name: VirtualPlayer2
   m_EditorClassIdentifier: 
-  _name: VirtualPlayer2
+  _name: sourpatchsid
   _id: 00000001ac6b79223ff55810
-  _outfit: {fileID: 11400000, guid: 03d2126839880684e94238817db8aeda, type: 2}
+  _outfit: {fileID: 11400000, guid: 93b82a3e294526643be96d80ce1da86c, type: 2}
   _isSubscriber: 0
   _isAgeVerifiedAbove18: 0
-  _isModerator: 0
-  _isSpectator: 0
   _petName: 
-  _petId: 625b52566dbd6e241cfe9297
+  _petId: 4f82295e9c39e92495b1951a
   _petOutfit: {fileID: 0}
   _serverPort: -1

@@ -14,12 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _name: VirtualPlayer9
   _id: 0000000107e3a1199fd00c4b
-  _outfit: {fileID: 11400000, guid: 1ddd221e9a55688499a9a565975d1356, type: 2}
+  _outfit: {fileID: 11400000, guid: 6aebe315efd4ef14ea805be486a46054, type: 2}
   _isSubscriber: 0
   _isAgeVerifiedAbove18: 0
-  _isModerator: 0
-  _isSpectator: 0
   _petName: 
-  _petId: ecbcd3312bafc72976678fc4
+  _petId: 7c5243c1b1b90b3acb84b14b
   _petOutfit: {fileID: 0}
-  _serverPort: -1
