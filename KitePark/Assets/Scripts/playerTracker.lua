@@ -39,8 +39,8 @@ function TrackPlayers(game, characterCallback)
         playercount = playercount + 1
         players[player] = {
             player = player,
-            playerKite = NumberValue.new("playerKite", 1, player),
-            lineLength = NumberValue.new("LineLength", DEFAULT_LINE_LENGTH),
+            playerKite = NumberValue.new("playerKite" .. player.user.id, 1),
+            lineLength = NumberValue.new("LineLength_" .. player.user.id, DEFAULT_LINE_LENGTH),
             myKite = nil,
         }
 
