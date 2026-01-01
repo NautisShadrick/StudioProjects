@@ -26,6 +26,7 @@ namespace Highrise.Lua.Generated
         private const string s_scriptGUID = "c697ce8da0b69e8438da6590aa3ca841";
         public override string ScriptGUID => s_scriptGUID;
 
+        [SerializeField] public UnityEngine.GameObject m_pointPrefab = default;
 
         protected override SerializedPropertyValue[] SerializeProperties()
         {
@@ -34,6 +35,7 @@ namespace Highrise.Lua.Generated
 
             return new SerializedPropertyValue[]
             {
+                CreateSerializedProperty(_script.GetPropertyAt(0), m_pointPrefab),
             };
         }
         

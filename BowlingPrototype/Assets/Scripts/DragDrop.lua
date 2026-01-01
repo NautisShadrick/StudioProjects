@@ -1,5 +1,8 @@
 --!Type(Module)
 
+--!SerializeField
+local pointPrefab: GameObject = nil
+
 local camera: Camera = nil
 
 local isDragging = false -- flag to check if the object is currently being dragged
@@ -15,13 +18,14 @@ local POINTCHECKDELTATIME = 0.1 -- Time interval to check motion points
 
 local MotionPoints = {
     startPoint = Vector3.zero,
-    midPoint = Vector3.zero,
     endPoint = Vector3.zero
 }
 
 
 local lastMotionDirection = Vector3.zero
 local lastMotionMagnitude = 0
+local last_rb: Rigidbody = nil
+
 
 function CalculateMotionVector()
     local motionVector = MotionPoints.endPoint - MotionPoints.startPoint
@@ -35,15 +39,19 @@ function CalculateMotionVector()
 end
 
 function ApplyMotionToObject(obj: GameObject)
+    obj.transform.position = MotionPoints.startPoint
     local rb: Rigidbody = obj:GetComponent(Rigidbody)
+    last_rb = rb
     if rb then
-        rb.velocity = lastMotionDirection * lastMotionMagnitude * 5 -- Adjust multiplier as needed
-        print("Applied Velocity: " .. tostring(rb.velocity))
+        local _newForce = lastMotionDirection * lastMotionMagnitude * 5 -- Adjust multiplier as needed
+        rb:AddForce(_newForce, ForceMode.VelocityChange)
     end
 end
 
 function self:ClientStart()
     camera = Camera.main -- Get the main camera in the scene
+
+    self.transform.position = Vector3.new(math.random(-4, 4), 0, 0)
 
     local worldUpPlane = Plane.new(Vector3.up, Vector3.new(0, 0, 0)) -- cached to avoid re-generating every call
 
@@ -105,24 +113,22 @@ function self:ClientStart()
         if touchedObject and touchedObject.tag == "draggable" then
             draggableObject = touchedObject
             MotionPoints.startPoint = touchedObject.transform.position
+            GameObject.Instantiate(pointPrefab, MotionPoints.startPoint, Quaternion.identity)
+
             print("Start POINT: ", tostring(MotionPoints.startPoint))
 
-            -- after the time delta, record the mid point
-            Timer.After(POINTCHECKDELTATIME, function()
-                MotionPoints.midPoint = draggableObject.transform.position
-                print("Mid POINT: ", tostring(MotionPoints.midPoint))
-            end)
-
             -- after the time delta, record the end point
-            Timer.After(POINTCHECKDELTATIME*2, function()
+            Timer.After(POINTCHECKDELTATIME, function()
                 MotionPoints.endPoint = draggableObject.transform.position
                 print("End POINT: ", tostring(MotionPoints.endPoint))
-                OnDragEnded()
+                GameObject.Instantiate(pointPrefab, MotionPoints.endPoint, Quaternion.identity)
+                OnDragEnded(nil)
             end)
 
             isDragging = true
             -- Disable the original object's collider during the drag
             draggableObject:GetComponent(SphereCollider).enabled = false
+            draggableObject:GetComponent(Rigidbody).isKinematic = true
             dragOffset = draggableObject.transform.position - ScreenPositionToWorldPoint(evt.position)
         else
             return
@@ -150,9 +156,9 @@ function self:ClientStart()
         if isDragging then
             isDragging = false
         end
-
         -- Enable the original object's collider again
         draggableObject:GetComponent(SphereCollider).enabled = true
+        draggableObject:GetComponent(Rigidbody).isKinematic = false
 
         -- Calculate and apply motion vector
         CalculateMotionVector()
@@ -167,6 +173,15 @@ function self:ClientStart()
     -- Handle the dragging behavior while the touch is moving
     Input.PinchOrDragChanged:Connect(OnDrag)
     -- Handle the end of dragging when the touch ends
-    Input.PinchOrDragEnded:Connect(OnDragEnded)
+    --Input.PinchOrDragEnded:Connect(OnDragEnded)
 
+end
+
+function self:FixedUpdate()
+    if last_rb then
+        -- Apply centering force to pull ball toward X = 0
+        local currentX = last_rb.transform.position.x
+        local centeringForce = Vector3.new(-currentX * 2, 0, 0) -- Adjust multiplier to control centering strength
+        last_rb:AddForce(centeringForce, ForceMode.Acceleration)
+    end
 end

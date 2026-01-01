@@ -20,7 +20,7 @@ function self:ClientStart()
     local width = 128
     local height = 128
     local texture = Texture2D.new(width, height)
-    local brushSize = 1
+    local brushSize = 6
 
     local ChangedPixels = {} -- Stores the pixels that have changed since the last frame
 
