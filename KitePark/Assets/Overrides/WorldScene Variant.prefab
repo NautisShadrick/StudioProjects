@@ -1,0 +1,130 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &7558537399011418359
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1999628579082987652, guid: 4ea8fc71d0d33aa4794e860bd8a9318a,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1999628579082987652, guid: 4ea8fc71d0d33aa4794e860bd8a9318a,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1999628579082987652, guid: 4ea8fc71d0d33aa4794e860bd8a9318a,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1999628579082987652, guid: 4ea8fc71d0d33aa4794e860bd8a9318a,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1999628579082987652, guid: 4ea8fc71d0d33aa4794e860bd8a9318a,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1999628579082987652, guid: 4ea8fc71d0d33aa4794e860bd8a9318a,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1999628579082987652, guid: 4ea8fc71d0d33aa4794e860bd8a9318a,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1999628579082987652, guid: 4ea8fc71d0d33aa4794e860bd8a9318a,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1999628579082987652, guid: 4ea8fc71d0d33aa4794e860bd8a9318a,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1999628579082987652, guid: 4ea8fc71d0d33aa4794e860bd8a9318a,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6694746433855017560, guid: 4ea8fc71d0d33aa4794e860bd8a9318a,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8457444051872364791, guid: 4ea8fc71d0d33aa4794e860bd8a9318a,
+        type: 3}
+      propertyPath: m_Name
+      value: WorldScene Variant
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8457444051872364791, guid: 4ea8fc71d0d33aa4794e860bd8a9318a,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -2443603168103578581}
+  m_SourcePrefab: {fileID: 100100000, guid: 4ea8fc71d0d33aa4794e860bd8a9318a, type: 3}
+--- !u!1 &2142500910176344064 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8457444051872364791, guid: 4ea8fc71d0d33aa4794e860bd8a9318a,
+    type: 3}
+  m_PrefabInstance: {fileID: 7558537399011418359}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &-2443603168103578581
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2142500910176344064}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd605fedc2fee2e1f1b4c687d2cb0d80, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _networkId: 0
+  _script: {fileID: -974389366465450183, guid: 07bf5f387821e2344b6bc65268140d55, type: 3}
+  _properties: []
+  _uiOutput: 0
+  _uiOutputSettings:
+    rid: -2
+  m_movementUpdateInterval: 0.1
+  m_footstepWalkSound: {fileID: 11400000, guid: 06f9d1665c501494cab2fabb8d9c0d4e,
+    type: 2}
+  m_footstepRunSound: {fileID: 11400000, guid: 264793f51d6488647abe8a49a72e9487, type: 2}
+  m_externalInputAction: {fileID: 0}
+  _startingMovementSpeed: 5.5
+  _smoothTime: 0.15
+  _movementSpeed: 5.5
+  m_runningSpeedThreshold: 5
+  _turnAroundThreshold: -0.5
+  m_is2D: 0
+  m_maxLinkDistance: 1
+  m_maxLinkAngle: 95
+  m_minLinkMoveStepChange: 0.24
+  m_movementCamera: {fileID: 0}
+  m_maxMovementDistance: 50
+  m_arrivalThreshold: 0.5
+  _tapToMoveThreshold: 0.05
+  _rotationScreenThreshold: 0.6
+  m_movementIndicator: {fileID: 7025435918243807456, guid: 5dfae8e2eae84f140b64b0e4cfcbcfe8,
+    type: 3}
+  m_longPressSound: {fileID: 11400000, guid: 25625e178d869405c92bfc4024612fb9, type: 2}
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }

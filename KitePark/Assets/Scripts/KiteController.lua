@@ -1,6 +1,11 @@
 --!Type(Client)
 
 --------------------------------
+------     REQUIRES       ------
+--------------------------------
+local Environment = require("EnvironmentManager")
+
+--------------------------------
 ------  SERIALIZED FIELDS  ------
 --------------------------------
 --!SerializeField
@@ -9,12 +14,11 @@ local lineLength: number = 10
 --------------------------------
 ------     CONSTANTS      ------
 --------------------------------
-local WIND_DIRECTION: Vector3 = Vector3.new(1, 0.5, 0).normalized
-local WIND_STRENGTH: number = 0
-local GRAVITY: number = 5
-local PLAYER_MOVE_LIFT: number = 12
+local GRAVITY: number = 6
+local PLAYER_MOVE_LIFT: number = 32
 local DRAG: number = 0.98
 local LINE_PULL_STRENGTH: number = 15
+local WIND_RESPONSIVENESS: number = 1.5
 
 --------------------------------
 ------     LOCAL STATE    ------
@@ -164,16 +168,12 @@ function self:Update()
     local _distanceToAnchor = _toAnchor.magnitude
     local _dirToAnchor = _toAnchor.normalized
 
-    -- Check if player is moving away from kite
-    local _playerMoveDir = playerVelocity.normalized
-    local _isMovingAway = false
-    if isPlayerMoving() and playerVelocity.magnitude > 0.1 then
-        local _dotProduct = Vector3.Dot(_playerMoveDir, -_dirToAnchor)
-        _isMovingAway = _dotProduct > 0.3
-    end
+    -- Check player speed
+    local _playerSpeed = playerVelocity.magnitude
+    local _isMoving = isPlayerMoving() and _playerSpeed > 0.5
 
-    -- Apply wind force (currently 0)
-    local _windForce = WIND_DIRECTION * WIND_STRENGTH
+    -- Get current wind from environment (amplified for more movement)
+    local _windForce = Environment.GetCurrentWind() * WIND_RESPONSIVENESS
 
     -- Apply gravity
     local _gravityForce = Vector3.new(0, -GRAVITY, 0)
@@ -182,18 +182,20 @@ function self:Update()
     local _linePullForce = Vector3.zero
     local _liftForce = Vector3.zero
 
-    if _distanceToAnchor >= lineLength then
+    -- How taut is the line (0 = slack, 1 = fully taut)
+    local _tension = math.max(0, (_distanceToAnchor - lineLength * 0.7) / (lineLength * 0.3))
+    _tension = math.min(1, _tension)
+
+    if _distanceToAnchor >= lineLength * 0.95 then
         -- Line is taut - pull kite toward player
         _linePullForce = _dirToAnchor * LINE_PULL_STRENGTH
+    end
 
-        -- Apply lift when line is taut and player is running away
-        if _isMovingAway then
-            _liftForce = Vector3.new(0, PLAYER_MOVE_LIFT, 0)
-        end
-    elseif _isMovingAway and _distanceToAnchor > lineLength * 0.8 then
-        -- Line is getting tight - start applying some lift
-        local _tension = (_distanceToAnchor - lineLength * 0.8) / (lineLength * 0.2)
-        _liftForce = Vector3.new(0, PLAYER_MOVE_LIFT * _tension, 0)
+    -- Apply lift when line has tension and player is moving
+    if _isMoving and _tension > 0 then
+        -- Lift scales with tension and player speed
+        local _speedFactor = math.min(1, _playerSpeed / 5)
+        _liftForce = Vector3.new(0, PLAYER_MOVE_LIFT * _tension * _speedFactor, 0)
     end
 
     -- Combine forces
