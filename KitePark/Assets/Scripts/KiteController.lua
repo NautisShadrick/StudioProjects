@@ -10,6 +10,10 @@ local Environment = require("EnvironmentManager")
 --------------------------------
 --!SerializeField
 local lineLength: number = 10
+--!SerializeField
+local dropShadow: Transform = nil
+--!SerializeField
+local kiteRenderer: Transform = nil
 
 --------------------------------
 ------     CONSTANTS      ------
@@ -230,11 +234,19 @@ function self:Update()
 
     self.transform.position = _newPos
 
-    -- Make kite face the direction it's moving/being pulled
-    if _toKite.magnitude > 0.01 then
-        self.transform:LookAt(_anchorPoint)
+    -- Make kite renderer face the direction it's moving/being pulled
+    if kiteRenderer and _toKite.magnitude > 0.01 then
+        kiteRenderer:LookAt(_anchorPoint)
     end
 
     -- Update the line renderer
     updateLineRenderer(_newPos)
+
+    -- Update drop shadow position
+    if dropShadow then
+        local _hit, _hitInfo = Physics.Raycast(_newPos, Vector3.new(0, -1, 0), 100)
+        if _hit then
+            dropShadow.position = _hitInfo.point + Vector3.new(0, 0.05, 0)
+        end
+    end
 end

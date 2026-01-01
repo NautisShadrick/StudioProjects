@@ -27,6 +27,8 @@ namespace Highrise.Lua.Generated
         public override string ScriptGUID => s_scriptGUID;
 
         [SerializeField] public System.Double m_lineLength = 10;
+        [SerializeField] public UnityEngine.Transform m_dropShadow = default;
+        [SerializeField] public UnityEngine.Transform m_kiteRenderer = default;
 
         protected override SerializedPropertyValue[] SerializeProperties()
         {
@@ -36,6 +38,8 @@ namespace Highrise.Lua.Generated
             return new SerializedPropertyValue[]
             {
                 CreateSerializedProperty(_script.GetPropertyAt(0), m_lineLength),
+                CreateSerializedProperty(_script.GetPropertyAt(1), m_dropShadow),
+                CreateSerializedProperty(_script.GetPropertyAt(2), m_kiteRenderer),
             };
         }
         

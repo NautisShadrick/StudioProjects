@@ -32,11 +32,15 @@ local segmentPositions = {}
 local segmentVelocities = {}
 local isInitialized: boolean = false
 local waveTime: number = 0
+local wavePhaseOffset: number = 0
 
 --------------------------------
 ------  LIFECYCLE HOOKS   ------
 --------------------------------
 function self:Start()
+    -- Random phase offset so each tail waves differently
+    wavePhaseOffset = math.random() * math.pi * 2
+
     lineRenderer = self.gameObject:GetComponent(LineRenderer)
     if not lineRenderer then
         return
@@ -85,9 +89,9 @@ function self:FixedUpdate()
         local _windFactor = (i / SEGMENT_COUNT) * WIND_INFLUENCE
         segmentVelocities[i] = segmentVelocities[i] + _wind * _windFactor * Time.fixedDeltaTime
 
-        -- Add sine wave that travels down the tail
+        -- Add sine wave that travels down the tail (with random offset per tail)
         local _segmentRatio = (i - 1) / SEGMENT_COUNT
-        local _wavePhase = waveTime - _segmentRatio * WAVE_FREQUENCY * math.pi * 2
+        local _wavePhase = waveTime - _segmentRatio * WAVE_FREQUENCY * math.pi * 2 + wavePhaseOffset
         local _waveOffset = math.sin(_wavePhase) * WAVE_AMPLITUDE * _segmentRatio
         segmentVelocities[i] = segmentVelocities[i] + _waveDir * _waveOffset
 
