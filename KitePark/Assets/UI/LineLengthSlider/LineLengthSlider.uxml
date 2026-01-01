@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UXML
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="UnityEngine.UIElements"
+    xmlns:hr="Highrise.UI"
+    xmlns:editor="UnityEditor.UIElements"
+    xsi:noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd"
+>
+  <hr:UILuaView class="line-length-hud" picking-mode="Ignore">
+    <VisualElement name="_container" class="slider-container">
+      <Label name="_titleLabel" text="Line Length" class="title-label" picking-mode="Ignore"/>
+      <hr:UISlider name="_lengthSlider" class="length-slider"/>
+      <Label name="_valueLabel" text="10" class="value-label" picking-mode="Ignore"/>
+    </VisualElement>
+  </hr:UILuaView>
+</UXML>

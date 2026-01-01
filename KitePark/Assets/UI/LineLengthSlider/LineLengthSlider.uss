@@ -1,0 +1,43 @@
+.line-length-hud {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.slider-container {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    width: 200px;
+    flex-direction: column;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.title-label {
+    font-size: 14px;
+    color: white;
+    -unity-text-align: middle-center;
+    margin-bottom: 5px;
+}
+
+.length-slider {
+    width: 100%;
+}
+
+.length-slider .slider__foreground {
+    background-color: white;
+}
+
+.length-slider .slider__knob {
+    border-color: white;
+}
+
+.value-label {
+    font-size: 18px;
+    color: white;
+    -unity-text-align: middle-center;
+    margin-top: 5px;
+}

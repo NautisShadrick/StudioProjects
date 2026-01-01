@@ -41,6 +41,10 @@ local function getPlayer(): Player
     return assignedPlayer or client.localPlayer
 end
 
+local function getLineLength(): number
+    return lineLength
+end
+
 local function getPlayerPosition(): Vector3
     local _player = getPlayer()
     if not _player or not _player.character then
@@ -54,13 +58,13 @@ local function getAnchorPoint(): Vector3
     return _playerPos + Vector3.new(0, 1.5, 0)
 end
 
-local function constrainToLineLength(kitePos: Vector3, anchorPos: Vector3): Vector3
+local function constrainToLineLength(kitePos: Vector3, anchorPos: Vector3, currentLineLength: number): Vector3
     local _toKite = kitePos - anchorPos
     local _distance = _toKite.magnitude
 
-    if _distance > lineLength then
+    if _distance > currentLineLength then
         local _direction = _toKite.normalized
-        return anchorPos + _direction * lineLength
+        return anchorPos + _direction * currentLineLength
     end
 
     return kitePos
@@ -85,13 +89,13 @@ end
 
 local LINE_SEGMENTS: number = 20
 
-local function updateLineRenderer(kitePos: Vector3)
+local function updateLineRenderer(kitePos: Vector3, currentLineLength: number)
     if not lineRenderer then
         return
     end
     local _handPos = getPlayerHandPosition()
     local _directDistance = Vector3.Distance(_handPos, kitePos)
-    local _slack = lineLength - _directDistance
+    local _slack = currentLineLength - _directDistance
 
     if _slack <= 0 then
         -- Line is taut - straight line
@@ -135,10 +139,14 @@ function SetPlayer(player: Player)
     isInitialized = false
 end
 
+function SetLineLength(length: number)
+    lineLength = length
+end
+
 --------------------------------
 ------  LIFECYCLE HOOKS   ------
 --------------------------------
-function self:Start()
+function self:Awake()
     lineRenderer = self.gameObject:GetComponent(LineRenderer)
     if lineRenderer then
         lineRenderer.positionCount = LINE_SEGMENTS + 1
@@ -151,9 +159,10 @@ function self:Start()
     if _player and _player.character then
         lastPlayerPos = getPlayerPosition()
         local _anchor = getAnchorPoint()
-        self.transform.position = _anchor + Vector3.new(0, lineLength * 0.5, lineLength * 0.5)
+        local _lineLen = getLineLength()
+        self.transform.position = _anchor + Vector3.new(0, _lineLen * 0.5, _lineLen * 0.5)
         isInitialized = true
-        updateLineRenderer(self.transform.position)
+        updateLineRenderer(self.transform.position, _lineLen)
     end
 end
 
@@ -172,6 +181,7 @@ function self:Update()
     end
 
     local _dt = Time.deltaTime
+    local _lineLen = getLineLength()
     local _currentPlayerPos = getPlayerPosition()
     local _anchorPoint = getAnchorPoint()
     local _kitePos = self.transform.position
@@ -200,10 +210,10 @@ function self:Update()
     local _liftForce = Vector3.zero
 
     -- How taut is the line (0 = slack, 1 = fully taut)
-    local _tension = math.max(0, (_distanceToAnchor - lineLength * 0.7) / (lineLength * 0.3))
+    local _tension = math.max(0, (_distanceToAnchor - _lineLen * 0.7) / (_lineLen * 0.3))
     _tension = math.min(1, _tension)
 
-    if _distanceToAnchor >= lineLength * 0.95 then
+    if _distanceToAnchor >= _lineLen * 0.95 then
         -- Line is taut - pull kite toward player
         _linePullForce = _dirToAnchor * LINE_PULL_STRENGTH
     end
@@ -226,12 +236,12 @@ function self:Update()
     local _newPos = _kitePos + kiteVelocity * _dt
 
     -- Constrain to line length (hard constraint)
-    _newPos = constrainToLineLength(_newPos, _anchorPoint)
+    _newPos = constrainToLineLength(_newPos, _anchorPoint, _lineLen)
 
     -- Apply tension from line constraint - remove outward velocity when taut
     local _toKite = _newPos - _anchorPoint
     local _distance = _toKite.magnitude
-    if _distance >= lineLength * 0.99 then
+    if _distance >= _lineLen * 0.99 then
         local _lineDir = _toKite.normalized
         local _velocityAlongLine = Vector3.Dot(kiteVelocity, _lineDir)
         if _velocityAlongLine > 0 then
@@ -260,7 +270,7 @@ function self:Update()
     end
 
     -- Update the line renderer
-    updateLineRenderer(_newPos)
+    updateLineRenderer(_newPos, _lineLen)
 
     -- Update drop shadow position
     if dropShadow then

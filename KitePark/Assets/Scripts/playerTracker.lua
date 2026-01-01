@@ -3,8 +3,35 @@
 --!SerializeField
 local kitePrefabs : {GameObject} = {}
 
+--------------------------------
+------     CONSTANTS      ------
+--------------------------------
+local DEFAULT_LINE_LENGTH: number = 10
+local MIN_LINE_LENGTH: number = 5
+local MAX_LINE_LENGTH: number = 25
+
+--------------------------------
+------  NETWORKED EVENTS  ------
+--------------------------------
+ChangeLengthRequest = Event.new("ChangeLengthRequest")
+
 players = {}
 local playercount = 0
+
+--------------------------------
+------  PUBLIC FUNCTIONS  ------
+--------------------------------
+function GetMinLineLength(): number
+    return MIN_LINE_LENGTH
+end
+
+function GetMaxLineLength(): number
+    return MAX_LINE_LENGTH
+end
+
+function GetDefaultLineLength(): number
+    return DEFAULT_LINE_LENGTH
+end
 
 ------------ Player Tracking ------------
 function TrackPlayers(game, characterCallback)
@@ -13,6 +40,7 @@ function TrackPlayers(game, characterCallback)
         players[player] = {
             player = player,
             playerKite = NumberValue.new("playerKite", 1, player),
+            lineLength = NumberValue.new("LineLength", DEFAULT_LINE_LENGTH),
             myKite = nil,
         }
 
@@ -65,6 +93,14 @@ function self:ClientAwake()
         playerinfo.playerKite.Changed:Connect(function(newKite, oldKite)
             UpdateKite(player, newKite, oldKite)
         end)
+
+        -- Subscribe to line length changes
+        playerinfo.lineLength.Changed:Connect(function(newVal, oldVal)
+            print(player.name .. " line length changed to: " .. newVal)
+            if playerinfo.myKite then
+                playerinfo.myKite.SetLineLength(newVal)
+            end
+        end)
     end
     TrackPlayers(client, OnCharacterInstantiate)
 end
@@ -74,6 +110,15 @@ end
 function self:ServerAwake()
     TrackPlayers(server, function(playerInfo)
         local player = playerInfo.player
+    end)
+
+    ChangeLengthRequest:Connect(function(player, newLength)
+        print("Received line length change request from " .. player.name .. " to length: " .. newLength)
+        local _playerInfo = players[player]
+        if _playerInfo and _playerInfo.lineLength then
+            local _clampedLength = math.max(MIN_LINE_LENGTH, math.min(MAX_LINE_LENGTH, newLength))
+            _playerInfo.lineLength.value = _clampedLength
+        end
     end)
 end
 
