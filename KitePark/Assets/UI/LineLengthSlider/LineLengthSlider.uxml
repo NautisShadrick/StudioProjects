@@ -8,9 +8,7 @@
 >
   <hr:UILuaView class="line-length-hud" picking-mode="Ignore">
     <VisualElement name="_container" class="slider-container">
-      <Label name="_titleLabel" text="Line Length" class="title-label" picking-mode="Ignore"/>
       <hr:UISlider name="_lengthSlider" class="length-slider"/>
-      <Label name="_valueLabel" text="10" class="value-label" picking-mode="Ignore"/>
     </VisualElement>
   </hr:UILuaView>
 </UXML>
