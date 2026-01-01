@@ -234,9 +234,16 @@ function self:Update()
 
     self.transform.position = _newPos
 
-    -- Make kite renderer face the direction it's moving/being pulled
-    if kiteRenderer and _toKite.magnitude > 0.01 then
-        kiteRenderer:LookAt(_anchorPoint)
+    -- Tilt kite renderer on Z based on horizontal movement relative to camera
+    if kiteRenderer then
+        local _cam = Camera.main
+        if _cam then
+            local _camRight = _cam.transform.right
+            local _horizontalSpeed = Vector3.Dot(kiteVelocity, _camRight)
+            local _tiltAngle = math.max(-45, math.min(45, _horizontalSpeed * -5))
+            local _currentRot = kiteRenderer.localEulerAngles
+            kiteRenderer.localEulerAngles = Vector3.new(_currentRot.x, _currentRot.y, _tiltAngle)
+        end
     end
 
     -- Update the line renderer

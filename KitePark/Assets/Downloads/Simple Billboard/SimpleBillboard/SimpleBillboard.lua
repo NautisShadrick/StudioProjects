@@ -21,9 +21,9 @@ function self:LateUpdate()
     if useInitialRotation then startRotation = startRotation - lastRotation end
 
     local newRotation = Vector3.new(
-        Mathf.Lerp(startRotation.x, cameraRotation.x, amount.x), 
-        Mathf.Lerp(startRotation.y, cameraRotation.y, amount.y), 
-        Mathf.Lerp(startRotation.z, cameraRotation.z, amount.z)
+        Mathf.Lerp(startRotation.x, cameraRotation.x, amount.x),
+        Mathf.Lerp(startRotation.y, cameraRotation.y, amount.y),
+        startRotation.z
     )
 
     lastRotation = newRotation - self.transform.eulerAngles
