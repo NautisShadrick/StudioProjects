@@ -115,6 +115,8 @@ local function showColorPicker(partElement: VisualElement, instanceID: number)
 
     _colorPicker.style.left = _pickerX
     _colorPicker.style.top = _pickerY
+
+    _colorPicker:BringToFront()
     _colorPicker:EnableInClassList(ColorPickerVisibleClass, true)
 end
 
