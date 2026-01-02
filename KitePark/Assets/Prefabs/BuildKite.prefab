@@ -548,7 +548,7 @@ MonoBehaviour:
   _uiOutputSettings:
     rid: -2
   m_canvas: {fileID: 9218316914569497353}
-  m_partSize: 0.1
+  m_basePartRatio: 0.066
   references:
     version: 2
     RefIds:

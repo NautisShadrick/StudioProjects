@@ -32,6 +32,8 @@ local _rotateCW: Label = nil
 local _scaleUp: Label = nil
 --!Bind
 local _scaleDown: Label = nil
+--!Bind
+local _duplicateButton: Label = nil
 
 local KitePartItemClass = "kite-part-item"
 local TrashCanActiveClass = "trash-can-active"
@@ -380,6 +382,63 @@ local function populateKiteParts()
     end
 end
 
+local function duplicatePart()
+    if not selectedPartInstanceID then
+        return
+    end
+
+    local _sourcePart = nil
+    for _, part in ipairs(placedParts) do
+        if part.instanceID == selectedPartInstanceID then
+            _sourcePart = part
+            break
+        end
+    end
+
+    if not _sourcePart then
+        return
+    end
+
+    local _sprite = nil
+    local _kiteParts = KitePartsManager.GetKiteParts()
+    for _, kitePart in ipairs(_kiteParts) do
+        if kitePart.GetPartId() == _sourcePart.partID then
+            _sprite = kitePart.GetSprite()
+            break
+        end
+    end
+
+    local _parentWidth = _placementArea.layout.width
+    local _parentHeight = _placementArea.layout.height
+    local _startX = (_parentWidth / 2) - 25
+    local _startY = (_parentHeight / 2) - 25
+
+    local _instanceID = nextInstanceID
+    nextInstanceID = nextInstanceID + 1
+
+    local _placedPart = createPlacedPart(_instanceID, _sourcePart.partID, _sprite, _startX, _startY)
+    _placementArea:Add(_placedPart)
+
+    local _normX, _normY = getNormalizedPosition(_startX, _startY)
+    table.insert(placedParts, {
+        instanceID = _instanceID,
+        partID = _sourcePart.partID,
+        x = _normX,
+        y = _normY,
+        color = _sourcePart.color,
+        rotation = _sourcePart.rotation,
+        flip = _sourcePart.flip,
+        scale = _sourcePart.scale
+    })
+
+    local _color = hexToColor(_sourcePart.color)
+    _placedPart.style.unityBackgroundImageTintColor = StyleColor.new(_color)
+    applyTransformToPart(_placedPart, _sourcePart.rotation, _sourcePart.flip, _sourcePart.scale)
+
+    selectPart(_placedPart, _instanceID)
+    updateConfirmButtonState()
+end
+
 local function clearPlacedParts()
     deselectPart()
     local _childCount = _placementArea.childCount
@@ -467,6 +526,10 @@ local function setupTransformToolbar()
 
     _scaleDown:RegisterPressCallback(function()
         scalePart(-1)
+    end)
+
+    _duplicateButton:RegisterPressCallback(function()
+        duplicatePart()
     end)
 end
 

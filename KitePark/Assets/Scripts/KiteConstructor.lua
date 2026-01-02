@@ -6,7 +6,7 @@ local KitePartsManager = require("KitePartsManager")
 --!SerializeField
 local canvas: Transform = nil
 --!SerializeField
-local partSize: number = 0.1
+local basePartRatio: number = 0.172 -- 50px / 290px from UI (adjust to tune)
 
 local spawnedParts: {GameObject} = {}
 local kiteParts: {KitePart} = {}
@@ -84,7 +84,9 @@ local function buildKite(buildData)
         local _localX = (_x - 0.5) * _canvasWidth
         local _localY = (_y - 0.5) * _canvasHeight
         _partObj.transform.localPosition = Vector3.new(_localX, _localY, -0.01 * i)
-        _partObj.transform.localScale = Vector3.new(partSize * _flip * _scale, partSize * _scale, 1)
+
+        local _baseSize = basePartRatio * math.min(_canvasWidth, _canvasHeight)
+        _partObj.transform.localScale = Vector3.new(_baseSize * _flip * _scale, _baseSize * _scale, 1)
         _partObj.transform.localRotation = Quaternion.Euler(0, 0, _rotation)
 
         table.insert(spawnedParts, _partObj)
