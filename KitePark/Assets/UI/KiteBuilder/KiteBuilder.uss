@@ -165,7 +165,6 @@
 .color-picker {
     position: absolute;
     width: 140px;
-    height: 70px;
     padding: 5px;
 
     background-color: rgba(255, 255, 255, 0.95);

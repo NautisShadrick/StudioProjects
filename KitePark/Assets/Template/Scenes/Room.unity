@@ -799,6 +799,7 @@ MonoBehaviour:
     rid: -2
   m_kiteParts:
   - {fileID: 11400000, guid: 6796cba8e25bbf347ae6444f118f0e66, type: 2}
+  - {fileID: 11400000, guid: 6690471d4fc50f543b4535f19b095687, type: 2}
   references:
     version: 2
     RefIds:

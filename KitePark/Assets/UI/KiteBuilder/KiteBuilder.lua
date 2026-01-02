@@ -20,22 +20,6 @@ local _partsScrollView: VisualElement = nil
 local _trashCan: VisualElement = nil
 --!Bind
 local _colorPicker: VisualElement = nil
---!Bind
-local _colorSwatch1: VisualElement = nil
---!Bind
-local _colorSwatch2: VisualElement = nil
---!Bind
-local _colorSwatch3: VisualElement = nil
---!Bind
-local _colorSwatch4: VisualElement = nil
---!Bind
-local _colorSwatch5: VisualElement = nil
---!Bind
-local _colorSwatch6: VisualElement = nil
---!Bind
-local _colorSwatch7: VisualElement = nil
---!Bind
-local _colorSwatch8: VisualElement = nil
 
 local KitePartItemClass = "kite-part-item"
 local TrashCanActiveClass = "trash-can-active"
@@ -159,16 +143,19 @@ local function applyColorToPart(hex: string)
 end
 
 local function setupColorSwatches()
-    local _swatches = {_colorSwatch1, _colorSwatch2, _colorSwatch3, _colorSwatch4, _colorSwatch5, _colorSwatch6, _colorSwatch7, _colorSwatch8}
+    for i, hex in ipairs(COLOR_SWATCHES) do
+        local _swatch = VisualElement.new()
+        _swatch.name = "_colorSwatch" .. i
+        _swatch:AddToClassList("color-swatch")
 
-    for i, swatch in ipairs(_swatches) do
-        local _hex = COLOR_SWATCHES[i]
-        local _color = hexToColor(_hex)
-        swatch.style.backgroundColor = StyleColor.new(_color)
+        local _color = hexToColor(hex)
+        _swatch.style.backgroundColor = StyleColor.new(_color)
 
-        swatch:RegisterPressCallback(function()
-            applyColorToPart(_hex)
+        _swatch:RegisterPressCallback(function()
+            applyColorToPart(hex)
         end)
+
+        _colorPicker:Add(_swatch)
     end
 end
 
