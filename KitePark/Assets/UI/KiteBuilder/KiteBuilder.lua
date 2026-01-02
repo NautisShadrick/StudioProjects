@@ -455,9 +455,82 @@ local function clearPlacedParts()
     _placementArea:Clear()
 end
 
+local function getSpriteByPartId(partID: string): Sprite
+    local _kiteParts = KitePartsManager.GetKiteParts()
+    for _, kitePart in ipairs(_kiteParts) do
+        if kitePart.GetPartId() == partID then
+            return kitePart.GetSprite()
+        end
+    end
+    return nil
+end
+
+local function loadExistingBuild()
+    local _localPlayer = client.localPlayer
+    if not _localPlayer then
+        return
+    end
+
+    local _playerInfo = playerTracker.players[_localPlayer]
+    if not _playerInfo or not _playerInfo.myBuild then
+        return
+    end
+
+    local _buildData = _playerInfo.myBuild.value
+    if not _buildData or #_buildData == 0 then
+        return
+    end
+
+    local _parentWidth = _placementArea.layout.width
+    local _parentHeight = _placementArea.layout.height
+
+    for _, partData in ipairs(_buildData) do
+        local _partID = partData.partID
+        local _x = partData.x
+        local _y = partData.y
+        local _colorHex = partData.color or DEFAULT_COLOR
+        local _rotation = partData.rotation or 0
+        local _flip = partData.flip or 1
+        local _scale = partData.scale or 1
+
+        local _sprite = getSpriteByPartId(_partID)
+
+        -- Convert normalized position back to pixel position
+        local _pixelX = (_x * _parentWidth) - (PART_SIZE / 2)
+        local _pixelY = ((1.0 - _y) * _parentHeight) - (PART_SIZE / 2)
+
+        local _instanceID = nextInstanceID
+        nextInstanceID = nextInstanceID + 1
+
+        local _placedPart = createPlacedPart(_instanceID, _partID, _sprite, _pixelX, _pixelY)
+        _placementArea:Add(_placedPart)
+
+        -- Apply color tint
+        local _tint = hexToColor(_colorHex)
+        _placedPart.style.unityBackgroundImageTintColor = StyleColor.new(_tint)
+
+        -- Apply transforms
+        applyTransformToPart(_placedPart, _rotation, _flip, _scale)
+
+        table.insert(placedParts, {
+            instanceID = _instanceID,
+            partID = _partID,
+            x = _x,
+            y = _y,
+            color = _colorHex,
+            rotation = _rotation,
+            flip = _flip,
+            scale = _scale
+        })
+    end
+
+    updateConfirmButtonState()
+end
+
 function InitializeBuilder()
     placedParts = {}
     nextInstanceID = 1
+    selectedColor = DEFAULT_COLOR
     clearPlacedParts()
 
     _cardContainer.style.scale = StyleScale.new(Vector2.new(0.01, 0.01))
@@ -469,6 +542,11 @@ function InitializeBuilder()
     initializeTweens()
     titleTween:start()
     openCardTween:start()
+
+    -- Load existing build after a short delay to ensure layout is ready
+    Timer.After(0.1, function()
+        loadExistingBuild()
+    end)
 end
 
 function GetPlacedParts(): {{instanceID: number, partID: string, x: number, y: number, color: string, rotation: number, flip: number, scale: number}}
