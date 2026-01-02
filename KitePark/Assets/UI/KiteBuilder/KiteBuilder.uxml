@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UXML
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="UnityEngine.UIElements"
+    xmlns:hr="Highrise.UI"
+    xmlns:editor="UnityEditor.UIElements"
+    xsi:noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd"
+>
+
+  <hr:UILuaView class="kite-builder">
+    <VisualElement name="_cardContainer">
+      <Label name="_title" text="Build Your Kite!" />
+      <VisualElement name="_placementArea">
+        <VisualElement name="_trashCan" class="trash-can" />
+      </VisualElement>
+      <VisualElement name="_partsScrollContainer">
+        <hr:UIScrollView name="_partsScrollView" class="parts-scroll-view">
+        </hr:UIScrollView>
+      </VisualElement>
+      <Label name="_confirmButton" text="Confirm" />
+    </VisualElement>
+  </hr:UILuaView>
+
+</UXML>

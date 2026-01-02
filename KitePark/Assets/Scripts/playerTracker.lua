@@ -18,6 +18,7 @@ local MAX_LINE_LENGTH: number = 25
 ------  NETWORKED EVENTS  ------
 --------------------------------
 ChangeLengthRequest = Event.new("ChangeLengthRequest")
+setMyBuildRequest = Event.new("SetMyBuildRequest")
 
 players = {}
 local playercount = 0
@@ -45,6 +46,7 @@ function TrackPlayers(game, characterCallback)
             player = player,
             playerKite = NumberValue.new("playerKite" .. player.user.id, 1),
             lineLength = NumberValue.new("LineLength_" .. player.user.id, DEFAULT_LINE_LENGTH),
+            myBuild = TableValue.new("MyBuild_" .. player.user.id, {}),
             myKite = nil,
         }
 
@@ -62,6 +64,10 @@ function TrackPlayers(game, characterCallback)
 
     game.PlayerDisconnected:Connect(function(player)
         playercount = playercount - 1
+        local _playerInfo = players[player]
+        if _playerInfo and _playerInfo.myKite then
+            GameObject.Destroy(_playerInfo.myKite.gameObject)
+        end
         players[player] = nil
     end)
 end
@@ -143,6 +149,14 @@ function self:ServerAwake()
         if _playerInfo and _playerInfo.lineLength then
             local _clampedLength = math.max(MIN_LINE_LENGTH, math.min(MAX_LINE_LENGTH, newLength))
             _playerInfo.lineLength.value = _clampedLength
+        end
+    end)
+
+    setMyBuildRequest:Connect(function(player, buildData)
+        local _playerInfo = players[player]
+        if _playerInfo and _playerInfo.myBuild then
+            _playerInfo.myBuild.value = buildData
+            print("Updated build for " .. player.name .. " with " .. #buildData .. " parts")
         end
     end)
 end

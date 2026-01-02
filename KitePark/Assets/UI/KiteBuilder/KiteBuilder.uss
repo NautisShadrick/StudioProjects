@@ -1,0 +1,163 @@
+:root {
+    --sky-blue: #87CEEB;
+    --sky-light: #E0F4FF;
+    --sky-dark: #5BA3C6;
+    --cloud-white: #FFFFFF;
+    --kite-accent: #FF6B6B;
+    --text-dark: #2C3E50;
+    --font-900: url("project://database/Assets/EventModules/UI/Fonts/MuseoSansRounded-900 SDF.asset");
+}
+
+.kite-builder {
+    position: absolute;
+    -unity-font-definition: var(--font-900);
+    width: 100%;
+    height: 100%;
+    color: var(--text-dark);
+
+    align-items: center;
+    justify-content: center;
+}
+
+#_cardContainer {
+    width: 320px;
+    height: 480px;
+    border-radius: 20px;
+
+    background-color: var(--sky-light);
+    border-width: 3px;
+    border-color: var(--sky-dark);
+
+    flex-direction: column;
+    align-items: center;
+}
+
+#_title {
+    position: absolute;
+    top: 15px;
+    width: 100%;
+    height: 35px;
+
+    font-size: 28px;
+    color: var(--sky-dark);
+    -unity-text-align: middle-center;
+    -unity-text-outline-color: #5ba3c6;
+    -unity-text-outline-width: 2px;
+    text-shadow: 0 2 0 rgba(91, 163, 198, 0.5);
+}
+
+#_placementArea {
+    width: 290px;
+    height: 280px;
+    margin-top: 55px;
+
+    background-color: var(--cloud-white);
+    border-radius: 15px;
+    border-width: 2px;
+    border-color: var(--sky-blue);
+
+    overflow: hidden;
+}
+
+#_partsScrollContainer {
+    width: 290px;
+    height: 80px;
+    margin-top: 10px;
+
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: 10px;
+    border-width: 2px;
+    border-color: var(--sky-blue);
+
+    padding: 5px;
+}
+
+#_partsScrollView {
+    width: 100%;
+    height: 100%;
+    flex-direction: row;
+}
+
+#_partsScrollView > * {
+    flex-direction: row;
+}
+
+#unity-content-container {
+    flex-direction: row;
+}
+
+.kite-part-item {
+    width: 60px;
+    height: 60px;
+    margin-right: 10px;
+    flex-shrink: 0;
+
+    background-color: var(--sky-light);
+    border-radius: 10px;
+    border-width: 2px;
+    border-color: var(--sky-dark);
+
+    align-items: center;
+    justify-content: center;
+}
+
+.kite-part-item:hover {
+    border-color: var(--kite-accent);
+}
+
+.placed-kite-part {
+    width: 50px;
+    height: 50px;
+    border-radius: 8px;
+}
+
+#_confirmButton {
+    position: absolute;
+    bottom: .5px;
+    width: 200px;
+    height: 45px;
+    border-radius: 15px;
+
+    background-color: var(--sky-dark);
+    color: var(--cloud-white);
+
+    justify-content: center;
+    align-items: center;
+
+    font-size: 22px;
+    -unity-text-align: middle-center;
+    -unity-text-outline-color: rgba(44, 62, 80, 0.5);
+    -unity-text-outline-width: 1px;
+    text-shadow: 0 2 0 rgba(44, 62, 80, 0.5);
+}
+
+#_confirmButton:hover {
+    background-color: var(--kite-accent);
+}
+
+.locked {
+    opacity: 0.5;
+}
+
+.trash-can {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    width: 40px;
+    height: 40px;
+
+    background-color: rgba(200, 80, 80, 0.8);
+    border-radius: 8px;
+    border-width: 2px;
+    border-color: #c0392b;
+
+    transition-duration: 0.15s;
+    transition-property: scale, rotate;
+}
+
+.trash-can-active {
+    scale: 1.2 1.2;
+    rotate: -15deg;
+    background-color: rgba(231, 76, 60, 1);
+    border-color: #e74c3c;
+}

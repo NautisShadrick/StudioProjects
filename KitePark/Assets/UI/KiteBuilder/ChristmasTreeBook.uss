@@ -1,0 +1,100 @@
+:root{
+    --bg-color: #fdf4d7;
+    --green-color: #108c4e;
+    --bg-dark-color: #ddd1b4;
+    --text-color: #9b8a6d;
+    --font-900: url("project://database/Assets/EventModules/UI/Fonts/MuseoSansRounded-900 SDF.asset");
+
+    --gold-gradient: url("project://database/Assets/EventModules/UI/Icons/gold_gradient.png");
+}
+
+.christmas-tree-book {
+    position: absolute;
+    -unity-font-definition: var(--font-900);
+    width: 100%;
+    height: 100%;
+    color: var(--green-color);
+
+    align-items: center;
+    justify-content: center;
+}
+
+#Tree_Card_Container{
+    width: 300px;
+    height: 400px;
+    border-radius: 15px;
+
+    background-color: var(--bg-color);
+    background-image: url("project://database/Assets/GameUI/ChristmasTreeBook/Screenshot 2025-10-22 223303.png");
+
+    justify-content: center;
+    align-items: center;
+}
+
+#placementElement{
+    width: 300px;
+    height: 292px;
+
+    /*background-color: red;*/
+    overflow: hidden;
+
+    opacity: 1;
+    translate: 0px -15px;
+}
+
+.ornament_sticker{
+    width:  32px;
+    height: 32px;
+    /*background-color: var(--green-color);*/
+    border-radius: 16px;
+    background-image: url("project://database/Assets/GameUI/ChristmasTreeBook/tree_decor_one.png");
+}
+
+.ornament_sticker_static{
+    width:  32px;
+    height: 32px;
+    /*background-color: var(--green-color);*/
+    border-radius: 16px;
+    background-image: url("project://database/Assets/GameUI/ChristmasTreeBook/tree_decor_static.png");
+    opacity: 0.5;
+}
+
+#confirm_button{
+    position: absolute;
+    bottom: 30px;
+    width: 200px;
+    height: 50px;
+    border-radius: 15px;
+
+    background-image: var(--gold-gradient);
+    color: #bb410b;
+
+    justify-content: center;
+    align-items: center;
+
+    translate: 0px 20px;
+
+    font-size: 22px;
+    -unity-text-align: middle-center;
+    -unity-text-outline-color: #942808;
+    -unity-text-outline-width: 1px;
+    text-shadow: 0 3 0 #942808;
+}
+
+#place_title{
+    position: absolute;
+    top: 20px;
+    width: 100%;
+    height: 30px;
+
+    font-size: 26px;
+    color: #ffdb44;
+    -unity-text-align: middle-center;
+    -unity-text-outline-color: rgba(250, 162, 0, 1);
+    -unity-text-outline-width: 1px;
+    text-shadow: 0 3 0 rgba(250, 162, 0, 1);
+}
+
+.locked{
+    opacity: 0.5;
+}
