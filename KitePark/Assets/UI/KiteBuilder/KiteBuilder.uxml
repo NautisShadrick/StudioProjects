@@ -19,9 +19,9 @@
         <Label name="_rotateCW" text="↻" class="transform-button" />
         <Label name="_scaleUp" text="+" class="transform-button" />
         <Label name="_duplicateButton" text="⧉" class="transform-button" />
+        <Label name="_deleteButton" text="🗑" class="transform-button" />
       </VisualElement>
       <VisualElement name="_placementArea">
-        <VisualElement name="_trashCan" class="trash-can" />
       </VisualElement>
       <VisualElement name="_partsScrollContainer">
         <hr:UIScrollView name="_partsScrollView" class="parts-scroll-view">

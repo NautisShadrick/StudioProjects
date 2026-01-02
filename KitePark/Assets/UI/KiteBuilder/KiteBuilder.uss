@@ -21,7 +21,7 @@
 
 #_cardContainer {
     width: 320px;
-    height: 530px;
+    height: 580px;
     border-radius: 20px;
 
     background-color: var(--sky-light);
@@ -138,29 +138,6 @@
 
 .locked {
     opacity: 0.5;
-}
-
-.trash-can {
-    position: absolute;
-    bottom: 10px;
-    left: 10px;
-    width: 40px;
-    height: 40px;
-
-    background-color: rgba(200, 80, 80, 0.8);
-    border-radius: 8px;
-    border-width: 2px;
-    border-color: #c0392b;
-
-    transition-duration: 0.15s;
-    transition-property: scale, rotate;
-}
-
-.trash-can-active {
-    scale: 1.2 1.2;
-    rotate: -15deg;
-    background-color: rgba(231, 76, 60, 1);
-    border-color: #e74c3c;
 }
 
 .color-picker {

@@ -17,8 +17,6 @@ local _title: Label = nil
 --!Bind
 local _partsScrollView: VisualElement = nil
 --!Bind
-local _trashCan: VisualElement = nil
---!Bind
 local _colorPicker: VisualElement = nil
 --!Bind
 local _transformToolbar: VisualElement = nil
@@ -34,9 +32,10 @@ local _scaleUp: Label = nil
 local _scaleDown: Label = nil
 --!Bind
 local _duplicateButton: Label = nil
+--!Bind
+local _deleteButton: Label = nil
 
 local KitePartItemClass = "kite-part-item"
-local TrashCanActiveClass = "trash-can-active"
 local PlacedKitePartClass = "placed-kite-part"
 local LockedClass = "locked"
 
@@ -213,18 +212,6 @@ local function updateConfirmButtonState()
     end
 end
 
-local function isOverlappingTrashCan(element: VisualElement): boolean
-    local _elementRect = element.worldBound
-    local _trashRect = _trashCan.worldBound
-
-    local _overlapX = _elementRect.x < _trashRect.x + _trashRect.width and
-                      _elementRect.x + _elementRect.width > _trashRect.x
-    local _overlapY = _elementRect.y < _trashRect.y + _trashRect.height and
-                      _elementRect.y + _elementRect.height > _trashRect.y
-
-    return _overlapX and _overlapY
-end
-
 local PART_SIZE = 50
 
 local function getNormalizedPosition(left: number, top: number): (number, number)
@@ -292,44 +279,26 @@ local function createPlacedPart(instanceID: number, partID: string, sprite: Spri
 
             _partElement.style.left = _newX
             _partElement.style.top = _newY
-
-            if isOverlappingTrashCan(_partElement) then
-                _trashCan:EnableInClassList(TrashCanActiveClass, true)
-            else
-                _trashCan:EnableInClassList(TrashCanActiveClass, false)
-            end
         end
     end)
 
     _partElement:RegisterCallback(DragGestureEnded, function(evt)
         if isDragging then
             isDragging = false
-            _trashCan:EnableInClassList(TrashCanActiveClass, false)
 
-            if isOverlappingTrashCan(_partElement) then
-                _placementArea:Remove(_partElement)
-                for i = #placedParts, 1, -1 do
-                    if placedParts[i].instanceID == instanceID then
-                        table.remove(placedParts, i)
-                        break
-                    end
+            local _currentLeft = _partElement.style.left.value.value or 0
+            local _currentTop = _partElement.style.top.value.value or 0
+            local _normX, _normY = getNormalizedPosition(_currentLeft, _currentTop)
+
+            for i, part in ipairs(placedParts) do
+                if part.instanceID == instanceID then
+                    part.x = _normX
+                    part.y = _normY
+                    break
                 end
-                updateConfirmButtonState()
-            else
-                local _currentLeft = _partElement.style.left.value.value or 0
-                local _currentTop = _partElement.style.top.value.value or 0
-                local _normX, _normY = getNormalizedPosition(_currentLeft, _currentTop)
-
-                for i, part in ipairs(placedParts) do
-                    if part.instanceID == instanceID then
-                        part.x = _normX
-                        part.y = _normY
-                        break
-                    end
-                end
-
-                selectPart(_partElement, instanceID)
             end
+
+            selectPart(_partElement, instanceID)
         end
     end)
 
@@ -439,15 +408,27 @@ local function duplicatePart()
     updateConfirmButtonState()
 end
 
-local function clearPlacedParts()
-    deselectPart()
-    local _childCount = _placementArea.childCount
-    for i = _childCount - 1, 0, -1 do
-        local _child = _placementArea:ElementAt(i)
-        if _child ~= _trashCan and _child ~= _colorPicker then
-            _placementArea:RemoveAt(i)
+local function deletePart()
+    if not selectedPartElement or not selectedPartInstanceID then
+        return
+    end
+
+    _placementArea:Remove(selectedPartElement)
+
+    for i = #placedParts, 1, -1 do
+        if placedParts[i].instanceID == selectedPartInstanceID then
+            table.remove(placedParts, i)
+            break
         end
     end
+
+    deselectPart()
+    updateConfirmButtonState()
+end
+
+local function clearPlacedParts()
+    deselectPart()
+    _placementArea:Clear()
 end
 
 function InitializeBuilder()
@@ -530,6 +511,10 @@ local function setupTransformToolbar()
 
     _duplicateButton:RegisterPressCallback(function()
         duplicatePart()
+    end)
+
+    _deleteButton:RegisterPressCallback(function()
+        deletePart()
     end)
 end
 
