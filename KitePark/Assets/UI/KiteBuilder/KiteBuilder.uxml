@@ -12,6 +12,11 @@
       <Label name="_title" text="Build Your Kite!" />
       <VisualElement name="_colorPicker" class="color-picker">
       </VisualElement>
+      <VisualElement name="_transformToolbar" class="transform-toolbar">
+        <Label name="_rotateCCW" text="↺" class="transform-button" />
+        <Label name="_flipButton" text="↔" class="transform-button" />
+        <Label name="_rotateCW" text="↻" class="transform-button" />
+      </VisualElement>
       <VisualElement name="_placementArea">
         <VisualElement name="_trashCan" class="trash-can" />
       </VisualElement>

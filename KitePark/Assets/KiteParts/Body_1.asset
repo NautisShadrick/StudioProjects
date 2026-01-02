@@ -15,7 +15,7 @@ MonoBehaviour:
   _script: {fileID: -974389366465450183, guid: ab452b26068fb8e4fa8158274c2283c3, type: 3}
   _networkId: 1339080641
   _properties: []
-  m_sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  m_sprite: {fileID: 21300000, guid: c04b63bd40a52d14696c482e470db1eb, type: 3}
   m_partId: body_1
   references:
     version: 2

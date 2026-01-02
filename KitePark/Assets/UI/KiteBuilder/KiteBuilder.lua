@@ -20,6 +20,14 @@ local _partsScrollView: VisualElement = nil
 local _trashCan: VisualElement = nil
 --!Bind
 local _colorPicker: VisualElement = nil
+--!Bind
+local _transformToolbar: VisualElement = nil
+--!Bind
+local _rotateCCW: Label = nil
+--!Bind
+local _flipButton: Label = nil
+--!Bind
+local _rotateCW: Label = nil
 
 local KitePartItemClass = "kite-part-item"
 local TrashCanActiveClass = "trash-can-active"
@@ -39,10 +47,12 @@ local COLOR_SWATCHES = {
 
 local isDragging = false
 local hasPlacedParts = false
-local placedParts: {{instanceID: number, partID: string, x: number, y: number, color: string}} = {}
+local placedParts: {{instanceID: number, partID: string, x: number, y: number, color: string, rotation: number, flip: number}} = {}
 local nextInstanceID = 1
 local selectedPartInstanceID: number = nil
 local selectedPartElement: VisualElement = nil
+
+local ROTATION_INCREMENT = 10
 
 local titleTween = nil
 local openCardTween = nil
@@ -99,6 +109,41 @@ local function deselectPart()
     selectedPartInstanceID = nil
 end
 
+local function applyTransformToPart(partElement: VisualElement, rotation: number, flip: number)
+    local _scaleX = flip
+    local _scaleY = 1
+    partElement.style.scale = StyleScale.new(Vector2.new(_scaleX, _scaleY))
+    partElement.style.rotate = StyleRotate.new(Rotate.new(Angle.new(rotation)))
+end
+
+local function rotatePart(direction: number)
+    if not selectedPartElement or not selectedPartInstanceID then
+        return
+    end
+
+    for i, part in ipairs(placedParts) do
+        if part.instanceID == selectedPartInstanceID then
+            part.rotation = (part.rotation or 0) + (direction * ROTATION_INCREMENT)
+            applyTransformToPart(selectedPartElement, part.rotation, part.flip or 1)
+            break
+        end
+    end
+end
+
+local function flipPart()
+    if not selectedPartElement or not selectedPartInstanceID then
+        return
+    end
+
+    for i, part in ipairs(placedParts) do
+        if part.instanceID == selectedPartInstanceID then
+            part.flip = (part.flip or 1) * -1
+            applyTransformToPart(selectedPartElement, part.rotation or 0, part.flip)
+            break
+        end
+    end
+end
+
 local function applyColorToPart(hex: string)
     if not selectedPartElement or not selectedPartInstanceID then
         return
@@ -113,8 +158,6 @@ local function applyColorToPart(hex: string)
             break
         end
     end
-
-    deselectPart()
 end
 
 local function setupColorSwatches()
@@ -315,7 +358,7 @@ local function createKitePartOption(kitePart: KitePart)
         _placementArea:Add(_placedPart)
 
         local _normX, _normY = getNormalizedPosition(_startX, _startY)
-        table.insert(placedParts, {instanceID = _instanceID, partID = _partID, x = _normX, y = _normY, color = "#FFFFFF"})
+        table.insert(placedParts, {instanceID = _instanceID, partID = _partID, x = _normX, y = _normY, color = "#FFFFFF", rotation = 0, flip = 1})
 
         selectPart(_placedPart, _instanceID)
         updateConfirmButtonState()
@@ -374,7 +417,7 @@ function InitializeBuilder()
     openCardTween:start()
 end
 
-function GetPlacedParts(): {{instanceID: number, partID: string, x: number, y: number, color: string}}
+function GetPlacedParts(): {{instanceID: number, partID: string, x: number, y: number, color: string, rotation: number, flip: number}}
     return placedParts
 end
 
@@ -415,8 +458,23 @@ _confirmButton:RegisterPressCallback(function()
     CloseBuilder()
 end)
 
+local function setupTransformToolbar()
+    _rotateCCW:RegisterPressCallback(function()
+        rotatePart(-1)
+    end)
+
+    _rotateCW:RegisterPressCallback(function()
+        rotatePart(1)
+    end)
+
+    _flipButton:RegisterPressCallback(function()
+        flipPart()
+    end)
+end
+
 function self:Start()
     populateKiteParts()
     setupColorSwatches()
+    setupTransformToolbar()
     _confirmButton:EnableInClassList(LockedClass, true)
 end

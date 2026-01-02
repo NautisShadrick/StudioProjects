@@ -21,7 +21,7 @@
 
 #_cardContainer {
     width: 320px;
-    height: 480px;
+    height: 530px;
     border-radius: 20px;
 
     background-color: var(--sky-light);
@@ -49,6 +49,8 @@
 #_placementArea {
     width: 290px;
     height: 290px;
+    flex-grow: 0;
+    flex-shrink: 0;
 
     background-color: var(--cloud-white);
     border-radius: 15px;
@@ -190,4 +192,34 @@
 .color-swatch:hover {
     scale: 1.1 1.1;
     border-color: rgba(0, 0, 0, 0.5);
+}
+
+.transform-toolbar {
+    width: 100%;
+    height: 40px;
+    margin-bottom: 5px;
+
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.transform-button {
+    width: 40px;
+    height: 40px;
+    margin: 0 5px;
+
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 8px;
+    border-width: 2px;
+    border-color: var(--sky-dark);
+
+    font-size: 24px;
+    -unity-text-align: middle-center;
+    color: var(--sky-dark);
+}
+
+.transform-button:hover {
+    background-color: var(--sky-light);
+    scale: 1.1 1.1;
 }
