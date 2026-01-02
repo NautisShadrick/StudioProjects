@@ -12,6 +12,16 @@
       <Label name="_title" text="Build Your Kite!" />
       <VisualElement name="_placementArea">
         <VisualElement name="_trashCan" class="trash-can" />
+        <VisualElement name="_colorPicker" class="color-picker">
+          <VisualElement name="_colorSwatch1" class="color-swatch" />
+          <VisualElement name="_colorSwatch2" class="color-swatch" />
+          <VisualElement name="_colorSwatch3" class="color-swatch" />
+          <VisualElement name="_colorSwatch4" class="color-swatch" />
+          <VisualElement name="_colorSwatch5" class="color-swatch" />
+          <VisualElement name="_colorSwatch6" class="color-swatch" />
+          <VisualElement name="_colorSwatch7" class="color-swatch" />
+          <VisualElement name="_colorSwatch8" class="color-swatch" />
+        </VisualElement>
       </VisualElement>
       <VisualElement name="_partsScrollContainer">
         <hr:UIScrollView name="_partsScrollView" class="parts-scroll-view">

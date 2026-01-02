@@ -29,6 +29,7 @@ namespace Highrise.Lua.Generated
         [SerializeField] public System.Collections.Generic.List<UnityEngine.GameObject> m_kitePrefabs = default;
         [SerializeField] public UnityEngine.GameObject m_duckKitePrefab = default;
         [SerializeField] public UnityEngine.GameObject m_dragonKitePrefab = default;
+        [SerializeField] public UnityEngine.GameObject m_buildKitePrefab = default;
 
         protected override SerializedPropertyValue[] SerializeProperties()
         {
@@ -40,6 +41,7 @@ namespace Highrise.Lua.Generated
                 CreateSerializedProperty(_script.GetPropertyAt(0), m_kitePrefabs),
                 CreateSerializedProperty(_script.GetPropertyAt(1), m_duckKitePrefab),
                 CreateSerializedProperty(_script.GetPropertyAt(2), m_dragonKitePrefab),
+                CreateSerializedProperty(_script.GetPropertyAt(3), m_buildKitePrefab),
             };
         }
         

@@ -18,16 +18,48 @@ local _title: Label = nil
 local _partsScrollView: VisualElement = nil
 --!Bind
 local _trashCan: VisualElement = nil
+--!Bind
+local _colorPicker: VisualElement = nil
+--!Bind
+local _colorSwatch1: VisualElement = nil
+--!Bind
+local _colorSwatch2: VisualElement = nil
+--!Bind
+local _colorSwatch3: VisualElement = nil
+--!Bind
+local _colorSwatch4: VisualElement = nil
+--!Bind
+local _colorSwatch5: VisualElement = nil
+--!Bind
+local _colorSwatch6: VisualElement = nil
+--!Bind
+local _colorSwatch7: VisualElement = nil
+--!Bind
+local _colorSwatch8: VisualElement = nil
 
 local KitePartItemClass = "kite-part-item"
 local TrashCanActiveClass = "trash-can-active"
 local PlacedKitePartClass = "placed-kite-part"
 local LockedClass = "locked"
+local ColorPickerVisibleClass = "color-picker-visible"
+
+local COLOR_SWATCHES = {
+    "#FFFFFF",
+    "#FF6B6B",
+    "#4ECDC4",
+    "#FFE66D",
+    "#95E1D3",
+    "#F38181",
+    "#AA96DA",
+    "#6C5CE7",
+}
 
 local isDragging = false
 local hasPlacedParts = false
-local placedParts: {{instanceID: number, partID: string, x: number, y: number}} = {}
+local placedParts: {{instanceID: number, partID: string, x: number, y: number, color: string}} = {}
 local nextInstanceID = 1
+local selectedPartInstanceID: number = nil
+local selectedPartElement: VisualElement = nil
 
 local titleTween = nil
 local openCardTween = nil
@@ -64,6 +96,80 @@ local function initializeTweens()
             _cardContainer.style.opacity = StyleFloat.new(1)
         end
     )
+end
+
+local function hexToColor(hex: string): Color
+    local _hex = hex:gsub("#", "")
+    local _r = tonumber(_hex:sub(1, 2), 16) / 255
+    local _g = tonumber(_hex:sub(3, 4), 16) / 255
+    local _b = tonumber(_hex:sub(5, 6), 16) / 255
+    return Color.new(_r, _g, _b, 1)
+end
+
+local function showColorPicker(partElement: VisualElement, instanceID: number)
+    selectedPartElement = partElement
+    selectedPartInstanceID = instanceID
+
+    local _left = partElement.style.left.value.value or 0
+    local _top = partElement.style.top.value.value or 0
+
+    local _pickerX = _left + 60
+    local _pickerY = _top - 20
+
+    local _parentWidth = _placementArea.layout.width
+    local _parentHeight = _placementArea.layout.height
+
+    if _pickerX + 140 > _parentWidth then
+        _pickerX = _left - 150
+    end
+    if _pickerY < 0 then
+        _pickerY = _top + 60
+    end
+    if _pickerY + 70 > _parentHeight then
+        _pickerY = _parentHeight - 75
+    end
+
+    _colorPicker.style.left = _pickerX
+    _colorPicker.style.top = _pickerY
+    _colorPicker:EnableInClassList(ColorPickerVisibleClass, true)
+end
+
+local function hideColorPicker()
+    _colorPicker:EnableInClassList(ColorPickerVisibleClass, false)
+    selectedPartElement = nil
+    selectedPartInstanceID = nil
+end
+
+local function applyColorToPart(hex: string)
+    if not selectedPartElement or not selectedPartInstanceID then
+        return
+    end
+
+    local _color = hexToColor(hex)
+    selectedPartElement.style.unityBackgroundImageTintColor = StyleColor.new(_color)
+
+    for i, part in ipairs(placedParts) do
+        if part.instanceID == selectedPartInstanceID then
+            part.color = hex
+            break
+        end
+    end
+
+    hideColorPicker()
+end
+
+local function setupColorSwatches()
+    local _swatches = {_colorSwatch1, _colorSwatch2, _colorSwatch3, _colorSwatch4, _colorSwatch5, _colorSwatch6, _colorSwatch7, _colorSwatch8}
+
+    for i, swatch in ipairs(_swatches) do
+        local _hex = COLOR_SWATCHES[i]
+        local _color = hexToColor(_hex)
+        swatch.style.backgroundColor = StyleColor.new(_color)
+
+        swatch:RegisterPressCallback(function()
+            applyColorToPart(_hex)
+        end)
+    end
 end
 
 local function updateConfirmButtonState()
@@ -137,9 +243,16 @@ local function createPlacedPart(instanceID: number, partID: string, sprite: Spri
 
     _partElement:RegisterGesture(DragGesture.new())
 
+    _partElement:RegisterPressCallback(function()
+        if not isDragging then
+            showColorPicker(_partElement, instanceID)
+        end
+    end)
+
     _partElement:RegisterCallback(DragGestureBegan, function(evt)
         if evt.target == _partElement then
             isDragging = true
+            hideColorPicker()
             _partElement.style.opacity = StyleFloat.new(0.8)
             _partElement.style.scale = StyleScale.new(Vector2.new(1.2, 1.2))
             _pulseTween:stop()
@@ -238,7 +351,7 @@ local function createKitePartOption(kitePart: KitePart)
         _placementArea:Add(_placedPart)
 
         local _normX, _normY = getNormalizedPosition(_startX, _startY)
-        table.insert(placedParts, {instanceID = _instanceID, partID = _partID, x = _normX, y = _normY})
+        table.insert(placedParts, {instanceID = _instanceID, partID = _partID, x = _normX, y = _normY, color = "#FFFFFF"})
 
         updateConfirmButtonState()
 
@@ -270,10 +383,11 @@ local function populateKiteParts()
 end
 
 local function clearPlacedParts()
+    hideColorPicker()
     local _childCount = _placementArea.childCount
     for i = _childCount - 1, 0, -1 do
         local _child = _placementArea:ElementAt(i)
-        if _child ~= _trashCan then
+        if _child ~= _trashCan and _child ~= _colorPicker then
             _placementArea:RemoveAt(i)
         end
     end
@@ -295,7 +409,7 @@ function InitializeBuilder()
     openCardTween:start()
 end
 
-function GetPlacedParts(): {{instanceID: number, partID: string, x: number, y: number}}
+function GetPlacedParts(): {{instanceID: number, partID: string, x: number, y: number, color: string}}
     return placedParts
 end
 
@@ -338,5 +452,7 @@ end)
 
 function self:Start()
     populateKiteParts()
+    setupColorSwatches()
     _confirmButton:EnableInClassList(LockedClass, true)
+    _colorPicker:EnableInClassList(ColorPickerVisibleClass, false)
 end

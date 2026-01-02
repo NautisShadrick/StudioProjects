@@ -6,6 +6,8 @@ local kitePrefabs : {GameObject} = {}
 local duckKitePrefab : GameObject = nil
 --!SerializeField
 local dragonKitePrefab : GameObject = nil
+--!SerializeField
+local buildKitePrefab : GameObject = nil
 
 --------------------------------
 ------     CONSTANTS      ------
@@ -48,6 +50,7 @@ function TrackPlayers(game, characterCallback)
             lineLength = NumberValue.new("LineLength_" .. player.user.id, DEFAULT_LINE_LENGTH),
             myBuild = TableValue.new("MyBuild_" .. player.user.id, {}),
             myKite = nil,
+            myKiteConstructor = nil,
         }
 
         player.CharacterChanged:Connect(function(player, character) 
@@ -77,31 +80,35 @@ end
 function UpdateKite(player, newKite, oldKite)
     playerinfo = players[player]
     local character = player.character
-    -- Update UI or other client-side elements based on player kite change
+
     if playerinfo.myKite then
         GameObject.Destroy(playerinfo.myKite.gameObject)
         playerinfo.myKite = nil
     end
-    local kiteIndex = playerinfo.playerKite.value
-    print("Player " .. player.name .. " changed kite to index: " .. kiteIndex)
-    -- Spawn NewKite for Player
-    print(typeof(kitePrefabs[kiteIndex]))
 
-    local _kiteTospawn = kitePrefabs[kiteIndex]
-    if newKite == -1 then
-        _kiteTospawn = duckKitePrefab
+    if playerinfo.myKiteConstructor then
+        playerinfo.myKiteConstructor = nil
     end
 
-    if newKite == -2 then
-        _kiteTospawn = dragonKitePrefab
+    if not buildKitePrefab then
+        print("BuildKite prefab not assigned!")
+        return
     end
 
-    if _kiteTospawn then
-        local kiteInstance = GameObject.Instantiate(_kiteTospawn)
-        kiteInstance.name = "Kite_" .. player.name
-        playerinfo.myKite = kiteInstance:GetComponent(KiteController)
+    local kiteInstance = GameObject.Instantiate(buildKitePrefab)
+    kiteInstance.name = "Kite_" .. player.name
+
+    playerinfo.myKite = kiteInstance:GetComponent(KiteController)
+    if playerinfo.myKite then
         playerinfo.myKite.SetPlayer(player)
     end
+
+    playerinfo.myKiteConstructor = kiteInstance:GetComponent(KiteConstructor)
+    if playerinfo.myKiteConstructor then
+        playerinfo.myKiteConstructor.SetPlayer(player)
+    end
+
+    print("Spawned BuildKite for " .. player.name)
 end
 
 function self:ClientAwake()
@@ -129,19 +136,7 @@ end
 function self:ServerAwake()
     TrackPlayers(server, function(playerInfo)
         local player = playerInfo.player
-
-        playerInfo.playerKite.value = math.random(1, #kitePrefabs)
-
-        if player.name:lower() == "sourpatchsid" then
-            playerInfo.playerKite.value = -1
-            print("Assigned duck kite to " .. player.name)
-        end
-
-        if player.name:lower() == "nautisshadrick" then
-            playerInfo.playerKite.value = -2
-            print("Assigned dragon kite to " .. player.name)
-        end
-
+        playerInfo.playerKite.value = 1
     end)
 
     ChangeLengthRequest:Connect(function(player, newLength)
