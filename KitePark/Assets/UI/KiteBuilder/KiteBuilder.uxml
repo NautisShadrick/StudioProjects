@@ -24,7 +24,7 @@
       <VisualElement name="_placementArea">
       </VisualElement>
       <VisualElement name="_partsScrollContainer">
-        <hr:UIScrollView name="_partsScrollView" class="parts-scroll-view">
+        <hr:UIScrollView name="_partsScrollView" class="parts-scroll-view" mode="Horizontal">
         </hr:UIScrollView>
       </VisualElement>
       <Label name="_confirmButton" text="Confirm" />

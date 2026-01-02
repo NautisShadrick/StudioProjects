@@ -2,7 +2,7 @@
     --sky-blue: #87CEEB;
     --sky-light: #E0F4FF;
     --sky-dark: #5BA3C6;
-    --cloud-white: #87ceeb;
+    --cloud-white: #ffffff;
     --kite-accent: #FF6B6B;
     --text-dark: #2C3E50;
     --font-900: url("project://database/Assets/EventModules/UI/Fonts/MuseoSansRounded-900 SDF.asset");
@@ -53,6 +53,7 @@
     flex-shrink: 0;
 
     background-color: var(--cloud-white);
+    background-image: url("project://database/Assets/grid.png");
     border-radius: 15px;
     border-width: 2px;
     border-color: var(--sky-blue);
@@ -76,14 +77,14 @@
 #_partsScrollView {
     width: 100%;
     height: 100%;
+}
+
+.parts-scroll-view .unity-scroll-view__content-container {
     flex-direction: row;
+    align-items: center;
 }
 
 #_partsScrollView > * {
-    flex-direction: row;
-}
-
-#unity-content-container {
     flex-direction: row;
 }
 

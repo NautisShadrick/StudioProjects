@@ -15,7 +15,7 @@ local _confirmButton: Label = nil
 --!Bind
 local _title: Label = nil
 --!Bind
-local _partsScrollView: VisualElement = nil
+local _partsScrollView: UIScrollView = nil
 --!Bind
 local _colorPicker: VisualElement = nil
 --!Bind
@@ -40,15 +40,19 @@ local PlacedKitePartClass = "placed-kite-part"
 local LockedClass = "locked"
 
 local COLOR_SWATCHES = {
-    "#FFFFFF",
-    "#FF6B6B",
-    "#4ECDC4",
-    "#FFE66D",
-    "#95E1D3",
-    "#F38181",
-    "#AA96DA",
-    "#6C5CE7",
+    "#FF6F61",
+    "#FFB74D",
+    "#FFF176",
+    "#81C784",
+    "#4DB6AC",
+    "#64B5F6",
+    "#9575CD",
+    "#F48FB1",
 }
+
+local DEFAULT_COLOR = COLOR_SWATCHES[1]
+local selectedColor = DEFAULT_COLOR
+local partOptionElements: {VisualElement} = {}
 
 local isDragging = false
 local hasPlacedParts = false
@@ -185,6 +189,13 @@ local function applyColorToPart(hex: string)
     end
 end
 
+local function updatePartOptionTints(hex: string)
+    local _tint = hexToColor(hex)
+    for _, partOption in ipairs(partOptionElements) do
+        partOption.style.unityBackgroundImageTintColor = StyleColor.new(_tint)
+    end
+end
+
 local function setupColorSwatches()
     for i, hex in ipairs(COLOR_SWATCHES) do
         local _swatch = VisualElement.new()
@@ -196,6 +207,8 @@ local function setupColorSwatches()
 
         _swatch:RegisterPressCallback(function()
             applyColorToPart(hex)
+            selectedColor = hex
+            updatePartOptionTints(hex)
         end)
 
         _colorPicker:Add(_swatch)
@@ -319,6 +332,13 @@ local function createKitePartOption(kitePart: KitePart)
         _partOption.style.backgroundColor = StyleColor.new(Color.new(1, 0, 0, 1))
     end
 
+    -- Apply selected color tint to part button
+    local _tint = hexToColor(selectedColor)
+    _partOption.style.unityBackgroundImageTintColor = StyleColor.new(_tint)
+
+    -- Store reference for later tint updates
+    table.insert(partOptionElements, _partOption)
+
     _partOption:RegisterPressCallback(function()
         local _parentWidth = _placementArea.layout.width
         local _parentHeight = _placementArea.layout.height
@@ -332,8 +352,12 @@ local function createKitePartOption(kitePart: KitePart)
         local _placedPart = createPlacedPart(_instanceID, _partID, _sprite, _startX, _startY)
         _placementArea:Add(_placedPart)
 
+        -- Apply selected color tint to spawned part
+        local _spawnTint = hexToColor(selectedColor)
+        _placedPart.style.unityBackgroundImageTintColor = StyleColor.new(_spawnTint)
+
         local _normX, _normY = getNormalizedPosition(_startX, _startY)
-        table.insert(placedParts, {instanceID = _instanceID, partID = _partID, x = _normX, y = _normY, color = "#FFFFFF", rotation = 0, flip = 1, scale = 1})
+        table.insert(placedParts, {instanceID = _instanceID, partID = _partID, x = _normX, y = _normY, color = selectedColor, rotation = 0, flip = 1, scale = 1})
 
         selectPart(_placedPart, _instanceID)
         updateConfirmButtonState()

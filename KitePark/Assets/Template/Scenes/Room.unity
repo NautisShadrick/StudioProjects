@@ -672,6 +672,7 @@ Transform:
   - {fileID: 1283952989}
   - {fileID: 917179146}
   - {fileID: 1926453857}
+  - {fileID: 1384567316}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1037145624
@@ -801,6 +802,11 @@ MonoBehaviour:
   - {fileID: 11400000, guid: e956d4836cd81974f80931d1d516b135, type: 2}
   - {fileID: 11400000, guid: 6690471d4fc50f543b4535f19b095687, type: 2}
   - {fileID: 11400000, guid: 6796cba8e25bbf347ae6444f118f0e66, type: 2}
+  - {fileID: 11400000, guid: db418c8e8679c2b46ae7a558a03b58e4, type: 2}
+  - {fileID: 11400000, guid: db418c8e8679c2b46ae7a558a03b58e4, type: 2}
+  - {fileID: 11400000, guid: db418c8e8679c2b46ae7a558a03b58e4, type: 2}
+  - {fileID: 11400000, guid: db418c8e8679c2b46ae7a558a03b58e4, type: 2}
+  - {fileID: 11400000, guid: db418c8e8679c2b46ae7a558a03b58e4, type: 2}
   - {fileID: 11400000, guid: db418c8e8679c2b46ae7a558a03b58e4, type: 2}
   references:
     version: 2
@@ -1040,6 +1046,62 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1384567315
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1384567316}
+  - component: {fileID: 1384567317}
+  m_Layer: 0
+  m_Name: Hud
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1384567316
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1384567315}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1037145623}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1384567317
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1384567315}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9a088a904c66de1f3c5f4b8a924191c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _networkId: 0
+  _script: {fileID: -974389366465450183, guid: 537f887cbe196d34491af46d13fb19c9, type: 3}
+  _properties: []
+  _uiOutput: 3
+  _uiOutputSettings:
+    rid: -2
+  m_kiteBuilderObject: {fileID: 1926453856}
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
 --- !u!1001 &1599188571
 PrefabInstance:
   m_ObjectHideFlags: 0
