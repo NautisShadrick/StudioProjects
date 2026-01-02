@@ -2,7 +2,7 @@
     --sky-blue: #87CEEB;
     --sky-light: #E0F4FF;
     --sky-dark: #5BA3C6;
-    --cloud-white: #FFFFFF;
+    --cloud-white: #87ceeb;
     --kite-accent: #FF6B6B;
     --text-dark: #2C3E50;
     --font-900: url("project://database/Assets/EventModules/UI/Fonts/MuseoSansRounded-900 SDF.asset");

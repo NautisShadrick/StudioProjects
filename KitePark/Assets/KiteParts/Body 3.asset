@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 119a2bf3bc50b831405e58f2f6fd8316, type: 3}
-  m_Name: Body 2
+  m_Name: Body 3
   m_EditorClassIdentifier: 
   _script: {fileID: -974389366465450183, guid: ab452b26068fb8e4fa8158274c2283c3, type: 3}
   _networkId: 1339080641
   _properties: []
-  m_sprite: {fileID: 21300000, guid: 3f577df2ed08748488b73737b8ba4ea9, type: 3}
-  m_partId: rect
+  m_sprite: {fileID: 21300000, guid: adbf8b6e373f6fc4186fdad09594fa6d, type: 3}
+  m_partId: triangletwo
   references:
     version: 2
     RefIds: []

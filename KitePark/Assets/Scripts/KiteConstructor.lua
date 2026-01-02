@@ -63,6 +63,7 @@ local function buildKite(buildData)
         local _colorHex = partData.color or "#FFFFFF"
         local _rotation = partData.rotation or 0
         local _flip = partData.flip or 1
+        local _scale = partData.scale or 1
 
         local _sprite = partSpriteMap[_partID]
         if not _sprite then
@@ -83,7 +84,7 @@ local function buildKite(buildData)
         local _localX = (_x - 0.5) * _canvasWidth
         local _localY = (_y - 0.5) * _canvasHeight
         _partObj.transform.localPosition = Vector3.new(_localX, _localY, -0.01 * i)
-        _partObj.transform.localScale = Vector3.new(partSize * _flip, partSize, 1)
+        _partObj.transform.localScale = Vector3.new(partSize * _flip * _scale, partSize * _scale, 1)
         _partObj.transform.localRotation = Quaternion.Euler(0, 0, _rotation)
 
         table.insert(spawnedParts, _partObj)

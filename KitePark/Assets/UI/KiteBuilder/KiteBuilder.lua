@@ -28,6 +28,10 @@ local _rotateCCW: Label = nil
 local _flipButton: Label = nil
 --!Bind
 local _rotateCW: Label = nil
+--!Bind
+local _scaleUp: Label = nil
+--!Bind
+local _scaleDown: Label = nil
 
 local KitePartItemClass = "kite-part-item"
 local TrashCanActiveClass = "trash-can-active"
@@ -47,12 +51,15 @@ local COLOR_SWATCHES = {
 
 local isDragging = false
 local hasPlacedParts = false
-local placedParts: {{instanceID: number, partID: string, x: number, y: number, color: string, rotation: number, flip: number}} = {}
+local placedParts: {{instanceID: number, partID: string, x: number, y: number, color: string, rotation: number, flip: number, scale: number}} = {}
 local nextInstanceID = 1
 local selectedPartInstanceID: number = nil
 local selectedPartElement: VisualElement = nil
 
-local ROTATION_INCREMENT = 10
+local ROTATION_INCREMENT = 15
+local SCALE_INCREMENT = 0.1
+local MIN_SCALE = 0.6
+local MAX_SCALE = 4.0
 
 local titleTween = nil
 local openCardTween = nil
@@ -109,9 +116,10 @@ local function deselectPart()
     selectedPartInstanceID = nil
 end
 
-local function applyTransformToPart(partElement: VisualElement, rotation: number, flip: number)
-    local _scaleX = flip
-    local _scaleY = 1
+local function applyTransformToPart(partElement: VisualElement, rotation: number, flip: number, scale: number)
+    local _scale = scale or 1
+    local _scaleX = flip * _scale
+    local _scaleY = _scale
     partElement.style.scale = StyleScale.new(Vector2.new(_scaleX, _scaleY))
     partElement.style.rotate = StyleRotate.new(Rotate.new(Angle.new(rotation)))
 end
@@ -124,7 +132,7 @@ local function rotatePart(direction: number)
     for i, part in ipairs(placedParts) do
         if part.instanceID == selectedPartInstanceID then
             part.rotation = (part.rotation or 0) + (direction * ROTATION_INCREMENT)
-            applyTransformToPart(selectedPartElement, part.rotation, part.flip or 1)
+            applyTransformToPart(selectedPartElement, part.rotation, part.flip or 1, part.scale or 1)
             break
         end
     end
@@ -138,7 +146,23 @@ local function flipPart()
     for i, part in ipairs(placedParts) do
         if part.instanceID == selectedPartInstanceID then
             part.flip = (part.flip or 1) * -1
-            applyTransformToPart(selectedPartElement, part.rotation or 0, part.flip)
+            applyTransformToPart(selectedPartElement, part.rotation or 0, part.flip, part.scale or 1)
+            break
+        end
+    end
+end
+
+local function scalePart(direction: number)
+    if not selectedPartElement or not selectedPartInstanceID then
+        return
+    end
+
+    for i, part in ipairs(placedParts) do
+        if part.instanceID == selectedPartInstanceID then
+            local _newScale = (part.scale or 1) + (direction * SCALE_INCREMENT)
+            _newScale = math.max(MIN_SCALE, math.min(MAX_SCALE, _newScale))
+            part.scale = _newScale
+            applyTransformToPart(selectedPartElement, part.rotation or 0, part.flip or 1, part.scale)
             break
         end
     end
@@ -232,43 +256,18 @@ local function createPlacedPart(instanceID: number, partID: string, sprite: Spri
         _partElement.style.backgroundColor = StyleColor.new(Color.new(1, 0, 0, 1))
     end
 
-    local _pulseTween = Tween:new(
-        1,
-        1.1,
-        0.5,
-        true,
-        true,
-        Easing.easeInOutQuad,
-        function(scale)
-            _partElement.style.scale = StyleScale.new(Vector2.new(scale, scale))
-        end,
-        nil
-    )
-    _pulseTween:start()
-
     _partElement:RegisterGesture(DragGesture.new())
 
     _partElement:RegisterPressCallback(function()
         if not isDragging then
             selectPart(_partElement, instanceID)
         end
-    end)
+    end, nil, nil, false)
 
     _partElement:RegisterCallback(DragGestureBegan, function(evt)
         if evt.target == _partElement then
             isDragging = true
             deselectPart()
-            _partElement.style.opacity = StyleFloat.new(0.8)
-
-            local _flip = 1
-            for _, part in ipairs(placedParts) do
-                if part.instanceID == instanceID then
-                    _flip = part.flip or 1
-                    break
-                end
-            end
-            _partElement.style.scale = StyleScale.new(Vector2.new(1.2 * _flip, 1.2))
-            _pulseTween:stop()
         end
     end)
 
@@ -303,16 +302,6 @@ local function createPlacedPart(instanceID: number, partID: string, sprite: Spri
     _partElement:RegisterCallback(DragGestureEnded, function(evt)
         if isDragging then
             isDragging = false
-            _partElement.style.opacity = StyleFloat.new(1.0)
-
-            local _flip = 1
-            for _, part in ipairs(placedParts) do
-                if part.instanceID == instanceID then
-                    _flip = part.flip or 1
-                    break
-                end
-            end
-            _partElement.style.scale = StyleScale.new(Vector2.new(_flip, 1))
             _trashCan:EnableInClassList(TrashCanActiveClass, false)
 
             if isOverlappingTrashCan(_partElement) then
@@ -324,7 +313,6 @@ local function createPlacedPart(instanceID: number, partID: string, sprite: Spri
                     end
                 end
                 updateConfirmButtonState()
-                _pulseTween:stop()
             else
                 local _currentLeft = _partElement.style.left.value.value or 0
                 local _currentTop = _partElement.style.top.value.value or 0
@@ -374,24 +362,10 @@ local function createKitePartOption(kitePart: KitePart)
         _placementArea:Add(_placedPart)
 
         local _normX, _normY = getNormalizedPosition(_startX, _startY)
-        table.insert(placedParts, {instanceID = _instanceID, partID = _partID, x = _normX, y = _normY, color = "#FFFFFF", rotation = 0, flip = 1})
+        table.insert(placedParts, {instanceID = _instanceID, partID = _partID, x = _normX, y = _normY, color = "#FFFFFF", rotation = 0, flip = 1, scale = 1})
 
         selectPart(_placedPart, _instanceID)
         updateConfirmButtonState()
-
-        local _popTween = Tween:new(
-            0.5,
-            1,
-            0.2,
-            false,
-            false,
-            Easing.easeOutBack,
-            function(v)
-                _placedPart.style.scale = StyleScale.new(Vector2.new(v, v))
-            end,
-            nil
-        )
-        _popTween:start()
     end)
 
     return _partOption
@@ -433,7 +407,7 @@ function InitializeBuilder()
     openCardTween:start()
 end
 
-function GetPlacedParts(): {{instanceID: number, partID: string, x: number, y: number, color: string, rotation: number, flip: number}}
+function GetPlacedParts(): {{instanceID: number, partID: string, x: number, y: number, color: string, rotation: number, flip: number, scale: number}}
     return placedParts
 end
 
@@ -485,6 +459,14 @@ local function setupTransformToolbar()
 
     _flipButton:RegisterPressCallback(function()
         flipPart()
+    end)
+
+    _scaleUp:RegisterPressCallback(function()
+        scalePart(1)
+    end)
+
+    _scaleDown:RegisterPressCallback(function()
+        scalePart(-1)
     end)
 end
 
