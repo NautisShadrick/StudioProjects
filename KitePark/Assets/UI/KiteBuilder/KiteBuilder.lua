@@ -259,7 +259,15 @@ local function createPlacedPart(instanceID: number, partID: string, sprite: Spri
             isDragging = true
             deselectPart()
             _partElement.style.opacity = StyleFloat.new(0.8)
-            _partElement.style.scale = StyleScale.new(Vector2.new(1.2, 1.2))
+
+            local _flip = 1
+            for _, part in ipairs(placedParts) do
+                if part.instanceID == instanceID then
+                    _flip = part.flip or 1
+                    break
+                end
+            end
+            _partElement.style.scale = StyleScale.new(Vector2.new(1.2 * _flip, 1.2))
             _pulseTween:stop()
         end
     end)
@@ -296,7 +304,15 @@ local function createPlacedPart(instanceID: number, partID: string, sprite: Spri
         if isDragging then
             isDragging = false
             _partElement.style.opacity = StyleFloat.new(1.0)
-            _partElement.style.scale = StyleScale.new(Vector2.new(1, 1))
+
+            local _flip = 1
+            for _, part in ipairs(placedParts) do
+                if part.instanceID == instanceID then
+                    _flip = part.flip or 1
+                    break
+                end
+            end
+            _partElement.style.scale = StyleScale.new(Vector2.new(_flip, 1))
             _trashCan:EnableInClassList(TrashCanActiveClass, false)
 
             if isOverlappingTrashCan(_partElement) then
