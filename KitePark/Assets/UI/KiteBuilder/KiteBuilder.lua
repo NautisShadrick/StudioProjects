@@ -25,7 +25,6 @@ local KitePartItemClass = "kite-part-item"
 local TrashCanActiveClass = "trash-can-active"
 local PlacedKitePartClass = "placed-kite-part"
 local LockedClass = "locked"
-local ColorPickerVisibleClass = "color-picker-visible"
 
 local COLOR_SWATCHES = {
     "#FFFFFF",
@@ -90,38 +89,12 @@ local function hexToColor(hex: string): Color
     return Color.new(_r, _g, _b, 1)
 end
 
-local function showColorPicker(partElement: VisualElement, instanceID: number)
+local function selectPart(partElement: VisualElement, instanceID: number)
     selectedPartElement = partElement
     selectedPartInstanceID = instanceID
-
-    local _left = partElement.style.left.value.value or 0
-    local _top = partElement.style.top.value.value or 0
-
-    local _pickerX = _left + 60
-    local _pickerY = _top - 20
-
-    local _parentWidth = _placementArea.layout.width
-    local _parentHeight = _placementArea.layout.height
-
-    if _pickerX + 140 > _parentWidth then
-        _pickerX = _left - 150
-    end
-    if _pickerY < 0 then
-        _pickerY = _top + 60
-    end
-    if _pickerY + 70 > _parentHeight then
-        _pickerY = _parentHeight - 75
-    end
-
-    _colorPicker.style.left = _pickerX
-    _colorPicker.style.top = _pickerY
-
-    _colorPicker:BringToFront()
-    _colorPicker:EnableInClassList(ColorPickerVisibleClass, true)
 end
 
-local function hideColorPicker()
-    _colorPicker:EnableInClassList(ColorPickerVisibleClass, false)
+local function deselectPart()
     selectedPartElement = nil
     selectedPartInstanceID = nil
 end
@@ -141,7 +114,7 @@ local function applyColorToPart(hex: string)
         end
     end
 
-    hideColorPicker()
+    deselectPart()
 end
 
 local function setupColorSwatches()
@@ -234,14 +207,14 @@ local function createPlacedPart(instanceID: number, partID: string, sprite: Spri
 
     _partElement:RegisterPressCallback(function()
         if not isDragging then
-            showColorPicker(_partElement, instanceID)
+            selectPart(_partElement, instanceID)
         end
     end)
 
     _partElement:RegisterCallback(DragGestureBegan, function(evt)
         if evt.target == _partElement then
             isDragging = true
-            hideColorPicker()
+            deselectPart()
             _partElement.style.opacity = StyleFloat.new(0.8)
             _partElement.style.scale = StyleScale.new(Vector2.new(1.2, 1.2))
             _pulseTween:stop()
@@ -305,6 +278,8 @@ local function createPlacedPart(instanceID: number, partID: string, sprite: Spri
                         break
                     end
                 end
+
+                selectPart(_partElement, instanceID)
             end
         end
     end)
@@ -342,6 +317,7 @@ local function createKitePartOption(kitePart: KitePart)
         local _normX, _normY = getNormalizedPosition(_startX, _startY)
         table.insert(placedParts, {instanceID = _instanceID, partID = _partID, x = _normX, y = _normY, color = "#FFFFFF"})
 
+        selectPart(_placedPart, _instanceID)
         updateConfirmButtonState()
 
         local _popTween = Tween:new(
@@ -372,7 +348,7 @@ local function populateKiteParts()
 end
 
 local function clearPlacedParts()
-    hideColorPicker()
+    deselectPart()
     local _childCount = _placementArea.childCount
     for i = _childCount - 1, 0, -1 do
         local _child = _placementArea:ElementAt(i)
@@ -443,5 +419,4 @@ function self:Start()
     populateKiteParts()
     setupColorSwatches()
     _confirmButton:EnableInClassList(LockedClass, true)
-    _colorPicker:EnableInClassList(ColorPickerVisibleClass, false)
 end

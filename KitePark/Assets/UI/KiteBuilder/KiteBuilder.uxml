@@ -10,10 +10,10 @@
   <hr:UILuaView class="kite-builder">
     <VisualElement name="_cardContainer">
       <Label name="_title" text="Build Your Kite!" />
+      <VisualElement name="_colorPicker" class="color-picker">
+      </VisualElement>
       <VisualElement name="_placementArea">
         <VisualElement name="_trashCan" class="trash-can" />
-        <VisualElement name="_colorPicker" class="color-picker">
-        </VisualElement>
       </VisualElement>
       <VisualElement name="_partsScrollContainer">
         <hr:UIScrollView name="_partsScrollView" class="parts-scroll-view">
