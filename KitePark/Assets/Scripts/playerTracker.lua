@@ -53,11 +53,11 @@ function TrackPlayers(game, characterCallback)
             myKiteConstructor = nil,
         }
 
-        player.CharacterChanged:Connect(function(player, character) 
+        player.CharacterChanged:Connect(function(player, character)
             local playerinfo = players[player]
             if (character == nil) then
                 return
-            end 
+            end
 
             if characterCallback then
                 characterCallback(playerinfo)
@@ -127,6 +127,7 @@ function self:ClientAwake()
                 playerinfo.myKite.SetLineLength(newVal)
             end
         end)
+
     end
     TrackPlayers(client, OnCharacterInstantiate)
 end

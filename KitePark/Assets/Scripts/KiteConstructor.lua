@@ -43,7 +43,7 @@ end
 local function buildKite(buildData)
     clearParts()
 
-    if not canvas then
+    if canvas == nil then
         print("KiteConstructor: No canvas assigned")
         return
     end
@@ -108,6 +108,13 @@ function SetPlayer(player: Player)
         buildKite(_playerInfo.myBuild.value)
 
         buildConnection = _playerInfo.myBuild.Changed:Connect(function(newBuild, oldBuild)
+            if canvas == nil then
+                if buildConnection then
+                    buildConnection:Disconnect()
+                    buildConnection = nil
+                end
+                return
+            end
             buildKite(newBuild)
         end)
     end
@@ -119,4 +126,5 @@ end
 
 function self:Start()
     buildSpriteMap()
+    buildKite(playerTracker.players[owner].myBuild.value)
 end
