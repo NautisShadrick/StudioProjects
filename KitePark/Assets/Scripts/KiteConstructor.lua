@@ -87,7 +87,7 @@ local function buildKite(buildData)
 
         local _baseSize = basePartRatio * math.min(_canvasWidth, _canvasHeight)
         _partObj.transform.localScale = Vector3.new(_baseSize * _flip * _scale, _baseSize * _scale, 1)
-        _partObj.transform.localRotation = Quaternion.Euler(0, 0, _rotation)
+        _partObj.transform.localRotation = Quaternion.Euler(0, 0, -_rotation)
 
         table.insert(spawnedParts, _partObj)
     end
