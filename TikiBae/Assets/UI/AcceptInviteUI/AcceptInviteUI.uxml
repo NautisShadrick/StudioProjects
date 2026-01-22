@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UXML
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="UnityEngine.UIElements"
+    xmlns:hr="Highrise.UI"
+    xmlns:editor="UnityEditor.UIElements"
+    xsi:noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd"
+>
+
+  <hr:UILuaView class="accept-invite-ui" picking-mode="Ignore">
+    <VisualElement name="_inviteContainer" class="invite-container">
+      <Label name="_inviteText" class="invite-text" text="Invited you to a ride"/>
+      <Label name="_acceptButton" class="accept-button" text="Accept"/>
+    </VisualElement>
+  </hr:UILuaView>
+
+</UXML>

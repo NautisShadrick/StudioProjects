@@ -3,6 +3,15 @@
 local TeleportRequest = Event.new("TeleportRequest")
 local TeleportResponse = Event.new("TeleportResponse")
 
+teleportToAnchorRequest = Event.new("teleportToAnchorRequest")
+teleportToAnchorResponse = Event.new("teleportToAnchorResponse")
+
+inviteRequest = Event.new("inviteRequest")
+inviteEvent = Event.new("inviteEvent")
+acceptInviteRequest = Event.new("acceptInviteRequest")
+
+local gameStateManager = require("GameStateManager")
+
 --local uiManager = require("UIManager")
 players = {}
 local playercount = 0
@@ -14,6 +23,8 @@ function TrackPlayers(game, characterCallback)
         players[player] = {
             player = player,
             matches = TableValue.new("matches"..player.user.id, {}, player),
+            lastInviteID = StringValue.new("lastInviteID"..player.user.id, "", player),
+            currentPartnerID = StringValue.new("currentPartnerID"..player.user.id, "", player),
         }
 
         player.CharacterChanged:Connect(function(player, character) 
@@ -57,10 +68,30 @@ function self:ClientAwake()
             character:Teleport(destination)
         end
     end)
+
+    teleportToAnchorResponse:Connect(function(player, anchor)
+        local character = player.character
+        if not character then
+            print("No character to teleport for player:", player.name)
+            return
+        end
+        if not anchor then
+            print("No anchor provided for teleportation for player:", player.name)
+            return
+        end
+        if character and anchor then
+            character:TeleportToAnchor(anchor)
+        end
+    end)
 end
 
 function TeleportLocalPlayerRequest(destination)
     TeleportRequest:FireServer(destination)
+end
+
+function TeleportToAnchorRequest(anchor)
+    print(typeof(anchor))
+    teleportToAnchorRequest:FireServer(anchor.gameObject)
 end
 
 ------------- SERVER -------------
@@ -73,50 +104,26 @@ function ShuffleTable(t)
     end
 end
 
-function SeparatePlayersIntoRandomPairs()
-    local playerList = {}
-    for player, playerinfo in pairs(players) do
-        table.insert(playerList, player)
-    end
-
-    -- Shuffle the player list for randomness
-    ShuffleTable(playerList)
-    
-    local playerCount = #playerList
-    local playerPairs = {}
-    local soloPlayer = nil
-    
-    -- Simple pairing: take players 2 at a time
-    for i = 1, playerCount, 2 do
-        local player1 = playerList[i]
-        local player2 = playerList[i + 1]
-        
-        if player2 then
-            -- We have a pair
-            local pair = {player1, player2}
-            table.insert(playerPairs, pair)
-        else
-            -- Odd number of players, this one is solo
-            soloPlayer = player1
-        end
-    end
-
-    return playerPairs, soloPlayer
-end
-
 function self:ServerAwake()
     TrackPlayers(server)
 
     TeleportRequest:Connect(TeleportPlayerServer)
+    teleportToAnchorRequest:Connect(function(player, anchor)
+        print(typeof(player), typeof(anchor))
+        teleportToAnchorResponse:FireAllClients(player, anchor)
+    end)
 
-    Timer.After(2,function()
-        local playerPairs, soloPlayer = SeparatePlayersIntoRandomPairs()
-        for i, pair in ipairs(playerPairs) do
-            local player1 = pair[1]
-            local player2 = pair[2]
-            print("Pair", i, player1.name, player2.name)
-        end
-        if soloPlayer then print("Solo", soloPlayer.name) end
+
+    inviteRequest:Connect(function(player, recipientPlayer)
+        local inviteID = recipientPlayer.user.id
+        players[player].lastInviteID.value = inviteID
+        inviteEvent:FireClient(recipientPlayer, player)
+    end)
+
+
+    acceptInviteRequest:Connect(function(player, senderPlayer)
+        print(player.name .. " accepted invite from " .. senderPlayer.name)
+        gameStateManager.StartBoatRideForPair(player, senderPlayer)
     end)
 end
 

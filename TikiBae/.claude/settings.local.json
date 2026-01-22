@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Skill(rosie:create-highrise-studio-ui)",
+      "Skill(rosie:create-highrise-studio-ui:*)"
+    ]
+  }
+}

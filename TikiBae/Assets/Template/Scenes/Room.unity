@@ -13,7 +13,7 @@ OcclusionCullingSettings:
 --- !u!104 &2
 RenderSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 9
+  serializedVersion: 10
   m_Fog: 1
   m_FogColor: {r: 0.08627451, g: 0.29803923, b: 0.6117647, a: 1}
   m_FogMode: 2
@@ -42,8 +42,8 @@ RenderSettings:
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 12
-  m_GIWorkflowMode: 1
+  serializedVersion: 13
+  m_BakeOnSceneLoad: 0
   m_GISettings:
     serializedVersion: 2
     m_BounceScale: 1
@@ -66,9 +66,6 @@ LightmapSettings:
     m_LightmapParameters: {fileID: 0}
     m_LightmapsBakeMode: 1
     m_TextureCompression: 1
-    m_FinalGather: 0
-    m_FinalGatherFiltering: 1
-    m_FinalGatherRayCount: 256
     m_ReflectionCompression: 2
     m_MixedBakeMode: 2
     m_BakeBackend: 1
@@ -813,7 +810,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: 7af714d0cbc49d742b4c0969c7244ea9,
         type: 3}
-      propertyPath: m_Materials.Array.data[0]
+      propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 5f34ab98f76b64b46a21be8918d4691c, type: 2}
     - target: {fileID: 919132149155446097, guid: 7af714d0cbc49d742b4c0969c7244ea9,
@@ -2072,7 +2069,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: f1ee76c14e0db4441a9d268eb1b16944,
         type: 3}
-      propertyPath: m_Materials.Array.data[0]
+      propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 7a123d1be8f996c458060eb8c744983a, type: 2}
     - target: {fileID: 919132149155446097, guid: f1ee76c14e0db4441a9d268eb1b16944,
@@ -3672,7 +3669,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &432438598
 Animator:
-  serializedVersion: 5
+  serializedVersion: 7
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -3686,6 +3683,7 @@ Animator:
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
@@ -3810,6 +3808,9 @@ ParticleSystemRenderer:
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -9315,6 +9316,9 @@ ParticleSystemRenderer:
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -15036,7 +15040,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: 7af714d0cbc49d742b4c0969c7244ea9,
         type: 3}
-      propertyPath: m_Materials.Array.data[0]
+      propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 5f34ab98f76b64b46a21be8918d4691c, type: 2}
     - target: {fileID: 919132149155446097, guid: 7af714d0cbc49d742b4c0969c7244ea9,
@@ -15373,9 +15377,8 @@ Light:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 613499642}
   m_Enabled: 1
-  serializedVersion: 10
+  serializedVersion: 11
   m_Type: 1
-  m_Shape: 0
   m_Color: {r: 0.759434, g: 0.8971941, b: 1, a: 1}
   m_Intensity: 0.1
   m_Range: 10
@@ -15425,8 +15428,12 @@ Light:
   m_BoundingSphereOverride: {x: 0, y: -66313410, z: 6.96e-43, w: 4.41e-43}
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
+  m_ForceVisible: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
+  m_LightUnit: 1
+  m_LuxAtDistance: 1
+  m_EnableSpotReflector: 1
 --- !u!4 &613499645
 Transform:
   m_ObjectHideFlags: 0
@@ -15564,6 +15571,9 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -19508,7 +19518,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: c7c7610f90e0487408983949ecad294a,
         type: 3}
-      propertyPath: m_Materials.Array.data[0]
+      propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 5f34ab98f76b64b46a21be8918d4691c, type: 2}
     - target: {fileID: 919132149155446097, guid: c7c7610f90e0487408983949ecad294a,
@@ -20136,6 +20146,9 @@ ParticleSystemRenderer:
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -25876,7 +25889,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: 7795fbbfbd55a9c4982473a61cc45e5f,
         type: 3}
-      propertyPath: m_Materials.Array.data[0]
+      propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 2e60936ffb9d84e4580648e2f31f4a8f, type: 2}
     - target: {fileID: 919132149155446097, guid: 7795fbbfbd55a9c4982473a61cc45e5f,
@@ -27123,7 +27136,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: 7795fbbfbd55a9c4982473a61cc45e5f,
         type: 3}
-      propertyPath: m_Materials.Array.data[0]
+      propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 2e60936ffb9d84e4580648e2f31f4a8f, type: 2}
     - target: {fileID: 919132149155446097, guid: 7795fbbfbd55a9c4982473a61cc45e5f,
@@ -27419,7 +27432,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: 299b0fd4ce2e41d42893120e70de32ce,
         type: 3}
-      propertyPath: m_Materials.Array.data[0]
+      propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 7bc9fe53c9292f34fbcac0547b4b1c76, type: 2}
     - target: {fileID: 919132149155446097, guid: 299b0fd4ce2e41d42893120e70de32ce,
@@ -27676,7 +27689,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: 7795fbbfbd55a9c4982473a61cc45e5f,
         type: 3}
-      propertyPath: m_Materials.Array.data[0]
+      propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 2e60936ffb9d84e4580648e2f31f4a8f, type: 2}
     - target: {fileID: 919132149155446097, guid: 7795fbbfbd55a9c4982473a61cc45e5f,
@@ -28922,6 +28935,7 @@ Transform:
   - {fileID: 967315802}
   - {fileID: 783130315}
   - {fileID: 1810530553}
+  - {fileID: 1876964595}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1382357498
@@ -28948,6 +28962,7 @@ MonoBehaviour:
   m_cinematicOverlayObj: {fileID: 967315801}
   m_leaderboardUIObj: {fileID: 783130314}
   m_hudButtonsUIObj: {fileID: 1810530552}
+  m_acceptUI: {fileID: 1876964596}
   m_mainCamera: {fileID: 1734549975}
   m_cutSceneCamera: {fileID: 846837440}
   references:
@@ -29461,7 +29476,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: af1a2f0b3fd0f81458e0f571530cbcb1,
         type: 3}
-      propertyPath: m_Materials.Array.data[0]
+      propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 2e60936ffb9d84e4580648e2f31f4a8f, type: 2}
     - target: {fileID: 919132149155446097, guid: af1a2f0b3fd0f81458e0f571530cbcb1,
@@ -29686,7 +29701,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: 7af714d0cbc49d742b4c0969c7244ea9,
         type: 3}
-      propertyPath: m_Materials.Array.data[0]
+      propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 5f34ab98f76b64b46a21be8918d4691c, type: 2}
     - target: {fileID: 919132149155446097, guid: 7af714d0cbc49d742b4c0969c7244ea9,
@@ -30450,6 +30465,9 @@ ParticleSystemRenderer:
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -36428,7 +36446,7 @@ MonoBehaviour:
   _uiOutputSettings:
     rid: -2
   m_cameraPivotHeight: 2.5
-  m_initalDistanceFromPivot: 7.5
+  m_initalDistanceFromPivot: 12
   m_minDistanceFromPivot: 3
   m_maxDistanceFromPivot: 25
   m_cameraOffset: {x: 0, y: 0, z: 0}
@@ -37460,6 +37478,61 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 671166421}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1876964594
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1876964595}
+  - component: {fileID: 1876964596}
+  m_Layer: 0
+  m_Name: Accept
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1876964595
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1876964594}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1382357497}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1876964596
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1876964594}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d08e0b0b4816043192face2fbb4fa60b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _networkId: 0
+  _script: {fileID: -974389366465450183, guid: 6a510bdef2c904e42825cefa0190a6de, type: 3}
+  _properties: []
+  _uiOutput: 2
+  _uiOutputSettings:
+    rid: -2
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
 --- !u!1001 &1891441912
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -37841,7 +37914,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: af1a2f0b3fd0f81458e0f571530cbcb1,
         type: 3}
-      propertyPath: m_Materials.Array.data[0]
+      propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 2e60936ffb9d84e4580648e2f31f4a8f, type: 2}
     - target: {fileID: 919132149155446097, guid: af1a2f0b3fd0f81458e0f571530cbcb1,
@@ -38235,7 +38308,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: 7af714d0cbc49d742b4c0969c7244ea9,
         type: 3}
-      propertyPath: m_Materials.Array.data[0]
+      propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 5f34ab98f76b64b46a21be8918d4691c, type: 2}
     - target: {fileID: 919132149155446097, guid: 7af714d0cbc49d742b4c0969c7244ea9,
@@ -39319,7 +39392,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: 7795fbbfbd55a9c4982473a61cc45e5f,
         type: 3}
-      propertyPath: m_Materials.Array.data[0]
+      propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 2e60936ffb9d84e4580648e2f31f4a8f, type: 2}
     - target: {fileID: 919132149155446097, guid: 7795fbbfbd55a9c4982473a61cc45e5f,
@@ -39823,6 +39896,9 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -40134,7 +40210,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: 87beb4685fbc07545be3a87750048919,
         type: 3}
-      propertyPath: m_Materials.Array.data[0]
+      propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: -876546973899608171, guid: 2c31ad22132603b4f952c18894afe04d,
         type: 3}

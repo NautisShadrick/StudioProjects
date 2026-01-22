@@ -65,8 +65,4 @@ function SetHand(state)
 end
 
 function self:Start()
-    SetHand(gameManager.GameState.value)
-    gameManager.GameState.Changed:Connect(function(state)
-        SetHand(state)
-    end)
 end

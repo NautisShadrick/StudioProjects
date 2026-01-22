@@ -12,6 +12,8 @@ local cinematicOverlayObj : GameObject = nil
 local leaderboardUIObj : GameObject = nil
 --!SerializeField
 local hudButtonsUIObj : GameObject = nil
+--!SerializeField
+local acceptUI : AcceptInviteUI = nil
 
 --!SerializeField
 local mainCamera : Camera = nil
@@ -29,6 +31,7 @@ hudButtonsUI = nil
 
 local audioManager = require("AudioManager")
 local gameManager = require("GameStateManager")
+local playerTracker = require("PlayerTracker")
 
 function self:ClientStart()
     timerUI = TimerUIObj:GetComponent(TimerUI)
@@ -51,15 +54,20 @@ function self:ClientStart()
         audioManager.PlaySound("pass")
     end)
 
+    playerTracker.inviteEvent:Connect(function(senderPlayer)
+        local senderName = senderPlayer.name
+        acceptUI.ShowInvite(senderName, function()
+            playerTracker.acceptInviteRequest:FireServer(senderPlayer)
+        end)
+    end)
+
     mainCamera.gameObject:SetActive(false)
     cutSceneCamera.gameObject:SetActive(true)
-
-
     TimerUIObj:SetActive(false)
+
     Timer.After(4.5, function()
         cinematicOverlay.FadeOut()
         Timer.After(.5, function()
-            TimerUIObj:SetActive(true)
             cutSceneCamera.gameObject:SetActive(false)
             mainCamera.gameObject:SetActive(true)
             cutSceneCamera.transform.parent.gameObject:SetActive(false)
@@ -74,7 +82,7 @@ end
 
 function ToggleDefaultHUD(state)
     hudButtonsUIObj:SetActive(state)
-    TimerUIObj:SetActive(state)
+    --TimerUIObj:SetActive(state)
 end
 
 function ToggleSelectionUI(state)

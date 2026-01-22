@@ -1,6 +1,6 @@
 /*
 
-    Copyright (c) 2025 Pocketz World. All rights reserved.
+    Copyright (c) 2026 Pocketz World. All rights reserved.
 
     This is a generated file, do not edit!
 
@@ -32,6 +32,8 @@ namespace Highrise.Lua.Generated
         [SerializeField] public UnityEngine.GameObject m_cinematicOverlayObj = default;
         [SerializeField] public UnityEngine.GameObject m_leaderboardUIObj = default;
         [SerializeField] public UnityEngine.GameObject m_hudButtonsUIObj = default;
+        [LuaScriptPropertyAttribute("6a510bdef2c904e42825cefa0190a6de")]
+        [SerializeField] public UnityEngine.Object m_acceptUI = default;
         [SerializeField] public UnityEngine.Camera m_mainCamera = default;
         [SerializeField] public UnityEngine.Camera m_cutSceneCamera = default;
 
@@ -48,8 +50,9 @@ namespace Highrise.Lua.Generated
                 CreateSerializedProperty(_script.GetPropertyAt(3), m_cinematicOverlayObj),
                 CreateSerializedProperty(_script.GetPropertyAt(4), m_leaderboardUIObj),
                 CreateSerializedProperty(_script.GetPropertyAt(5), m_hudButtonsUIObj),
-                CreateSerializedProperty(_script.GetPropertyAt(6), m_mainCamera),
-                CreateSerializedProperty(_script.GetPropertyAt(7), m_cutSceneCamera),
+                CreateSerializedProperty(_script.GetPropertyAt(6), m_acceptUI),
+                CreateSerializedProperty(_script.GetPropertyAt(7), m_mainCamera),
+                CreateSerializedProperty(_script.GetPropertyAt(8), m_cutSceneCamera),
             };
         }
         
