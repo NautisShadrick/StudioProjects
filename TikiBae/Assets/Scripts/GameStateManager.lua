@@ -63,7 +63,18 @@ function self:ClientStart()
         Timer.After(BOATDURATION, function()
             --Destroy the boat
             GameObject.Destroy(_newBoat)
+            uiManager.ToggleTimerUI(false)
         end)
+
+        if client.localPlayer == player1 or client.localPlayer == player2 then
+            Timer.After(BOATDURATION - 5, function()
+                -- Start the Match Req
+                uiManager.ToggleSelectionUI(true)
+            end)
+
+            uiManager.ToggleTimerUI(true)
+            uiManager.PlayTimer(BOATDURATION)
+        end
 
     end)
 
@@ -109,6 +120,16 @@ function StartBoatRideForPair(player1, player2)
     playerTracker.players[player2].currentPartnerID.value = player1.user.id
 
     Timer.After(BOATDURATION, function()
+        -- Check if they matched
+        local choice1 = choicesByPlayer[player1]
+        local choice2 = choicesByPlayer[player2]
+
+        if choice1 == 1 and choice2 == 1 then
+            playerMatchedEvent:FireClients({player1, player2})
+        else
+            playerMismatchedEvent:FireClients({player1, player2})
+        end
+
         EndBoatRide(player1, player2)
     end)
 end

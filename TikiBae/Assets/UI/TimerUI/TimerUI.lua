@@ -14,6 +14,8 @@ local Tween = TweenModule.Tween
 
 local handRotationTween = nil
 
+local timerTween = nil
+
 function SetTitle(title)
     timer_label.text = title
 end
@@ -62,6 +64,33 @@ function SetHand(state)
         )
         handRotationTween:start()
     end
+end
+
+function StartTimerWithDuration(duration)
+
+    if timerTween then
+        timerTween:stop()
+        timerTween = nil
+    end
+    -- Implementation for starting the timer with a specific duration
+    timerTween = Tween:new(
+        duration,
+        0,
+        duration,
+        false,
+        false,
+        TweenModule.Easing.linear,
+        function(value)
+            -- set timer label text to be mm:ss format
+            local minutes = math.floor(value / 60)
+            local seconds = math.floor(value % 60)
+            timer_label.text = string.format("%02d:%02d", minutes, seconds)
+        end,
+        function()
+            -- Timer completed
+        end
+    )
+    timerTween:start()
 end
 
 function self:Start()

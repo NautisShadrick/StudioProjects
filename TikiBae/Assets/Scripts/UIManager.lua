@@ -80,6 +80,14 @@ function self:ClientStart()
 
 end
 
+function PlayTimer(duration)
+    timerUI.StartTimerWithDuration(duration)
+end
+
+function ToggleTimerUI(state)
+    TimerUIObj:SetActive(state)
+end
+
 function ToggleDefaultHUD(state)
     hudButtonsUIObj:SetActive(state)
     --TimerUIObj:SetActive(state)
