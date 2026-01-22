@@ -746,6 +746,8 @@ MonoBehaviour:
   - {fileID: 6815276694904266038, guid: 78421c8a58da16f40933cbbde865ea25, type: 3}
   - {fileID: 3413499606362744391, guid: 028a298a6a840024b9a7b28571e91e28, type: 3}
   - {fileID: 3413499606362744391, guid: d26bd179682d74e4d9a8cab5805ca135, type: 3}
+  - {fileID: 3413499606362744391, guid: 825e0237f159162448617c50f12f8f2a, type: 3}
+  - {fileID: 3413499606362744391, guid: 50087cc986a31b94aba5893204411484, type: 3}
   m_duckKitePrefab: {fileID: 6744104775434505619, guid: 24639d0b0f093f44898e0efd779eb6de,
     type: 3}
   m_dragonKitePrefab: {fileID: 3413499606362744391, guid: d26bd179682d74e4d9a8cab5805ca135,
@@ -803,11 +805,13 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 6690471d4fc50f543b4535f19b095687, type: 2}
   - {fileID: 11400000, guid: 6796cba8e25bbf347ae6444f118f0e66, type: 2}
   - {fileID: 11400000, guid: db418c8e8679c2b46ae7a558a03b58e4, type: 2}
-  - {fileID: 11400000, guid: db418c8e8679c2b46ae7a558a03b58e4, type: 2}
-  - {fileID: 11400000, guid: db418c8e8679c2b46ae7a558a03b58e4, type: 2}
-  - {fileID: 11400000, guid: db418c8e8679c2b46ae7a558a03b58e4, type: 2}
-  - {fileID: 11400000, guid: db418c8e8679c2b46ae7a558a03b58e4, type: 2}
-  - {fileID: 11400000, guid: db418c8e8679c2b46ae7a558a03b58e4, type: 2}
+  - {fileID: 11400000, guid: 6131c4121261aee468b0d7c58650afa1, type: 2}
+  - {fileID: 11400000, guid: 3ad7b7284c703e041b9ea898f6dcf635, type: 2}
+  - {fileID: 11400000, guid: f6c44932dc3efa540bd12c7dc46a6181, type: 2}
+  - {fileID: 11400000, guid: da6bbbae86bf42841a7bd230f2edf6e6, type: 2}
+  - {fileID: 11400000, guid: e72381bac877df644b7b9357dd2c90dc, type: 2}
+  - {fileID: 11400000, guid: 036830b1714c6944e9e1bcf9fb926645, type: 2}
+  - {fileID: 11400000, guid: f386e7b44f9306f4c98b71ba041a9c52, type: 2}
   references:
     version: 2
     RefIds:
@@ -1248,7 +1252,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1926453857
 Transform:
   m_ObjectHideFlags: 0

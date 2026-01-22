@@ -1,6 +1,6 @@
 /*
 
-    Copyright (c) 2025 Pocketz World. All rights reserved.
+    Copyright (c) 2026 Pocketz World. All rights reserved.
 
     This is a generated file, do not edit!
 
@@ -26,18 +26,6 @@ namespace Highrise.Lua.Generated
         private const string s_scriptGUID = "9f704bff1826b43a3834478cd1499710";
         public override string ScriptGUID => s_scriptGUID;
 
-        [SerializeField] public System.Boolean m_enableVoice = true;
-        [SerializeField] public System.Double m_defaultChannel = 0;
-        [SerializeField] public System.String m_noVoiceChannelName = "General Chat";
-        [SerializeField] public System.String m_voiceChannelName = "General Voice";
-        [SerializeField] public System.String m_broadcastChannelName = "Broadcast";
-        [Tooltip("Restricts voice chat to world/room owners, moderators, and verified 18+ users")]
-        [SerializeField] public System.Boolean m_verifiedOnlyVoice = false;
-        [SerializeField] public System.Boolean m_enableProximityChat = true;
-        [Tooltip("The distance between players where their voice starts to get softer")]
-        [SerializeField] public System.Double m_maxVolumeDistance = 15;
-        [Tooltip("The distance between players where you can no longer hear them")]
-        [SerializeField] public System.Double m_minVolumeDistance = 30;
         [Tooltip("Enable to customize the chat bubble colors")]
         [SerializeField] public System.Boolean m_customChatBubbleColors = false;
         [Tooltip("Chat bubble background color used for other players")]
@@ -48,6 +36,12 @@ namespace Highrise.Lua.Generated
         [SerializeField] public UnityEngine.Color m_selfChatBubbleBackgroundColor = new Color(0.157f, 0.153f, 0.176f, 1f);
         [Tooltip("Chat bubble font color used for messages you send")]
         [SerializeField] public UnityEngine.Color m_selfChatBubbleFontColor = new Color(0.521f, 0.38f, 1f, 1f);
+        [Tooltip("Enable to customize the chat bubble sounds")]
+        [SerializeField] public System.Boolean m_customChatBubbleSound = false;
+        [Tooltip("Sound to play when a chat message is sent, if left empty then no sound will play")]
+        [SerializeField] public Highrise.AudioShader m_chatSentSound = default;
+        [Tooltip("Sound to play when a chat bubble appears, if left empty then no sound will play")]
+        [SerializeField] public Highrise.AudioShader m_chatBubbleSound = default;
 
         protected override SerializedPropertyValue[] SerializeProperties()
         {
@@ -56,20 +50,14 @@ namespace Highrise.Lua.Generated
 
             return new SerializedPropertyValue[]
             {
-                CreateSerializedProperty(_script.GetPropertyAt(0), m_enableVoice),
-                CreateSerializedProperty(_script.GetPropertyAt(1), m_defaultChannel),
-                CreateSerializedProperty(_script.GetPropertyAt(2), m_noVoiceChannelName),
-                CreateSerializedProperty(_script.GetPropertyAt(3), m_voiceChannelName),
-                CreateSerializedProperty(_script.GetPropertyAt(4), m_broadcastChannelName),
-                CreateSerializedProperty(_script.GetPropertyAt(5), m_verifiedOnlyVoice),
-                CreateSerializedProperty(_script.GetPropertyAt(6), m_enableProximityChat),
-                CreateSerializedProperty(_script.GetPropertyAt(7), m_maxVolumeDistance),
-                CreateSerializedProperty(_script.GetPropertyAt(8), m_minVolumeDistance),
-                CreateSerializedProperty(_script.GetPropertyAt(9), m_customChatBubbleColors),
-                CreateSerializedProperty(_script.GetPropertyAt(10), m_defaultChatBubbleBackgroundColor),
-                CreateSerializedProperty(_script.GetPropertyAt(11), m_defaultChatBubbleFontColor),
-                CreateSerializedProperty(_script.GetPropertyAt(12), m_selfChatBubbleBackgroundColor),
-                CreateSerializedProperty(_script.GetPropertyAt(13), m_selfChatBubbleFontColor),
+                CreateSerializedProperty(_script.GetPropertyAt(0), m_customChatBubbleColors),
+                CreateSerializedProperty(_script.GetPropertyAt(1), m_defaultChatBubbleBackgroundColor),
+                CreateSerializedProperty(_script.GetPropertyAt(2), m_defaultChatBubbleFontColor),
+                CreateSerializedProperty(_script.GetPropertyAt(3), m_selfChatBubbleBackgroundColor),
+                CreateSerializedProperty(_script.GetPropertyAt(4), m_selfChatBubbleFontColor),
+                CreateSerializedProperty(_script.GetPropertyAt(5), m_customChatBubbleSound),
+                CreateSerializedProperty(_script.GetPropertyAt(6), m_chatSentSound),
+                CreateSerializedProperty(_script.GetPropertyAt(7), m_chatBubbleSound),
             };
         }
         

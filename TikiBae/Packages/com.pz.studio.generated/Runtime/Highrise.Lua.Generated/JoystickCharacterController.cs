@@ -1,6 +1,6 @@
 /*
 
-    Copyright (c) 2025 Pocketz World. All rights reserved.
+    Copyright (c) 2026 Pocketz World. All rights reserved.
 
     This is a generated file, do not edit!
 
@@ -30,6 +30,8 @@ namespace Highrise.Lua.Generated
         [SerializeField] public Highrise.AudioShader m_footstepRunSound = default;
         [Tooltip("Keyboard and gamepad input used on Desktop clients")]
         [SerializeField] public UnityEngine.InputSystem.InputActionReference m_externalInputAction = default;
+        [Tooltip("The jogging emote will be used beyond this speed")]
+        [SerializeField] public System.Double m_joggingSpeedThreshold = 2;
         [Tooltip("The running emote will be used beyond this speed")]
         [SerializeField] public System.Double m_runningSpeedThreshold = 5;
         [Tooltip("If checked the input to world space transform will not ignore the Y coordinate")]
@@ -50,6 +52,12 @@ namespace Highrise.Lua.Generated
         [SerializeField] public System.Boolean m_anchorThumbstick = false;
         [Tooltip("Prevents the thumbstick from being dragged on screen")]
         [SerializeField] public System.Boolean m_preventDraggingThumbstick = false;
+        [Tooltip("Animation to use when winding up to jump")]
+        [SerializeField] public Highrise.Client.Characters.CharacterAnimation m_jumpInAnim = default;
+        [Tooltip("Animation to use while jumping")]
+        [SerializeField] public Highrise.Client.Characters.CharacterAnimation m_jumpLoopAnim = default;
+        [Tooltip("Animation to use when landing from a jump")]
+        [SerializeField] public Highrise.Client.Characters.CharacterAnimation m_jumpOutAnim = default;
 
         protected override SerializedPropertyValue[] SerializeProperties()
         {
@@ -61,15 +69,19 @@ namespace Highrise.Lua.Generated
                 CreateSerializedProperty(_script.GetPropertyAt(0), m_footstepWalkSound),
                 CreateSerializedProperty(_script.GetPropertyAt(1), m_footstepRunSound),
                 CreateSerializedProperty(_script.GetPropertyAt(2), m_externalInputAction),
-                CreateSerializedProperty(_script.GetPropertyAt(3), m_runningSpeedThreshold),
-                CreateSerializedProperty(_script.GetPropertyAt(4), m_is2D),
-                CreateSerializedProperty(_script.GetPropertyAt(5), m_maxLinkDistance),
-                CreateSerializedProperty(_script.GetPropertyAt(6), m_maxLinkAngle),
-                CreateSerializedProperty(_script.GetPropertyAt(7), m_minLinkMoveStepChange),
-                CreateSerializedProperty(_script.GetPropertyAt(8), m_hideOnDesktop),
-                CreateSerializedProperty(_script.GetPropertyAt(9), m_hideOnExternalInput),
-                CreateSerializedProperty(_script.GetPropertyAt(10), m_anchorThumbstick),
-                CreateSerializedProperty(_script.GetPropertyAt(11), m_preventDraggingThumbstick),
+                CreateSerializedProperty(_script.GetPropertyAt(3), m_joggingSpeedThreshold),
+                CreateSerializedProperty(_script.GetPropertyAt(4), m_runningSpeedThreshold),
+                CreateSerializedProperty(_script.GetPropertyAt(5), m_is2D),
+                CreateSerializedProperty(_script.GetPropertyAt(6), m_maxLinkDistance),
+                CreateSerializedProperty(_script.GetPropertyAt(7), m_maxLinkAngle),
+                CreateSerializedProperty(_script.GetPropertyAt(8), m_minLinkMoveStepChange),
+                CreateSerializedProperty(_script.GetPropertyAt(9), m_hideOnDesktop),
+                CreateSerializedProperty(_script.GetPropertyAt(10), m_hideOnExternalInput),
+                CreateSerializedProperty(_script.GetPropertyAt(11), m_anchorThumbstick),
+                CreateSerializedProperty(_script.GetPropertyAt(12), m_preventDraggingThumbstick),
+                CreateSerializedProperty(_script.GetPropertyAt(13), m_jumpInAnim),
+                CreateSerializedProperty(_script.GetPropertyAt(14), m_jumpLoopAnim),
+                CreateSerializedProperty(_script.GetPropertyAt(15), m_jumpOutAnim),
             };
         }
         

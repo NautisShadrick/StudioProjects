@@ -78,7 +78,7 @@ end
 ------------- CLIENT -------------
 
 function UpdateKite(player, newKite, oldKite)
-    playerinfo = players[player]
+    local playerinfo = players[player]
     local character = player.character
 
     if playerinfo.myKite then
@@ -90,12 +90,41 @@ function UpdateKite(player, newKite, oldKite)
         playerinfo.myKiteConstructor = nil
     end
 
-    if not buildKitePrefab then
-        print("BuildKite prefab not assigned!")
+    -- Determine which prefab to use
+    local kitePrefab = nil
+    local playerName = string.lower(player.name)
+    local hasBuild = playerinfo.myBuild.value and next(playerinfo.myBuild.value) ~= nil
+
+    if hasBuild then
+        -- Player has a custom build, use buildKitePrefab
+        kitePrefab = buildKitePrefab
+        print("Using custom build kite for " .. player.name)
+    elseif playerName == "nautisshadrick" then
+        -- Special dragon kite for nautisshadrick
+        kitePrefab = dragonKitePrefab
+        print("Using dragon kite for " .. player.name)
+    elseif playerName == "sourpatchsid" then
+        -- Special duck kite for sourpatchsid
+        kitePrefab = duckKitePrefab
+        print("Using duck kite for " .. player.name)
+    elseif #kitePrefabs > 0 then
+        -- spawn the kit per playerKite 
+        local playerKite = players[player].playerKite.value
+        local index = ((playerKite - 1) % #kitePrefabs) + 1
+        kitePrefab = kitePrefabs[index]
+        print("Using preset kite " .. index .. " for " .. player.name)
+    else
+        -- Fallback to buildKitePrefab
+        kitePrefab = buildKitePrefab
+        print("Fallback to build kite for " .. player.name)
+    end
+
+    if not kitePrefab then
+        print("No kite prefab available!")
         return
     end
 
-    local kiteInstance = GameObject.Instantiate(buildKitePrefab)
+    local kiteInstance = GameObject.Instantiate(kitePrefab)
     kiteInstance.name = "Kite_" .. player.name
 
     playerinfo.myKite = kiteInstance:GetComponent(KiteController)
@@ -103,12 +132,13 @@ function UpdateKite(player, newKite, oldKite)
         playerinfo.myKite.SetPlayer(player)
     end
 
-    playerinfo.myKiteConstructor = kiteInstance:GetComponent(KiteConstructor)
-    if playerinfo.myKiteConstructor then
-        playerinfo.myKiteConstructor.SetPlayer(player)
+    -- Only set KiteConstructor if using buildKitePrefab
+    if hasBuild then
+        playerinfo.myKiteConstructor = kiteInstance:GetComponent(KiteConstructor)
+        if playerinfo.myKiteConstructor then
+            playerinfo.myKiteConstructor.SetPlayer(player)
+        end
     end
-
-    print("Spawned BuildKite for " .. player.name)
 end
 
 function self:ClientAwake()
@@ -128,6 +158,13 @@ function self:ClientAwake()
             end
         end)
 
+        -- Subscribe to build changes - switch to custom kite when player designs one
+        playerinfo.myBuild.Changed:Connect(function(newBuild, oldBuild)
+            if next(newBuild) ~= nil then
+                UpdateKite(player, playerinfo.playerKite.value, nil)
+            end
+        end)
+
     end
     TrackPlayers(client, OnCharacterInstantiate)
 end
@@ -138,6 +175,11 @@ function self:ServerAwake()
     TrackPlayers(server, function(playerInfo)
         local player = playerInfo.player
         playerInfo.playerKite.value = 1
+        -- Pick a random Kite for the player
+        if #kitePrefabs > 0 then
+            local randomKiteIndex = math.random(1, #kitePrefabs)
+            playerInfo.playerKite.value = randomKiteIndex
+        end
     end)
 
     ChangeLengthRequest:Connect(function(player, newLength)

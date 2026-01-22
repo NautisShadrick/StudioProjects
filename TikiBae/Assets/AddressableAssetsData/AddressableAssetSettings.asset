@@ -46,6 +46,36 @@ MonoBehaviour:
   m_GroupAssets:
   - {fileID: 11400000, guid: 637b4c0615a79674192b9786b1426ce5, type: 2}
   - {fileID: 11400000, guid: 9896dda0d67b495479de75fce2b51e33, type: 2}
+  - {fileID: 11400000, guid: 44f287a288b7740fa97a58449686da24, type: 2}
+  - {fileID: 11400000, guid: a19f5fa7850664fb78d43d0c42581898, type: 2}
+  - {fileID: 11400000, guid: e46fd33e3a1a044fd8f6a9d50601e7f7, type: 2}
+  - {fileID: 11400000, guid: d441fec62059b450094fc283baef7ac1, type: 2}
+  - {fileID: 11400000, guid: 621eb94819aae4e5a9855ada04e1b225, type: 2}
+  - {fileID: 11400000, guid: a362af16158db46d893757fd5c10bb64, type: 2}
+  - {fileID: 11400000, guid: f93b2894dbf8b4cd8ae142554491c945, type: 2}
+  - {fileID: 11400000, guid: 760a7614f473caf4b8bb3cc275342e3e, type: 2}
+  - {fileID: 11400000, guid: 5f96d8b829bdc4bcaa1456917e97d053, type: 2}
+  - {fileID: 11400000, guid: c2c4a10ac1932481e81e927e64bbe8d9, type: 2}
+  - {fileID: 11400000, guid: 052a830d09b0c574c8d65b7628487731, type: 2}
+  - {fileID: 11400000, guid: 50065231b67194682b0f7c05ab7f180b, type: 2}
+  - {fileID: 11400000, guid: c97aea172815d47348bfe9041a63ed93, type: 2}
+  - {fileID: 11400000, guid: c490dd08f4fe643f682891a35bd69c99, type: 2}
+  - {fileID: 11400000, guid: fe46d31155ccb475a8f911743327c54e, type: 2}
+  - {fileID: 11400000, guid: cea7a0b5e4bfa4c6fb9cfa04e686f597, type: 2}
+  - {fileID: 11400000, guid: f7da0941f8a70474a974f5e4f83b908a, type: 2}
+  - {fileID: 11400000, guid: bddde51eb36a845d695a00a749791c19, type: 2}
+  - {fileID: 11400000, guid: c1c4f2e7125b348e1aca997a420d76f7, type: 2}
+  - {fileID: 11400000, guid: 6552a197641254c08a203d2ac7228654, type: 2}
+  - {fileID: 11400000, guid: fdc72210700874935a12072cf05867b0, type: 2}
+  - {fileID: 11400000, guid: 85e3179db34eb4a179db37911faf20dc, type: 2}
+  - {fileID: 11400000, guid: c038d619b00984d2390955c3782fcd65, type: 2}
+  - {fileID: 11400000, guid: dfb7e27d234ef49d9987af56720929bd, type: 2}
+  - {fileID: 11400000, guid: adfbc555542284409abe087f5c071a0f, type: 2}
+  - {fileID: 11400000, guid: 027e9d835a83d493fa03c0a09ae449a3, type: 2}
+  - {fileID: 11400000, guid: 48d9dae9c79054d7ab94d7144f83ceaa, type: 2}
+  - {fileID: 11400000, guid: 1e92140be76c3411a9a6c01c783837a5, type: 2}
+  - {fileID: 11400000, guid: a28661d9f92bf4a1eb70466b4d7ea5ac, type: 2}
+  - {fileID: 11400000, guid: 825cb7fb4743f4a0eaa51ad21c1f2587, type: 2}
   m_BuildSettings:
     m_CompileScriptsInVirtualMode: 0
     m_CleanupStreamingAssetsAfterBuilds: 1
@@ -64,9 +94,9 @@ MonoBehaviour:
       - m_Id: ad55ed101cd8bae4bb68a0f03ee87d80
         m_Value: '{UnityEngine.AddressableAssets.Addressables.RuntimePath}/[BuildTarget]'
       - m_Id: 3eb2092ce4ae80c468ba3a52861c9edf
-        m_Value: ServerData/[BuildTarget]
+        m_Value: 'ServerData/[BuildTarget]'
       - m_Id: 92312d4e7c6cc294a880a9a2fb888d8c
-        m_Value: http://[PrivateIpAddress]:[HostingServicePort]
+        m_Value: 'http://[PrivateIpAddress]:[HostingServicePort]'
     m_ProfileEntryNames:
     - m_Id: be87e0b0c809a6047a7dac0788ddbdaf
       m_Name: BuildTarget

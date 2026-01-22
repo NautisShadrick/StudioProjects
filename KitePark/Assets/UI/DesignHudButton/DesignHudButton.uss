@@ -6,17 +6,17 @@
 
 .button-wrapper {
     position: absolute;
-    bottom: 20px;
-    right: 20px;
+    top: 5px;
+    left: 5px;
 }
 
 .design-button {
     background-color: rgba(80, 160, 255, 0.9);
     color: white;
-    font-size: 18px;
+    font-size: 13px;
     -unity-font-style: bold;
     -unity-text-align: middle-center;
-    padding: 12px 24px;
+    padding: 8px 6px;
     border-radius: 8px;
     border-width: 2px;
     border-color: rgba(255, 255, 255, 0.5);

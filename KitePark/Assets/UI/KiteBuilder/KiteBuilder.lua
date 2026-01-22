@@ -40,6 +40,7 @@ local PlacedKitePartClass = "placed-kite-part"
 local LockedClass = "locked"
 
 local COLOR_SWATCHES = {
+    -- Row 1: Light tones
     "#FF6F61",
     "#FFB74D",
     "#FFF176",
@@ -48,6 +49,19 @@ local COLOR_SWATCHES = {
     "#64B5F6",
     "#9575CD",
     "#F48FB1",
+    "#ffffff",
+    "#2d2d2d",
+    -- Row 2: Darker tones
+    "#CC5850",
+    "#CC923E",
+    "#CCC05E",
+    "#669F69",
+    "#3E9189",
+    "#5090C5",
+    "#775EA4",
+    "#C3728E",
+    "#CCCCCC",
+    "#1a1a1a",
 }
 
 local DEFAULT_COLOR = COLOR_SWATCHES[1]
@@ -63,7 +77,7 @@ local selectedPartElement: VisualElement = nil
 
 local ROTATION_INCREMENT = 15
 local SCALE_INCREMENT = 0.1
-local MIN_SCALE = 0.6
+local MIN_SCALE = 0.4
 local MAX_SCALE = 4.0
 
 local titleTween = nil

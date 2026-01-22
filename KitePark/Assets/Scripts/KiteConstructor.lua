@@ -19,7 +19,7 @@ local function hexToColor(hex: string): Color
     local _r = tonumber(_hex:sub(1, 2), 16) / 255
     local _g = tonumber(_hex:sub(3, 4), 16) / 255
     local _b = tonumber(_hex:sub(5, 6), 16) / 255
-    return Color.new(_r, _g, _b, 1)
+    return Color.new(_r, _g, _b, 0.95)
 end
 
 local function buildSpriteMap()
