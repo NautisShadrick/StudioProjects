@@ -94,4 +94,5 @@ function StartTimerWithDuration(duration)
 end
 
 function self:Start()
+    SetHand(1)
 end

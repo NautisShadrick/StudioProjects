@@ -27,7 +27,9 @@ MonoBehaviour:
   _maxVolumeDistance: 7
   _highQualityAvatars: 0
   _hideVirtualPlayerScenes: 1
+  _enableRealTimeLight: 0
   _useRemoteServer: 0
+  _localServerPorts: a10f0000
   _remoteServerUserIds: []
   _checkStudioUpdatesOnLaunch: 1
   _enableSceneButtons: 1

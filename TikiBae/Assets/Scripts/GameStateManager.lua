@@ -7,7 +7,7 @@ local stateDuration : number = 60
 --!SerializeField
 local mainCamera : Camera = nil
 
-BOATDURATION = 15
+BOATDURATION = 180 -- seconds
 
 local GetpairsResponse = Event.new("GetpairsResponse")
 makeChoiceRequest = Event.new("makeChoiceRequest")
@@ -129,6 +129,26 @@ function StartBoatRideForPair(player1, player2)
 
         if choice1 == 1 and choice2 == 1 then
             playerMatchedEvent:FireClients({player1, player2})
+
+            -- Save match data for player1
+            local player1Matches = playerTracker.players[player1].matches.value or {}
+            local matchCount1 = 0
+            if player1Matches[player2.user.id] then
+                matchCount1 = player1Matches[player2.user.id][2] or 0
+            end
+            player1Matches[player2.user.id] = {player2.name, matchCount1 + 1}
+            playerTracker.players[player1].matches.value = player1Matches
+            Storage.SetPlayerValue(player1, "matches", player1Matches)
+
+            -- Save match data for player2
+            local player2Matches = playerTracker.players[player2].matches.value or {}
+            local matchCount2 = 0
+            if player2Matches[player1.user.id] then
+                matchCount2 = player2Matches[player1.user.id][2] or 0
+            end
+            player2Matches[player1.user.id] = {player1.name, matchCount2 + 1}
+            playerTracker.players[player2].matches.value = player2Matches
+            Storage.SetPlayerValue(player2, "matches", player2Matches)
         else
             playerMismatchedEvent:FireClients({player1, player2})
         end
