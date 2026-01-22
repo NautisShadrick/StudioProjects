@@ -15,7 +15,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: rgba(50, 50, 50, 0.9);
+    background-color: #ffbad6;
     border-radius: 16px;
     padding: 16px 24px;
     min-width: 250px;
@@ -25,12 +25,12 @@
     font-size: 18px;
     -unity-font-definition: var(--font-comic);
     -unity-text-align: middle-center;
-    color: white;
+    color: #e90173;
     margin-bottom: 12px;
 }
 
 .accept-button {
-    background-color: #4CAF50;
+    background-color: #e90173;
     border-radius: 8px;
     padding: 10px 32px;
     font-size: 16px;
@@ -38,12 +38,4 @@
     -unity-text-align: middle-center;
     color: white;
     border-width: 0;
-}
-
-.accept-button:hover {
-    background-color: #45a049;
-}
-
-.accept-button:active {
-    background-color: #3d8b40;
 }

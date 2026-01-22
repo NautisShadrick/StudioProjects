@@ -64,6 +64,7 @@ function self:ClientStart()
             --Destroy the boat
             GameObject.Destroy(_newBoat)
             uiManager.ToggleTimerUI(false)
+            uiManager.ToggleSelectionUI(false)
         end)
 
         if client.localPlayer == player1 or client.localPlayer == player2 then
@@ -81,7 +82,7 @@ function self:ClientStart()
     endboatRideEvent:Connect(function(player1, player2)
 
         if player1 == client.localPlayer or player2 == client.localPlayer then
-            playerTracker.TeleportLocalPlayerRequest(Vector3.new(0,0,0))
+            playerTracker.TeleportLocalPlayerRequest(Vector3.new(math.random(-5,5),0,math.random(-5,5)))
         end
 
         if player1 == client.localPlayer then
@@ -115,14 +116,16 @@ function EndBoatRide(player1, player2)
 end
 
 function StartBoatRideForPair(player1, player2)
+    choicesByPlayer[player1] = 0
+    choicesByPlayer[player2] = 0
     startRideEvent:FireAllClients(player1, player2)
     playerTracker.players[player1].currentPartnerID.value = player2.user.id
     playerTracker.players[player2].currentPartnerID.value = player1.user.id
 
     Timer.After(BOATDURATION, function()
         -- Check if they matched
-        local choice1 = choicesByPlayer[player1]
-        local choice2 = choicesByPlayer[player2]
+        local choice1 = choicesByPlayer[player1] or 0
+        local choice2 = choicesByPlayer[player2] or 0
 
         if choice1 == 1 and choice2 == 1 then
             playerMatchedEvent:FireClients({player1, player2})

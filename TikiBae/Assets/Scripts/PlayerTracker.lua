@@ -24,7 +24,7 @@ function TrackPlayers(game, characterCallback)
             player = player,
             matches = TableValue.new("matches"..player.user.id, {}, player),
             lastInviteID = StringValue.new("lastInviteID"..player.user.id, "", player),
-            currentPartnerID = StringValue.new("currentPartnerID"..player.user.id, "", player),
+            currentPartnerID = StringValue.new("currentPartnerID"..player.user.id, ""),
         }
 
         player.CharacterChanged:Connect(function(player, character) 
