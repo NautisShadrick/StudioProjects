@@ -7,7 +7,7 @@ local stateDuration : number = 60
 --!SerializeField
 local mainCamera : Camera = nil
 
-BOATDURATION = 180 -- seconds
+BOATDURATION = 120 -- seconds
 
 local GetpairsResponse = Event.new("GetpairsResponse")
 makeChoiceRequest = Event.new("makeChoiceRequest")
@@ -105,6 +105,19 @@ function self:ServerAwake()
     end)
     server.PlayerDisconnected:Connect(function(player)
         choicesByPlayer[player] = nil
+
+        -- If the disconnecting player was on a boat ride, end it for their partner
+        local playerData = playerTracker.players[player]
+        if playerData and playerData.currentPartnerID.value ~= "" then
+            local partnerID = playerData.currentPartnerID.value
+            -- Find the partner player
+            for otherPlayer, data in pairs(playerTracker.players) do
+                if otherPlayer.user.id == partnerID then
+                    EndBoatRide(player, otherPlayer)
+                    break
+                end
+            end
+        end
     end)
 end
 

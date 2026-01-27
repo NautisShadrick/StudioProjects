@@ -19,7 +19,10 @@ function self:Start()
         playerTracker.inviteRequest:FireServer(myPlayer)
     end)
 
+    if client.localPlayer == myPlayer then
+        self.transform:GetChild(0).gameObject:SetActive(false)
+    end
     playerTracker.players[myPlayer].currentPartnerID.Changed:Connect(function(id)
-        self.transform:GetChild(0).gameObject:SetActive(id == "")
+        self.transform:GetChild(0).gameObject:SetActive(id == "" and client.localPlayer ~= myPlayer)
     end)
 end
