@@ -5,8 +5,15 @@ local Seats : {Anchor} = {}
 
 local addtoListReq = Event.new("AddToListRequest")
 local removeFromListReq = Event.new("RemoveFromListRequest")
-local myPlayers = TableValue.new("My Players", {})
+myPlayers = TableValue.new("My Players", {})
 
+function GetPlayercount()
+    local count = 0
+    for _, _ in pairs(myPlayers.value) do
+        count = count + 1
+    end
+    return count
+end
 
 function self:ClientStart()
 

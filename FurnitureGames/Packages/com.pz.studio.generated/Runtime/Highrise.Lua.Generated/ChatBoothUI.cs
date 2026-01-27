@@ -26,6 +26,8 @@ namespace Highrise.Lua.Generated
         private const string s_scriptGUID = "35bb0e6cbb1ad8b40b8273cba4ddb534";
         public override string ScriptGUID => s_scriptGUID;
 
+        [LuaScriptPropertyAttribute("9cd95e5343f5ecd4cb4dc80396d37cea")]
+        [SerializeField] public UnityEngine.Object m_boothController = default;
 
         protected override SerializedPropertyValue[] SerializeProperties()
         {
@@ -34,6 +36,8 @@ namespace Highrise.Lua.Generated
 
             return new SerializedPropertyValue[]
             {
+                CreateSerializedProperty(_script.GetPropertyAt(0), m_boothController),
+                CreateSerializedProperty(_script.GetPropertyAt(1), null),
             };
         }
         

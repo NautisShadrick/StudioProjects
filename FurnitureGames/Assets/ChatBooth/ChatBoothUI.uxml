@@ -8,6 +8,8 @@
 >
 
   <hr:UILuaView class="chat-booth-u-i">
+    <VisualElement name="player_icon" />
+    <Label name="player_count" />
   </hr:UILuaView>
 
 </UXML>

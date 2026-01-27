@@ -1,2 +1,27 @@
+:root {
+  --font-muesou-1000: url("project://database/Assets/EventModules/UI/Fonts/MuseoSansRounded1000 SDF.asset");
+  --person-icon: url("project://database/Packages/com.pz.studio/Editor/UI/Icons/IconVirtualPlayerHeader.png");
+}
+
 .chat-booth-u-i {
+    width: 100%;
+    height: 100%;
+    color: white;
+    font-size: 72px;
+    -unity-font-definition: var(--font-muesou-1000);
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    scale: .9;
+}
+
+#player_icon {
+    width:  96px;
+    height: 96px;
+    background-image: var(--person-icon);
+    background-size: cover;
+    margin-right: 8px;
 }
