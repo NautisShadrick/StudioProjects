@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UXML
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="UnityEngine.UIElements"
+    xmlns:hr="Highrise.UI"
+    xmlns:editor="UnityEditor.UIElements"
+    xsi:noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd"
+>
+
+  <hr:UILuaView class="rythm-game-main-hud">
+
+    <VisualElement name="Buttons_Container">
+      <VisualElement name="Button_Left" class="rythm-game-button"/>
+      <VisualElement name="Button_Down" class="rythm-game-button"/>
+      <VisualElement name="Button_Up" class="rythm-game-button"/>
+      <VisualElement name="Button_Right" class="rythm-game-button"/>
+    </VisualElement>
+
+  </hr:UILuaView>
+
+</UXML>
