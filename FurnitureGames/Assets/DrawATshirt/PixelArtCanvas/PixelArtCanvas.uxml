@@ -21,6 +21,9 @@
         <VisualElement name="_clearButton" class="action-button clear-button">
           <Label text="Clear" class="button-label"/>
         </VisualElement>
+        <VisualElement name="_resetZoomButton" class="action-button reset-zoom-button">
+          <Label text="Reset" class="button-label"/>
+        </VisualElement>
         <VisualElement name="_saveButton" class="action-button save-button">
           <Label text="Save" class="button-label"/>
         </VisualElement>

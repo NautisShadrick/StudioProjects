@@ -15,6 +15,8 @@ local _colorPicker: VisualElement = nil
 --!Bind
 local _clearButton: VisualElement = nil
 --!Bind
+local _resetZoomButton: VisualElement = nil
+--!Bind
 local _saveButton: VisualElement = nil
 --!Bind
 local _closeButton: VisualElement = nil
@@ -65,6 +67,17 @@ local colorEntries: {VisualElement} = {}
 local onSaveCallback: ((string) -> ())? = nil
 local onCloseCallback: (() -> ())? = nil
 
+local MIN_ZOOM = 1.0
+local MAX_ZOOM = 8.0
+local WHEEL_ZOOM_FACTOR = 0.1
+local currentZoom: number = 1.0
+local panOffsetX: number = 0
+local panOffsetY: number = 0
+local isPinching: boolean = false
+local lastPinchScale: number = 1.0
+local isMiddleMousePanning: boolean = false
+local lastMousePos: Vector2 = Vector2.new(0, 0)
+
 local function indexToChar(index: number): string
     return string.sub(INDEX_CHARS, index + 1, index + 1)
 end
@@ -113,16 +126,43 @@ local function setPixel(x: number, y: number, colorIndex: number)
     end
 end
 
+local CANVAS_UI_SIZE = 256
+
 local function screenToPixel(localPos: Vector2): (number, number)
-    local canvasSize = _canvas:GetResolvedStyleSize()
-    local pixelX = math.floor((localPos.x / canvasSize.x) * CANVAS_SIZE)
-    local pixelY = math.floor(((canvasSize.y - localPos.y) / canvasSize.y) * CANVAS_SIZE)
+    -- localPosition in Unity UI Toolkit is already in element's local coordinate space
+    -- The CSS transform (scale/translate) affects visual rendering but localPosition
+    -- is reported relative to the untransformed element bounds
+    -- Direct mapping from UI coords to texture coords
+    local pixelX = math.floor((localPos.x / CANVAS_UI_SIZE) * CANVAS_SIZE)
+    local pixelY = math.floor(((CANVAS_UI_SIZE - localPos.y) / CANVAS_UI_SIZE) * CANVAS_SIZE)
     return pixelX, pixelY
 end
 
 local function handleDrawAtLocal(localPos: Vector2)
+    if isPinching then
+        return
+    end
     local pixelX, pixelY = screenToPixel(localPos)
     setPixel(pixelX, pixelY, selectedColorIndex)
+end
+
+local function applyCanvasTransform()
+    _canvas.style.scale = StyleScale.new(Scale.new(Vector2.new(currentZoom, currentZoom)))
+    _canvas.style.translate = StyleTranslate.new(Translate.new(Length.new(panOffsetX), Length.new(panOffsetY)))
+end
+
+local function resetZoomPan()
+    currentZoom = 1.0
+    panOffsetX = 0
+    panOffsetY = 0
+    applyCanvasTransform()
+end
+
+local function clampPan()
+    local canvasSize = _canvas:GetResolvedStyleSize()
+    local maxPan = (canvasSize.x * (currentZoom - 1)) / 2
+    panOffsetX = math.max(-maxPan, math.min(maxPan, panOffsetX))
+    panOffsetY = math.max(-maxPan, math.min(maxPan, panOffsetY))
 end
 
 local function updateColorSelection(newIndex: number)
@@ -211,24 +251,82 @@ function self:Start()
     createColorPicker()
 
     _canvas:RegisterCallback(PointerDownEvent, function(evt: PointerDownEvent)
-        isDrawing = true
         local localPos = Vector2.new(evt.localPosition.x, evt.localPosition.y)
-        handleDrawAtLocal(localPos)
+        if evt.button == 2 then
+            isMiddleMousePanning = true
+            lastMousePos = Vector2.new(evt.position.x, evt.position.y)
+        else
+            isDrawing = true
+            handleDrawAtLocal(localPos)
+        end
     end)
 
     _canvas:RegisterCallback(PointerMoveEvent, function(evt: PointerMoveEvent)
-        if isDrawing and evt.pressedButtons > 0 then
+        local currentPos = Vector2.new(evt.position.x, evt.position.y)
+        if isMiddleMousePanning then
+            local deltaX = currentPos.x - lastMousePos.x
+            local deltaY = currentPos.y - lastMousePos.y
+            panOffsetX = panOffsetX + deltaX
+            panOffsetY = panOffsetY + deltaY
+            clampPan()
+            applyCanvasTransform()
+            lastMousePos = currentPos
+        elseif isDrawing and evt.pressedButtons > 0 then
             local localPos = Vector2.new(evt.localPosition.x, evt.localPosition.y)
             handleDrawAtLocal(localPos)
         end
     end)
 
     _canvas:RegisterCallback(PointerUpEvent, function(evt: PointerUpEvent)
-        isDrawing = false
+        if evt.button == 2 then
+            isMiddleMousePanning = false
+        else
+            isDrawing = false
+        end
+    end)
+
+    _container:RegisterCallback(WheelEvent, function(evt: WheelEvent)
+        local zoomDelta = -evt.delta.y * WHEEL_ZOOM_FACTOR
+        local newZoom = currentZoom + zoomDelta
+        currentZoom = math.max(MIN_ZOOM, math.min(MAX_ZOOM, newZoom))
+        clampPan()
+        applyCanvasTransform()
     end)
 
     _clearButton:RegisterPressCallback(function()
         clearCanvas()
+        resetZoomPan()
+    end)
+
+    Input.PinchOrDragBegan:Connect(function(evt: PinchGestureBegan)
+        if evt.isPinching then
+            isPinching = true
+            isDrawing = false
+            lastPinchScale = evt.scale
+        end
+    end)
+
+    Input.PinchOrDragChanged:Connect(function(evt: PinchGestureChanged)
+        if evt.isPinching and isPinching then
+            local scaleDelta = evt.scale / lastPinchScale
+            local newZoom = currentZoom * scaleDelta
+            currentZoom = math.max(MIN_ZOOM, math.min(MAX_ZOOM, newZoom))
+            lastPinchScale = evt.scale
+
+            panOffsetX = panOffsetX + evt.deltaPosition.x
+            panOffsetY = panOffsetY + evt.deltaPosition.y
+            clampPan()
+
+            applyCanvasTransform()
+        end
+    end)
+
+    Input.PinchOrDragEnded:Connect(function(evt: PinchGestureEnded)
+        isPinching = false
+    end)
+
+    _resetZoomButton:RegisterPressCallback(function()
+        resetZoomPan()
     end)
 
     _saveButton:RegisterPressCallback(function()

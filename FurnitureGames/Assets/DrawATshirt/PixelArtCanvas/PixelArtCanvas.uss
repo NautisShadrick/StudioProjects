@@ -34,6 +34,7 @@
     border-radius: 8px;
     border-width: 2px;
     border-color: rgb(81, 255, 165);
+    overflow: hidden;
 }
 
 .canvas {
@@ -89,6 +90,10 @@
 
 .clear-button {
     background-color: rgb(80, 80, 90);
+}
+
+.reset-zoom-button {
+    background-color: rgb(100, 100, 180);
 }
 
 .save-button {
