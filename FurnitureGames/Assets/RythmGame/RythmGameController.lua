@@ -3,10 +3,14 @@
 --!SerializeField
 local SongFile : AudioShader = nil
 
+local mySongData : SongEntry = nil 
+
 --!SerializeField
 local gameUI : RythmGameMainHud = nil
 --!SerializeField
 local RewardParticlesUI : RewardParticle = nil
+--!SerializeField
+local Mainmenu : RythmGameMenuUI = nil
 
 -- Active arrows per direction (0=Left, 1=Down, 2=Up, 3=Right)
 -- Each entry is a table: { spawnTime, targetTime, active }
@@ -54,7 +58,7 @@ end
 function TryHit(direction)
     local arrows = activeArrows[direction]
     if #arrows == 0 then
-        return nil -- No arrow to hit
+        return "miss", 0 , 0
     end
 
     -- Get the oldest arrow for this direction
@@ -69,7 +73,7 @@ function TryHit(direction)
 
     -- Check if too early (arrow hasn't arrived yet)
     if currentTime < arrowData.targetTime - OK_WINDOW then
-        return "miss", timeDiff , 0
+        return "miss", 0 , 0
     end
 
     -- Mark as hit and remove
@@ -98,16 +102,53 @@ function self:ClientStart()
         button:RegisterPressCallback(function()
             local message, timeDiff, score = TryHit(dir)
             print(typeof(message), typeof(timeDiff), typeof(score))
-            RewardParticlesUI.TicketAward(score)
+            RewardParticlesUI.TicketAward(score, button)
         end)
     end
+    gameUI.gameObject:SetActive(false)
+    Mainmenu.gameObject:SetActive(false)
+end
 
-    Timer.After(2.0, function()
-        Timer.Every(0.48, function()
-            SpawnArrow(math.random(0,3))
-        end)
-        Timer.After(2, function()
-            SongFile:Play()
-        end)
+local currentBeatTimer = nil
+function StartGameWithSong(songData : SongEntry)
+    mySongData = songData
+    gameUI.gameObject:SetActive(true)
+    Mainmenu.gameObject:SetActive(false)
+
+    local audioFile = songData.GetSongShader()
+    local timeBetweenBeats = 60 / songData.GetBPM()
+
+    if currentBeatTimer then
+        currentBeatTimer:Stop()
+        currentBeatTimer = nil
+    end
+
+    currentBeatTimer = Timer.Every(timeBetweenBeats, function()
+        SpawnArrow(math.random(0,3))
     end)
+    Timer.After(2, function()
+        audioFile:Play()
+    end)
+
+end
+
+function self:OnTriggerEnter(collider: Collider)
+    local char = collider.gameObject:GetComponent(Character)
+    if not char then return end
+    local player = char.player
+    if not player then return end
+    if player == client.localPlayer then
+        Mainmenu.gameObject:SetActive(true)
+
+    end
+end
+
+function self:OnTriggerExit(collider: Collider)
+    local char = collider.gameObject:GetComponent(Character)
+    if not char then return end
+    local player = char.player
+    if not player then return end
+    if player == client.localPlayer then
+        Mainmenu.gameObject:SetActive(false)
+    end
 end

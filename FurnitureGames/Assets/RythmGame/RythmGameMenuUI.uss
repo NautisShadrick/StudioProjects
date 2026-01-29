@@ -1,0 +1,191 @@
+
+:root {
+    --color-red: #fd4f4b;
+    --color-yellow: #f1d800;
+    --color-blue: #00b9f1;
+    --color-green: #00d345;
+    --color-purple: #cdcbdb;
+    --color-white: #141317;
+    --color-pink: #ff8c8c;
+    --color-pink-dark: #e07574;
+    
+    --font-muesou-900: url("project://database/Assets/Fonts/MuseoSansRounded1000 SDF.asset");
+}
+
+#open_button{
+    position: absolute;
+
+    bottom: 18px;
+    align-self: center;
+
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--color-white);
+
+    background-color: #51ffa5;
+    border-radius: 10px;
+
+    margin: 0;
+    padding: 10px;
+}
+
+.title {
+  color: var(--color-purple);
+  font-size: 32px;
+  margin: auto;
+}
+
+.rythm-game-menu-u-i {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    align-self: center;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    bottom: 0;
+    padding: 30px;
+    color: var(--color-purple);
+    -unity-font-definition: var(--font-muesou-900);
+}
+
+.menu-container {
+  display: flex;
+  overflow: hidden;
+
+  padding: 5px;
+
+  width: 290px;
+  height: auto;
+
+  background-color: var(--color-white);
+  border-radius: 10px;
+  /*background-image: url("project://database/Assets/UI/Icons/PurpleWhiteGrad_1.png");*/
+  border-color: #cec1e4;
+}
+
+.menu-close {
+  position: absolute;
+
+  width: 32px;
+  height: 32px;
+
+  top: 8px;
+  right: 8px;
+  background-image: url("project://database/Packages/com.pz.studio/Assets/Sprites/Icons/icon_small_close.png");
+  opacity: 0.75;
+}
+
+.button-content Image {
+  --unity-image: var(--image-icon-close);
+  width: 37px;
+  height: 37px;
+}
+
+.song-title-label {
+    font-size: 14px;
+    margin-left: 10px;
+}
+
+.song-entry{
+    flex-direction: row;
+    font-size: 13px;
+
+    height: 48px;
+    width: 90%;
+
+    background-color: #1b191f;
+    margin-bottom: 5px;
+    border-radius: 8px;
+
+    align-items: center;
+}
+
+.content {
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
+
+  width: 100%;
+  padding: 10px 5px;
+  margin-top: auto;
+  margin-bottom: 25px;
+  
+}
+
+.content .songlist {
+  display: flex;
+
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  width: 100%;
+}
+
+.play-label{
+  position: absolute;
+
+  font-size: 14px;
+  font-weight: normal;
+  color: var(--color-white);
+  background-color: #51ffa5;
+  margin-left: 10px;
+
+  padding: 5px 10px;
+  border-radius: 5px;
+
+  right: 10px;
+}
+
+.scroll-view__content-container {
+
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+
+  width: auto;
+  height: auto;
+}
+
+.scroll-bar {
+  width: 5px;
+  height: 100%;
+
+  background-color: rgba(0,0,0,0);
+  border-radius: 2px;
+}
+
+.scroll-bar__thumb {
+  background-color: rgba(0,0,0,0);
+  border-radius: 5px;
+}
+
+.scroll-bar__thumb:hover {
+  background-color: rgba(0,0,0,0);
+}
+
+.menu {
+  max-height: 250px;
+}
+
+.hidden {
+  display: none;
+}
+
+#continue_button {
+  position: absolute;
+  font-size: 13px;
+  font-weight: bold;
+  color: var(--color-purple);
+
+  bottom: 15px;
+  align-self: center;
+
+  margin: 0;
+  padding: 0;
+}

@@ -68,10 +68,10 @@ end
 
 function CreatAnimatedStarElements(stars: number, startElement: VisualElement, sprite : Texture, destination : VisualElement)
     sprite = sprite or starSprite
-    reward_particles.style.translate = StyleTranslate.new(Translate.new(Length.new(0), Length.new(0)))
-    local startWorld = startElement.worldBound.position 
-    local localPos = reward_particles:WorldToLocal(startWorld) 
-    reward_particles.style.translate = StyleTranslate.new(Translate.new(Length.new(localPos.x), Length.new(localPos.y)))
+
+    -- Get the world position of where particles should spawn
+    local startWorld = startElement.worldBound.position
+    local stableParent = reward_particles.parent
 
     for i=1, math.min(stars, 50) do
         Timer.After(i * .05, function()
@@ -81,8 +81,13 @@ function CreatAnimatedStarElements(stars: number, startElement: VisualElement, s
                 _starParticle:RemoveFromHierarchy()
             end)
             _starParticle:AddToClassList("star-particle")
+            _starParticle.style.position = Position.Absolute
 
-            reward_particles:Add(_starParticle)
+            -- Add to stable parent and position at spawn point
+            stableParent:Add(_starParticle)
+            local localPos = stableParent:WorldToLocal(startWorld)
+            _starParticle.style.left = Length.new(localPos.x)
+            _starParticle.style.top = Length.new(localPos.y)
 
             _starParticle.style.backgroundImage = sprite
 
@@ -100,14 +105,21 @@ function SpawnRewardLabel(message, startElement)
     local rewardLabel = Label.new()
     rewardLabel.text = message
     rewardLabel:AddToClassList("reward-label")
+    rewardLabel.style.position = Position.Absolute
 
-    reward_particles:Add(rewardLabel)
+    -- Add to stable parent and position at spawn point
+    local stableParent = reward_particles.parent
+    local startWorld = startElement.worldBound.position
+    stableParent:Add(rewardLabel)
+    local localPos = stableParent:WorldToLocal(startWorld)
+    rewardLabel.style.left = Length.new(localPos.x)
+    rewardLabel.style.top = Length.new(localPos.y - 60)
     rewardLabel:BringToFront()
 
     local AwardShrinkOutTween = Tween:new(
         1,                      -- from
         0.01,                    -- to
-        .25,                      -- duration in seconds
+        .2,                      -- duration in seconds
         false,
         false,
         Easing.easeInQuad,          -- easing function
@@ -123,7 +135,7 @@ function SpawnRewardLabel(message, startElement)
     local AwardPopInTween = Tween:new(
         0.01,                      -- from
         1,                    -- to
-        .5,                      -- duration in seconds
+        .1,                      -- duration in seconds
         false,
         false,
         Easing.bounce,          -- easing function
@@ -133,7 +145,7 @@ function SpawnRewardLabel(message, startElement)
         end,
         function()             -- onComplete callback
             rewardLabel.style.scale = StyleScale.new(Scale.new(Vector2.new(1, 1)))
-            Timer.After(.5, function()
+            Timer.After(.2, function()
                 AwardShrinkOutTween:start()
             end)
         end
@@ -143,12 +155,13 @@ function SpawnRewardLabel(message, startElement)
     AwardPopInTween:start()
 end
 
-function TicketAward(amount)
+function TicketAward(amount, startElement)
     local _sprite = starSprite
-    CreatAnimatedStarElements(amount/10, reward_particles, _sprite, UI.hud:Q("SeasonPassAttractor"))
+    local spawnElement = startElement or reward_particles
+    --CreatAnimatedStarElements(amount/10, spawnElement, _sprite, UI.aboveChat:Q("SeasonPassAttractor"))
     local message = "+"..tostring(amount)
-    if amount == 0 then 
+    if amount == 0 then
         message = "MISS"
     end
-    SpawnRewardLabel(message, reward_particles)
+    SpawnRewardLabel(message, spawnElement)
 end

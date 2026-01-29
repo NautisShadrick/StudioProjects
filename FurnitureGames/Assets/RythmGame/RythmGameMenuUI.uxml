@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UXML
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="UnityEngine.UIElements"
+    xmlns:hr="Highrise.UI"
+    xmlns:editor="UnityEditor.UIElements"
+    xsi:noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd"
+>
+
+  <hr:UILuaView class="rythm-game-menu-u-i" picking-mode="Ignore">
+    <VisualElement class="menu-container" name="menu_container" picking-mode="Ignore">
+      <VisualElement class="header" picking-mode="Ignore">
+        <Label name="title_label" class="title" text="Songs" />
+      </VisualElement>
+      
+      <!-- Note: A player can also close the menu using the same button that opened it -->
+      <VisualElement name="_closeButton" class="menu-close"/>
+
+      <VisualElement class="content" name="_content">
+        <!-- menu -->
+        <hr:UIScrollView class="menu" name="_songlist">
+          <!-- songs will be added here -->
+        </hr:UIScrollView>
+      </VisualElement>
+
+    </VisualElement>
+
+    <Label name="open_button" text="Start Game!"/>
+  </hr:UILuaView>
+
+</UXML>

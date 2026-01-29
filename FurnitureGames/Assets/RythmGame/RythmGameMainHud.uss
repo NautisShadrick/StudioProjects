@@ -29,9 +29,6 @@
     align-items: flex-end;
 
     padding-bottom: 50px;
-
-    background-color: rgba(0,0,0,0.2);
-
 }
 
 .rythm-game-button{
