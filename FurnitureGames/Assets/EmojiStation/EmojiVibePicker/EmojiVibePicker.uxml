@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UXML
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="UnityEngine.UIElements"
+    xmlns:hr="Highrise.UI"
+    xmlns:editor="UnityEditor.UIElements"
+    xsi:noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd"
+>
+
+  <hr:UILuaView class="emoji-vibe-picker" picking-mode="Ignore">
+    <VisualElement class="menu-container" name="_menuContainer" picking-mode="Ignore">
+      <VisualElement class="header" picking-mode="Ignore">
+        <Label name="_titleLabel" class="title" text="Pick Your Vibe" />
+      </VisualElement>
+
+      <VisualElement name="_closeButton" class="menu-close"/>
+
+      <VisualElement class="content" name="_content">
+        <hr:UIScrollView class="emoji-grid" name="_emojiGrid">
+        </hr:UIScrollView>
+      </VisualElement>
+
+    </VisualElement>
+  </hr:UILuaView>
+
+</UXML>

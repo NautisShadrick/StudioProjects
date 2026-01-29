@@ -1,0 +1,134 @@
+:root {
+    --color-purple: #cdcbdb;
+    --color-dark: #141317;
+    --color-accent: #51ffa5;
+    --font-muesou-900: url("project://database/Assets/Fonts/MuseoSansRounded1000 SDF.asset");
+}
+
+.emoji-vibe-picker {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    align-self: center;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    bottom: 0;
+    padding: 30px;
+    color: var(--color-purple);
+    -unity-font-definition: var(--font-muesou-900);
+}
+
+.menu-container {
+    display: flex;
+    overflow: hidden;
+    padding: 5px;
+    width: 290px;
+    height: auto;
+    background-color: var(--color-dark);
+    border-radius: 10px;
+    border-color: #cec1e4;
+}
+
+.header {
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+}
+
+.title {
+    color: var(--color-purple);
+    font-size: 24px;
+    margin: auto;
+}
+
+.menu-close {
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    top: 8px;
+    right: 8px;
+    background-image: url("project://database/Packages/com.pz.studio/Assets/Sprites/Icons/icon_small_close.png");
+    opacity: 0.75;
+}
+
+.content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 10px 5px;
+    margin-bottom: 15px;
+}
+
+.emoji-grid {
+    max-height: 250px;
+}
+
+.scroll-view__content-container {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: auto;
+    height: auto;
+}
+
+.emoji-entry {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 70px;
+    height: 70px;
+    margin: 5px;
+    background-color: #1b191f;
+    border-radius: 10px;
+    border-width: 2px;
+    border-color: transparent;
+}
+
+.emoji-entry-selected {
+    border-color: var(--color-accent);
+}
+
+.emoji-image {
+    width: 50px;
+    height: 50px;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.clear-label {
+    font-size: 14px;
+    color: var(--color-purple);
+}
+
+.scroll-bar {
+    width: 5px;
+    height: 100%;
+    background-color: rgba(0,0,0,0);
+    border-radius: 2px;
+}
+
+.scroll-bar__thumb {
+    background-color: rgba(0,0,0,0);
+    border-radius: 5px;
+}
+
+.scroll-bar__thumb:hover {
+    background-color: rgba(0,0,0,0);
+}
+
+.open-button {
+    position: absolute;
+    bottom: 18px;
+    align-self: center;
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--color-dark);
+    background-color: var(--color-accent);
+    border-radius: 10px;
+    margin: 0;
+    padding: 10px;
+}

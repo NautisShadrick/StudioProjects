@@ -3,6 +3,7 @@
 --!SerializeField
 local Emojis : {Texture} = {}
 
+changeEmojiRequest = Event.new("ChangeEmojiRequest")
 
 players = {}
 local playercount = 0
@@ -61,10 +62,11 @@ end
 function self:ServerAwake()
     TrackPlayers(server, function(playerinfo)
         local player = playerinfo.player
-        Timer.Every(1, function()
-            local emoteIndex = math.random(0, 5)
-            print("Setting emoji for player " .. player.name .. " to index " .. emoteIndex)
-            playerinfo.myEmoji.value = emoteIndex
-        end)
+    end)
+
+    changeEmojiRequest:Connect(function(player, newEmojiIndex)
+        if players[player] then
+            players[player].myEmoji.value = newEmojiIndex
+        end
     end)
 end
