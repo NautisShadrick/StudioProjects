@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UXML
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="UnityEngine.UIElements"
+    xmlns:hr="Highrise.UI"
+    xmlns:editor="UnityEditor.UIElements"
+    xsi:noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd"
+>
+  <hr:UILuaView class="pixel-art-root" picking-mode="Ignore">
+    <VisualElement name="_container" class="container">
+      <Label name="_title" text="Pixel Art Canvas" class="title"/>
+
+      <VisualElement name="_canvasWrapper" class="canvas-wrapper">
+        <VisualElement name="_canvas" class="canvas"/>
+      </VisualElement>
+
+      <Label text="Colors" class="section-label"/>
+      <VisualElement name="_colorPicker" class="color-picker"/>
+
+      <VisualElement class="button-row">
+        <VisualElement name="_clearButton" class="action-button clear-button">
+          <Label text="Clear" class="button-label"/>
+        </VisualElement>
+        <VisualElement name="_saveButton" class="action-button save-button">
+          <Label text="Save" class="button-label"/>
+        </VisualElement>
+        <VisualElement name="_closeButton" class="action-button close-button">
+          <Label text="Close" class="button-label"/>
+        </VisualElement>
+      </VisualElement>
+    </VisualElement>
+  </hr:UILuaView>
+</UXML>
