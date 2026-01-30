@@ -1,7 +1,7 @@
 --!Type(UI)
 
-local CANVAS_SIZE = 16
-local COLOR_COUNT = 6
+local CANVAS_SIZE = 32
+local COLOR_COUNT = 4
 
 local ColorPickerEntryClass = "color-picker-entry"
 local ColorPickerEntrySelectedClass = "color-picker-entry-selected"
@@ -24,12 +24,12 @@ local _closeButton: VisualElement = nil
 local clothesCanvasModule = require("ClothesCanvasModule")
 
 local COLOR_PALETTE: {Color} = {
-    Color.new(0, 0, 0, 1),           -- 0: Black
-    Color.new(1, 1, 1, 1),           -- 1: White
-    Color.new(0.5, 0.5, 0.5, 1),     -- 2: Gray
-    Color.new(0.75, 0.75, 0.75, 1),  -- 3: Light Gray
-    Color.new(0.25, 0.25, 0.25, 1),  -- 4: Dark Gray
-    Color.new(1, 0, 0, 1),           -- 5: Red
+    Color.new(0, 0, 0, 1),                       -- 0: Black
+    Color.new(1, 1, 1, 1),                       -- 1: White
+    Color.new(133/255, 97/255, 255/255, 1),     -- 2: Purple
+    Color.new(255/255, 91/255, 149/255, 1),     -- 3: Pink/Red
+    Color.new(0.75, 0.75, 0.75, 1),              -- 4: Light Gray
+    Color.new(0.25, 0.25, 0.25, 1),              -- 5: Dark Gray
 }
 
 local INDEX_CHARS = "0123456789abcdefghijklmnopqrstuv"
@@ -80,6 +80,10 @@ local function updateTexture(raw)
             local idx = getPixelIndex(x, y)
             local colorIdx = pixelData[idx]
             local color = COLOR_PALETTE[colorIdx + 1]
+            -- When raw, render white (index 1) as transparent
+            if raw and colorIdx == 1 then
+                color = Color.new(1, 1, 1, 0)
+            end
             canvasTexture:SetPixel(x, y, color)
         end
     end
