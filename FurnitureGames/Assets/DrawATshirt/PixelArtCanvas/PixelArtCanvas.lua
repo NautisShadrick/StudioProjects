@@ -1,6 +1,6 @@
 --!Type(UI)
 
-local CANVAS_SIZE = 32
+local CANVAS_SIZE = 16
 local COLOR_COUNT = 6
 
 local ColorPickerEntryClass = "color-picker-entry"
@@ -21,6 +21,8 @@ local _saveButton: VisualElement = nil
 --!Bind
 local _closeButton: VisualElement = nil
 
+local clothesCanvasModule = require("ClothesCanvasModule")
+
 local COLOR_PALETTE: {Color} = {
     Color.new(0, 0, 0, 1),           -- 0: Black
     Color.new(1, 1, 1, 1),           -- 1: White
@@ -28,32 +30,6 @@ local COLOR_PALETTE: {Color} = {
     Color.new(0.75, 0.75, 0.75, 1),  -- 3: Light Gray
     Color.new(0.25, 0.25, 0.25, 1),  -- 4: Dark Gray
     Color.new(1, 0, 0, 1),           -- 5: Red
-    Color.new(0.5, 0, 0, 1),         -- 6: Dark Red
-    Color.new(1, 0.5, 0.5, 1),       -- 7: Light Red
-    Color.new(1, 0.5, 0, 1),         -- 8: Orange
-    Color.new(1, 0.75, 0.5, 1),      -- 9: Light Orange
-    Color.new(1, 1, 0, 1),           -- 10: Yellow
-    Color.new(1, 1, 0.5, 1),         -- 11: Light Yellow
-    Color.new(0.5, 0.5, 0, 1),       -- 12: Olive
-    Color.new(0, 1, 0, 1),           -- 13: Green
-    Color.new(0, 0.5, 0, 1),         -- 14: Dark Green
-    Color.new(0.5, 1, 0.5, 1),       -- 15: Light Green
-    Color.new(0, 1, 1, 1),           -- 16: Cyan
-    Color.new(0, 0.5, 0.5, 1),       -- 17: Teal
-    Color.new(0.5, 1, 1, 1),         -- 18: Light Cyan
-    Color.new(0, 0, 1, 1),           -- 19: Blue
-    Color.new(0, 0, 0.5, 1),         -- 20: Dark Blue
-    Color.new(0.5, 0.5, 1, 1),       -- 21: Light Blue
-    Color.new(0.5, 0, 1, 1),         -- 22: Purple
-    Color.new(0.25, 0, 0.5, 1),      -- 23: Dark Purple
-    Color.new(0.75, 0.5, 1, 1),      -- 24: Light Purple
-    Color.new(1, 0, 1, 1),           -- 25: Magenta
-    Color.new(1, 0.5, 1, 1),         -- 26: Pink
-    Color.new(1, 0.75, 0.8, 1),      -- 27: Light Pink
-    Color.new(0.6, 0.3, 0, 1),       -- 28: Brown
-    Color.new(0.4, 0.2, 0, 1),       -- 29: Dark Brown
-    Color.new(0.8, 0.6, 0.4, 1),     -- 30: Tan
-    Color.new(1, 0.85, 0.7, 1),      -- 31: Peach
 }
 
 local INDEX_CHARS = "0123456789abcdefghijklmnopqrstuv"
@@ -63,9 +39,6 @@ local pixelData: {number} = {}
 local selectedColorIndex: number = 0
 local isDrawing: boolean = false
 local colorEntries: {VisualElement} = {}
-
-local onSaveCallback: ((string) -> ())? = nil
-local onCloseCallback: (() -> ())? = nil
 
 local MIN_ZOOM = 1.0
 local MAX_ZOOM = 8.0
@@ -101,7 +74,7 @@ local function getPixelIndex(x: number, y: number): number
     return y * CANVAS_SIZE + x + 1
 end
 
-local function updateTexture()
+local function updateTexture(raw)
     for y = 0, CANVAS_SIZE - 1 do
         for x = 0, CANVAS_SIZE - 1 do
             local idx = getPixelIndex(x, y)
@@ -109,6 +82,10 @@ local function updateTexture()
             local color = COLOR_PALETTE[colorIdx + 1]
             canvasTexture:SetPixel(x, y, color)
         end
+    end
+    if raw then
+        print("Returning raw texture", typeof(canvasTexture))
+        return canvasTexture
     end
     canvasTexture:Apply()
     _canvas.style.backgroundImage = canvasTexture
@@ -200,7 +177,7 @@ end
 
 local function clearCanvas()
     initializePixelData()
-    updateTexture()
+    updateTexture(false)
 end
 
 function SerializePixelData(): string
@@ -211,7 +188,8 @@ function SerializePixelData(): string
     return table.concat(chars)
 end
 
-function DeserializePixelData(data: string)
+function DeserializePixelData(data: string, raw)
+    raw = raw or false
     if not data or #data ~= CANVAS_SIZE * CANVAS_SIZE then
         return
     end
@@ -220,7 +198,7 @@ function DeserializePixelData(data: string)
         local char = string.sub(data, i, i)
         pixelData[i] = charToIndex(char)
     end
-    updateTexture()
+    return updateTexture(raw)
 end
 
 function SetOnSaveCallback(callback: (string) -> ())
@@ -247,7 +225,7 @@ function self:Start()
     canvasTexture = Texture2D.new(CANVAS_SIZE, CANVAS_SIZE)
 
     initializePixelData()
-    updateTexture()
+    updateTexture(false)
     createColorPicker()
 
     _canvas:RegisterCallback(PointerDownEvent, function(evt: PointerDownEvent)
@@ -331,16 +309,11 @@ function self:Start()
 
     _saveButton:RegisterPressCallback(function()
         local serialized = SerializePixelData()
-        if onSaveCallback then
-            onSaveCallback(serialized)
-        end
-        print("Saved pixel art data: " .. string.sub(serialized, 1, 50) .. "...")
+        print("Saved pixel art data: " .. serialized)
+        clothesCanvasModule.createShirtRequest:FireServer(serialized)
     end)
 
     _closeButton:RegisterPressCallback(function()
-        if onCloseCallback then
-            onCloseCallback()
-        end
         Hide()
     end)
 end
