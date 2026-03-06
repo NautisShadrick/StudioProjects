@@ -1,7 +1,12 @@
 --!Type(ScriptableObject)
 
+-- One string, one chunk per line: [#RRGGBB][animID][message text]
+-- Example:
+--   [#F2F2F2][0][Hello there!]
+--   [#FF6666][1][Wobbly text!]
+-- animID: 0 = none, 1 = wave, 2 = bounce
 --!SerializeField
-local Messages: {DialogueTextBlock} = {}
+local messagesData: string = ""
 --!SerializeField
 local responses: {string} = {}
 --!SerializeField
@@ -25,12 +30,30 @@ local bgOverride: Texture = nil
 --!SerializeField
 local npcImageOverride: Texture2D = nil
 
-function SetMessage(id, message)
-    Messages[id].SetMessage(message)
-end
-
+-- Scans messagesData for all [#RRGGBB][animID][message text] triplets.
+-- Works whether entries are on separate lines or all on one line.
+-- Note: message text cannot contain ']'
 function GetMessages()
-    return Messages
+    local parsed = {}
+    for colorStr, animStr, msg in messagesData:gmatch("%[([^%]]+)%]%[([^%]]+)%]%[([^%]]*)%]") do
+        local color = Color.new(0.949, 0.949, 0.949)
+        if colorStr:sub(1, 1) == "#" then
+            local hex = colorStr:sub(2)
+            local r = (tonumber(hex:sub(1, 2), 16) or 242) / 255
+            local g = (tonumber(hex:sub(3, 4), 16) or 242) / 255
+            local b = (tonumber(hex:sub(5, 6), 16) or 242) / 255
+            local a = #hex >= 8 and (tonumber(hex:sub(7, 8), 16) or 255) / 255 or 1
+            color = Color.new(r, g, b, a)
+        end
+        local animID = tonumber(animStr) or 0
+        local message = msg
+        parsed[#parsed + 1] = {
+            GetMessageData = function()
+                return message, animID, color, false
+            end
+        }
+    end
+    return parsed
 end
 
 function GetResponses()

@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8623594102814220246}
+  - component: {fileID: 1873113284836818712}
   m_Layer: 0
   m_Name: NPCScene
   m_TagString: Untagged
@@ -34,6 +35,29 @@ Transform:
   - {fileID: 4528058573309830901}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1873113284836818712
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2903327987604765274}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bee68282dfdad68190272b1fcaaea095, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _networkId: 0
+  _script: {fileID: -974389366465450183, guid: 043982576505d6542af82bca7071a040, type: 3}
+  _properties: []
+  _uiOutput: 0
+  _uiOutputSettings:
+    rid: -2
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
 --- !u!1 &3561738555360742426
 GameObject:
   m_ObjectHideFlags: 0
@@ -58,7 +82,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3561738555360742426}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: -0, y: 0.38268209, z: -0, w: 0.92388016}
   m_LocalPosition: {x: 0, y: -35.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -66,7 +90,7 @@ Transform:
   - {fileID: 3970547221107125462}
   - {fileID: 1938629571668102855}
   m_Father: {fileID: 8623594102814220246}
-  m_LocalEulerAnglesHint: {x: 0, y: 135, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 45, z: 0}
 --- !u!1 &5469743100330233291
 GameObject:
   m_ObjectHideFlags: 0
@@ -246,7 +270,7 @@ MonoBehaviour:
   _uiOutputSettings:
     rid: -2
   m_npcScene: {fileID: 3561738555360742426}
-  m_defaultNPCBG: {fileID: 2800000, guid: a422d06df9013104eb5f0e8fc05df6ee, type: 3}
+  m_defaultNPCBG: {fileID: 0}
   references:
     version: 2
     RefIds:
@@ -275,6 +299,12 @@ PrefabInstance:
       propertyPath: _characterRig
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 1454563307858525926, guid: 198abfadde54eb74e8b5199b7c74498a,
+        type: 3}
+      propertyPath: '_outfits.Array.data[0]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 3fade92b14422554b9367f29deb9616b,
+        type: 2}
     - target: {fileID: 4544923799990572724, guid: 198abfadde54eb74e8b5199b7c74498a,
         type: 3}
       propertyPath: m_Name
@@ -283,22 +313,22 @@ PrefabInstance:
     - target: {fileID: 4863869335849948899, guid: 198abfadde54eb74e8b5199b7c74498a,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 7.71
+      value: 1.08
       objectReference: {fileID: 0}
     - target: {fileID: 4863869335849948899, guid: 198abfadde54eb74e8b5199b7c74498a,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.072
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4863869335849948899, guid: 198abfadde54eb74e8b5199b7c74498a,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 16.71
+      value: 1.02
       objectReference: {fileID: 0}
     - target: {fileID: 4863869335849948899, guid: 198abfadde54eb74e8b5199b7c74498a,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.4071985
+      value: -0.13052304
       objectReference: {fileID: 0}
     - target: {fileID: 4863869335849948899, guid: 198abfadde54eb74e8b5199b7c74498a,
         type: 3}
@@ -308,7 +338,7 @@ PrefabInstance:
     - target: {fileID: 4863869335849948899, guid: 198abfadde54eb74e8b5199b7c74498a,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.91333973
+      value: -0.9914453
       objectReference: {fileID: 0}
     - target: {fileID: 4863869335849948899, guid: 198abfadde54eb74e8b5199b7c74498a,
         type: 3}
@@ -323,7 +353,7 @@ PrefabInstance:
     - target: {fileID: 4863869335849948899, guid: 198abfadde54eb74e8b5199b7c74498a,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: -131.942
+      value: -195
       objectReference: {fileID: 0}
     - target: {fileID: 4863869335849948899, guid: 198abfadde54eb74e8b5199b7c74498a,
         type: 3}
@@ -334,12 +364,12 @@ PrefabInstance:
         type: 3}
       propertyPath: m_outfit
       value: 
-      objectReference: {fileID: -7553472394939420986, guid: d2a4c3de0c6928249a36e613869c2f1b,
-        type: 3}
+      objectReference: {fileID: 11400000, guid: 3fade92b14422554b9367f29deb9616b,
+        type: 2}
     - target: {fileID: 6245158293690016979, guid: 198abfadde54eb74e8b5199b7c74498a,
         type: 3}
       propertyPath: m_npcName
-      value: Shelly
+      value: BESTIE
       objectReference: {fileID: 0}
     - target: {fileID: 6245158293690016979, guid: 198abfadde54eb74e8b5199b7c74498a,
         type: 3}
@@ -351,6 +381,12 @@ PrefabInstance:
       propertyPath: m_introChunk
       value: 
       objectReference: {fileID: 11400000, guid: 0a45ce86a7c56c54fb6d132ecc2eed6d,
+        type: 2}
+    - target: {fileID: 6245158293690016979, guid: 198abfadde54eb74e8b5199b7c74498a,
+        type: 3}
+      propertyPath: m_startChunk
+      value: 
+      objectReference: {fileID: 11400000, guid: 2b3a93aed8cf2f1439e1dd786a981b5f,
         type: 2}
     - target: {fileID: 6245158293690016979, guid: 198abfadde54eb74e8b5199b7c74498a,
         type: 3}

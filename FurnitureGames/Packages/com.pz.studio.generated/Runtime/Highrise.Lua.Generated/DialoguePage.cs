@@ -26,8 +26,7 @@ namespace Highrise.Lua.Generated
         private const string s_scriptGUID = "5f7dbb76983dd93469a12bb278d8bb78";
         public override string ScriptGUID => s_scriptGUID;
 
-        [LuaScriptPropertyAttribute("56c23c95405296944a4c52a9bbff52ec")]
-        [SerializeField] public System.Collections.Generic.List<UnityEngine.Object> m_Messages = default;
+        [SerializeField] public System.String m_messagesData = "";
         [SerializeField] public System.Collections.Generic.List<System.String> m_responses = default;
         [SerializeField] public System.Collections.Generic.List<System.String> m_responseIDs = default;
         [LuaScriptPropertyAttribute("3d0bd200f8ab7b948aa8f0034f550645")]
@@ -48,7 +47,7 @@ namespace Highrise.Lua.Generated
 
             return new SerializedPropertyValue[]
             {
-                CreateSerializedProperty(_script.GetPropertyAt(0), m_Messages),
+                CreateSerializedProperty(_script.GetPropertyAt(0), m_messagesData),
                 CreateSerializedProperty(_script.GetPropertyAt(1), m_responses),
                 CreateSerializedProperty(_script.GetPropertyAt(2), m_responseIDs),
                 CreateSerializedProperty(_script.GetPropertyAt(3), m_Chunks),
