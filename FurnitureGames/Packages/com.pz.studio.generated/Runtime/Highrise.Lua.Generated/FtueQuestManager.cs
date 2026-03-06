@@ -19,14 +19,13 @@ using UnityEditor;
 
 namespace Highrise.Lua.Generated
 {
-    [AddComponentMenu("Lua/PassTheSparkSpawner")]
-    [LuaRegisterType(0x7013609d71326c7c, typeof(LuaBehaviour))]
-    public class PassTheSparkSpawner : LuaBehaviourThunk
+    [AddComponentMenu("Lua/FtueQuestManager")]
+    [LuaRegisterType(0xdce660f760e542e0, typeof(LuaBehaviour))]
+    public class FtueQuestManager : LuaBehaviourThunk
     {
-        private const string s_scriptGUID = "57ccb8439af23f14980079e9954ec9c3";
+        private const string s_scriptGUID = "73fa28272c4cbf34f9467ba370a3bbd3";
         public override string ScriptGUID => s_scriptGUID;
 
-        [SerializeField] public UnityEngine.GameObject m_entityPrefbab = default;
 
         protected override SerializedPropertyValue[] SerializeProperties()
         {
@@ -35,12 +34,11 @@ namespace Highrise.Lua.Generated
 
             return new SerializedPropertyValue[]
             {
-                CreateSerializedProperty(_script.GetPropertyAt(0), m_entityPrefbab),
             };
         }
         
 #if HR_STUDIO
-        [MenuItem("CONTEXT/PassTheSparkSpawner/Edit Script")]
+        [MenuItem("CONTEXT/FtueQuestManager/Edit Script")]
         private static void EditScript()
         {
             VisualStudioCodeOpener.OpenPath(AssetDatabase.GUIDToAssetPath(s_scriptGUID));

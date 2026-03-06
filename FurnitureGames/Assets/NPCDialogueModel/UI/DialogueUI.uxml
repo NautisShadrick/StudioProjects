@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UXML
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="UnityEngine.UIElements"
+    xmlns:hr="Highrise.UI"
+    xmlns:editor="UnityEditor.UIElements"
+    xsi:noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd"
+>
+
+  <hr:UILuaView class="dialogue-u-i" name="_root">
+    <VisualElement name="background_scrim" />
+    <VisualElement name="message_container" class="message-container">
+      <VisualElement name="title_container" class="title-container">
+        <Image name="NPC_backdrop" class="NPC-backdrop"/>
+        <Image name="NPC_Image"/>
+        <VisualElement name="info_Image"/>
+        <Label name="title" class="title" text="NPC NAME" />
+      </VisualElement>
+
+      <VisualElement name="message" class="message">
+      </VisualElement>
+
+      <VisualElement name="indicator" />
+      
+    </VisualElement>
+    <VisualElement name="responses_container">
+    </VisualElement>
+
+  </hr:UILuaView>
+
+</UXML>

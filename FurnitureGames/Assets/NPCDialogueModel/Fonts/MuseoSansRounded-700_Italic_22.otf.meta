@@ -1,0 +1,25 @@
+fileFormatVersion: 2
+guid: 079e73ba3a9c7234b80cb8b4d4351ace
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - Museo Sans Rounded
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 33dc7fee92533664d9027c8b2566f0bc, type: 3}
+  - {fileID: 12800000, guid: 0fba02b7f47cc2f4c94b802ceb0ef3e7, type: 3}
+  - {fileID: 12800000, guid: 003f3dc06e20c224ca61968628fa74cd, type: 3}
+  - {fileID: 12800000, guid: e428a4b34b6c13348860c05ed6e23c64, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

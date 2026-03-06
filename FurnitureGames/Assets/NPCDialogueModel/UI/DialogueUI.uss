@@ -1,0 +1,170 @@
+:root {
+    --font-muesou-700: url("project://database/Assets/NPCDialogueModel/Fonts/MuseoSansRounded-700 SDF.asset");
+    --font-muesou-1000: url("project://database/Assets/NPCDialogueModel/Fonts/MuseoSansRounded-1000 SDF.asset");
+    --font-muesou-700-italic: url("project://database/Assets/NPCDialogueModel/Fonts/MuseoSansRounded-700_Italic_22 SDF.asset");
+    --color-bg: #fdf2d0;
+    --color-primary: #ffffff;
+    --color-text1: #f7f7f7;
+    --color-text2: #000000;
+    --color-bg: #3f3e46;
+}
+
+.dialogue-u-i {
+    position: absolute;
+    color: var(--color-text1);
+    font-size: 16px;
+    letter-spacing: 2px;
+    -unity-text-align: middle-center;
+    -unity-font-definition: var(--font-muesou-700);
+    -unity-font-style: bold;
+
+    width: 100%;
+    height: 100%;
+
+    align-items: center;
+    justify-content: center;
+
+    bottom: 40px;
+    /* background-color: rgba(1, 1, 4, 0.6); 60% opacity blackfish */
+}
+
+#background_scrim{
+    position: absolute;
+    width: 200%;
+    height: 200%;
+    background-color: rgba(0,0,0,0.6);
+    left:50%;
+    top:50%;
+    translate: -50%;
+}
+
+/* .NPC-backdrop {
+    position: absolute;
+    width:  330px;
+    height: 224px;
+    background-color: white;
+    translate: 0px -224;
+    background-image: var(--NPC_bg);
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+} */
+
+.NPC-backdrop {
+    position: absolute;
+    width:  330px;
+    height: 200px;
+    translate: 0px -200;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+}
+
+.title-container {
+    position: absolute;
+    width: auto;
+    height: auto;
+}
+
+#NPC_Image{
+    position: absolute;
+    /* width:  224px;
+    height: 224px; */
+    width:  315px;
+    height: 315px;
+    background-color: white;
+    /* translate: 0px -224; */
+    translate: -40 -315;
+    background-color: rgba(0,0,0,0);
+}
+
+#info_Image {
+    position: absolute;
+    width:  168px;
+    height: 168px;
+    background-color: white;
+    translate: 112px -168px;
+
+    background-color: rgba(0,0,0,0);
+    scale: .75;
+}
+
+.title {
+    position: absolute;
+    margin: auto;
+    padding: 4px 8px;
+    color: var(--color-text2);
+    background-color: var(--color-primary);
+    border-radius: 8px;
+    -unity-font-definition: var(--font-muesou-1000);
+
+    top: -20px;
+    left: 20px;
+}
+
+.message-container {
+    width: 330px;
+    height: 110px;
+    margin: auto;
+    margin-bottom: 10px;
+    background-color: var(--color-bg);
+    /* border-radius: 20px; */
+    border-radius: 16px;
+}
+
+.message {
+    flex-direction: row;
+    padding: 5px 15px;
+    height: auto;
+    flex-wrap: wrap;
+
+    margin-top: 20px;
+    margin-bottom: auto;
+    color: var(--color-text1);
+}
+
+.message-character {
+    padding: 0px;
+    margin: 0px;
+}
+
+.word-container{
+    flex-direction: row;
+    margin-right: 5px;
+}
+
+#indicator {
+    position: absolute;
+    width:  10px;
+    height: 10px;
+
+    background-image: url("project://database/Assets/NPCDialogueModel/TapIndicator.png");
+
+    bottom: 20px;
+    right:  20px;
+}
+
+#responses_container {
+    width: 330px;
+    margin-bottom: 10px;
+    /* margin-left: 120px; */
+    display: flex;             /* make it a flex container */
+    flex-direction: column;    /* stack responses vertically */
+    align-items: flex-end;     /* align them to the right side */
+}
+.response-button {
+    background-color: var(--color-primary);
+    color: var(--color-bg);
+    border-radius: 12px;
+    padding: 0;
+    margin: 2px;
+    height: 36px;
+    width: 80%;
+}
+
+.response-label {
+    color: var(--color-text1);
+    letter-spacing: 1px;
+    -unity-text-align: middle-center;
+    -unity-font-definition: var(--font-muesou-1000);
+    font-size: 11px;
+    white-space: normal;      /* prevent wrapping */
+}

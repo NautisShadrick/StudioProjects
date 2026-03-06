@@ -19,14 +19,16 @@ using UnityEditor;
 
 namespace Highrise.Lua.Generated
 {
-    [AddComponentMenu("Lua/PassTheSparkSpawner")]
-    [LuaRegisterType(0x7013609d71326c7c, typeof(LuaBehaviour))]
-    public class PassTheSparkSpawner : LuaBehaviourThunk
+    [CreateAssetMenu(menuName = "Highrise/ScriptableObjects/DialogueChunk")]
+    [LuaRegisterType(0x8bd551d4e826ba40, typeof(LuaScriptableObject))]
+    public class DialogueChunk : LuaScriptableObjectThunk
     {
-        private const string s_scriptGUID = "57ccb8439af23f14980079e9954ec9c3";
+        private const string s_scriptGUID = "3d0bd200f8ab7b948aa8f0034f550645";
         public override string ScriptGUID => s_scriptGUID;
 
-        [SerializeField] public UnityEngine.GameObject m_entityPrefbab = default;
+        [LuaScriptPropertyAttribute("5f7dbb76983dd93469a12bb278d8bb78")]
+        [SerializeField] public System.Collections.Generic.List<UnityEngine.Object> m_Pages = default;
+        [SerializeField] public System.Boolean m_isStoryBeat = false;
 
         protected override SerializedPropertyValue[] SerializeProperties()
         {
@@ -35,12 +37,13 @@ namespace Highrise.Lua.Generated
 
             return new SerializedPropertyValue[]
             {
-                CreateSerializedProperty(_script.GetPropertyAt(0), m_entityPrefbab),
+                CreateSerializedProperty(_script.GetPropertyAt(0), m_Pages),
+                CreateSerializedProperty(_script.GetPropertyAt(1), m_isStoryBeat),
             };
         }
         
 #if HR_STUDIO
-        [MenuItem("CONTEXT/PassTheSparkSpawner/Edit Script")]
+        [MenuItem("CONTEXT/DialogueChunk/Edit Script")]
         private static void EditScript()
         {
             VisualStudioCodeOpener.OpenPath(AssetDatabase.GUIDToAssetPath(s_scriptGUID));
