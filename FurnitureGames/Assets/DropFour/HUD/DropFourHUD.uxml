@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UXML
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="UnityEngine.UIElements"
+    xmlns:hr="Highrise.UI"
+    xmlns:editor="UnityEditor.UIElements"
+    xsi:noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd"
+>
+
+  <hr:UILuaView class="drop-four-h-u-d no-lightmode" picking-mode="Ignore">
+    <!-- Explicit 100%-sized wrapper: it is both the slide vehicle and the parent every
+         announcement and popup is added to, so the coordinate space they measure against
+         is a known quantity rather than whatever the document root happens to be. -->
+    <VisualElement name="_hudRoot" class="hud-root" picking-mode="Ignore">
+      <VisualElement name="_playersContainer" class="players-container" picking-mode="Ignore"/>
+    </VisualElement>
+  </hr:UILuaView>
+
+</UXML>

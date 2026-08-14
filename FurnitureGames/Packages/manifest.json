@@ -44,12 +44,12 @@
     "com.unity.modules.wind": "1.0.0",
     "com.unity.modules.xr": "1.0.0",
     "com.unity.probuilder": "5.2.2",
-    "com.pz.studio": "0.26.5"
+    "com.pz.studio": "0.29.7-build.1483"
   },
   "scopedRegistries": [
     {
       "name": "Highrise Studio",
-      "url": "https://npm.highrise.game",
+      "url": "https://npm-dev.highrise.game",
       "scopes": [
         "com.pz.studio"
       ]

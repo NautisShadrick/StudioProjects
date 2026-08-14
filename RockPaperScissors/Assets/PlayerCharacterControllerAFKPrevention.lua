@@ -278,16 +278,16 @@ local function LocalMoveTo(
 end
 
 if client then
-	local afkTimer = Timer.Every(120, function()
-		-- Move the player a random direction to prevent AFK
-		local player = client.localPlayer
-		if player and player.character then
-			local character = player.character
-			local randomDirection = Vector3.new(math.random(-1, 1)/4, 0, math.random(-1, 1)/4)
-			local destination = character.transform.position + randomDirection * 5
-			LocalMoveTo(character, destination, -1, 0, nil)
-		end
-	end)
+	--local afkTimer = Timer.Every(120, function()
+	--	-- Move the player a random direction to prevent AFK
+	--	local player = client.localPlayer
+	--	if player and player.character then
+	--		local character = player.character
+	--		local randomDirection = Vector3.new(math.random(-1, 1)/4, 0, math.random(-1, 1)/4)
+	--		local destination = character.transform.position + randomDirection * 5
+	--		LocalMoveTo(character, destination, -1, 0, nil)
+	--	end
+	--end)
 end
 
 ---

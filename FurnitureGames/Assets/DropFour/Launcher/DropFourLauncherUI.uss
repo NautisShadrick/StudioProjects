@@ -1,0 +1,175 @@
+/*
+    DropFourLauncherUI -- the minimized-window pill and the quit-confirm popup.
+
+    Colors are hard-coded rather than aliased to the engine's app-wide theme tokens: those
+    tokens are supplied by the Highrise client theme and are not defined in this project, so
+    a var() reference to one would silently resolve to nothing here.
+*/
+:root {
+    --font-museo-900: url("project://database/Packages/com.pz.studio/Assets/Fonts/MuseoSansRounded-900 SDF.asset");
+    --font-museo-1000: url("project://database/Packages/com.pz.studio/Assets/Fonts/MuseoSansRounded-1000 SDF.asset");
+
+    --d4-accent-green: #51FFA5;
+    --d4-danger: #fd4f4b;
+    --d4-danger-soft: rgba(253, 79, 75, 0.25);
+    --d4-panel: #45454d;
+    --d4-outline: rgba(239, 237, 255, 0.1);
+    --d4-scrim: rgba(0, 0, 0, 0.25);
+    --d4-modal-surface: #2a2a31;
+    --d4-text-dark: #15151a;
+    --d4-text-muted: #d3d2d9;
+    --d4-text-warn: #ff8c8c;
+
+    --d4-turn-halo: #ffe27a;
+    --d4-disc-1: #fd4f4b;
+    --d4-disc-2: #f1d800;
+}
+
+.drop-four-launcher-u-i {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+}
+
+/* ------------------------ minimized pill ----------------------- */
+
+.open-button {
+    position: absolute;
+    left: 12px;
+    top: 30%;
+    width: 58px;
+    height: 58px;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Same-size element BEHIND the face; shown and scale-pulsed from Lua on your turn. */
+.open-button-glow {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: var(--d4-turn-halo);
+    border-radius: 14px;
+    transform-origin: center;
+    display: none;
+}
+
+/* Two discs read as Drop Four at pill size without needing any art. */
+.open-button-face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: var(--d4-panel);
+    border-radius: 14px;
+    border-width: 1px;
+    border-color: var(--d4-outline);
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.pill-disc {
+    width: 18px;
+    height: 18px;
+    border-radius: 9px;
+    margin: 0 2px;
+}
+
+.pill-disc-1 {
+    background-color: var(--d4-disc-1);
+}
+
+.pill-disc-2 {
+    background-color: var(--d4-disc-2);
+}
+
+.count-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    min-width: 26px;
+    height: 26px;
+    border-radius: 13px;
+    padding: 0 5px;
+    background-color: var(--d4-danger);
+    color: white;
+    font-size: 14px;
+    -unity-font-definition: var(--font-museo-1000);
+    -unity-text-align: middle-center;
+}
+
+/* ---------------------- quit confirmation ---------------------- */
+
+.quit-confirm-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    display: none;
+}
+
+.quit-confirm-overlay {
+    position: absolute;
+    width: 200%;
+    height: 200%;
+    translate: 0 -25%;
+    background-color: var(--d4-scrim);
+}
+
+.quit-confirm-box {
+    width: 80%;
+    max-width: 340px;
+    padding: 24px 22px;
+    border-radius: 24px;
+    background-color: var(--d4-modal-surface);
+    border-width: 1px;
+    border-color: var(--d4-outline);
+    align-items: center;
+    align-self: center;
+}
+
+.quit-confirm-title {
+    font-size: 20px;
+    color: var(--d4-text-muted);
+    -unity-font-definition: var(--font-museo-1000);
+    -unity-text-align: middle-center;
+    margin-bottom: 10px;
+}
+
+.quit-confirm-msg {
+    font-size: 13px;
+    color: var(--d4-text-warn);
+    -unity-font-definition: var(--font-museo-900);
+    -unity-text-align: middle-center;
+    white-space: normal;
+    margin-bottom: 22px;
+}
+
+.quit-confirm-buttons {
+    flex-direction: row;
+    justify-content: center;
+}
+
+.qc-btn {
+    padding: 12px 0;
+    width: 130px;
+    margin: 0 6px;
+    border-radius: 14px;
+    font-size: 18px;
+    -unity-font-definition: var(--font-museo-900);
+    -unity-text-align: middle-center;
+}
+
+/* Safe action: solid accent fill, dark text. */
+.qc-cancel {
+    background-color: var(--d4-accent-green);
+    color: var(--d4-text-dark);
+}
+
+/* Destructive action: 25% tint fill, full-strength text. */
+.qc-quit {
+    background-color: var(--d4-danger-soft);
+    color: var(--d4-danger);
+}

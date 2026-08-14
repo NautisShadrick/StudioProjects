@@ -8,4 +8,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Template/Scenes/Room.unity
     guid: 3d97b014f52721147ba461f2a8133078
-  m_configObjects: {}
+  m_configObjects:
+    com.unity.addressableassets: {fileID: 11400000, guid: 55cee22e2d46b48fd8f7ff94595c6628,
+      type: 2}
+  m_UseUCBPForAssetBundles: 0

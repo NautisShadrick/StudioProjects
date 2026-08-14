@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 968827023, guid: 30a4c7dce0b6891478396efa6bd2a6d0, type: 3}
+  m_Name: VirtualPlayer7Outfit
+  m_EditorClassIdentifier: 
+  _skeletonId: 
+  _items:
+  - _descriptorId: body-flesh
+    _paletteId: 9
+  - _descriptorId: eyebrow-n_basic2018newbrows07
+    _paletteId: 2
+  - _descriptorId: eye-n_basic2018falselashes
+    _paletteId: 2
+  - _descriptorId: nose-n_basic2018newnose19
+    _paletteId: -1
+  - _descriptorId: mouth-basic2018poutfullround
+    _paletteId: 2
+  - _descriptorId: freckle-n_basic2018freckle35
+    _paletteId: -1
+  - _descriptorId: freckle-n_basic2018freckle27
+    _paletteId: -1
+  - _descriptorId: hair_front-n_basic2018coilysidepart
+    _paletteId: 28
+  - _descriptorId: hair_back-n_basic2018loosecoilymedium
+    _paletteId: 28
+  - _descriptorId: shirt-n_room32019jerseywhite
+    _paletteId: -1
+  - _descriptorId: handbag-n_room22019banana
+    _paletteId: -1
+  - _descriptorId: bag-n_room12019backpack
+    _paletteId: -1
+  - _descriptorId: bag-n_room32019flannelwrapyellow
+    _paletteId: -1
+  - _descriptorId: pants-n_room22019shortcutoffsdenim
+    _paletteId: -1
+  - _descriptorId: shoes-n_room12019sneakerspink
+    _paletteId: -1
+  _includeFallbacks: 1

@@ -153,7 +153,7 @@ QualitySettings:
     asyncUploadBufferSize: 16
     asyncUploadPersistentBuffer: 1
     resolutionScalingFixedDPIFactor: 1
-    customRenderPipeline: {fileID: 11400000, guid: 7b7fd9122c28c4d15b667c7040e3b3fd,
+    customRenderPipeline: {fileID: 11400000, guid: c5ca88e9b17b24976bac59625274883c,
       type: 2}
     terrainQualityOverrides: 0
     terrainPixelError: 1
@@ -173,6 +173,7 @@ QualitySettings:
     GameCoreXboxOne: 2
     Lumin: 2
     Nintendo Switch: 2
+    Nintendo Switch 2: 2
     PS4: 2
     PS5: 2
     Server: 0

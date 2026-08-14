@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UXML
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="UnityEngine.UIElements"
+    xmlns:hr="Highrise.UI"
+    xmlns:editor="UnityEditor.UIElements"
+    xsi:noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd"
+>
+
+  <hr:UILuaView class="drop-four-launcher-u-i no-lightmode" picking-mode="Ignore">
+    <!-- The minimized-window pill. Only visible while the local player holds a seat. -->
+    <VisualElement name="_openButton" class="open-button">
+      <VisualElement name="_openButtonGlow" class="open-button-glow" picking-mode="Ignore"/>
+      <VisualElement class="open-button-face" picking-mode="Ignore">
+        <VisualElement class="pill-disc pill-disc-1" picking-mode="Ignore"/>
+        <VisualElement class="pill-disc pill-disc-2" picking-mode="Ignore"/>
+      </VisualElement>
+      <Label name="_countBadge" text="" class="count-badge" picking-mode="Ignore"/>
+    </VisualElement>
+
+    <VisualElement name="_quitConfirm" class="quit-confirm-container">
+      <VisualElement class="quit-confirm-overlay"/>
+      <VisualElement name="_quitConfirmBox" class="quit-confirm-box">
+        <Label text="Leave the game?" class="quit-confirm-title" picking-mode="Ignore"/>
+        <Label text="You'll forfeit this match and give up your seat." class="quit-confirm-msg" picking-mode="Ignore"/>
+        <VisualElement class="quit-confirm-buttons" picking-mode="Ignore">
+          <Label name="_quitCancel" text="Keep Playing" class="qc-btn qc-cancel"/>
+          <Label name="_quitConfirmYes" text="Leave" class="qc-btn qc-quit"/>
+        </VisualElement>
+      </VisualElement>
+    </VisualElement>
+  </hr:UILuaView>
+
+</UXML>

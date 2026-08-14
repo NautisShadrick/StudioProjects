@@ -1,6 +1,6 @@
 /*
 
-    Copyright (c) 2024 Pocketz World. All rights reserved.
+    Copyright (c) 2026 Pocketz World. All rights reserved.
 
     This is a generated file, do not edit!
 
@@ -15,6 +15,7 @@ using UnityEngine;
 using Highrise.Client;
 using Highrise.Studio;
 using Highrise.Lua;
+using UnityEditor;
 
 namespace Highrise.Lua.Generated
 {
@@ -63,6 +64,14 @@ namespace Highrise.Lua.Generated
                 CreateSerializedProperty(_script.GetPropertyAt(11), m_keepPlayerInViewPanDuration),
             };
         }
+        
+#if HR_STUDIO
+        [MenuItem("CONTEXT/RTSCamera/Edit Script")]
+        private static void EditScript()
+        {
+            VisualStudioCodeOpener.OpenPath(AssetDatabase.GUIDToAssetPath(s_scriptGUID));
+        }
+#endif
     }
 }
 

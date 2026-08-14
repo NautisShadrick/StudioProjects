@@ -1,0 +1,216 @@
+/*
+    DropFourBoardUI -- the 7x6 board, its column tap targets, and the in-game chrome.
+
+    Geometry: the grid is 7 columns at a fixed 46px pitch = 322px, and the panel HUGS that
+    (no percentage width) so the fixed-pixel grid can never overflow its own content box.
+    Yoga counts padding inside `width`, so a percentage-width panel would have silently
+    clipped the rightmost column. Discs are a true circle -- radius is half the size, unlike
+    the lobby avatar's 18px squircle.
+
+    Runtime constraints this file works around (learned from the Color Splash build):
+      * background-position and percent/negative insets on absolutes are IGNORED, so
+        framing is done with a larger wrapper element, never negative insets.
+      * borders draw OUTSIDE the content box, so a ring must be smaller than what it rings.
+      * percent translate shifts rendering but is NOT reflected in worldBound. The disc
+        drop reads worldBound, so it animates layout top, never percent translate.
+*/
+:root {
+    --font-museo-700: url("project://database/Packages/com.pz.studio/Assets/Fonts/MuseoSansRounded-700 SDF.asset");
+    --font-museo-900: url("project://database/Packages/com.pz.studio/Assets/Fonts/MuseoSansRounded-900 SDF.asset");
+
+    --icon-chevron-down: url("project://database/Packages/com.pz.studio/Assets/Sprites/Icons/icon_carrow_down.png");
+
+    --d4-panel: #45454d;
+    --d4-inset: #51515b;
+    --d4-empty: #2f2f35;
+    --d4-outline: rgba(239, 237, 255, 0.1);
+    --d4-scrim: rgba(0, 0, 0, 0.25);
+    --d4-chip-bg: rgba(0, 0, 0, 0.3);
+    --d4-text: #efedff;
+    --d4-label-muted: rgba(255, 255, 255, 0.55);
+
+    /* Disc colors: classic Connect Four red and yellow, sampled to sit on the dark panel.
+       Player 1 = roster slot 1, player 2 = roster slot 2. */
+    --d4-disc-1: #fd4f4b;
+    --d4-disc-2: #f1d800;
+}
+
+.drop-four-board-u-i {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    color: var(--d4-text);
+    -unity-font-definition: var(--font-museo-900);
+    -unity-text-align: middle-center;
+}
+
+/* Oversized and pulled up because this view does not span the whole screen. */
+.window-backdrop {
+    position: absolute;
+    width: 200%;
+    height: 200%;
+    top: -25%;
+    background-color: var(--d4-scrim);
+}
+
+.board-row {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Width is content-driven: 322px of grid + 12px frame padding + 24px inset padding. */
+.board-inset {
+    padding: 12px;
+    border-radius: 24px;
+    background-color: var(--d4-panel);
+    border-width: 1px;
+    border-color: var(--d4-outline);
+    align-items: center;
+}
+
+/* ------------------------- in-game chrome ---------------------- */
+
+.controls-row {
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.game-chevron {
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    background-color: var(--d4-chip-bg);
+    align-items: center;
+    justify-content: center;
+}
+
+.game-chevron-icon {
+    width: 20px;
+    height: 20px;
+    background-image: var(--icon-chevron-down);
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.quit-button {
+    height: 34px;
+    padding: 7px 18px;
+    background-color: var(--d4-chip-bg);
+    border-radius: 12px;
+    color: var(--d4-text);
+    font-size: 16px;
+    -unity-font-definition: var(--font-museo-900);
+    -unity-text-align: middle-center;
+}
+
+/* ---------------------------- board ---------------------------- */
+
+.spectator-banner {
+    width: 100%;
+    font-size: 13px;
+    -unity-font-definition: var(--font-museo-700);
+    color: var(--d4-label-muted);
+    -unity-text-align: middle-center;
+    white-space: normal;
+    margin-bottom: 6px;
+    display: none;
+}
+
+/* One cap per column, at the same 46px pitch as the grid, so a hint sits directly above
+   its own column. */
+.cap-row {
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-end;
+    height: 26px;
+}
+
+.col-cap {
+    width: 46px;
+    height: 26px;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+/* The hint disc itself. Hidden until its column is playable; the float is driven from Lua
+   off the ready state, matching how Color Splash indicates a playable card. */
+.col-cap-disc {
+    width: 20px;
+    height: 20px;
+    border-radius: 10px;
+    background-color: var(--d4-disc-1);
+    display: none;
+}
+
+.board-frame {
+    padding: 6px;
+    border-radius: 18px;
+    background-color: var(--d4-inset);
+}
+
+.board-grid {
+    flex-direction: row;
+}
+
+/* The column is the tap target -- a full-height strip, so a tap anywhere in it drops a
+   disc. pickingMode is set in Lua as well, since dynamically created elements are not
+   reliably tappable otherwise. */
+.board-col {
+    width: 46px;
+    flex-direction: column;
+    align-items: center;
+}
+
+.board-cell {
+    width: 46px;
+    height: 46px;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Empty slots read as dark holes punched in the frame. */
+.board-disc {
+    width: 42px;
+    height: 42px;
+    border-radius: 21px;
+    background-color: var(--d4-empty);
+}
+
+/* Declared after .board-disc and after .col-cap-disc so these win the cascade for both the
+   in-grid discs and the reused hint disc. */
+.board-disc-1 {
+    background-color: var(--d4-disc-1);
+}
+
+.board-disc-2 {
+    background-color: var(--d4-disc-2);
+}
+
+/* Winning line: a ring INSIDE the disc's footprint, because borders draw outside the
+   content box -- a same-size ring would overlap its neighbours. */
+.board-disc-win {
+    width: 36px;
+    height: 36px;
+    border-radius: 18px;
+    border-width: 3px;
+    border-color: var(--d4-text);
+}
+
+/* Flying disc during a drop. Sized to match .board-disc so it lands flush. */
+.flight-layer {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.flying-disc {
+    position: absolute;
+    width: 42px;
+    height: 42px;
+    border-radius: 21px;
+}

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UXML
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="UnityEngine.UIElements"
+    xmlns:hr="Highrise.UI"
+    xmlns:editor="UnityEditor.UIElements"
+    xsi:noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd"
+>
+
+  <hr:UILuaView class="drop-four-lobby-u-i no-lightmode" picking-mode="Ignore">
+    <VisualElement class="window-backdrop" picking-mode="Ignore"/>
+    <VisualElement name="_lobbyWindow" class="lobby-window" picking-mode="Ignore">
+      <VisualElement class="lobby-panel">
+        <VisualElement class="lobby-header" picking-mode="Ignore">
+          <VisualElement name="_minimizeButton" class="header-chevron">
+            <VisualElement class="header-chevron-icon" picking-mode="Ignore"/>
+          </VisualElement>
+          <Label text="Drop Four" class="lobby-title" picking-mode="Ignore"/>
+          <VisualElement name="_infoButton" class="header-info">
+            <VisualElement class="header-info-icon" picking-mode="Ignore"/>
+          </VisualElement>
+        </VisualElement>
+        <Label name="_tableLabel" text="" class="table-label" picking-mode="Ignore"/>
+        <VisualElement name="_seatsContainer" class="seats-container" picking-mode="Ignore"/>
+        <Label name="_queueLabel" text="" class="queue-label" picking-mode="Ignore"/>
+        <Label name="_statusLabel" text="" class="status-label" picking-mode="Ignore"/>
+        <Label name="_readyButton" text="Start Game" class="ready-button"/>
+        <Label name="_leaveButton" text="Leave Queue" class="leave-button"/>
+      </VisualElement>
+    </VisualElement>
+
+    <!-- How-to-play: a slide-up drawer with a scrim fade, dismissed by a tap anywhere. -->
+    <VisualElement name="_rulesOverlay" class="rules-overlay">
+      <VisualElement name="_rulesScrim" class="rules-overlay-bg"/>
+      <VisualElement name="_rulesDrawer" class="rules-drawer">
+        <VisualElement class="rules-handle" picking-mode="Ignore"/>
+        <Label text="How to Play" class="rules-title" picking-mode="Ignore"/>
+        <VisualElement class="rules-section" picking-mode="Ignore">
+          <VisualElement class="rules-row" picking-mode="Ignore">
+            <Label text="1" class="rules-row-badge" picking-mode="Ignore"/>
+            <Label text="Two players take turns. On your turn, tap a column to drop your disc into it." class="rules-row-text" picking-mode="Ignore"/>
+          </VisualElement>
+          <VisualElement class="rules-row" picking-mode="Ignore">
+            <Label text="2" class="rules-row-badge" picking-mode="Ignore"/>
+            <Label text="Line up four of your discs in a row — across, down, or diagonally — to win." class="rules-row-text" picking-mode="Ignore"/>
+          </VisualElement>
+          <VisualElement class="rules-row" picking-mode="Ignore">
+            <Label text="3" class="rules-row-badge" picking-mode="Ignore"/>
+            <Label text="You get 15 seconds a turn. Run out and a random column is played for you." class="rules-row-text" picking-mode="Ignore"/>
+          </VisualElement>
+          <VisualElement class="rules-row" picking-mode="Ignore">
+            <Label text="4" class="rules-row-badge" picking-mode="Ignore"/>
+            <Label text="Fill all 42 slots with nobody at four in a row and the game is a draw." class="rules-row-text" picking-mode="Ignore"/>
+          </VisualElement>
+        </VisualElement>
+        <Label text="Tap to close" class="rules-close-label" picking-mode="Ignore"/>
+      </VisualElement>
+    </VisualElement>
+  </hr:UILuaView>
+
+</UXML>

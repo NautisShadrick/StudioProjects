@@ -1,0 +1,91 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 968827023, guid: 30a4c7dce0b6891478396efa6bd2a6d0, type: 3}
+  m_Name: VirtualPlayer2Outfit
+  m_EditorClassIdentifier: 
+  _skeletonId: 
+  _items:
+  - _descriptorId: body-flesh
+    _paletteId: 0
+  - _descriptorId: eyebrow-n_michimacchiattobrandgrab2022fadedstraightbrows
+    _paletteId: 2
+  - _descriptorId: freckle-n_doodlekitchen2024makeupvalentine
+    _paletteId: 0
+  - _descriptorId: freckle-n_anywayyouwantitudcgrab2023chuxchublushfreckles
+    _paletteId: 0
+  - _descriptorId: freckle-n_muthurcosmeticsbrand2022highlight
+    _paletteId: 0
+  - _descriptorId: freckle-n_doodlekitchen2024makeupvalentinespeckle
+    _paletteId: 0
+  - _descriptorId: freckle-n_doodlekitchen2025kiss
+    _paletteId: 0
+  - _descriptorId: mouth-n_michimacchiattobrandgrab2022plumppout
+    _paletteId: 0
+  - _descriptorId: tattoo-n_udcaccessorisegrabtwo2022butterflypiercingjadeyxo
+    _paletteId: 0
+  - _descriptorId: necklace-n_jewelriseudcparticrewards2024brynnsbsnecklace
+    _paletteId: 0
+  - _descriptorId: eye-n_mockeririseapaloozaudc2023femeyes
+    _paletteId: 37
+  - _descriptorId: glasses-n_doodlekitchen2025lashsinupper
+    _paletteId: 0
+  - _descriptorId: glasses-n_muthurwildy2k2022leftmuthurlash
+    _paletteId: 0
+  - _descriptorId: hat-n_muthursoakedgrab2024_lashesunder
+    _paletteId: 0
+  - _descriptorId: humanoid-size-default
+    _paletteId: 0
+  - _descriptorId: bag-n_springflingevntrwrds12024littletrufflesduckydarlingsduckgold
+    _paletteId: 0
+  - _descriptorId: freckle-n_doodlekitchen2025egirltats2
+    _paletteId: 0
+  - _descriptorId: bag-n_doodlekitchen2024idollzmanicurekitty
+    _paletteId: 0
+  - _descriptorId: nose-n_doodlekitchen2025noserich
+    _paletteId: 0
+  - _descriptorId: hair_front-n_doodlekitchen2024hairsnow1
+    _paletteId: 63
+  - _descriptorId: hair_back-n_doodlekitchen2025richgirlhair4
+    _paletteId: 63
+  - _descriptorId: gloves-n_decadessale202100moodring
+    _paletteId: 0
+  - _descriptorId: eye-n_tomsinfinitelenses2024fullspectrum
+    _paletteId: 0
+  - _descriptorId: eye-eye-n_doodlekitchen2025lensrich5
+    _paletteId: 0
+  - _descriptorId: hat-n_woodlandsenchant2025caterpillar
+    _paletteId: 0
+  - _descriptorId: shoes-n_snoopfeet
+    _paletteId: 0
+  - _descriptorId: bag-n_2016demonshoulderdemon
+    _paletteId: 0
+  - _descriptorId: sock-n_bowsandlacegrab22024anklebow
+    _paletteId: 0
+  - _descriptorId: sock-n_lightfairyrewards2022rufflesocks
+    _paletteId: 0
+  - _descriptorId: hat-n_jewelryshopplayerdesign2021gaugedears_1
+    _paletteId: 0
+  - _descriptorId: shirt-n_vintagevault2023scoopedneckgrey
+    _paletteId: 0
+  - _descriptorId: skirt-n_doodlekitchen2025egirlskirt2
+    _paletteId: 0
+  - _descriptorId: tattoo-n_doodlekitchen2024thicbodtatted3
+    _paletteId: 0
+  - _descriptorId: tattoo-n_muthurcosmeticsbrand2022glitterspray
+    _paletteId: 0
+  - _descriptorId: glasses-n_room12019halfrimwhite
+    _paletteId: 0
+  - _descriptorId: bag-n_onceuponatimegrab2023swordharness
+    _paletteId: 0
+  - _descriptorId: hat-n_prankrewardsrecolor2021iBatarianabigribbon_1
+    _paletteId: 0
+  _includeFallbacks: 1

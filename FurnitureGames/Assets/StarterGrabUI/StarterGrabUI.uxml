@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UXML
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="UnityEngine.UIElements"
+    xmlns:hr="Highrise.UI"
+    xmlns:editor="UnityEditor.UIElements"
+    xsi:noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd"
+>
+
+  <hr:UILuaView class="starter-grab-u-i">
+    <VisualElement name="shop_card">
+      <Label name="shop_card_title" text="Pick a Box!" />
+      <VisualElement name="shop_card_content">
+      </VisualElement>
+    </VisualElement>
+  </hr:UILuaView>
+
+</UXML>

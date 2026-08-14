@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _version: 1
-  _publishedId: 
+  _publishedId: 69d6a5a35bf1f17965655228
   _worldPrefab: {fileID: 2261589748193165057, guid: 8d1077d6915c6cd41a5abfc6aef5d242,
     type: 3}
   _scenePrefab: {fileID: 8410445380251270705, guid: e8a33b600e7693c458fbe02a989e39b8,

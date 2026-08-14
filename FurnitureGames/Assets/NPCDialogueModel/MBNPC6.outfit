@@ -1,0 +1,74 @@
+{
+  "IncludeFallbacks": true,
+  "Skeleton": "",
+  "Clothing": [
+    {
+      "Id": "body-flesh",
+      "Color": 9
+    },
+    {
+      "Id": "tattoo-n_doodlekitchen2025hdvalentinebod",
+      "Color": 0
+    },
+    {
+      "Id": "eyebrow-n_doodlekitchen2024browvalentine",
+      "Color": 2
+    },
+    {
+      "Id": "nose-n_doodlekitchen2025nosehurt2",
+      "Color": 0
+    },
+    {
+      "Id": "mouth-n_doodlekitchen2025mouthegirl13",
+      "Color": 4
+    },
+    {
+      "Id": "shirt-n_doodlekitchen2025idollzvalentinecorset2",
+      "Color": 0
+    },
+    {
+      "Id": "skirt-n_whimsicalwoodsgrab012023flowyskirt",
+      "Color": 0
+    },
+    {
+      "Id": "bag-n_doodlekitchen2025idollzrichbracelet45",
+      "Color": 0
+    },
+    {
+      "Id": "gloves-n_jewelriseudc2023spillymillygiantring",
+      "Color": 0
+    },
+    {
+      "Id": "gloves-n_earthdayhcc2024brownbracelet",
+      "Color": 0
+    },
+    {
+      "Id": "hair_front-n_hrideasfundedudc2025iemxmoonlitwaves",
+      "Color": 63
+    },
+    {
+      "Id": "hair_back-n_doodlekitchen2025princesshair69",
+      "Color": 63
+    },
+    {
+      "Id": "eye-n_doodlekitchen2026lusteye2",
+      "Color": 10
+    },
+    {
+      "Id": "freckle-n_doodlekitchen2026lustmakeup",
+      "Color": 0
+    },
+    {
+      "Id": "freckle-n_doodlekitchen2024makeupvalentinespeckle",
+      "Color": 0
+    },
+    {
+      "Id": "mole-n_doodlekitchen2025beatuymarksrich",
+      "Color": 0
+    },
+    {
+      "Id": "hat-n_mayflowercrownudc2024ethenrosebutterflycrown",
+      "Color": 0
+    }
+  ]
+}

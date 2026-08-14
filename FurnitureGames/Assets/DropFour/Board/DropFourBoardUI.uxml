@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UXML
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="UnityEngine.UIElements"
+    xmlns:hr="Highrise.UI"
+    xmlns:editor="UnityEditor.UIElements"
+    xsi:noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd"
+>
+
+  <hr:UILuaView class="drop-four-board-u-i no-lightmode" picking-mode="Ignore">
+    <VisualElement class="window-backdrop" picking-mode="Ignore"/>
+    <!-- Slide vehicle: everything the board view shows lives in here, so one translate
+         carries the whole panel. -->
+    <VisualElement name="_boardRow" class="board-row" picking-mode="Ignore">
+      <!-- The panel hugs the board rather than taking a percentage width, so the fixed-pixel
+           grid can never overflow its own content box. The chrome sits inside it, which also
+           keeps the chevron and Quit aligned to the board's edges. -->
+      <VisualElement class="board-inset" picking-mode="Ignore">
+        <VisualElement class="controls-row">
+          <VisualElement name="_minimizeButton" class="game-chevron">
+            <VisualElement class="game-chevron-icon" picking-mode="Ignore"/>
+          </VisualElement>
+          <Label name="_quitButton" text="Quit" class="quit-button"/>
+        </VisualElement>
+        <Label name="_spectatorBanner" text="" class="spectator-banner" picking-mode="Ignore"/>
+        <!-- Drop hints, one per column, at the grid's column pitch. -->
+        <VisualElement name="_capRow" class="cap-row" picking-mode="Ignore"/>
+        <VisualElement class="board-frame" picking-mode="Ignore">
+          <VisualElement name="_boardGrid" class="board-grid" picking-mode="Ignore"/>
+        </VisualElement>
+      </VisualElement>
+      <!-- Flying discs are parented here so they draw above the grid. Absolute and
+           100%-sized, so worldBound math against it is stable. -->
+      <VisualElement name="_flightLayer" class="flight-layer" picking-mode="Ignore"/>
+    </VisualElement>
+  </hr:UILuaView>
+
+</UXML>

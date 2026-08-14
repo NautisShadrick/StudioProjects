@@ -20,7 +20,7 @@ using UnityEditor;
 namespace Highrise.Lua.Generated
 {
     [AddComponentMenu("Lua/EnvironmentManager")]
-    [LuaRegisterType(0xcd64d2b8bbb69562, typeof(LuaBehaviour))]
+    [LuaRegisterType(0xd2d040f75a64af41, typeof(LuaBehaviour))]
     public class EnvironmentManager : LuaBehaviourThunk
     {
         private const string s_scriptGUID = "946f6624d1e06e344821f72897474fd3";

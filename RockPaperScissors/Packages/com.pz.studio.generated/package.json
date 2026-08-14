@@ -1,6 +1,6 @@
 {
     "name": "com.pz.studio.generated",
-    "version": "1.0.0",
+    "version": "1.0.2",
     "displayName": "Highrise Studio Generated",
     "description": "Automatically generated package that contains assets that were created by the Highrise Studio package.",
     "unity": "2022.3",

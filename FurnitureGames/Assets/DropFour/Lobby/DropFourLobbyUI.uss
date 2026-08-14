@@ -1,0 +1,390 @@
+/*
+    DropFourLobbyUI -- the lobby view inside the Drop Four window.
+
+    Palette and geometry are ported from the Color Splash (Uno) lobby so every Drop Four
+    view reads as the same panel. Fonts and icons come from the com.pz.studio package
+    rather than project assets, which keeps this folder drop-in with no art dependency.
+*/
+:root {
+    /* Fonts -- the full Museo weight ladder ships with the studio package. */
+    --font-museo-500: url("project://database/Packages/com.pz.studio/Assets/Fonts/MuseoSansRounded-500 SDF.asset");
+    --font-museo-700: url("project://database/Packages/com.pz.studio/Assets/Fonts/MuseoSansRounded-700 SDF.asset");
+    --font-museo-900: url("project://database/Packages/com.pz.studio/Assets/Fonts/MuseoSansRounded-900 SDF.asset");
+
+    /* Icons -- icon_carrow_down is already white, so it must NOT be tinted (tint multiplies). */
+    --icon-chevron-down: url("project://database/Packages/com.pz.studio/Assets/Sprites/Icons/icon_carrow_down.png");
+    --icon-info: url("project://database/Packages/com.pz.studio/Assets/Sprites/Icons/icon_info.png");
+    --icon-check: url("project://database/Packages/com.pz.studio/Assets/Sprites/Icons/icon_checkmark.png");
+
+    --d4-accent-green: #51FFA5;
+    --d4-accent-soft: rgba(81, 255, 165, 0.08);
+    --d4-panel: #45454d;
+    --d4-empty: #2f2f35;
+    --d4-outline: rgba(239, 237, 255, 0.1);
+    --d4-scrim: rgba(0, 0, 0, 0.25);
+    --d4-scrim-drawer: rgba(0, 0, 0, 0.8);
+    --d4-chip-bg: rgba(0, 0, 0, 0.3);
+    --d4-text: #efedff;
+    --d4-text-muted: #a3a2ad;
+    --d4-text-dark: #15151a;
+    --d4-surface-2: #5a5a64;
+
+    --d4-rules-bg: #141318;
+    --d4-rules-bg-light: #28262e;
+    --d4-rules-handle: #404044;
+    --d4-rules-text: #d3d2d9;
+    --d4-rules-text-muted: rgba(139, 139, 143, 1);
+}
+
+.drop-four-lobby-u-i {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    color: var(--d4-text);
+    -unity-font-definition: var(--font-museo-900);
+    -unity-text-align: middle-center;
+}
+
+/* The view does not span the whole screen, so the scrim is oversized and pulled up to
+   cover it. A 100% element would read as a weird partial overlay. */
+.window-backdrop {
+    position: absolute;
+    width: 200%;
+    height: 200%;
+    top: -25%;
+    background-color: var(--d4-scrim);
+}
+
+/* Slide vehicle: 100% tall so a Percent(100) translate is exactly one screen, matching
+   the board and HUD views. */
+.lobby-window {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+.lobby-panel {
+    width: 90%;
+    max-width: 360px;
+    margin-top: 90px;
+    padding: 14px 22px 28px 22px;
+    border-radius: 28px;
+    background-color: var(--d4-panel);
+    border-width: 1px;
+    border-color: var(--d4-outline);
+    align-items: center;
+}
+
+.lobby-header {
+    width: 100%;
+    height: 40px;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+/* Both icon buttons float to their edge so the title stays optically centered. */
+.header-chevron {
+    position: absolute;
+    left: 0;
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    background-color: var(--d4-chip-bg);
+    align-items: center;
+    justify-content: center;
+}
+
+.header-chevron-icon {
+    width: 20px;
+    height: 20px;
+    background-image: var(--icon-chevron-down);
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.header-info {
+    position: absolute;
+    right: 0;
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    background-color: var(--d4-chip-bg);
+    align-items: center;
+    justify-content: center;
+}
+
+.header-info-icon {
+    width: 20px;
+    height: 20px;
+    background-image: var(--icon-info);
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.lobby-title {
+    font-size: 24px;
+    -unity-font-definition: var(--font-museo-900);
+    color: var(--d4-text);
+    -unity-text-align: middle-center;
+}
+
+/* Pulled back into the header's bottom margin. */
+.table-label {
+    margin-top: -16px;
+    margin-bottom: 16px;
+    font-size: 15px;
+    -unity-font-definition: var(--font-museo-700);
+    color: var(--d4-text-muted);
+    -unity-text-align: middle-center;
+}
+
+/* "+N waiting to play" -- the table still seats spectators behind the two players, they just
+   don't get a slot of their own. Hidden entirely when nobody is queued. */
+.queue-label {
+    margin-top: -8px;
+    margin-bottom: 14px;
+    font-size: 13px;
+    -unity-font-definition: var(--font-museo-700);
+    color: var(--d4-text-muted);
+    -unity-text-align: middle-center;
+    display: none;
+}
+
+.status-label {
+    font-size: 16px;
+    -unity-font-definition: var(--font-museo-700);
+    color: var(--d4-text);
+    -unity-text-align: middle-center;
+    white-space: normal;
+    margin-bottom: 24px;
+}
+
+/* Primary CTA: solid accent fill, dark text. */
+.ready-button {
+    width: 86%;
+    background-color: var(--d4-accent-green);
+    color: var(--d4-text-dark);
+    border-radius: 12px;
+    padding: 11px 0;
+    font-size: 18px;
+    -unity-font-definition: var(--font-museo-900);
+    -unity-text-align: middle-center;
+    margin-bottom: 10px;
+}
+
+.ready-button-unready {
+    background-color: var(--d4-surface-2);
+    color: var(--d4-text-muted);
+}
+
+/* Declared after .ready-button so it wins the cascade. */
+.ready-button-disabled {
+    background-color: var(--d4-empty);
+    color: var(--d4-text-muted);
+    opacity: 0.6;
+}
+
+/* Ghost button: 8% tint fill, full-strength accent text. */
+.leave-button {
+    width: 86%;
+    background-color: var(--d4-accent-soft);
+    color: var(--d4-accent-green);
+    border-radius: 12px;
+    padding: 11px 0;
+    font-size: 18px;
+    -unity-font-definition: var(--font-museo-700);
+    -unity-text-align: middle-center;
+}
+
+/* ---------------------------- seats ---------------------------- */
+
+/* Top-aligned so the caption below a seat hangs off the bottom without re-centering the
+   whole row. */
+.seats-container {
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    margin-bottom: 18px;
+}
+
+.seat {
+    justify-content: center;
+    align-items: center;
+    margin: 0 5px;
+    flex-shrink: 0;
+}
+
+/* Fixed-size frame so the ready badge anchors to the avatar, not to the slot (whose
+   width follows the caption). */
+.avatar-wrap {
+    width: 64px;
+    height: 64px;
+    flex-shrink: 0;
+}
+
+/* Transparent tap target, added last in Lua so it sits above the thumbnail. */
+.seat-hit {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.seat-avatar {
+    flex-shrink: 0;
+    background-color: var(--d4-surface-2);
+}
+
+/* Compound selector to outrank UIUserThumbnail's own stylesheet. */
+.seat-avatar.user-thumbnail {
+    width: 64px;
+    height: 64px;
+    border-radius: 18px;
+    overflow: hidden;
+}
+
+.seat-avatar-ready {
+    background-color: var(--d4-accent-soft);
+}
+
+.seat-empty-box {
+    width: 64px;
+    height: 64px;
+    flex-shrink: 0;
+    background-color: var(--d4-empty);
+    border-radius: 18px;
+    border-width: 1px;
+    border-color: var(--d4-outline);
+}
+
+.seat-ready-check {
+    position: absolute;
+    right: -4px;
+    bottom: -4px;
+    width: 24px;
+    height: 24px;
+    background-image: var(--icon-check);
+    -unity-background-image-tint-color: var(--d4-accent-green);
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.seat-host-label {
+    margin-top: 6px;
+    padding: 0;
+    font-size: 13px;
+    -unity-font-definition: var(--font-museo-900);
+    color: var(--d4-text);
+    -unity-text-align: middle-center;
+}
+
+.seat-waiting-dots {
+    margin-top: 6px;
+    padding: 0;
+    font-size: 13px;
+    -unity-font-definition: var(--font-museo-900);
+    color: var(--d4-text-muted);
+    -unity-text-align: middle-center;
+    letter-spacing: 2px;
+}
+
+/* ------------------------ rules drawer ------------------------- */
+
+.rules-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: flex-end;
+    flex-direction: column;
+}
+
+/* Oversized and offset so the scrim covers the screen even though this view does not. */
+.rules-overlay-bg {
+    position: absolute;
+    width: 300%;
+    height: 300%;
+    left: -100%;
+    top: -100%;
+    background-color: var(--d4-scrim-drawer);
+}
+
+.rules-drawer {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+    background-color: var(--d4-rules-bg);
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    flex-direction: column;
+    align-items: center;
+    padding: 12px 16px 44px 16px;
+}
+
+.rules-handle {
+    width: 40px;
+    height: 4px;
+    background-color: var(--d4-rules-handle);
+    border-radius: 2px;
+    margin-bottom: 16px;
+}
+
+.rules-title {
+    font-size: 24px;
+    color: var(--d4-rules-text);
+    -unity-text-align: middle-center;
+    margin-bottom: 16px;
+    -unity-font-definition: var(--font-museo-900);
+}
+
+.rules-section {
+    width: 100%;
+    margin-bottom: 12px;
+}
+
+.rules-row {
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    background-color: var(--d4-rules-bg-light);
+    border-radius: 10px;
+    padding: 8px 12px;
+    margin-bottom: 6px;
+}
+
+/* Numbered step badge in place of Uno's per-row icon art -- same 36px row geometry, no
+   texture dependency. */
+.rules-row-badge {
+    width: 26px;
+    height: 26px;
+    flex-shrink: 0;
+    margin-right: 10px;
+    border-radius: 13px;
+    background-color: var(--d4-accent-soft);
+    color: var(--d4-accent-green);
+    font-size: 14px;
+    -unity-font-definition: var(--font-museo-900);
+    -unity-text-align: middle-center;
+}
+
+.rules-row-text {
+    font-size: 13px;
+    color: var(--d4-rules-text);
+    -unity-font-definition: var(--font-museo-500);
+    -unity-text-align: middle-left;
+    white-space: normal;
+    flex-shrink: 1;
+}
+
+.rules-close-label {
+    margin-top: 8px;
+    font-size: 14px;
+    color: var(--d4-rules-text-muted);
+    -unity-text-align: middle-center;
+    -unity-font-definition: var(--font-museo-500);
+}

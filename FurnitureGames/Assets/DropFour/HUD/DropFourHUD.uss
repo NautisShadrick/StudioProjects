@@ -1,0 +1,220 @@
+/*
+    DropFourHUD -- the two player tiles above the board, plus the announcement layer.
+
+    Runtime constraints carried over from the Color Splash build:
+      * background-position and percent/negative insets on absolutes are IGNORED, so the
+        active-turn highlight is a plain border, not an oversized glow texture.
+      * borders draw OUTSIDE the content box, which is why .glow-frame (66px) is smaller
+        than the .avatar (70px) it rings -- the 5px outline then sits flush.
+*/
+:root {
+    --font-museo-700: url("project://database/Packages/com.pz.studio/Assets/Fonts/MuseoSansRounded-700 SDF.asset");
+    --font-museo-900: url("project://database/Packages/com.pz.studio/Assets/Fonts/MuseoSansRounded-900 SDF.asset");
+    --font-museo-1000: url("project://database/Packages/com.pz.studio/Assets/Fonts/MuseoSansRounded-1000 SDF.asset");
+
+    --announce-band: url("project://database/Assets/DropFour/Icons/CardGameNotif.png");
+    --announce-toast: url("project://database/Assets/DropFour/Icons/CardGameStatus.png");
+
+    --d4-current-green: #51FFA5;
+    --d4-next-gold: #ffc721;
+    --d4-timer-fill: rgba(100, 242, 169, 0.25);
+    --d4-text: #efedff;
+    --d4-text-dark: #15151a;
+    --d4-toast-text: #25252e;
+    --d4-outline-dark: #28272D;
+
+    --d4-disc-1: #fd4f4b;
+    --d4-disc-2: #f1d800;
+}
+
+.drop-four-h-u-d {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    color: var(--d4-text);
+    font-size: 22px;
+    -unity-font-definition: var(--font-museo-900);
+    -unity-text-align: middle-center;
+}
+
+.hud-root {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+}
+
+/* Sits above the board panel, which is vertically centered and roughly 382px tall. The
+   tile row is ~110px, so a 56px top margin clears the panel's top edge on every screen
+   height we support. Deliberately uses margin only -- a percentage `top` on an in-flow
+   element makes the clearance depend on view height, which is how tiles end up overlapping
+   the board on short screens. */
+.players-container {
+    margin-top: 56px;
+    flex-direction: row;
+}
+
+/* Explicit column direction so a narrow screen cannot reflow the disc badge beside the
+   avatar instead of under it. */
+.player {
+    flex-direction: column;
+    flex-shrink: 0;
+    justify-content: center;
+    align-items: center;
+    margin: 0 18px;
+}
+
+/* Not an overlay: this element IS the avatar's box, and the highlight is its own border.
+   Nothing to align, nothing to drift. */
+.glow-frame {
+    width: 66px;
+    height: 66px;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+}
+
+.glow-frame-on {
+    border-width: 5px;
+    border-color: var(--d4-current-green);
+    border-radius: 14px;
+}
+
+.avatar {
+    width: 70px;
+    height: 70px;
+    flex-shrink: 0;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+}
+
+.timer-bar {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+/* Height is driven from Lua; fills bottom-up. */
+.timer-fill {
+    position: absolute;
+    width: 100%;
+    border-radius: 2px;
+    background-color: var(--d4-timer-fill);
+    bottom: 0;
+}
+
+.next-label {
+    position: absolute;
+    top: -22px;
+    left: 0;
+    right: 0;
+    color: var(--d4-next-gold);
+    font-size: 14px;
+    -unity-font-definition: var(--font-museo-900);
+    -unity-text-align: middle-center;
+}
+
+.turn-timer-label {
+    position: absolute;
+    top: -24px;
+    left: 0;
+    right: 0;
+    color: var(--d4-current-green);
+    font-size: 16px;
+    -unity-font-definition: var(--font-museo-900);
+    -unity-text-align: middle-center;
+}
+
+/* Which disc color this player is playing. Overlaps up onto the avatar, where Color Splash
+   put its card count. */
+.disc-badge-container {
+    flex-direction: row;
+    align-items: center;
+    margin-top: -14px;
+}
+
+.disc-badge {
+    width: 22px;
+    height: 22px;
+    border-radius: 11px;
+    border-width: 2px;
+    border-color: var(--d4-outline-dark);
+}
+
+.disc-badge-1 {
+    background-color: var(--d4-disc-1);
+}
+
+.disc-badge-2 {
+    background-color: var(--d4-disc-2);
+}
+
+.player-name {
+    margin-top: 4px;
+    font-size: 13px;
+    -unity-font-definition: var(--font-museo-700);
+    color: var(--d4-text);
+    -unity-text-align: middle-center;
+    max-width: 90px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+/* -------------------- announcements -------------------- */
+
+/* YOUR moments. Fixed box at the art's aspect ratio (1524x495 ~ 3.08:1); the glow and
+   shadow margins are baked into the PNG, so no border-radius or background-color here. */
+.announce-band {
+    position: absolute;
+    align-self: center;
+    top: 40%;
+    width: 460px;
+    height: 149px;
+    background-image: var(--announce-band);
+    -unity-background-scale-mode: scale-to-fit;
+    font-size: 30px;
+    color: var(--d4-text-dark);
+    white-space: nowrap;
+    -unity-font-definition: var(--font-museo-900);
+    -unity-text-align: middle-center;
+}
+
+/* What the OTHER player did. Smaller and higher up, so it reads as "not about me". The top
+   here is a fallback only: Lua re-anchors the bubble above the acting player's tile.
+   Size is kept in sync with TOAST_W / TOAST_H in the Lua. */
+.announce-toast {
+    position: absolute;
+    align-self: center;
+    top: 24%;
+    width: 160px;
+    height: 68px;
+    padding-bottom: 10px;
+    background-image: var(--announce-toast);
+    -unity-background-scale-mode: scale-to-fit;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.toast-avatar {
+    flex-shrink: 0;
+    margin: 0 4px;
+}
+
+/* 14 = half of 28, so this one is a true circle. */
+.toast-avatar.user-thumbnail {
+    width: 28px;
+    height: 28px;
+    border-radius: 14px;
+    overflow: hidden;
+}
+
+.toast-text {
+    font-size: 15px;
+    color: var(--d4-toast-text);
+    white-space: nowrap;
+    -unity-font-definition: var(--font-museo-900);
+    -unity-text-align: middle-center;
+}
