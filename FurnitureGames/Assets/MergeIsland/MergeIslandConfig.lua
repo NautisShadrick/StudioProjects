@@ -21,12 +21,26 @@
 --------------------------------
 ------     CONSTANTS      ------
 --------------------------------
--- Board geometry. Row 1 is the top row. The playable area starts as a square of START_RADIUS
--- cells around the centre (radius 1 = the 3x3 seen in the prototype).
+-- Board geometry. Row 1 is the TOP row, so the start area below sits at the bottom of the board.
 COLS = 7
 ROWS = 7
 CELL_COUNT = COLS * ROWS
-START_RADIUS = 1
+
+-- The starting playable area, as an inclusive row/col rectangle. Defaults to the bottom-centre
+-- 3x2 block:
+--     1111111
+--     1111111
+--     1111111
+--     1111111
+--     1111111
+--     1100011
+--     1100011
+-- Everything outside it starts locked, and ghost rings are measured outward FROM this rectangle
+-- (not from the board centre), so moving or resizing it re-tiers the whole board automatically.
+START_ROW_MIN = 6
+START_ROW_MAX = 7
+START_COL_MIN = 3
+START_COL_MAX = 5
 
 -- Cell states. Numeric so the persisted payload stays small.
 STATE_HIDDEN = 0    -- locked, nothing shown (plain tile)
@@ -36,7 +50,9 @@ STATE_OPEN = 2      -- unlocked; may or may not hold an item
 -- Bumped whenever the persisted board SHAPE changes. A save from a different version is
 -- discarded rather than half-read, which is what keeps a format change from producing a board
 -- that is subtly wrong instead of obviously fresh.
-SAVE_VERSION = 2
+-- v3: start area moved from the board centre to the bottom-centre rectangle, so boards saved
+-- under the old layout are regenerated rather than kept with a centre-opened start.
+SAVE_VERSION = 3
 
 -- Energy. A fixed pool is granted per event window; there is no passive regen. Bumping
 -- EVENT_ID re-grants the pool to every player on their next load, which is how a new event
@@ -208,16 +224,23 @@ function HasItem(cells, index: number): boolean
     return _cell.state == STATE_OPEN and _cell.tier ~= nil
 end
 
--- Chebyshev distance from the board centre. Concentric squares, so the start area and every
--- ghost ring are square -- which is what the prototype's outward expansion looks like.
+-- Chebyshev distance from the START RECTANGLE: 0 for a cell inside it, 1 for the ring touching
+-- it, and so on outward. Measuring from the rectangle rather than a point is what lets the start
+-- area sit anywhere (here, bottom-centre) while ghost rings still ramp outward from it.
 function RingDistance(index: number): number
     local _row, _col = CellCoords(index)
     if not _row then
         return math.huge
     end
-    local _centreRow = math.floor((ROWS + 1) / 2)
-    local _centreCol = math.floor((COLS + 1) / 2)
-    return math.max(math.abs(_row - _centreRow), math.abs(_col - _centreCol))
+    -- Distance outside the rectangle on each axis, 0 when the cell is within its span.
+    local _dRow = math.max(START_ROW_MIN - _row, 0, _row - START_ROW_MAX)
+    local _dCol = math.max(START_COL_MIN - _col, 0, _col - START_COL_MAX)
+    return math.max(_dRow, _dCol)
+end
+
+-- Is this cell part of the initial playable area?
+function IsStartCell(index: number): boolean
+    return RingDistance(index) == 0
 end
 
 -- Base ghost tier for a ghost ring (ring 1 being the first locked ring outside the start area).
@@ -237,8 +260,8 @@ end
 
 -- SERVER ONLY (rolls dice). A fresh ghost spec for a cell, tiered by how far out it sits.
 function RandomGhostFor(index: number): Cell
-    local _ring = RingDistance(index) - START_RADIUS
-    local _tier = GhostTierForRing(_ring)
+    -- RingDistance is already 0 inside the start area, so it IS the ghost ring number.
+    local _tier = GhostTierForRing(RingDistance(index))
     -- Jitter upward sometimes so a ring is not visually uniform, never past the top ghost tier.
     local _topGhostTier = math.max(1, MAX_TIER - 1)
     if math.random() < GHOST_TIER_JITTER_CHANCE and _tier < _topGhostTier then
@@ -360,12 +383,12 @@ function ExpandFrom(cells, index: number): {number}
     return _opened
 end
 
--- SERVER ONLY (rolls dice). A brand-new board: everything hidden, the centre square opened, and
--- the first ghost ring seeded around it.
+-- SERVER ONLY (rolls dice). A brand-new board: everything hidden, the start rectangle opened,
+-- and the first ghost ring seeded around it.
 function NewBoard(): {Cell}
     local _cells = {}
     for i = 1, CELL_COUNT do
-        if RingDistance(i) <= START_RADIUS then
+        if IsStartCell(i) then
             _cells[i] = { state = STATE_OPEN }
         else
             _cells[i] = { state = STATE_HIDDEN }

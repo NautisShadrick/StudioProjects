@@ -1,13 +1,14 @@
 /*
     MergeIslandHUD -- full-screen merge-and-unlock board.
 
-    Geometry: 7 columns at a 44px pitch (40px cell + 2px margin all round) = 308px of grid.
-    The frame HUGS that fixed-pixel width rather than taking a percentage, because Yoga counts
-    padding inside `width` and a percentage frame would silently clip the last column.
+    Geometry: 7 columns of flush 44px tiles = 308px of grid, no margins -- tiles touch, and
+    colour alone separates them. The frame HUGS that fixed-pixel width rather than taking a
+    percentage, because Yoga counts padding inside `width` and a percentage frame would silently
+    clip the last column.
 
-    The 2px margin around each cell is load-bearing: borders draw OUTSIDE the content box, so
-    the drop-target highlight's border needs that gap to draw into or it would overlap its
-    neighbours.
+    Because tiles are flush, NO tile may carry a border: borders draw OUTSIDE the content box in
+    this runtime, so one would bleed over its neighbours. The drop-target ring is therefore an
+    inset overlay child (.cell-highlight), sized so its outward border lands on the tile edge.
 
     Runtime constraints this file works around (carried over from the Drop Four build):
       * background-position and percent/negative insets on absolutes are IGNORED, so framing
@@ -25,14 +26,21 @@
     --font-museo-700: url("project://database/Packages/com.pz.studio/Assets/Fonts/MuseoSansRounded-700 SDF.asset");
     --font-museo-900: url("project://database/Packages/com.pz.studio/Assets/Fonts/MuseoSansRounded-900 SDF.asset");
 
+    --icon-energy: url("project://database/Assets/MergeIsland/energy.png");
+
     /* Beach palette, sampled from the prototype. */
     --mi-sky: #7fd4e8;
     --mi-sand-frame: #e8c9a0;
     --mi-sand-inset: #f2ddb8;
-    --mi-locked: #e0be93;
     --mi-locked-edge: #c9a476;
-    --mi-water: #9fdcef;
-    --mi-water-edge: #7cc4da;
+
+    /* Board tiles. Tiles touch with no gap, so COLOUR is the only separation: undiscovered and
+       ghost sand are distinct shades, and open water alternates on a checkerboard so the grid
+       stays readable without borders. */
+    --mi-hidden: #f1bb7b;
+    --mi-ghost: #d79c62;
+    --mi-water-a: #7dc9d7;
+    --mi-water-b: #89cfdd;
 
     --mi-text: #5b3f22;
     --mi-text-light: #fffaf0;
@@ -42,7 +50,6 @@
     --mi-green: #67c23a;
     --mi-green-dark: #4f9c2b;
     --mi-red: #e8483f;
-    --mi-gold: #f0b429;
     --mi-highlight: #7cf34a;
 
     /* Placeholder item colours, one per rung of the ladder. A deliberate low-to-high ramp
@@ -149,49 +156,63 @@
 .board-grid {
     flex-direction: column;
     align-items: center;
+    background-color: #f1bb7b;
 }
 
 .board-row {
     flex-direction: row;
 }
 
-/* The cell is the tap target. pickingMode is also set in Lua, since dynamically created
-   elements are not reliably tappable from a USS rule alone. */
+/* The cell is the tap target. Tiles are flush -- no margin, no radius, no border -- so the board
+   reads as one continuous grid. pickingMode is also set in Lua, since dynamically created
+   elements are not reliably tappable from a USS rule alone.
+
+   NOTE: no border here on purpose. Borders draw OUTSIDE the content box in this runtime, so with
+   tiles touching, any border would bleed over its neighbours. The drop-target ring is an inset
+   overlay child instead (.cell-highlight). */
 .cell {
-    width: 40px;
-    height: 40px;
-    margin: 2px;
-    border-radius: 8px;
+    width: 44px;
+    height: 44px;
     align-items: center;
     justify-content: center;
 }
 
 /* Locked and blank -- solid sand, no hint of what goes there yet. */
 .cell-hidden {
-    background-color: var(--mi-locked);
-    border-width: 1px;
-    border-color: var(--mi-locked-edge);
+    background-color: var(--mi-hidden);
 }
 
-/* Locked but ghosted -- same sand tile, but it shows a faded silhouette of what it accepts. */
+/* Locked but ghosted -- a darker sand tile showing a faded silhouette of what it accepts. */
 .cell-ghost {
-    background-color: var(--mi-sand-inset);
-    border-width: 1px;
-    border-color: var(--mi-locked-edge);
+    background-color: var(--mi-ghost);
 }
 
-/* Unlocked and playable -- reads as water punched through the sand. */
-.cell-open {
-    background-color: var(--mi-water);
-    border-width: 1px;
-    border-color: var(--mi-water-edge);
+/* Unlocked and playable -- water. The two shades alternate by (row + col) parity, applied from
+   Lua, so the playable area reads as a checkerboard without needing any tile borders. */
+.cell-open-a {
+    background-color: var(--mi-water-a);
 }
 
-/* Legal drop target under the dragged item. A ring INSIDE the margin gap, since borders draw
-   outside the content box. */
-.cell-drop-target {
+.cell-open-b {
+    background-color: var(--mi-water-b);
+    border-radius: 0px;
+}
+
+/* Legal drop target under the dragged item: a ring inset 2px so that, with the border drawing
+   outward, it lands exactly on the tile's 44px edge instead of over its neighbours. */
+.cell-highlight {
+    position: absolute;
+    left: 2px;
+    top: 2px;
+    width: 40px;
+    height: 40px;
     border-width: 2px;
     border-color: var(--mi-highlight);
+    display: none;
+}
+
+.cell-highlight-visible {
+    display: flex;
 }
 
 .cell-item {
@@ -264,12 +285,14 @@
     justify-content: center;
 }
 
+/* No background-color: the icon art is the whole visual, and a fill behind a transparent PNG
+   would show as a square halo. */
 .energy-bolt {
-    width: 18px;
-    height: 18px;
+    width: 22px;
+    height: 22px;
     margin-right: 6px;
-    border-radius: 4px;
-    background-color: var(--mi-gold);
+    background-image: var(--icon-energy);
+    -unity-background-scale-mode: scale-to-fit;
 }
 
 .energy-label {

@@ -29,8 +29,11 @@ local BoardRowClass = "board-row"
 local CellClass = "cell"
 local CellHiddenClass = "cell-hidden"
 local CellGhostClass = "cell-ghost"
-local CellOpenClass = "cell-open"
-local CellDropTargetClass = "cell-drop-target"
+-- Two open-water shades, alternating by (row + col) parity to make a checkerboard.
+local CellOpenAClass = "cell-open-a"
+local CellOpenBClass = "cell-open-b"
+local CellHighlightClass = "cell-highlight"
+local CellHighlightVisibleClass = "cell-highlight-visible"
 local CellItemClass = "cell-item"
 local CellItemVisibleClass = "cell-item-visible"
 local CellItemGhostClass = "cell-item-ghost"
@@ -304,13 +307,16 @@ local function renderCell(index: number)
 
     _ui.root:RemoveFromClassList(CellHiddenClass)
     _ui.root:RemoveFromClassList(CellGhostClass)
-    _ui.root:RemoveFromClassList(CellOpenClass)
+    _ui.root:RemoveFromClassList(CellOpenAClass)
+    _ui.root:RemoveFromClassList(CellOpenBClass)
 
     if _cell.state == config.STATE_GHOST then
         _ui.root:AddToClassList(CellGhostClass)
         applyItemVisual(_ui, _cell.tier, true)
     elseif _cell.state == config.STATE_OPEN then
-        _ui.root:AddToClassList(CellOpenClass)
+        -- Parity is fixed per cell and cached at build time, so the checkerboard stays stable as
+        -- tiles change state.
+        _ui.root:AddToClassList(if _ui.isEven then CellOpenAClass else CellOpenBClass)
         applyItemVisual(_ui, _cell.tier, false)
     else
         _ui.root:AddToClassList(CellHiddenClass)
@@ -397,7 +403,7 @@ local function clearHover()
     if dragState and dragState.hoverIndex then
         local _ui = cellElements[dragState.hoverIndex]
         if _ui then
-            _ui.root:RemoveFromClassList(CellDropTargetClass)
+            _ui.highlight:RemoveFromClassList(CellHighlightVisibleClass)
         end
         dragState.hoverIndex = nil
     end
@@ -548,11 +554,21 @@ local function buildGrid()
             _tierLabel.pickingMode = PickingMode.Ignore
             _itemElement:Add(_tierLabel)
 
+            -- Drop-target ring. An overlay child rather than a border on the cell, because
+            -- borders draw outside the content box and tiles have no gap to absorb that.
+            local _highlight = VisualElement.new()
+            _highlight:AddToClassList(CellHighlightClass)
+            _highlight.pickingMode = PickingMode.Ignore
+            _cellElement:Add(_highlight)
+
             cellElements[_index] = {
                 root = _cellElement,
                 item = _itemElement,
                 tier = _tierLabel,
+                highlight = _highlight,
                 itemClass = nil,
+                -- Cached so the checkerboard never has to be recomputed per repaint.
+                isEven = (_row + _col) % 2 == 0,
             }
 
             -- Pickup identity comes from the event target, not from coordinates, so grabbing
@@ -690,7 +706,7 @@ function self:Start()
         if _over and manager.CanDrop(dragState.fromIndex, _over) then
             local _ui = cellElements[_over]
             if _ui then
-                _ui.root:AddToClassList(CellDropTargetClass)
+                _ui.highlight:AddToClassList(CellHighlightVisibleClass)
                 dragState.hoverIndex = _over
             end
         end
