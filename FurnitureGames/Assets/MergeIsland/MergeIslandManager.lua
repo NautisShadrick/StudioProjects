@@ -27,8 +27,6 @@ local STORAGE_KEY = "MergeIslandState"
 local SAVE_INTERVAL_SECONDS = 5
 local MAX_SAVES_PER_SWEEP = 8
 
-local SPAWN_TIER = 1
-
 --------------------------------
 ------  REQUIRED MODULES  ------
 --------------------------------
@@ -98,7 +96,6 @@ local function cloneCells(cells): {any}
         if _cell then
             _copy[i] = {
                 state = _cell.state,
-                itemType = _cell.itemType,
                 tier = _cell.tier,
             }
         else
@@ -139,6 +136,7 @@ local function flush(player: Player, board)
     -- player.name inside the callback could happen after they are gone.
     local _name = tostring(player.name)
     Storage.SetPlayerValue(player, STORAGE_KEY, {
+        version = config.SAVE_VERSION,
         cells = cloneCells(board.cells),
         energy = board.energy,
         eventId = board.eventId,
@@ -151,10 +149,14 @@ local function flush(player: Player, board)
     end)
 end
 
--- Is a stored payload usable? A board saved under a different grid size (or a truncated
--- write) must be rejected, or every index-based rule downstream would misbehave.
+-- Is a stored payload usable? A board saved under a different grid size or an older cell shape
+-- (or a truncated write) must be rejected outright: a half-read board misbehaves subtly, which
+-- is much worse to debug than an obviously fresh one.
 local function isValidSavedBoard(value): boolean
     if type(value) ~= "table" or type(value.cells) ~= "table" then
+        return false
+    end
+    if value.version ~= config.SAVE_VERSION then
         return false
     end
     for i = 1, config.CELL_COUNT do
@@ -406,10 +408,10 @@ function self:ServerAwake()
         end
 
         _board.energy = _board.energy - config.SPAWN_COST
+        -- Every spawn enters at the bottom of the single ladder; there is no type to roll.
         _board.cells[_index] = {
             state = config.STATE_OPEN,
-            itemType = config.RandomItemType(),
-            tier = SPAWN_TIER,
+            tier = config.SPAWN_TIER,
         }
         markDirty(_board)
         sendSnapshot(player)

@@ -52,6 +52,12 @@
 
       <Label name="_hintLabel" text="Drag an item onto a matching item to merge it" class="hint-label" picking-mode="Ignore"/>
 
+      <!-- Transient feedback ("Board is full!"). The row centres the pill so the label hugs its
+           own text instead of stretching; Lua animates the label's opacity and translate. -->
+      <VisualElement class="toast-row" picking-mode="Ignore">
+        <Label name="_toastLabel" text="" class="toast" picking-mode="Ignore"/>
+      </VisualElement>
+
       <!-- The dragged item is parented here so it draws above every cell. Absolute and
            100%-sized, so WorldToLocal against it is stable. -->
       <VisualElement name="_flightLayer" class="flight-layer" picking-mode="Ignore"/>

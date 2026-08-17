@@ -16,6 +16,13 @@
 -- everything it is asked to do.
 
 --------------------------------
+------ SERIALIZED FIELDS  ------
+--------------------------------
+--!Tooltip("Item art, ONE SPRITE PER TIER, ordered bottom of the ladder to top. Index 1 = tier 1. Any tier left empty falls back to its placeholder colour and tier number, so a partly-filled list is fine while you are still making art.")
+--!SerializeField
+local tierSprites : {Sprite} = {}
+
+--------------------------------
 ------  USS CLASS NAMES   ------
 --------------------------------
 local BoardRowClass = "board-row"
@@ -54,6 +61,8 @@ local _generatorButton : VisualElement = nil
 --!Bind
 local _hintLabel : Label = nil
 --!Bind
+local _toastLabel : Label = nil
+--!Bind
 local _flightLayer : VisualElement = nil
 
 --------------------------------
@@ -71,8 +80,11 @@ local POP_SECONDS = 0.26
 local POP_FROM_SCALE = 0.55
 local BREAK_SECONDS = 0.3
 local BREAK_FROM_SCALE = 0.4
--- How long a rejection message stays up before the default hint returns.
-local HINT_RESET_SECONDS = 2.0
+-- Toast: fades in while sliding up, holds, then fades out.
+local TOAST_RISE_PX = 24
+local TOAST_IN_SECONDS = 0.22
+local TOAST_HOLD_SECONDS = 1.2
+local TOAST_OUT_SECONDS = 0.35
 
 local WORLD_TOP_BUTTON_INDEX = 0
 
@@ -85,8 +97,8 @@ local DEFAULT_HINT = "Drag an item onto a matching item to merge it"
 -- move, a drag of nothing) are deliberately absent and fall through to the default hint.
 local REJECT_MESSAGES = {
     no_energy = "Out of energy!",
-    board_full = "No space left -- merge something first",
-    mismatch = "Those don't match",
+    board_full = "Board is full!",
+    mismatch = "Those tiers don't match",
     max_tier = "That's already the highest tier",
     locked = "That tile is still locked",
 }
@@ -130,9 +142,10 @@ local pendingPopIndex: number | nil = nil
 -- it. Without this the item flickers back into its old cell for one network round trip.
 local committedFromIndex: number | nil = nil
 
--- Bumped on every hint change; a pending reset only fires if it is still the newest one. This
--- is used instead of cancelling the timer so overlapping hints cannot reset each other early.
-local hintGeneration: number = 0
+-- Bumped on every toast; a deferred fade-out only runs if its toast is still the newest one, so
+-- a superseded toast cannot hide the one that replaced it.
+local toastGeneration: number = 0
+local toastTween = nil
 local isOpen: boolean = false
 local worldTopButton: VisualElement = nil
 
@@ -177,45 +190,109 @@ local function cellIndexAt(point: Vector2): number | nil
     return nil
 end
 
-local function setHint(text: string)
-    _hintLabel.text = text
-    if text == DEFAULT_HINT then
-        return
-    end
-    hintGeneration = hintGeneration + 1
-    local _generation = hintGeneration
-    Timer.After(HINT_RESET_SECONDS, function()
-        -- A newer hint has replaced this one; let that one own the reset.
-        if _generation ~= hintGeneration then
-            return
-        end
-        _hintLabel.text = DEFAULT_HINT
-    end)
+local function applyToast(opacity: number, risePx: number)
+    _toastLabel.style.opacity = StyleFloat.new(opacity)
+    _toastLabel.style.translate = StyleTranslate.new(
+        Translate.new(Length.new(0), Length.new(risePx)))
 end
 
--- Paint one cell's item element for an item (or a ghost's silhouette). Passing nil itemType
--- hides it.
-local function applyItemVisual(ui, itemType: string | nil, tier: number | nil, isGhost: boolean)
+-- Pop a transient message above the generator: fade in while sliding up from below, hold, then
+-- fade out. Re-triggering restarts it, and the generation guard stops a superseded toast's
+-- deferred fade-out from hiding the newer one.
+local function showToast(text: string)
+    toastGeneration = toastGeneration + 1
+    local _generation = toastGeneration
+    if toastTween then
+        toastTween:stop()
+        toastTween = nil
+    end
+
+    _toastLabel.text = text
+    _toastLabel.style.display = DisplayStyle.Flex
+    applyToast(0, TOAST_RISE_PX)
+
+    toastTween = Tween:new(
+        0, 1, TOAST_IN_SECONDS, false, false, Easing.easeOutQuad,
+        function(value) applyToast(value, TOAST_RISE_PX * (1 - value)) end,
+        function()
+            applyToast(1, 0)
+            Timer.After(TOAST_HOLD_SECONDS, function()
+                if _generation ~= toastGeneration then
+                    return
+                end
+                toastTween = Tween:new(
+                    1, 0, TOAST_OUT_SECONDS, false, false, Easing.easeInQuad,
+                    function(value) applyToast(value, 0) end,
+                    function()
+                        if _generation ~= toastGeneration then
+                            return
+                        end
+                        applyToast(0, TOAST_RISE_PX)
+                        _toastLabel.style.display = DisplayStyle.None
+                        toastTween = nil
+                    end
+                )
+                toastTween:start()
+            end)
+        end
+    )
+    toastTween:start()
+end
+
+-- The assigned sprite's texture for a tier, or nil when that tier has no art yet. Sprites are
+-- assigned in the inspector, so a half-filled list is normal during production -- every caller
+-- has to cope with nil rather than assume art exists.
+local function tierTexture(tier: number?)
+    -- `tier or 0` keeps the index a plain number for the type checker; index 0 never exists, so
+    -- a nil tier falls through to the no-art path just the same.
+    local _sprite = tierSprites[tier or 0]
+    if not _sprite then
+        return nil
+    end
+    return _sprite.texture
+end
+
+-- Paint one cell's item element for an item (or a ghost's silhouette). Passing nil tier hides
+-- it. Art comes from tierSprites when available; the USS colour class and the tier number are
+-- the fallback, and the number is dropped once real art is in so it does not sit on top of it.
+local function hideItemVisual(ui)
+    ui.item:RemoveFromClassList(CellItemVisibleClass)
+    ui.item.style.backgroundImage = nil
+    ui.tier.text = ""
+end
+
+local function applyItemVisual(ui, tier: number?, isGhost: boolean)
     if ui.itemClass then
         ui.item:RemoveFromClassList(ui.itemClass)
         ui.itemClass = nil
     end
     ui.item:RemoveFromClassList(CellItemGhostClass)
 
-    local _info = itemType and config.TierInfo(itemType, tier)
+    if tier == nil then
+        hideItemVisual(ui)
+        return
+    end
+    local _info = config.TierInfo(tier)
     if not _info then
-        ui.item:RemoveFromClassList(CellItemVisibleClass)
-        ui.tier.text = ""
+        hideItemVisual(ui)
         return
     end
 
-    ui.itemClass = _info.class
-    ui.item:AddToClassList(_info.class)
+    local _texture = tierTexture(tier)
+    if _texture then
+        ui.item.style.backgroundImage = _texture
+        ui.tier.text = ""
+    else
+        ui.item.style.backgroundImage = nil
+        ui.itemClass = _info.class
+        ui.item:AddToClassList(_info.class)
+        ui.tier.text = tostring(tier)
+    end
+
     ui.item:AddToClassList(CellItemVisibleClass)
     if isGhost then
         ui.item:AddToClassList(CellItemGhostClass)
     end
-    ui.tier.text = tostring(tier)
 end
 
 local function renderCell(index: number)
@@ -231,13 +308,13 @@ local function renderCell(index: number)
 
     if _cell.state == config.STATE_GHOST then
         _ui.root:AddToClassList(CellGhostClass)
-        applyItemVisual(_ui, _cell.itemType, _cell.tier, true)
+        applyItemVisual(_ui, _cell.tier, true)
     elseif _cell.state == config.STATE_OPEN then
         _ui.root:AddToClassList(CellOpenClass)
-        applyItemVisual(_ui, _cell.itemType, _cell.tier, false)
+        applyItemVisual(_ui, _cell.tier, false)
     else
         _ui.root:AddToClassList(CellHiddenClass)
-        applyItemVisual(_ui, nil, nil, false)
+        applyItemVisual(_ui, nil, false)
     end
 
     -- A cell whose item is lifted (or whose move is committed but unconfirmed) keeps its layout
@@ -395,7 +472,7 @@ local function beginDrag(index: number, point: Vector2)
         return
     end
     local _cell = config.CellAt(_cells, index)
-    local _info = config.TierInfo(_cell.itemType, _cell.tier)
+    local _info = config.TierInfo(_cell.tier)
     if not _info then
         return
     end
@@ -410,12 +487,19 @@ local function beginDrag(index: number, point: Vector2)
 
     local _element = VisualElement.new()
     _element:AddToClassList(FlyingItemClass)
-    _element:AddToClassList(_info.class)
     _element.pickingMode = PickingMode.Ignore
     local _tierLabel = Label.new()
     _tierLabel:AddToClassList(CellTierClass)
-    _tierLabel.text = tostring(_cell.tier)
     _tierLabel.pickingMode = PickingMode.Ignore
+    -- Same art rule as a cell: the tier's sprite if it has one, otherwise the placeholder
+    -- colour class plus its tier number.
+    local _texture = tierTexture(_cell.tier)
+    if _texture then
+        _element.style.backgroundImage = _texture
+    else
+        _element:AddToClassList(_info.class)
+        _tierLabel.text = tostring(_cell.tier)
+    end
     _element:Add(_tierLabel)
     _flightLayer:Add(_element)
     _element:BringToFront()
@@ -503,6 +587,15 @@ function Hide()
     -- A drag in flight must not survive the HUD closing, or the flying element would be
     -- orphaned in a hidden layer.
     teardownDrag(true)
+    -- Likewise a toast: bump the generation so any deferred fade-out is abandoned, and reset it
+    -- so the next open does not flash a stale message mid-animation.
+    toastGeneration = toastGeneration + 1
+    if toastTween then
+        toastTween:stop()
+        toastTween = nil
+    end
+    _toastLabel.style.display = DisplayStyle.None
+    applyToast(0, TOAST_RISE_PX)
     _hudRoot.style.display = DisplayStyle.None
     UI:ShowWorldControls()
 end
@@ -519,6 +612,15 @@ end
 ------  LIFECYCLE HOOKS   ------
 --------------------------------
 function self:Start()
+    -- A partly-filled sprite list is fine (those tiers fall back to placeholders), but MORE
+    -- sprites than rungs means someone expected a tier that the ladder does not have, and the
+    -- extras would silently never render.
+    if #tierSprites > config.MAX_TIER then
+        print("[MergeIslandHUD] tierSprites has " .. tostring(#tierSprites) .. " entries but the"
+            .. " ladder only has " .. tostring(config.MAX_TIER) .. " tiers; the extras are"
+            .. " ignored. Add rows to ITEM_TIERS in MergeIslandConfig to use them.")
+    end
+
     buildGrid()
 
     -- Start closed; the world-top button is the way in.
@@ -528,16 +630,17 @@ function self:Start()
 
     _closeButton:RegisterPressCallback(function() Hide() end)
     _infoButton:RegisterPressCallback(function()
-        setHint("Merge two matching items, or drop one on its faded twin to unlock the board")
+        showToast("Merge two matching items, or drop one on its faded twin to unlock the board")
     end)
 
     _generatorButton:RegisterPressCallback(function()
         if not manager.CanSpawn() then
-            -- Explain the refusal locally instead of firing an intent we know will be denied.
+            -- Refused locally: no spawn, no intent sent, just a toast saying why. The server
+            -- would reject it too, but there is no reason to make the player wait for that.
             if manager.GetEnergy() < config.SPAWN_COST then
-                setHint(REJECT_MESSAGES.no_energy)
+                showToast(REJECT_MESSAGES.no_energy)
             else
-                setHint(REJECT_MESSAGES.board_full)
+                showToast(REJECT_MESSAGES.board_full)
             end
             return
         end
@@ -639,7 +742,7 @@ function self:Start()
     manager.OnRejected(function(reason)
         local _message = REJECT_MESSAGES[reason]
         if _message then
-            setHint(_message)
+            showToast(_message)
         end
         refreshGenerator()
     end)

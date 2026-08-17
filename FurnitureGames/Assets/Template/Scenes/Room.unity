@@ -146,7 +146,7 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 346113214}
-  m_Material: {fileID: 1247029484}
+  m_Material: {fileID: 688725690}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -310,11 +310,30 @@ MonoBehaviour:
   _uiOutput: 3
   _uiOutputSettings:
     rid: -2
+  m_tierSprites:
+  - {fileID: 21300000, guid: ba9700570dd49864797aaf537813c6d9, type: 3}
+  - {fileID: 21300000, guid: a14f80f88e033904cb8b08f8b681a10a, type: 3}
+  - {fileID: 21300000, guid: b4103242d11f67545a18599653614305, type: 3}
+  - {fileID: 21300000, guid: a69f65f17080b5247bb61f1338179566, type: 3}
+  - {fileID: 21300000, guid: ea98d5dfbba7a584fba45ff4f6282799, type: 3}
   references:
     version: 2
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
+--- !u!134 &688725690
+PhysicsMaterial:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: ' (Instance) (Instance)'
+  serializedVersion: 2
+  m_DynamicFriction: 0.6
+  m_StaticFriction: 0.6
+  m_Bounciness: 0
+  m_FrictionCombine: 0
+  m_BounceCombine: 0
 --- !u!1 &731429270
 GameObject:
   m_ObjectHideFlags: 0
@@ -395,19 +414,6 @@ Transform:
   - {fileID: 538931845}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!134 &1247029484
-PhysicsMaterial:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: ' (Instance)'
-  serializedVersion: 2
-  m_DynamicFriction: 0.6
-  m_StaticFriction: 0.6
-  m_Bounciness: 0
-  m_FrictionCombine: 0
-  m_BounceCombine: 0
 --- !u!1 &1277134859
 GameObject:
   m_ObjectHideFlags: 0

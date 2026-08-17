@@ -26,6 +26,8 @@ namespace Highrise.Lua.Generated
         private const string s_scriptGUID = "be0a75302bf24ba44a4f8b1f659151fd";
         public override string ScriptGUID => s_scriptGUID;
 
+        [Tooltip("Item art, ONE SPRITE PER TIER, ordered bottom of the ladder to top. Index 1 = tier 1. Any tier left empty falls back to its placeholder colour and tier number, so a partly-filled list is fine while you are still making art.")]
+        [SerializeField] public System.Collections.Generic.List<UnityEngine.Sprite> m_tierSprites = default;
 
         protected override SerializedPropertyValue[] SerializeProperties()
         {
@@ -34,7 +36,7 @@ namespace Highrise.Lua.Generated
 
             return new SerializedPropertyValue[]
             {
-                CreateSerializedProperty(_script.GetPropertyAt(0), null),
+                CreateSerializedProperty(_script.GetPropertyAt(0), m_tierSprites),
                 CreateSerializedProperty(_script.GetPropertyAt(1), null),
                 CreateSerializedProperty(_script.GetPropertyAt(2), null),
                 CreateSerializedProperty(_script.GetPropertyAt(3), null),
@@ -43,6 +45,8 @@ namespace Highrise.Lua.Generated
                 CreateSerializedProperty(_script.GetPropertyAt(6), null),
                 CreateSerializedProperty(_script.GetPropertyAt(7), null),
                 CreateSerializedProperty(_script.GetPropertyAt(8), null),
+                CreateSerializedProperty(_script.GetPropertyAt(9), null),
+                CreateSerializedProperty(_script.GetPropertyAt(10), null),
             };
         }
         

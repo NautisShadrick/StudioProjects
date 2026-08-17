@@ -16,9 +16,10 @@
         hit-tests against worldBound, so the lifted item animates layout left/top and never
         percent translate.
 
-    Placeholder art: an item is a coloured rounded square plus its tier number. Item colour
-    encodes the type and brightness encodes the tier, so the board is readable before any real
-    sprites exist. Swapping in art means changing these 16 classes, not the game logic.
+    Art: the item chain is a single linear ladder of MAX_TIER rungs. Real art comes from the
+    `tierSprites` array on the MergeIslandHUD component, applied as backgroundImage from Lua.
+    The .item-tier-N classes below are the fallback for any tier with no sprite assigned yet --
+    a colour ramp plus the tier number, so the board stays readable before art exists.
 */
 :root {
     --font-museo-700: url("project://database/Packages/com.pz.studio/Assets/Fonts/MuseoSansRounded-700 SDF.asset");
@@ -36,6 +37,7 @@
     --mi-text: #5b3f22;
     --mi-text-light: #fffaf0;
     --mi-scrim: rgba(20, 40, 60, 0.55);
+    --mi-toast-bg: rgba(45, 32, 18, 0.88);
 
     --mi-green: #67c23a;
     --mi-green-dark: #4f9c2b;
@@ -43,26 +45,13 @@
     --mi-gold: #f0b429;
     --mi-highlight: #7cf34a;
 
-    /* Item colours: hue = type, brightness = tier. */
-    --mi-bottle-1: #a7e8d8;
-    --mi-bottle-2: #66d4b8;
-    --mi-bottle-3: #2bb894;
-    --mi-bottle-4: #12856a;
-
-    --mi-shell-1: #ffd9e0;
-    --mi-shell-2: #ffa8bc;
-    --mi-shell-3: #f4718f;
-    --mi-shell-4: #c93f61;
-
-    --mi-driftwood-1: #dcc09a;
-    --mi-driftwood-2: #bb9264;
-    --mi-driftwood-3: #8f6538;
-    --mi-driftwood-4: #5e3f1e;
-
-    --mi-coral-1: #ffd0a8;
-    --mi-coral-2: #ff9f5e;
-    --mi-coral-3: #f26b2a;
-    --mi-coral-4: #bf4110;
+    /* Placeholder item colours, one per rung of the ladder. A deliberate low-to-high ramp
+       (pale shell -> gold chest) so the tier is legible at a glance before real art exists. */
+    --mi-tier-1: #f6e0c0;
+    --mi-tier-2: #66d4b8;
+    --mi-tier-3: #4aa3e0;
+    --mi-tier-4: #9b6ede;
+    --mi-tier-5: #f0b429;
 }
 
 .merge-island-h-u-d {
@@ -211,6 +200,8 @@
     border-radius: 8px;
     align-items: center;
     justify-content: center;
+    /* So an assigned tier sprite fits the cell without distorting its aspect. */
+    -unity-background-scale-mode: scale-to-fit;
     display: none;
 }
 
@@ -330,6 +321,29 @@
     -unity-text-align: middle-center;
 }
 
+/* Transient feedback pill. Sits above the generator so it reads as a response to pressing it.
+   Starts at opacity 0 and display none; Lua fades and slides it in, then fades it out. */
+.toast-row {
+    position: absolute;
+    bottom: 130px;
+    left: 0;
+    width: 100%;
+    align-items: center;
+}
+
+.toast {
+    padding: 8px 18px;
+    border-radius: 16px;
+    background-color: var(--mi-toast-bg);
+    color: var(--mi-text-light);
+    font-size: 14px;
+    -unity-font-definition: var(--font-museo-900);
+    -unity-text-align: middle-center;
+    white-space: normal;
+    opacity: 0;
+    display: none;
+}
+
 .hint-label {
     position: absolute;
     bottom: 22px;
@@ -381,27 +395,19 @@
     border-radius: 8px;
     align-items: center;
     justify-content: center;
+    -unity-background-scale-mode: scale-to-fit;
 }
 
 /* ---------------------------- items ----------------------------- */
-/* Declared last so they win the cascade over .cell-item's own background. */
+/* One class per rung of the single linear ladder, declared last so they win the cascade over
+   .cell-item's own background.
 
-.item-bottle-1 { background-color: var(--mi-bottle-1); }
-.item-bottle-2 { background-color: var(--mi-bottle-2); }
-.item-bottle-3 { background-color: var(--mi-bottle-3); }
-.item-bottle-4 { background-color: var(--mi-bottle-4); }
+   These are the PLACEHOLDER fallback only. When a sprite is assigned to a tier in the
+   MergeIslandHUD inspector, Lua sets backgroundImage and the sprite covers this colour. Until
+   then the colour ramp plus the tier number keeps the board readable. */
 
-.item-shell-1 { background-color: var(--mi-shell-1); }
-.item-shell-2 { background-color: var(--mi-shell-2); }
-.item-shell-3 { background-color: var(--mi-shell-3); }
-.item-shell-4 { background-color: var(--mi-shell-4); }
-
-.item-driftwood-1 { background-color: var(--mi-driftwood-1); }
-.item-driftwood-2 { background-color: var(--mi-driftwood-2); }
-.item-driftwood-3 { background-color: var(--mi-driftwood-3); }
-.item-driftwood-4 { background-color: var(--mi-driftwood-4); }
-
-.item-coral-1 { background-color: var(--mi-coral-1); }
-.item-coral-2 { background-color: var(--mi-coral-2); }
-.item-coral-3 { background-color: var(--mi-coral-3); }
-.item-coral-4 { background-color: var(--mi-coral-4); }
+.item-tier-1 { background-color: var(--mi-tier-1); }
+.item-tier-2 { background-color: var(--mi-tier-2); }
+.item-tier-3 { background-color: var(--mi-tier-3); }
+.item-tier-4 { background-color: var(--mi-tier-4); }
+.item-tier-5 { background-color: var(--mi-tier-5); }
