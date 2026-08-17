@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UXML
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="UnityEngine.UIElements"
+    xmlns:hr="Highrise.UI"
+    xmlns:editor="UnityEditor.UIElements"
+    xsi:noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd"
+>
+
+  <hr:UILuaView class="merge-island-h-u-d no-lightmode">
+    <!-- Everything lives inside _hudRoot so the whole HUD shows/hides as one element. -->
+    <VisualElement name="_hudRoot" class="hud-root">
+      <VisualElement class="hud-backdrop" picking-mode="Ignore"/>
+
+      <VisualElement class="top-bar">
+        <VisualElement name="_infoButton" class="info-button">
+          <Label text="i" class="info-glyph" picking-mode="Ignore"/>
+        </VisualElement>
+        <VisualElement name="_closeButton" class="close-button">
+          <!-- Plain ASCII rather than a glyph character, so it cannot render as tofu if the
+               bundled font lacks the codepoint. -->
+          <Label text="X" class="close-glyph" picking-mode="Ignore"/>
+        </VisualElement>
+      </VisualElement>
+
+      <!-- Board. The frame hugs the fixed-pixel grid rather than taking a percentage width,
+           so the grid can never overflow its own content box (Yoga counts padding inside
+           `width`). -->
+      <VisualElement class="board-area" picking-mode="Ignore">
+        <VisualElement class="board-frame" picking-mode="Ignore">
+          <!-- Rows are built in Lua. This element carries the DragGesture. -->
+          <VisualElement name="_boardGrid" class="board-grid"/>
+        </VisualElement>
+        <Label name="_loadingLabel" text="Loading your island..." class="loading-label" picking-mode="Ignore"/>
+      </VisualElement>
+
+      <VisualElement class="bottom-bar" picking-mode="Ignore">
+        <VisualElement class="energy-chip" picking-mode="Ignore">
+          <VisualElement class="energy-bolt" picking-mode="Ignore"/>
+          <Label name="_energyLabel" text="0" class="energy-label" picking-mode="Ignore"/>
+        </VisualElement>
+
+        <VisualElement name="_generatorButton" class="generator-button">
+          <VisualElement class="generator-icon" picking-mode="Ignore"/>
+        </VisualElement>
+
+        <!-- Spawn multiplier. Rendered for layout parity with the prototype but inert in V1. -->
+        <VisualElement class="multiplier-chip" picking-mode="Ignore">
+          <Label name="_multiplierLabel" text="x1" class="multiplier-label" picking-mode="Ignore"/>
+        </VisualElement>
+      </VisualElement>
+
+      <Label name="_hintLabel" text="Drag an item onto a matching item to merge it" class="hint-label" picking-mode="Ignore"/>
+
+      <!-- The dragged item is parented here so it draws above every cell. Absolute and
+           100%-sized, so WorldToLocal against it is stable. -->
+      <VisualElement name="_flightLayer" class="flight-layer" picking-mode="Ignore"/>
+    </VisualElement>
+  </hr:UILuaView>
+
+</UXML>

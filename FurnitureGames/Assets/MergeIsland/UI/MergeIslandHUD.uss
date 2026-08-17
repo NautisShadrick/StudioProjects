@@ -1,0 +1,407 @@
+/*
+    MergeIslandHUD -- full-screen merge-and-unlock board.
+
+    Geometry: 7 columns at a 44px pitch (40px cell + 2px margin all round) = 308px of grid.
+    The frame HUGS that fixed-pixel width rather than taking a percentage, because Yoga counts
+    padding inside `width` and a percentage frame would silently clip the last column.
+
+    The 2px margin around each cell is load-bearing: borders draw OUTSIDE the content box, so
+    the drop-target highlight's border needs that gap to draw into or it would overlap its
+    neighbours.
+
+    Runtime constraints this file works around (carried over from the Drop Four build):
+      * background-position and percent/negative insets on absolutes are IGNORED, so framing
+        is done with a larger wrapper element, never negative insets.
+      * percent translate shifts rendering but is NOT reflected in worldBound. The drag
+        hit-tests against worldBound, so the lifted item animates layout left/top and never
+        percent translate.
+
+    Placeholder art: an item is a coloured rounded square plus its tier number. Item colour
+    encodes the type and brightness encodes the tier, so the board is readable before any real
+    sprites exist. Swapping in art means changing these 16 classes, not the game logic.
+*/
+:root {
+    --font-museo-700: url("project://database/Packages/com.pz.studio/Assets/Fonts/MuseoSansRounded-700 SDF.asset");
+    --font-museo-900: url("project://database/Packages/com.pz.studio/Assets/Fonts/MuseoSansRounded-900 SDF.asset");
+
+    /* Beach palette, sampled from the prototype. */
+    --mi-sky: #7fd4e8;
+    --mi-sand-frame: #e8c9a0;
+    --mi-sand-inset: #f2ddb8;
+    --mi-locked: #e0be93;
+    --mi-locked-edge: #c9a476;
+    --mi-water: #9fdcef;
+    --mi-water-edge: #7cc4da;
+
+    --mi-text: #5b3f22;
+    --mi-text-light: #fffaf0;
+    --mi-scrim: rgba(20, 40, 60, 0.55);
+
+    --mi-green: #67c23a;
+    --mi-green-dark: #4f9c2b;
+    --mi-red: #e8483f;
+    --mi-gold: #f0b429;
+    --mi-highlight: #7cf34a;
+
+    /* Item colours: hue = type, brightness = tier. */
+    --mi-bottle-1: #a7e8d8;
+    --mi-bottle-2: #66d4b8;
+    --mi-bottle-3: #2bb894;
+    --mi-bottle-4: #12856a;
+
+    --mi-shell-1: #ffd9e0;
+    --mi-shell-2: #ffa8bc;
+    --mi-shell-3: #f4718f;
+    --mi-shell-4: #c93f61;
+
+    --mi-driftwood-1: #dcc09a;
+    --mi-driftwood-2: #bb9264;
+    --mi-driftwood-3: #8f6538;
+    --mi-driftwood-4: #5e3f1e;
+
+    --mi-coral-1: #ffd0a8;
+    --mi-coral-2: #ff9f5e;
+    --mi-coral-3: #f26b2a;
+    --mi-coral-4: #bf4110;
+}
+
+.merge-island-h-u-d {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.hud-root {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    color: var(--mi-text);
+    -unity-font-definition: var(--font-museo-900);
+    -unity-text-align: middle-center;
+}
+
+.hud-backdrop {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: var(--mi-sky);
+}
+
+/* ---------------------------- top bar --------------------------- */
+
+.top-bar {
+    position: absolute;
+    top: 16px;
+    left: 0;
+    width: 100%;
+    height: 44px;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 18px;
+    padding-right: 18px;
+}
+
+.info-button {
+    width: 34px;
+    height: 34px;
+    border-radius: 17px;
+    background-color: var(--mi-green);
+    border-width: 2px;
+    border-color: var(--mi-text-light);
+    align-items: center;
+    justify-content: center;
+}
+
+.info-glyph {
+    font-size: 18px;
+    color: var(--mi-text-light);
+    -unity-font-definition: var(--font-museo-900);
+    -unity-text-align: middle-center;
+}
+
+.close-button {
+    width: 34px;
+    height: 34px;
+    border-radius: 17px;
+    background-color: var(--mi-red);
+    border-width: 2px;
+    border-color: var(--mi-text-light);
+    align-items: center;
+    justify-content: center;
+}
+
+.close-glyph {
+    font-size: 16px;
+    color: var(--mi-text-light);
+    -unity-font-definition: var(--font-museo-900);
+    -unity-text-align: middle-center;
+}
+
+/* ----------------------------- board ---------------------------- */
+
+.board-area {
+    align-items: center;
+    justify-content: center;
+}
+
+/* Content-driven width: 308px of grid + 10px padding each side. */
+.board-frame {
+    padding: 10px;
+    border-radius: 20px;
+    background-color: var(--mi-sand-frame);
+    border-width: 2px;
+    border-color: var(--mi-locked-edge);
+    align-items: center;
+}
+
+.board-grid {
+    flex-direction: column;
+    align-items: center;
+}
+
+.board-row {
+    flex-direction: row;
+}
+
+/* The cell is the tap target. pickingMode is also set in Lua, since dynamically created
+   elements are not reliably tappable from a USS rule alone. */
+.cell {
+    width: 40px;
+    height: 40px;
+    margin: 2px;
+    border-radius: 8px;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Locked and blank -- solid sand, no hint of what goes there yet. */
+.cell-hidden {
+    background-color: var(--mi-locked);
+    border-width: 1px;
+    border-color: var(--mi-locked-edge);
+}
+
+/* Locked but ghosted -- same sand tile, but it shows a faded silhouette of what it accepts. */
+.cell-ghost {
+    background-color: var(--mi-sand-inset);
+    border-width: 1px;
+    border-color: var(--mi-locked-edge);
+}
+
+/* Unlocked and playable -- reads as water punched through the sand. */
+.cell-open {
+    background-color: var(--mi-water);
+    border-width: 1px;
+    border-color: var(--mi-water-edge);
+}
+
+/* Legal drop target under the dragged item. A ring INSIDE the margin gap, since borders draw
+   outside the content box. */
+.cell-drop-target {
+    border-width: 2px;
+    border-color: var(--mi-highlight);
+}
+
+.cell-item {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    align-items: center;
+    justify-content: center;
+    display: none;
+}
+
+/* Shown when the cell actually has something to draw (a real item, or a ghost silhouette). */
+.cell-item-visible {
+    display: flex;
+}
+
+/* A ghost's silhouette: the item's own colour, knocked back so it reads as a target rather
+   than a thing you own. */
+.cell-item-ghost {
+    opacity: 0.35;
+}
+
+/* The source cell while its item is lifted: the item is hidden, not removed, so the grid
+   layout never reflows mid-drag (which would move every worldBound the drop reads). */
+.cell-item-lifted {
+    opacity: 0;
+}
+
+.cell-tier {
+    font-size: 15px;
+    color: var(--mi-text-light);
+    -unity-font-definition: var(--font-museo-900);
+    -unity-text-align: middle-center;
+}
+
+.loading-label {
+    margin-top: 14px;
+    font-size: 15px;
+    color: var(--mi-text);
+    -unity-font-definition: var(--font-museo-700);
+    -unity-text-align: middle-center;
+    display: none;
+}
+
+/* --------------------------- bottom bar ------------------------- */
+
+.bottom-bar {
+    position: absolute;
+    bottom: 58px;
+    left: 0;
+    width: 100%;
+    height: 62px;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.energy-chip {
+    width: 96px;
+    height: 40px;
+    margin-right: 12px;
+    border-radius: 20px;
+    background-color: var(--mi-sand-frame);
+    border-width: 2px;
+    border-color: var(--mi-locked-edge);
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.energy-bolt {
+    width: 18px;
+    height: 18px;
+    margin-right: 6px;
+    border-radius: 4px;
+    background-color: var(--mi-gold);
+}
+
+.energy-label {
+    font-size: 18px;
+    color: var(--mi-text);
+    -unity-font-definition: var(--font-museo-900);
+    -unity-text-align: middle-center;
+}
+
+.generator-button {
+    width: 116px;
+    height: 58px;
+    border-radius: 18px;
+    background-color: var(--mi-green);
+    border-width: 3px;
+    border-color: var(--mi-green-dark);
+    align-items: center;
+    justify-content: center;
+}
+
+/* Out of energy or nowhere to put an item: greyed so the refusal is legible before the tap. */
+.generator-button-disabled {
+    opacity: 0.45;
+}
+
+.generator-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    background-color: var(--mi-sand-inset);
+}
+
+.multiplier-chip {
+    width: 62px;
+    height: 40px;
+    margin-left: 12px;
+    border-radius: 20px;
+    background-color: var(--mi-sand-frame);
+    border-width: 2px;
+    border-color: var(--mi-locked-edge);
+    align-items: center;
+    justify-content: center;
+}
+
+.multiplier-label {
+    font-size: 17px;
+    color: var(--mi-text);
+    -unity-font-definition: var(--font-museo-900);
+    -unity-text-align: middle-center;
+}
+
+.hint-label {
+    position: absolute;
+    bottom: 22px;
+    left: 0;
+    width: 100%;
+    font-size: 13px;
+    color: var(--mi-text);
+    -unity-font-definition: var(--font-museo-700);
+    -unity-text-align: middle-center;
+    white-space: normal;
+}
+
+/* ---------------------- world-top entry point -------------------- */
+/* Built in Lua and handed to UI:AddWorldTopButton, so nothing else in the scene needs to know
+   Merge Island exists. */
+
+.world-top-button {
+    width: 38px;
+    height: 38px;
+    border-radius: 12px;
+    background-color: var(--mi-green);
+    border-width: 2px;
+    border-color: var(--mi-text-light);
+    align-items: center;
+    justify-content: center;
+}
+
+.world-top-glyph {
+    font-size: 18px;
+    color: var(--mi-text-light);
+    -unity-font-definition: var(--font-museo-900);
+    -unity-text-align: middle-center;
+}
+
+/* -------------------------- drag layer -------------------------- */
+
+.flight-layer {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+/* The lifted item. Sized to match .cell-item so it lands flush, and slightly scaled up so it
+   reads as picked up. Positioned by layout left/top from Lua, never percent translate. */
+.flying-item {
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ---------------------------- items ----------------------------- */
+/* Declared last so they win the cascade over .cell-item's own background. */
+
+.item-bottle-1 { background-color: var(--mi-bottle-1); }
+.item-bottle-2 { background-color: var(--mi-bottle-2); }
+.item-bottle-3 { background-color: var(--mi-bottle-3); }
+.item-bottle-4 { background-color: var(--mi-bottle-4); }
+
+.item-shell-1 { background-color: var(--mi-shell-1); }
+.item-shell-2 { background-color: var(--mi-shell-2); }
+.item-shell-3 { background-color: var(--mi-shell-3); }
+.item-shell-4 { background-color: var(--mi-shell-4); }
+
+.item-driftwood-1 { background-color: var(--mi-driftwood-1); }
+.item-driftwood-2 { background-color: var(--mi-driftwood-2); }
+.item-driftwood-3 { background-color: var(--mi-driftwood-3); }
+.item-driftwood-4 { background-color: var(--mi-driftwood-4); }
+
+.item-coral-1 { background-color: var(--mi-coral-1); }
+.item-coral-2 { background-color: var(--mi-coral-2); }
+.item-coral-3 { background-color: var(--mi-coral-3); }
+.item-coral-4 { background-color: var(--mi-coral-4); }
