@@ -10,47 +10,93 @@
   <hr:UILuaView class="merge-island-h-u-d no-lightmode">
     <!-- Everything lives inside _hudRoot so the whole HUD shows/hides as one element. -->
     <VisualElement name="_hudRoot" class="hud-root">
-      <VisualElement class="hud-backdrop" picking-mode="Ignore"/>
+      <VisualElement name="_backdrop" class="hud-backdrop" picking-mode="Ignore"/>
 
-      <VisualElement class="top-bar">
-        <VisualElement name="_infoButton" class="info-button">
-          <Label text="i" class="info-glyph" picking-mode="Ignore"/>
+      <!-- The main column. Sections are spread with space-evenly so the layout breathes on tall
+           phones and compresses on short ones instead of overflowing. -->
+      <VisualElement name="_layout" class="layout" picking-mode="Ignore">
+
+        <!-- "Find all items to win": the grand prize. Cards are built in Lua from
+             MergeIslandConfig.GRAND_PRIZE. The tag is drawn AFTER the body so it sits on top of
+             the body's top edge. -->
+        <VisualElement name="_prizePanel" class="prize-panel" picking-mode="Ignore">
+          <VisualElement class="prize-body" picking-mode="Ignore">
+            <VisualElement class="prize-inner" picking-mode="Ignore">
+              <VisualElement name="_prizeRow" class="prize-row" picking-mode="Ignore"/>
+              <VisualElement name="_prizeShine" class="prize-shine" picking-mode="Ignore"/>
+            </VisualElement>
+            <VisualElement class="prize-stamp-row" picking-mode="Ignore">
+              <Label name="_prizeStamp" text="COMPLETE!" class="prize-stamp" picking-mode="Ignore"/>
+            </VisualElement>
+          </VisualElement>
+          <VisualElement class="prize-tag-row" picking-mode="Ignore">
+            <VisualElement class="prize-tag" picking-mode="Ignore">
+              <Label text="Find all items to win" class="prize-tag-label" picking-mode="Ignore"/>
+            </VisualElement>
+          </VisualElement>
         </VisualElement>
-        <VisualElement name="_closeButton" class="close-button">
-          <!-- Plain ASCII rather than a glyph character, so it cannot render as tofu if the
-               bundled font lacks the codepoint. -->
-          <Label text="X" class="close-glyph" picking-mode="Ignore"/>
+
+        <!-- Discovery track: one slot per tier, then the crown. Slots are built in Lua. The
+             tooltip floats above the NEXT tier to discover and advertises its reward. -->
+        <VisualElement name="_trackPanel" class="track-panel" picking-mode="Ignore">
+          <VisualElement name="_trackBar" class="track-bar" picking-mode="Ignore">
+            <VisualElement name="_trackLine" class="track-line" picking-mode="Ignore">
+              <VisualElement name="_trackFill" class="track-fill" picking-mode="Ignore"/>
+            </VisualElement>
+            <VisualElement name="_trackSlots" class="track-slots" picking-mode="Ignore"/>
+          </VisualElement>
+          <VisualElement name="_trackTooltip" class="track-tooltip" picking-mode="Ignore">
+            <VisualElement name="_tooltipBob" class="tooltip-bob" picking-mode="Ignore">
+              <VisualElement class="tooltip-bubble" picking-mode="Ignore">
+                <VisualElement name="_tooltipIcon" class="tooltip-icon reward-icon-gold" picking-mode="Ignore"/>
+                <Label name="_tooltipLabel" text="" class="tooltip-label" picking-mode="Ignore"/>
+              </VisualElement>
+              <VisualElement class="tooltip-pointer" picking-mode="Ignore"/>
+            </VisualElement>
+          </VisualElement>
         </VisualElement>
+
+        <!-- Board. The frame hugs the fixed-pixel grid rather than taking a percentage width,
+             so the grid can never overflow its own content box (Yoga counts padding inside
+             `width`). -->
+        <VisualElement name="_boardArea" class="board-area" picking-mode="Ignore">
+          <VisualElement name="_boardFrame" class="board-frame" picking-mode="Ignore">
+            <VisualElement class="board-inner" picking-mode="Ignore">
+              <!-- Rows are built in Lua. This element carries the DragGesture. -->
+              <VisualElement name="_boardGrid" class="board-grid"/>
+            </VisualElement>
+          </VisualElement>
+          <Label name="_loadingLabel" text="Loading your island..." class="loading-label" picking-mode="Ignore"/>
+        </VisualElement>
+
+        <VisualElement name="_bottomBar" class="bottom-bar" picking-mode="Ignore">
+          <!-- The bolt overlaps the chip's left edge; both are absolute inside a wrapper because
+               negative insets are ignored in this runtime. -->
+          <VisualElement name="_energyChip" class="energy-wrap" picking-mode="Ignore">
+            <VisualElement class="energy-chip" picking-mode="Ignore">
+              <Label name="_energyLabel" text="0" class="energy-label" picking-mode="Ignore"/>
+            </VisualElement>
+            <VisualElement name="_energyBolt" class="energy-bolt" picking-mode="Ignore"/>
+          </VisualElement>
+
+          <VisualElement name="_generatorButton" class="generator-button">
+            <VisualElement class="generator-face" picking-mode="Ignore">
+              <VisualElement class="generator-castle" picking-mode="Ignore"/>
+              <VisualElement class="generator-bolt" picking-mode="Ignore"/>
+              <VisualElement class="generator-shell" picking-mode="Ignore"/>
+            </VisualElement>
+          </VisualElement>
+
+          <!-- Spawn multiplier. Rendered for layout parity with the concept but inert in V1. -->
+          <VisualElement class="multiplier-chip" picking-mode="Ignore">
+            <VisualElement class="multiplier-face" picking-mode="Ignore">
+              <Label name="_multiplierLabel" text="x1" class="multiplier-label" picking-mode="Ignore"/>
+            </VisualElement>
+          </VisualElement>
+        </VisualElement>
+
+        <Label name="_hintLabel" text="Drag an item onto a matching item to merge it" class="hint-label" picking-mode="Ignore"/>
       </VisualElement>
-
-      <!-- Board. The frame hugs the fixed-pixel grid rather than taking a percentage width,
-           so the grid can never overflow its own content box (Yoga counts padding inside
-           `width`). -->
-      <VisualElement class="board-area" picking-mode="Ignore">
-        <VisualElement class="board-frame" picking-mode="Ignore">
-          <!-- Rows are built in Lua. This element carries the DragGesture. -->
-          <VisualElement name="_boardGrid" class="board-grid"/>
-        </VisualElement>
-        <Label name="_loadingLabel" text="Loading your island..." class="loading-label" picking-mode="Ignore"/>
-      </VisualElement>
-
-      <VisualElement class="bottom-bar" picking-mode="Ignore">
-        <VisualElement class="energy-chip" picking-mode="Ignore">
-          <VisualElement class="energy-bolt" picking-mode="Ignore"/>
-          <Label name="_energyLabel" text="0" class="energy-label" picking-mode="Ignore"/>
-        </VisualElement>
-
-        <VisualElement name="_generatorButton" class="generator-button">
-          <VisualElement class="generator-icon" picking-mode="Ignore"/>
-        </VisualElement>
-
-        <!-- Spawn multiplier. Rendered for layout parity with the prototype but inert in V1. -->
-        <VisualElement class="multiplier-chip" picking-mode="Ignore">
-          <Label name="_multiplierLabel" text="x1" class="multiplier-label" picking-mode="Ignore"/>
-        </VisualElement>
-      </VisualElement>
-
-      <Label name="_hintLabel" text="Drag an item onto a matching item to merge it" class="hint-label" picking-mode="Ignore"/>
 
       <!-- Transient feedback ("Board is full!"). The row centres the pill so the label hugs its
            own text instead of stretching; Lua animates the label's opacity and translate. -->
@@ -58,9 +104,132 @@
         <Label name="_toastLabel" text="" class="toast" picking-mode="Ignore"/>
       </VisualElement>
 
+      <VisualElement name="_infoButton" class="round-button info-button">
+        <Label text="i" class="round-glyph" picking-mode="Ignore"/>
+      </VisualElement>
+      <VisualElement name="_closeButton" class="round-button close-button">
+        <!-- Plain ASCII rather than a glyph character, so it cannot render as tofu if the
+             bundled font lacks the codepoint. -->
+        <Label text="X" class="round-glyph" picking-mode="Ignore"/>
+      </VisualElement>
+
+      <!-- Particles, sparkles, coins and flying rewards. Above the board, below the overlays. -->
+      <VisualElement name="_fxLayer" class="fx-layer" picking-mode="Ignore"/>
+
       <!-- The dragged item is parented here so it draws above every cell. Absolute and
            100%-sized, so WorldToLocal against it is stable. -->
       <VisualElement name="_flightLayer" class="flight-layer" picking-mode="Ignore"/>
+
+      <!-- NEW ITEM REVEALED. The overlay itself takes the tap ("Tap to Collect"); everything in
+           it ignores picking so a tap anywhere lands on the overlay. -->
+      <VisualElement name="_revealOverlay" class="overlay">
+        <VisualElement name="_revealScrim" class="overlay-scrim" picking-mode="Ignore"/>
+        <VisualElement name="_revealContent" class="overlay-content" picking-mode="Ignore">
+          <VisualElement name="_revealBanner" class="banner" picking-mode="Ignore">
+            <VisualElement class="banner-decor" picking-mode="Ignore">
+              <VisualElement class="banner-sand" picking-mode="Ignore"/>
+              <VisualElement class="banner-shell banner-shell-a" picking-mode="Ignore"/>
+              <VisualElement class="banner-shell banner-shell-b" picking-mode="Ignore"/>
+              <VisualElement class="banner-shell banner-shell-c" picking-mode="Ignore"/>
+            </VisualElement>
+            <VisualElement class="banner-plank" picking-mode="Ignore">
+              <VisualElement class="banner-plank-face" picking-mode="Ignore">
+                <Label text="Merge Island" class="banner-label" picking-mode="Ignore"/>
+              </VisualElement>
+            </VisualElement>
+          </VisualElement>
+
+          <Label name="_revealTitle" text="NEW ITEM REVEALED!" class="reveal-title" picking-mode="Ignore"/>
+
+          <VisualElement name="_revealStage" class="reveal-stage" picking-mode="Ignore">
+            <VisualElement name="_revealRaysBack" class="stage-fill reveal-rays reveal-rays-back" picking-mode="Ignore"/>
+            <VisualElement name="_revealRays" class="stage-fill reveal-rays" picking-mode="Ignore"/>
+            <VisualElement name="_revealGlow" class="stage-fill reveal-glow" picking-mode="Ignore"/>
+            <VisualElement name="_revealSparkles" class="stage-fill" picking-mode="Ignore"/>
+            <VisualElement name="_revealItem" class="reveal-item" picking-mode="Ignore"/>
+          </VisualElement>
+
+          <Label name="_revealName" text="" class="reveal-name" picking-mode="Ignore"/>
+          <VisualElement name="_revealReward" class="reveal-reward" picking-mode="Ignore">
+            <VisualElement name="_revealRewardIcon" class="reveal-reward-icon reward-icon-gold" picking-mode="Ignore"/>
+            <Label name="_revealRewardLabel" text="" class="reveal-reward-label" picking-mode="Ignore"/>
+          </VisualElement>
+        </VisualElement>
+        <VisualElement name="_revealTap" class="tap-prompt" picking-mode="Ignore">
+          <Label text="Tap to Collect" class="tap-label" picking-mode="Ignore"/>
+          <VisualElement class="tap-underline" picking-mode="Ignore"/>
+        </VisualElement>
+      </VisualElement>
+
+      <!-- Every item found: the grand prize celebration. -->
+      <VisualElement name="_winOverlay" class="overlay">
+        <VisualElement name="_winScrim" class="overlay-scrim" picking-mode="Ignore"/>
+        <VisualElement name="_confettiLayer" class="fx-layer" picking-mode="Ignore"/>
+        <VisualElement name="_winContent" class="overlay-content" picking-mode="Ignore">
+          <VisualElement name="_winBanner" class="banner" picking-mode="Ignore">
+            <VisualElement class="banner-decor" picking-mode="Ignore">
+              <VisualElement class="banner-sand" picking-mode="Ignore"/>
+              <VisualElement class="banner-shell banner-shell-a" picking-mode="Ignore"/>
+              <VisualElement class="banner-shell banner-shell-b" picking-mode="Ignore"/>
+              <VisualElement class="banner-shell banner-shell-c" picking-mode="Ignore"/>
+            </VisualElement>
+            <VisualElement class="banner-plank" picking-mode="Ignore">
+              <VisualElement class="banner-plank-face" picking-mode="Ignore">
+                <Label text="You Win!" class="banner-label" picking-mode="Ignore"/>
+              </VisualElement>
+            </VisualElement>
+          </VisualElement>
+
+          <VisualElement name="_winStage" class="reveal-stage" picking-mode="Ignore">
+            <VisualElement name="_winRays" class="stage-fill reveal-rays" picking-mode="Ignore"/>
+            <VisualElement name="_winGlow" class="stage-fill reveal-glow" picking-mode="Ignore"/>
+            <VisualElement name="_winCrown" class="win-crown" picking-mode="Ignore"/>
+          </VisualElement>
+
+          <Label name="_winTitle" text="You found every item!" class="win-title" picking-mode="Ignore"/>
+          <VisualElement name="_winPrizeRow" class="win-prize-row" picking-mode="Ignore"/>
+
+          <VisualElement name="_winButton" class="cta-button">
+            <VisualElement class="cta-face" picking-mode="Ignore">
+              <Label text="Collect" class="cta-label" picking-mode="Ignore"/>
+            </VisualElement>
+          </VisualElement>
+        </VisualElement>
+      </VisualElement>
+
+      <!-- How to play. -->
+      <VisualElement name="_infoOverlay" class="overlay">
+        <VisualElement name="_infoScrim" class="overlay-scrim" picking-mode="Ignore"/>
+        <VisualElement name="_infoContent" class="overlay-content" picking-mode="Ignore">
+          <VisualElement name="_infoPanel" class="info-panel" picking-mode="Ignore">
+            <Label text="How to Play" class="info-title" picking-mode="Ignore"/>
+            <VisualElement class="info-row" picking-mode="Ignore">
+              <VisualElement class="info-icon info-icon-castle" picking-mode="Ignore"/>
+              <Label text="Tap the sandcastle to dig up a shell. Each dig costs 1 energy." class="info-text" picking-mode="Ignore"/>
+            </VisualElement>
+            <VisualElement class="info-row" picking-mode="Ignore">
+              <VisualElement class="info-icon info-icon-shell" picking-mode="Ignore"/>
+              <Label text="Drag two matching items together to merge them into something better." class="info-text" picking-mode="Ignore"/>
+            </VisualElement>
+            <VisualElement class="info-row" picking-mode="Ignore">
+              <VisualElement class="info-icon info-icon-ghost" picking-mode="Ignore"/>
+              <Label text="Drop an item on its faded twin in the sand to uncover more island." class="info-text" picking-mode="Ignore"/>
+            </VisualElement>
+            <VisualElement class="info-row" picking-mode="Ignore">
+              <VisualElement class="info-icon info-icon-crown" picking-mode="Ignore"/>
+              <Label text="Discover every item to earn rewards and win the grand prize!" class="info-text" picking-mode="Ignore"/>
+            </VisualElement>
+            <VisualElement name="_infoOk" class="cta-button info-ok">
+              <VisualElement class="cta-face" picking-mode="Ignore">
+                <Label text="Got it!" class="cta-label" picking-mode="Ignore"/>
+              </VisualElement>
+            </VisualElement>
+          </VisualElement>
+        </VisualElement>
+      </VisualElement>
+
+      <!-- Above every overlay: the revealed item flying to its track slot, and its sparkles. -->
+      <VisualElement name="_topLayer" class="fx-layer" picking-mode="Ignore"/>
     </VisualElement>
   </hr:UILuaView>
 

@@ -70,3 +70,8 @@ crashlytics-build.properties
 # Temporary auto-generated Android Assets
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
+Assets/Editor/Serializer/
+
+# Claude Code plugin files (auto-generated)
+.claude/*
+!.claude/CLAUDE.md

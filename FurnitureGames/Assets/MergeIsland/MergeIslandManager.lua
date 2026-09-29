@@ -12,8 +12,18 @@
 -- FireClient. 49 cells is small enough that a full snapshot per action beats the complexity
 -- of delta reconciliation.
 --
+-- Each snapshot also carries what the action that produced it DID (an item spawned, a ghost
+-- unlocked, a tier discovered, a refusal). Delivering the truth and its animation trigger in ONE
+-- message is what keeps the HUD from ever animating a state it has not received yet, or
+-- receiving a state a frame before it knows why.
+--
+-- Discovery rewards are decided here, never on the client: the server's own board is the only
+-- thing that can produce a new tier, so a tampered client cannot claim anything. Rewards are a
+-- PLACEHOLDER for now -- they are printed, not granted (see grantReward).
+--
 -- Storage is server-only and rate limited (~10-20 calls/sec), so saves are debounced through
--- a dirty flag and one sweep timer rather than written per merge.
+-- a dirty flag and one sweep timer rather than written per merge. The one exception is a
+-- discovery, which is flushed immediately (see discover()).
 --
 -- NOTE: this module must be attached to a GameObject in the scene to be require-able.
 
@@ -44,12 +54,11 @@ MoveRequest = Event.new("MIslandMoveRequest")
 -- client was listening.
 StateRequest = Event.new("MIslandStateRequest")
 
--- Server -> owning player only. BoardStateEvent is the truth; the other two are animation
--- triggers, deterministic on receipt (the same split DropFour uses for DiscDroppedEvent).
+-- Server -> owning player only. The board truth, plus (optionally) what produced it:
+--   { cells, energy, highestTier,
+--     spawned = index?, rejected = reason?,
+--     unlocked = { index, opened = {index} }?, discovered = tier? }
 BoardStateEvent = Event.new("MIslandBoardStateEvent")
-ActionRejectedEvent = Event.new("MIslandActionRejectedEvent")
-SpawnedEvent = Event.new("MIslandSpawnedEvent")
-UnlockedEvent = Event.new("MIslandUnlockedEvent")
 
 --------------------------------
 ------     LOCAL STATE    ------
@@ -58,7 +67,9 @@ UnlockedEvent = Event.new("MIslandUnlockedEvent")
 -- boards[player] = {
 --   cells       -- {Config.Cell}, the authoritative board
 --   energy      -- number remaining in this event's pool
---   eventId     -- which event the pool was granted for
+--   eventId     -- which event the board belongs to
+--   highestTier -- the highest tier this board has ever produced this event (the discovery
+--                  track). The ladder is linear, so "discovered" is always exactly 1..highestTier.
 --   dirty       -- has changed since the last successful save
 --   loaded      -- storage read has completed; intents are refused before this
 --   readFailed  -- the storage read ERRORED. We play in memory but NEVER save, because
@@ -75,12 +86,14 @@ local saveCursor: number = 0
 -- anything the server decides.
 local localCells: {any} = {}
 local localEnergy: number = 0
+local localHighestTier: number = 1
 local localLoaded: boolean = false
 -- Listener lists, so the HUD can subscribe without the manager knowing about the UI.
 local boardChangedListeners: {any} = {}
 local spawnedListeners: {any} = {}
 local unlockedListeners: {any} = {}
 local rejectedListeners: {any} = {}
+local discoveredListeners: {any} = {}
 
 --------------------------------
 ------  LOCAL FUNCTIONS   ------
@@ -105,16 +118,23 @@ local function cloneCells(cells): {any}
     return _copy
 end
 
-local function sendSnapshot(player: Player)
+-- `extras` describes what just happened, for the HUD to animate. See BoardStateEvent.
+local function sendSnapshot(player: Player, extras)
     local _board = boards[player]
     if not _board then
         return
     end
-    BoardStateEvent:FireClient(player, {
+    local _payload = {
         cells = cloneCells(_board.cells),
         energy = _board.energy,
-        eventId = _board.eventId,
-    })
+        highestTier = _board.highestTier,
+    }
+    if extras then
+        for key, value in pairs(extras) do
+            _payload[key] = value
+        end
+    end
+    BoardStateEvent:FireClient(player, _payload)
 end
 
 local function markDirty(board)
@@ -128,7 +148,7 @@ end
 -- mid-flight re-marks it and gets picked up by the next sweep; a failure re-marks it too, so
 -- the write is retried rather than silently dropped.
 local function flush(player: Player, board)
-    if board.readFailed then
+    if board.readFailed or not board.loaded then
         return
     end
     board.dirty = false
@@ -140,6 +160,7 @@ local function flush(player: Player, board)
         cells = cloneCells(board.cells),
         energy = board.energy,
         eventId = board.eventId,
+        highestTier = board.highestTier,
     }, function(error)
         if error ~= StorageError.None then
             print("[MergeIslandManager] save failed for " .. _name
@@ -173,10 +194,40 @@ local function freshBoard(): any
         cells = config.NewBoard(),
         energy = config.ENERGY_POOL_PER_EVENT,
         eventId = config.EVENT_ID,
+        -- Every spawn is tier 1, so the bottom rung is known from the very first tap.
+        highestTier = config.SPAWN_TIER,
         dirty = false,
         loaded = true,
         readFailed = false,
     }
+end
+
+-- PLACEHOLDER reward grant: prints what the player earned and grants nothing. This is the one
+-- function to replace when a real reward system exists. It only ever runs server-side, and
+-- `reward` always comes from MergeIslandConfig, never from the client.
+local function grantReward(player: Player, reward)
+    if not reward then
+        return
+    end
+    print("[MergeIslandManager] REWARD (placeholder, not granted): " .. tostring(player.name)
+        .. " earned " .. config.RewardText(reward))
+end
+
+-- Record a newly produced tier. Returns the tier when it is a first-time discovery, else nil.
+-- The save is flushed IMMEDIATELY rather than waiting for the sweep, so a discovery (and the
+-- reward that goes with it) cannot be lost to a crash and then earned a second time.
+-- Discoveries are rare (at most MAX_TIER - 1 per event), so this cannot pressure the rate limit.
+local function discover(player: Player, board, tier: number): number | nil
+    if type(tier) ~= "number" or tier <= board.highestTier then
+        return nil
+    end
+    board.highestTier = tier
+    for _, reward in ipairs(config.DiscoveryRewards(tier)) do
+        grantReward(player, reward)
+    end
+    markDirty(board)
+    flush(player, board)
+    return tier
 end
 
 local function loadBoard(player: Player)
@@ -208,21 +259,22 @@ local function loadBoard(player: Player)
                 .. tostring(player.name) .. "; starting fresh")
             _board = freshBoard()
             _board.dirty = true
+        elseif value.eventId ~= config.EVENT_ID then
+            -- A new event: a clean board, a full pool, and an empty discovery track, so this
+            -- event's rewards can be won.
+            _board = freshBoard()
+            _board.dirty = true
         else
             _board = {
                 cells = value.cells,
                 energy = tonumber(value.energy) or 0,
                 eventId = value.eventId,
+                highestTier = math.max(config.SPAWN_TIER, math.min(config.MAX_TIER,
+                    tonumber(value.highestTier) or config.SPAWN_TIER)),
                 dirty = false,
                 loaded = true,
                 readFailed = false,
             }
-            -- A new event window re-grants the pool. This is what EVENT_ID is for.
-            if _board.eventId ~= config.EVENT_ID then
-                _board.eventId = config.EVENT_ID
-                _board.energy = config.ENERGY_POOL_PER_EVENT
-                _board.dirty = true
-            end
         end
 
         boards[player] = _board
@@ -231,13 +283,15 @@ local function loadBoard(player: Player)
 end
 
 local function reject(player: Player, reason: string)
-    ActionRejectedEvent:FireClient(player, reason)
+    -- The board rides along: a client that thought this was legal is out of sync, and the
+    -- snapshot is what puts it right.
+    sendSnapshot(player, { rejected = reason })
 end
 
 ----------- CLIENT -------------
-local function notify(listeners)
+local function notify(listeners, ...)
     for _, fn in ipairs(listeners) do
-        fn()
+        fn(...)
     end
 end
 
@@ -252,6 +306,16 @@ end
 
 function GetEnergy(): number
     return localEnergy
+end
+
+-- The top of the discovery track: every tier from 1 to this one has been found this event.
+function GetHighestTier(): number
+    return localHighestTier
+end
+
+-- True once every rung of the ladder has been discovered, i.e. the grand prize is won.
+function IsWon(): boolean
+    return localHighestTier >= config.MAX_TIER
 end
 
 -- False until the first snapshot arrives, so the HUD can show a loading state instead of an
@@ -295,29 +359,41 @@ function RequestMove(from: number, to: number)
     MoveRequest:FireServer(from, to)
 end
 
--- Subscriptions for the HUD. Each fires with no arguments except OnUnlocked/OnSpawned/
--- OnRejected, which carry what the animation needs.
+-- Subscriptions for the HUD. For any one snapshot they fire in this order, AFTER the local
+-- mirror has been updated: OnSpawned / OnRejected, then OnBoardChanged, then OnUnlocked, then
+-- OnDiscovered. Spawn/reject come first so the HUD can settle its optimistic spawn state
+-- before it repaints.
 function OnBoardChanged(fn)
     if fn then
         table.insert(boardChangedListeners, fn)
     end
 end
 
+-- fn(index): an item was placed at `index` by a spawn.
 function OnSpawned(fn)
     if fn then
         table.insert(spawnedListeners, fn)
     end
 end
 
+-- fn(index, openedIndices): the ghost at `index` was satisfied and these cells broke open.
 function OnUnlocked(fn)
     if fn then
         table.insert(unlockedListeners, fn)
     end
 end
 
+-- fn(reason): an intent was refused. `reason` is one of the Config REJECT_* values.
 function OnRejected(fn)
     if fn then
         table.insert(rejectedListeners, fn)
+    end
+end
+
+-- fn(tier): `tier` was produced for the first time this event (its rewards are being paid).
+function OnDiscovered(fn)
+    if fn then
+        table.insert(discoveredListeners, fn)
     end
 end
 
@@ -331,25 +407,21 @@ function self:ClientAwake()
         end
         localCells = snapshot.cells or {}
         localEnergy = tonumber(snapshot.energy) or 0
+        localHighestTier = tonumber(snapshot.highestTier) or config.SPAWN_TIER
         localLoaded = true
+
+        if snapshot.spawned then
+            notify(spawnedListeners, snapshot.spawned)
+        end
+        if snapshot.rejected then
+            notify(rejectedListeners, snapshot.rejected)
+        end
         notify(boardChangedListeners)
-    end)
-
-    SpawnedEvent:Connect(function(index)
-        for _, fn in ipairs(spawnedListeners) do
-            fn(index)
+        if snapshot.unlocked then
+            notify(unlockedListeners, snapshot.unlocked.index, snapshot.unlocked.opened or {})
         end
-    end)
-
-    UnlockedEvent:Connect(function(index, openedIndices)
-        for _, fn in ipairs(unlockedListeners) do
-            fn(index, openedIndices or {})
-        end
-    end)
-
-    ActionRejectedEvent:Connect(function(reason)
-        for _, fn in ipairs(rejectedListeners) do
-            fn(reason)
+        if snapshot.discovered then
+            notify(discoveredListeners, snapshot.discovered)
         end
     end)
 
@@ -368,6 +440,7 @@ function self:ServerAwake()
             cells = {},
             energy = 0,
             eventId = config.EVENT_ID,
+            highestTier = config.SPAWN_TIER,
             dirty = false,
             loaded = false,
             readFailed = false,
@@ -414,8 +487,7 @@ function self:ServerAwake()
             tier = config.SPAWN_TIER,
         }
         markDirty(_board)
-        sendSnapshot(player)
-        SpawnedEvent:FireClient(player, _index)
+        sendSnapshot(player, { spawned = _index })
     end)
 
     MoveRequest:Connect(function(player, from, to)
@@ -426,25 +498,25 @@ function self:ServerAwake()
 
         local _result = config.ResolveDrop(_board.cells, from, to)
         if not _result.ok then
-            -- Re-send the board as well as the reason: a client that thought this was legal is
-            -- out of sync, and the snapshot is what puts it right.
             reject(player, _result.reason)
-            sendSnapshot(player)
             return
         end
 
         config.ApplyDrop(_board.cells, _result)
-
-        if _result.kind == config.KIND_UNLOCK then
-            local _opened = config.ExpandFrom(_board.cells, _result.to)
-            markDirty(_board)
-            sendSnapshot(player)
-            UnlockedEvent:FireClient(player, _result.to, _opened)
-            return
-        end
-
         markDirty(_board)
-        sendSnapshot(player)
+
+        local _extras = {}
+        if _result.kind == config.KIND_UNLOCK then
+            _extras.unlocked = {
+                index = _result.to,
+                opened = config.ExpandFrom(_board.cells, _result.to),
+            }
+        end
+        -- A move never changes a tier, so only a merge or an unlock can discover one.
+        if _result.kind ~= config.KIND_MOVE then
+            _extras.discovered = discover(player, _board, _result.tier)
+        end
+        sendSnapshot(player, _extras)
     end)
 
     -- One sweep drives every player's persistence. Capped per tick so a room full of players

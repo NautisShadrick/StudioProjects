@@ -1,59 +1,80 @@
 /*
-    MergeIslandHUD -- full-screen merge-and-unlock board.
+    MergeIslandHUD -- full-screen merge-and-unlock board, beach theme.
 
-    Geometry: 7 columns of flush 44px tiles = 308px of grid, no margins -- tiles touch, and
-    colour alone separates them. The frame HUGS that fixed-pixel width rather than taking a
-    percentage, because Yoga counts padding inside `width` and a percentage frame would silently
-    clip the last column.
-
-    Because tiles are flush, NO tile may carry a border: borders draw OUTSIDE the content box in
-    this runtime, so one would bleed over its neighbours. The drop-target ring is therefore an
-    inset overlay child (.cell-highlight), sized so its outward border lands on the tile edge.
+    Geometry: 7 columns of 44px cells = 308px of grid. A cell is the (contiguous, gapless) hit
+    area; the visible TILE is inset 1px inside it, so the sand showing through the 2px gaps reads
+    as grid lines while the drop test still sees one continuous board. The frame HUGS that
+    fixed-pixel width rather than taking a percentage, because Yoga counts padding inside `width`
+    and a percentage frame would silently clip the last column.
 
     Runtime constraints this file works around (carried over from the Drop Four build):
-      * background-position and percent/negative insets on absolutes are IGNORED, so framing
-        is done with a larger wrapper element, never negative insets.
+      * background-position and percent/negative insets on absolutes are IGNORED, so anything
+        that must overlap an edge (the prize tag, the energy bolt) sits inside a larger wrapper
+        at a POSITIVE inset, and pure visual offsets use `translate` instead.
       * percent translate shifts rendering but is NOT reflected in worldBound. The drag
-        hit-tests against worldBound, so the lifted item animates layout left/top and never
-        percent translate.
+        hit-tests against worldBound, so the lifted item animates layout left/top.
+      * borders draw OUTSIDE the content box, so bevels are built from a coloured parent plus an
+        inset "face" child rather than from borders, wherever the size must be exact.
 
-    Art: the item chain is a single linear ladder of MAX_TIER rungs. Real art comes from the
-    `tierSprites` array on the MergeIslandHUD component, applied as backgroundImage from Lua.
-    The .item-tier-N classes below are the fallback for any tier with no sprite assigned yet --
-    a colour ramp plus the tier number, so the board stays readable before art exists.
+    Every animation is driven from Lua (MergeIslandHUD.lua). The values here are each
+    element's resting state; Lua tweens scale/translate/rotate/opacity away from it and back.
+
+    Art: item art comes from the `tierSprites` array on the MergeIslandHUD component. The
+    .item-tier-N classes are the fallback for any tier with no sprite -- a colour ramp plus the
+    tier number, so the board stays readable before art exists.
 */
 :root {
     --font-museo-700: url("project://database/Packages/com.pz.studio/Assets/Fonts/MuseoSansRounded-700 SDF.asset");
     --font-museo-900: url("project://database/Packages/com.pz.studio/Assets/Fonts/MuseoSansRounded-900 SDF.asset");
 
+    --art-bg: url("project://database/Assets/MergeIsland/UI/Art/mi_bg_beach.png");
+    --art-map: url("project://database/Assets/MergeIsland/UI/Art/mi_board_map.png");
+    --art-sunburst: url("project://database/Assets/MergeIsland/UI/Art/mi_sunburst.png");
+    --art-glow: url("project://database/Assets/MergeIsland/UI/Art/mi_glow.png");
+    --art-star: url("project://database/Assets/MergeIsland/UI/Art/mi_star.png");
+    --art-crown: url("project://database/Assets/MergeIsland/UI/Art/mi_crown.png");
+    --art-castle: url("project://database/Assets/MergeIsland/UI/Art/mi_sandcastle.png");
+    --art-shell: url("project://database/Assets/MergeIsland/shell.png");
     --icon-energy: url("project://database/Assets/MergeIsland/energy.png");
+    --icon-gold: url("project://database/Packages/com.pz.studio/Assets/Sprites/Currency/gold_thumbnail.png");
+    --icon-chest: url("project://database/Packages/com.pz.studio/Assets/Sprites/Icons/icon_chest.png");
+    --icon-sparkle: url("project://database/Packages/com.pz.studio/Assets/Sprites/CardRewardSparkle.png");
 
-    /* Beach palette, sampled from the prototype. */
-    --mi-sky: #7fd4e8;
-    --mi-sand-frame: #e8c9a0;
-    --mi-sand-inset: #f2ddb8;
-    --mi-locked-edge: #c9a476;
-
-    /* Board tiles. Tiles touch with no gap, so COLOUR is the only separation: undiscovered and
-       ghost sand are distinct shades, and open water alternates on a checkerboard so the grid
-       stays readable without borders. */
-    --mi-hidden: #f1bb7b;
-    --mi-ghost: #d79c62;
-    --mi-water-a: #7dc9d7;
-    --mi-water-b: #89cfdd;
-
-    --mi-text: #5b3f22;
+    /* Wood, parchment and sand. */
+    --mi-text: #5b3a1e;
     --mi-text-light: #fffaf0;
-    --mi-scrim: rgba(20, 40, 60, 0.55);
-    --mi-toast-bg: rgba(45, 32, 18, 0.88);
+    --mi-outline: #6b3a14;
+    --mi-cream: #fff5de;
+    --mi-parchment: #fbe7c2;
+    --mi-parchment-edge: #d39a58;
+    --mi-wood: #9a6232;
+    --mi-wood-dark: #6f4220;
 
-    --mi-green: #67c23a;
-    --mi-green-dark: #4f9c2b;
-    --mi-red: #e8483f;
-    --mi-highlight: #7cf34a;
+    /* Board tiles. */
+    --mi-grid: #e7b97e;
+    --mi-hidden-face: rgba(255, 244, 222, 0.5);
+    --mi-ghost-edge: #c07f43;
+    --mi-ghost-face: #dea464;
+    --mi-water-edge: #5eb6cf;
+    --mi-water-a: #7fcde0;
+    --mi-water-b: #8bd3e5;
 
-    /* Placeholder item colours, one per rung of the ladder. A deliberate low-to-high ramp
-       (pale shell -> gold chest) so the tier is legible at a glance before real art exists. */
+    --mi-orange: #f7a928;
+    --mi-orange-dark: #c96f14;
+    --mi-green: #72cc42;
+    --mi-green-light: #9fe56c;
+    --mi-green-dark: #3e8c20;
+    --mi-red: #ef4d41;
+    --mi-red-dark: #b3302a;
+    --mi-navy: #2d5d92;
+    --mi-navy-dark: #1d3d66;
+    --mi-navy-light: #3f79b6;
+    --mi-highlight: #8cf552;
+
+    --mi-scrim: rgba(18, 22, 40, 0.78);
+    --mi-toast-bg: rgba(45, 28, 12, 0.9);
+
+    /* Placeholder item colours, one per rung of the ladder. */
     --mi-tier-1: #f6e0c0;
     --mi-tier-2: #66d4b8;
     --mi-tier-3: #4aa3e0;
@@ -71,8 +92,6 @@
     position: absolute;
     width: 100%;
     height: 100%;
-    align-items: center;
-    justify-content: center;
     color: var(--mi-text);
     -unity-font-definition: var(--font-museo-900);
     -unity-text-align: middle-center;
@@ -82,133 +101,497 @@
     position: absolute;
     width: 100%;
     height: 100%;
-    background-color: var(--mi-sky);
+    background-color: #f6c792;
+    background-image: var(--art-bg);
+    -unity-background-scale-mode: scale-and-crop;
 }
 
-/* ---------------------------- top bar --------------------------- */
-
-.top-bar {
+.layout {
     position: absolute;
-    top: 16px;
     left: 0;
+    top: 0;
     width: 100%;
-    height: 44px;
-    flex-direction: row;
-    justify-content: space-between;
+    height: 100%;
+    padding-top: 12px;
+    padding-bottom: 6px;
+    flex-direction: column;
     align-items: center;
-    padding-left: 18px;
-    padding-right: 18px;
+    justify-content: space-evenly;
 }
 
-.info-button {
-    width: 34px;
-    height: 34px;
-    border-radius: 17px;
-    background-color: var(--mi-green);
-    border-width: 2px;
+/* --------------------------- round buttons ------------------------ */
+
+.round-button {
+    position: absolute;
+    top: 14px;
+    width: 38px;
+    height: 38px;
+    border-radius: 19px;
+    border-width: 3px;
     border-color: var(--mi-text-light);
     align-items: center;
     justify-content: center;
 }
 
-.info-glyph {
+.info-button {
+    left: 14px;
+    background-color: var(--mi-green);
+}
+
+.close-button {
+    right: 14px;
+    background-color: var(--mi-red);
+}
+
+.round-glyph {
     font-size: 18px;
     color: var(--mi-text-light);
     -unity-font-definition: var(--font-museo-900);
     -unity-text-align: middle-center;
+    text-shadow: 0px 2px 0px rgba(0, 0, 0, 0.25);
 }
 
-.close-button {
+/* ---------------------------- prize panel ------------------------- */
+
+/* The tag straddles the body's top edge: the body is pushed down by the tag's half-height and
+   the tag is drawn after it at top 0. */
+.prize-panel {
+    width: 268px;
+    height: 96px;
+    flex-shrink: 0;
+}
+
+.prize-body {
+    position: absolute;
+    left: 0;
+    top: 13px;
+    width: 268px;
+    height: 83px;
+    padding: 4px;
+    border-radius: 16px;
+    background-color: var(--mi-orange-dark);
+}
+
+.prize-inner {
+    flex-grow: 1;
+    border-radius: 12px;
+    background-color: var(--mi-orange);
+    padding: 4px;
+    overflow: hidden;
+}
+
+.prize-row {
+    flex-grow: 1;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding-top: 10px;
+    border-radius: 9px;
+    background-color: var(--mi-navy);
+    overflow: hidden;
+}
+
+/* A soft light sweep that crosses the prize row every few seconds. */
+.prize-shine {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 34px;
-    height: 34px;
-    border-radius: 17px;
-    background-color: var(--mi-red);
-    border-width: 2px;
-    border-color: var(--mi-text-light);
+    height: 100px;
+    background-color: rgba(255, 255, 255, 0.28);
+    rotate: 20deg;
+    translate: -60px -12px;
+}
+
+.prize-card {
+    width: 56px;
+    height: 50px;
+    margin-left: 5px;
+    margin-right: 5px;
+    border-radius: 10px;
+    background-color: var(--mi-navy-light);
     align-items: center;
     justify-content: center;
 }
 
-.close-glyph {
-    font-size: 16px;
-    color: var(--mi-text-light);
-    -unity-font-definition: var(--font-museo-900);
-    -unity-text-align: middle-center;
+.prize-card-icon {
+    width: 34px;
+    height: 34px;
+    -unity-background-scale-mode: scale-to-fit;
 }
 
-/* ----------------------------- board ---------------------------- */
+.prize-card-label {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    font-size: 13px;
+    color: var(--mi-text-light);
+    -unity-font-definition: var(--font-museo-900);
+    -unity-text-align: lower-center;
+    -unity-text-outline-width: 1px;
+    -unity-text-outline-color: var(--mi-navy-dark);
+    text-shadow: 0px 2px 0px var(--mi-navy-dark);
+}
+
+.prize-card-check {
+    position: absolute;
+    right: 2px;
+    top: 2px;
+    width: 16px;
+    height: 16px;
+    border-radius: 8px;
+    background-color: var(--mi-green);
+    border-width: 2px;
+    border-color: var(--mi-text-light);
+    display: none;
+}
+
+.prize-won .prize-card-check {
+    display: flex;
+}
+
+.prize-won .prize-card {
+    opacity: 0.75;
+}
+
+.prize-stamp-row {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+.prize-stamp {
+    padding: 4px 12px;
+    border-radius: 8px;
+    border-width: 3px;
+    border-color: #e23c3c;
+    background-color: rgba(255, 250, 240, 0.92);
+    color: #e23c3c;
+    font-size: 20px;
+    -unity-font-definition: var(--font-museo-900);
+    rotate: -10deg;
+    display: none;
+}
+
+.prize-tag-row {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    align-items: center;
+}
+
+.prize-tag {
+    height: 26px;
+    padding-left: 14px;
+    padding-right: 14px;
+    border-radius: 13px;
+    background-color: #ffe27a;
+    border-width: 2px;
+    border-color: var(--mi-orange-dark);
+    justify-content: center;
+}
+
+.prize-tag-label {
+    font-size: 13px;
+    color: var(--mi-wood-dark);
+    -unity-font-definition: var(--font-museo-900);
+}
+
+/* ------------------------------ track ----------------------------- */
+
+.track-panel {
+    width: 330px;
+    height: 104px;
+    flex-shrink: 0;
+}
+
+/* Tooltip room above, bar below. */
+.track-bar {
+    position: absolute;
+    left: 0;
+    top: 48px;
+    width: 330px;
+    height: 56px;
+    border-radius: 28px;
+    background-color: var(--mi-cream);
+    border-width: 3px;
+    border-color: var(--mi-parchment-edge);
+}
+
+.track-line {
+    position: absolute;
+    left: 30px;
+    top: 22px;
+    width: 264px;
+    height: 6px;
+    border-radius: 3px;
+    background-color: #ecd3a6;
+}
+
+.track-fill {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 0;
+    height: 6px;
+    border-radius: 3px;
+    background-color: var(--mi-orange);
+}
+
+.track-slots {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+.track-slot {
+    width: 40px;
+    height: 40px;
+    border-radius: 20px;
+    background-color: #f1dcb4;
+    align-items: center;
+    justify-content: center;
+}
+
+.track-slot-art {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-background-image-tint-color: #8a5327;
+    opacity: 0.55;
+}
+
+.track-slot-found {
+    background-color: #ffffff;
+    border-width: 2px;
+    border-color: var(--mi-orange);
+}
+
+.track-slot-found .track-slot-art {
+    -unity-background-image-tint-color: #ffffff;
+    opacity: 1;
+}
+
+/* The next tier to find: a warmer ring so the eye knows where the tooltip points. */
+.track-slot-next {
+    background-color: #ffe9a8;
+    border-width: 2px;
+    border-color: #f2c35a;
+}
+
+.track-slot-next .track-slot-art {
+    opacity: 0.75;
+}
+
+.track-slot-crown .track-slot-art {
+    background-image: var(--art-crown);
+    border-radius: 0;
+}
+
+.track-tooltip {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 64px;
+    height: 50px;
+    align-items: center;
+}
+
+.tooltip-bob {
+    align-items: center;
+}
+
+.tooltip-bubble {
+    height: 36px;
+    padding-left: 8px;
+    padding-right: 8px;
+    border-radius: 12px;
+    background-color: #ffffff;
+    border-width: 2px;
+    border-color: var(--mi-parchment-edge);
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.tooltip-icon {
+    width: 22px;
+    height: 22px;
+    margin-right: 3px;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.tooltip-label {
+    font-size: 14px;
+    color: var(--mi-wood-dark);
+    -unity-font-definition: var(--font-museo-900);
+}
+
+/* A square turned 45deg: its right and bottom borders become the pointer's V. It overlaps
+   the bubble's bottom edge (via translate) so the two read as one speech bubble. */
+.tooltip-pointer {
+    width: 10px;
+    height: 10px;
+    background-color: #ffffff;
+    border-right-width: 2px;
+    border-bottom-width: 2px;
+    border-color: var(--mi-parchment-edge);
+    rotate: 45deg;
+    translate: 0 -7px;
+}
+
+/* ----------------------------- board ------------------------------ */
 
 .board-area {
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
 }
 
-/* Content-driven width: 308px of grid + 10px padding each side. */
 .board-frame {
-    padding: 10px;
-    border-radius: 20px;
-    background-color: var(--mi-sand-frame);
-    border-width: 2px;
-    border-color: var(--mi-locked-edge);
+    padding: 4px;
+    border-radius: 18px;
+    background-color: var(--mi-parchment-edge);
     align-items: center;
+}
+
+.board-inner {
+    padding: 6px;
+    border-radius: 14px;
+    background-color: var(--mi-parchment);
 }
 
 .board-grid {
     flex-direction: column;
     align-items: center;
-    background-color: #f1bb7b;
+    border-radius: 6px;
+    background-color: var(--mi-grid);
+    background-image: var(--art-map);
+    -unity-background-scale-mode: stretch-to-fill;
 }
 
 .board-row {
     flex-direction: row;
 }
 
-/* The cell is the tap target. Tiles are flush -- no margin, no radius, no border -- so the board
-   reads as one continuous grid. pickingMode is also set in Lua, since dynamically created
-   elements are not reliably tappable from a USS rule alone.
+/* Items draw on their own layer above every tile (see buildGrid), laid out as an identical 7x7
+   of 44px slots so each slot sits exactly over its cell. */
+.item-layer {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+}
 
-   NOTE: no border here on purpose. Borders draw OUTSIDE the content box in this runtime, so with
-   tiles touching, any border would bleed over its neighbours. The drop-target ring is an inset
-   overlay child instead (.cell-highlight). */
+.item-slot {
+    width: 44px;
+    height: 44px;
+}
+
+/* The cell is the tap and drop target: contiguous 44px squares with no margins. Everything
+   visible is a child. pickingMode is also set in Lua, since dynamically created elements are
+   not reliably tappable from a USS rule alone. */
 .cell {
     width: 44px;
     height: 44px;
-    align-items: center;
-    justify-content: center;
 }
 
-/* Locked and blank -- solid sand, no hint of what goes there yet. */
-.cell-hidden {
-    background-color: var(--mi-hidden);
+/* The visible tile, inset 1px so the grid shows between tiles. Its colour is the bevel EDGE;
+   the face child inset 2px inside it is the fill. */
+.tile {
+    position: absolute;
+    left: 1px;
+    top: 1px;
+    width: 42px;
+    height: 42px;
+    border-radius: 6px;
 }
 
-/* Locked but ghosted -- a darker sand tile showing a faded silhouette of what it accepts. */
-.cell-ghost {
-    background-color: var(--mi-ghost);
-}
-
-/* Unlocked and playable -- water. The two shades alternate by (row + col) parity, applied from
-   Lua, so the playable area reads as a checkerboard without needing any tile borders. */
-.cell-open-a {
-    background-color: var(--mi-water-a);
-}
-
-.cell-open-b {
-    background-color: var(--mi-water-b);
-    border-radius: 0px;
-}
-
-/* Legal drop target under the dragged item: a ring inset 2px so that, with the border drawing
-   outward, it lands exactly on the tile's 44px edge instead of over its neighbours. */
-.cell-highlight {
+.tile-face {
     position: absolute;
     left: 2px;
     top: 2px;
-    width: 40px;
-    height: 40px;
-    border-width: 2px;
-    border-color: var(--mi-highlight);
+    width: 38px;
+    height: 38px;
+    border-radius: 4px;
+}
+
+/* Locked and blank: pale sand with the treasure map showing through. */
+.tile-hidden .tile-face {
+    background-color: var(--mi-hidden-face);
+}
+
+/* Locked but ghosted: a darker, bevelled sand tile showing what it accepts. */
+.tile-ghost {
+    background-color: var(--mi-ghost-edge);
+}
+
+.tile-ghost .tile-face {
+    background-color: var(--mi-ghost-face);
+}
+
+/* Unlocked and playable: water, alternating by (row + col) parity. */
+.tile-open-a,
+.tile-open-b {
+    background-color: var(--mi-water-edge);
+}
+
+.tile-open-a .tile-face {
+    background-color: var(--mi-water-a);
+}
+
+.tile-open-b .tile-face {
+    background-color: var(--mi-water-b);
+}
+
+.cell-shadow {
+    position: absolute;
+    left: 9px;
+    top: 34px;
+    width: 26px;
+    height: 7px;
+    border-radius: 4px;
+    background-color: rgba(10, 60, 80, 0.22);
     display: none;
+}
+
+.cell-shadow-visible {
+    display: flex;
+}
+
+/* Legal drop target under the dragged item: a ring on the tile. */
+.cell-highlight {
+    position: absolute;
+    left: 1px;
+    top: 1px;
+    width: 42px;
+    height: 42px;
+    border-radius: 6px;
+    border-width: 3px;
+    border-color: var(--mi-highlight);
+    background-color: rgba(160, 255, 110, 0.18);
+    display: none;
+}
+
+.cell-highlight-move {
+    border-color: rgba(255, 255, 255, 0.85);
+    background-color: rgba(255, 255, 255, 0.12);
 }
 
 .cell-highlight-visible {
@@ -216,8 +599,11 @@
 }
 
 .cell-item {
-    width: 32px;
-    height: 32px;
+    position: absolute;
+    left: 3px;
+    top: 2px;
+    width: 38px;
+    height: 38px;
     border-radius: 8px;
     align-items: center;
     justify-content: center;
@@ -231,10 +617,11 @@
     display: flex;
 }
 
-/* A ghost's silhouette: the item's own colour, knocked back so it reads as a target rather
-   than a thing you own. */
+/* A ghost's silhouette: the item's own art tinted dark and knocked back, so it reads as a
+   target rather than a thing you own. */
 .cell-item-ghost {
-    opacity: 0.35;
+    -unity-background-image-tint-color: #8a5327;
+    opacity: 0.55;
 }
 
 /* The source cell while its item is lifted: the item is hidden, not removed, so the grid
@@ -242,6 +629,32 @@
 .cell-item-lifted {
     opacity: 0;
 }
+
+/* "New item" corner brackets, shown on the cell that produced a discovery. */
+.cell-brackets {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 44px;
+    height: 44px;
+    display: none;
+}
+
+.cell-brackets-visible {
+    display: flex;
+}
+
+.bracket {
+    position: absolute;
+    width: 11px;
+    height: 11px;
+    border-color: var(--mi-orange);
+}
+
+.bracket-tl { left: 0; top: 0; border-left-width: 3px; border-top-width: 3px; border-top-left-radius: 4px; }
+.bracket-tr { right: 0; top: 0; border-right-width: 3px; border-top-width: 3px; border-top-right-radius: 4px; }
+.bracket-bl { left: 0; bottom: 0; border-left-width: 3px; border-bottom-width: 3px; border-bottom-left-radius: 4px; }
+.bracket-br { right: 0; bottom: 0; border-right-width: 3px; border-bottom-width: 3px; border-bottom-right-radius: 4px; }
 
 .cell-tier {
     font-size: 15px;
@@ -251,135 +664,196 @@
 }
 
 .loading-label {
-    margin-top: 14px;
-    font-size: 15px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    font-size: 16px;
     color: var(--mi-text);
-    -unity-font-definition: var(--font-museo-700);
+    -unity-font-definition: var(--font-museo-900);
     -unity-text-align: middle-center;
     display: none;
 }
 
-/* --------------------------- bottom bar ------------------------- */
+/* ---------------------------- bottom bar -------------------------- */
 
 .bottom-bar {
-    position: absolute;
-    bottom: 58px;
-    left: 0;
-    width: 100%;
-    height: 62px;
+    width: 340px;
+    height: 70px;
+    flex-shrink: 0;
     flex-direction: row;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
 }
 
+.energy-wrap {
+    width: 104px;
+    height: 44px;
+}
+
 .energy-chip {
-    width: 96px;
-    height: 40px;
-    margin-right: 12px;
-    border-radius: 20px;
-    background-color: var(--mi-sand-frame);
+    position: absolute;
+    left: 16px;
+    top: 5px;
+    width: 88px;
+    height: 34px;
+    border-radius: 17px;
+    background-color: var(--mi-wood);
     border-width: 2px;
-    border-color: var(--mi-locked-edge);
-    flex-direction: row;
+    border-color: var(--mi-wood-dark);
     align-items: center;
     justify-content: center;
+    padding-left: 16px;
 }
 
 /* No background-color: the icon art is the whole visual, and a fill behind a transparent PNG
    would show as a square halo. */
 .energy-bolt {
-    width: 22px;
-    height: 22px;
-    margin-right: 6px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 40px;
+    height: 44px;
     background-image: var(--icon-energy);
     -unity-background-scale-mode: scale-to-fit;
 }
 
 .energy-label {
-    font-size: 18px;
-    color: var(--mi-text);
+    font-size: 19px;
+    color: var(--mi-text-light);
     -unity-font-definition: var(--font-museo-900);
     -unity-text-align: middle-center;
+    text-shadow: 0px 2px 0px var(--mi-wood-dark);
 }
 
+/* Chunky 3D button: the dark body shows below the face as its "depth". */
 .generator-button {
-    width: 116px;
-    height: 58px;
+    width: 124px;
+    height: 66px;
+    padding: 3px;
+    padding-bottom: 7px;
     border-radius: 18px;
+    background-color: var(--mi-green-dark);
+}
+
+.generator-face {
+    flex-grow: 1;
+    border-radius: 15px;
     background-color: var(--mi-green);
-    border-width: 3px;
-    border-color: var(--mi-green-dark);
+    border-width: 2px;
+    border-color: var(--mi-green-light);
     align-items: center;
     justify-content: center;
 }
 
-/* Out of energy or nowhere to put an item: greyed so the refusal is legible before the tap. */
-.generator-button-disabled {
-    opacity: 0.45;
+.generator-castle {
+    width: 52px;
+    height: 52px;
+    background-image: var(--art-castle);
+    -unity-background-scale-mode: scale-to-fit;
 }
 
-.generator-icon {
-    width: 34px;
-    height: 34px;
-    border-radius: 8px;
-    background-color: var(--mi-sand-inset);
+.generator-bolt {
+    position: absolute;
+    left: 12px;
+    bottom: 2px;
+    width: 24px;
+    height: 26px;
+    background-image: var(--icon-energy);
+    -unity-background-scale-mode: scale-to-fit;
+    rotate: -12deg;
+}
+
+.generator-shell {
+    position: absolute;
+    right: 10px;
+    bottom: 3px;
+    width: 26px;
+    height: 26px;
+    background-image: var(--art-shell);
+    -unity-background-scale-mode: scale-to-fit;
+    rotate: 15deg;
+}
+
+/* Out of energy or nowhere to put an item: greyed so the refusal is legible before the tap. */
+.generator-button-disabled {
+    background-color: #6f6f6f;
+}
+
+.generator-button-disabled .generator-face {
+    background-color: #a9a9a9;
+    border-color: #c4c4c4;
+}
+
+.generator-button-disabled .generator-castle,
+.generator-button-disabled .generator-bolt,
+.generator-button-disabled .generator-shell {
+    opacity: 0.55;
 }
 
 .multiplier-chip {
-    width: 62px;
-    height: 40px;
-    margin-left: 12px;
-    border-radius: 20px;
-    background-color: var(--mi-sand-frame);
-    border-width: 2px;
-    border-color: var(--mi-locked-edge);
+    width: 80px;
+    height: 44px;
+    padding: 2px;
+    padding-bottom: 5px;
+    border-radius: 14px;
+    background-color: var(--mi-orange-dark);
+}
+
+.multiplier-face {
+    flex-grow: 1;
+    border-radius: 12px;
+    background-color: var(--mi-orange);
     align-items: center;
     justify-content: center;
 }
 
 .multiplier-label {
-    font-size: 17px;
-    color: var(--mi-text);
+    font-size: 19px;
+    color: var(--mi-text-light);
     -unity-font-definition: var(--font-museo-900);
     -unity-text-align: middle-center;
+    text-shadow: 0px 2px 0px var(--mi-orange-dark);
+}
+
+.hint-label {
+    width: 90%;
+    font-size: 13px;
+    color: var(--mi-wood-dark);
+    -unity-font-definition: var(--font-museo-700);
+    -unity-text-align: middle-center;
+    white-space: normal;
+    flex-shrink: 0;
 }
 
 /* Transient feedback pill. Sits above the generator so it reads as a response to pressing it.
    Starts at opacity 0 and display none; Lua fades and slides it in, then fades it out. */
 .toast-row {
     position: absolute;
-    bottom: 130px;
+    bottom: 120px;
     left: 0;
     width: 100%;
     align-items: center;
 }
 
 .toast {
-    padding: 8px 18px;
-    border-radius: 16px;
+    padding: 9px 18px;
+    border-radius: 18px;
     background-color: var(--mi-toast-bg);
+    border-width: 2px;
+    border-color: rgba(255, 220, 150, 0.6);
     color: var(--mi-text-light);
     font-size: 14px;
     -unity-font-definition: var(--font-museo-900);
     -unity-text-align: middle-center;
     white-space: normal;
+    max-width: 300px;
     opacity: 0;
     display: none;
 }
 
-.hint-label {
-    position: absolute;
-    bottom: 22px;
-    left: 0;
-    width: 100%;
-    font-size: 13px;
-    color: var(--mi-text);
-    -unity-font-definition: var(--font-museo-700);
-    -unity-text-align: middle-center;
-    white-space: normal;
-}
-
-/* ---------------------- world-top entry point -------------------- */
+/* ---------------------- world-top entry point --------------------- */
 /* Built in Lua and handed to UI:AddWorldTopButton, so nothing else in the scene needs to know
    Merge Island exists. */
 
@@ -387,41 +861,473 @@
     width: 38px;
     height: 38px;
     border-radius: 12px;
-    background-color: var(--mi-green);
+    background-color: var(--mi-orange);
     border-width: 2px;
     border-color: var(--mi-text-light);
     align-items: center;
     justify-content: center;
 }
 
-.world-top-glyph {
-    font-size: 18px;
-    color: var(--mi-text-light);
-    -unity-font-definition: var(--font-museo-900);
-    -unity-text-align: middle-center;
+.world-top-icon {
+    width: 28px;
+    height: 28px;
+    background-image: var(--art-shell);
+    -unity-background-scale-mode: scale-to-fit;
 }
 
-/* -------------------------- drag layer -------------------------- */
+/* ------------------------- fx + drag layers ----------------------- */
 
+.fx-layer,
 .flight-layer {
     position: absolute;
+    left: 0;
+    top: 0;
     width: 100%;
     height: 100%;
 }
 
-/* The lifted item. Sized to match .cell-item so it lands flush, and slightly scaled up so it
-   reads as picked up. Positioned by layout left/top from Lua, never percent translate. */
+/* The lifted item. Sized to match .cell-item so it lands flush. Positioned by layout
+   left/top from Lua, never percent translate. */
 .flying-item {
     position: absolute;
-    width: 32px;
-    height: 32px;
+    width: 38px;
+    height: 38px;
     border-radius: 8px;
     align-items: center;
     justify-content: center;
     -unity-background-scale-mode: scale-to-fit;
 }
 
-/* ---------------------------- items ----------------------------- */
+.fx-particle {
+    position: absolute;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.fx-star {
+    background-image: var(--art-star);
+}
+
+.fx-sparkle {
+    background-image: var(--icon-sparkle);
+}
+
+.fx-glow {
+    background-image: var(--art-glow);
+}
+
+.fx-coin {
+    background-image: var(--icon-gold);
+}
+
+.fx-chest {
+    background-image: var(--icon-chest);
+}
+
+.fx-energy {
+    background-image: var(--icon-energy);
+}
+
+.fx-ring {
+    border-width: 4px;
+    border-color: #fffbe6;
+}
+
+.fx-ring-gold {
+    border-color: #ffd54a;
+}
+
+.fx-sand {
+    background-color: #d9a25f;
+}
+
+.fx-bubble {
+    background-color: rgba(255, 255, 255, 0.75);
+}
+
+.fx-confetti-0 { background-color: #ff5a5f; }
+.fx-confetti-1 { background-color: #ffd23f; }
+.fx-confetti-2 { background-color: #3bceac; }
+.fx-confetti-3 { background-color: #4d9de0; }
+.fx-confetti-4 { background-color: #b56fe0; }
+.fx-confetti-5 { background-color: #ff9f1c; }
+
+.fx-float-text {
+    position: absolute;
+    width: 160px;
+    height: 30px;
+    font-size: 20px;
+    color: #ffe45c;
+    -unity-font-definition: var(--font-museo-900);
+    -unity-text-align: middle-center;
+    -unity-text-outline-width: 1px;
+    -unity-text-outline-color: var(--mi-outline);
+    text-shadow: 0px 2px 0px var(--mi-outline);
+}
+
+.fx-float-text-energy {
+    color: #fff3a0;
+    font-size: 17px;
+}
+
+/* ---------------------------- overlays ---------------------------- */
+
+.overlay {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+}
+
+.overlay-scrim {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--mi-scrim);
+}
+
+.overlay-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 40px;
+}
+
+/* "Merge Island" sign: a sand mound with shells on top of a wooden-edged sea-blue plank. */
+.banner {
+    width: 290px;
+    height: 104px;
+    align-items: center;
+}
+
+.banner-decor {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 290px;
+    height: 44px;
+    align-items: center;
+}
+
+.banner-sand {
+    position: absolute;
+    left: 75px;
+    top: 16px;
+    width: 140px;
+    height: 40px;
+    border-radius: 20px;
+    background-color: #f3cf92;
+}
+
+.banner-shell {
+    position: absolute;
+    background-image: var(--art-shell);
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.banner-shell-a { left: 86px; top: 8px; width: 34px; height: 34px; rotate: -25deg; }
+.banner-shell-b { left: 126px; top: 0; width: 40px; height: 40px; rotate: 8deg; }
+.banner-shell-c { left: 170px; top: 10px; width: 30px; height: 30px; rotate: 35deg; }
+
+.banner-plank {
+    position: absolute;
+    left: 0;
+    top: 38px;
+    width: 290px;
+    height: 64px;
+    padding: 4px;
+    padding-bottom: 8px;
+    border-radius: 20px;
+    background-color: var(--mi-wood-dark);
+}
+
+.banner-plank-face {
+    flex-grow: 1;
+    border-radius: 16px;
+    background-color: #45b4dc;
+    border-width: 3px;
+    border-color: #8fdcf5;
+    align-items: center;
+    justify-content: center;
+}
+
+.banner-label {
+    font-size: 30px;
+    color: #ffd84a;
+    -unity-font-definition: var(--font-museo-900);
+    -unity-text-outline-width: 2px;
+    -unity-text-outline-color: var(--mi-outline);
+    text-shadow: 0px 3px 0px var(--mi-outline);
+}
+
+.reveal-title {
+    margin-top: 22px;
+    font-size: 26px;
+    color: #ffffff;
+    -unity-font-definition: var(--font-museo-900);
+    -unity-text-outline-width: 2px;
+    -unity-text-outline-color: #2a1a0c;
+    text-shadow: 0px 3px 0px #2a1a0c;
+}
+
+.reveal-stage {
+    width: 230px;
+    height: 230px;
+    align-items: center;
+    justify-content: center;
+}
+
+.stage-fill {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 230px;
+    height: 230px;
+}
+
+.reveal-rays {
+    background-image: var(--art-sunburst);
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-background-image-tint-color: #fff2b8;
+}
+
+.reveal-rays-back {
+    -unity-background-image-tint-color: #ffc861;
+    opacity: 0.6;
+}
+
+.reveal-glow {
+    background-image: var(--art-glow);
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.reveal-item {
+    width: 124px;
+    height: 124px;
+    border-radius: 24px;
+    align-items: center;
+    justify-content: center;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.reveal-name {
+    margin-top: 2px;
+    font-size: 24px;
+    color: #ffe45c;
+    -unity-font-definition: var(--font-museo-900);
+    -unity-text-outline-width: 2px;
+    -unity-text-outline-color: #2a1a0c;
+    text-shadow: 0px 3px 0px #2a1a0c;
+}
+
+.reveal-reward {
+    margin-top: 10px;
+    height: 40px;
+    padding-left: 14px;
+    padding-right: 16px;
+    border-radius: 20px;
+    background-color: rgba(0, 0, 0, 0.35);
+    border-width: 2px;
+    border-color: rgba(255, 216, 74, 0.7);
+    flex-direction: row;
+    align-items: center;
+}
+
+.reveal-reward-icon {
+    width: 28px;
+    height: 28px;
+    margin-right: 6px;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.reveal-reward-label {
+    font-size: 18px;
+    color: #ffffff;
+    -unity-font-definition: var(--font-museo-900);
+}
+
+.tap-prompt {
+    position: absolute;
+    left: 0;
+    bottom: 64px;
+    width: 100%;
+    align-items: center;
+}
+
+.tap-label {
+    font-size: 21px;
+    color: #ffffff;
+    -unity-font-definition: var(--font-museo-900);
+    text-shadow: 0px 2px 0px rgba(0, 0, 0, 0.5);
+}
+
+.tap-underline {
+    width: 124px;
+    height: 3px;
+    margin-top: 4px;
+    border-radius: 2px;
+    background-color: #ffffff;
+}
+
+.win-crown {
+    width: 136px;
+    height: 136px;
+    background-image: var(--art-crown);
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.win-title {
+    font-size: 22px;
+    color: #ffffff;
+    -unity-font-definition: var(--font-museo-900);
+    -unity-text-outline-width: 2px;
+    -unity-text-outline-color: #2a1a0c;
+    text-shadow: 0px 3px 0px #2a1a0c;
+}
+
+.win-prize-row {
+    margin-top: 14px;
+    margin-bottom: 20px;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.win-prize-card {
+    width: 84px;
+    height: 92px;
+    margin-left: 6px;
+    margin-right: 6px;
+    padding: 4px;
+    border-radius: 16px;
+    background-color: var(--mi-orange-dark);
+}
+
+.win-prize-face {
+    flex-grow: 1;
+    border-radius: 12px;
+    background-color: var(--mi-navy);
+    align-items: center;
+    justify-content: center;
+}
+
+.win-prize-icon {
+    width: 50px;
+    height: 50px;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.win-prize-label {
+    margin-top: 2px;
+    font-size: 15px;
+    color: #ffffff;
+    -unity-font-definition: var(--font-museo-900);
+    text-shadow: 0px 2px 0px var(--mi-navy-dark);
+}
+
+/* Green call-to-action with the same depth trick as the generator. */
+.cta-button {
+    width: 180px;
+    height: 58px;
+    padding: 3px;
+    padding-bottom: 7px;
+    border-radius: 20px;
+    background-color: var(--mi-green-dark);
+}
+
+.cta-face {
+    flex-grow: 1;
+    border-radius: 17px;
+    background-color: var(--mi-green);
+    border-width: 2px;
+    border-color: var(--mi-green-light);
+    align-items: center;
+    justify-content: center;
+}
+
+.cta-label {
+    font-size: 22px;
+    color: #ffffff;
+    -unity-font-definition: var(--font-museo-900);
+    text-shadow: 0px 2px 0px var(--mi-green-dark);
+}
+
+.info-panel {
+    width: 320px;
+    padding: 18px;
+    padding-top: 14px;
+    border-radius: 22px;
+    background-color: var(--mi-parchment);
+    border-width: 4px;
+    border-color: var(--mi-parchment-edge);
+    align-items: center;
+}
+
+.info-title {
+    font-size: 24px;
+    margin-bottom: 8px;
+    color: #ffd84a;
+    -unity-font-definition: var(--font-museo-900);
+    -unity-text-outline-width: 2px;
+    -unity-text-outline-color: var(--mi-outline);
+    text-shadow: 0px 3px 0px var(--mi-outline);
+}
+
+.info-row {
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 6px;
+    margin-bottom: 6px;
+}
+
+.info-icon {
+    width: 44px;
+    height: 44px;
+    margin-right: 10px;
+    border-radius: 10px;
+    flex-shrink: 0;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.info-icon-castle { background-image: var(--art-castle); }
+.info-icon-shell { background-image: var(--art-shell); }
+.info-icon-ghost {
+    background-image: var(--art-shell);
+    background-color: var(--mi-ghost-face);
+    -unity-background-image-tint-color: #a0612e;
+}
+.info-icon-crown { background-image: var(--art-crown); }
+
+.info-text {
+    flex-shrink: 1;
+    flex-grow: 1;
+    font-size: 14px;
+    color: var(--mi-text);
+    -unity-font-definition: var(--font-museo-700);
+    -unity-text-align: middle-left;
+    white-space: normal;
+}
+
+.info-ok {
+    margin-top: 12px;
+    width: 150px;
+    height: 52px;
+}
+
+/* --------------------------- reward icons ------------------------- */
+
+.reward-icon-gold { background-image: var(--icon-gold); }
+.reward-icon-item { background-image: var(--icon-chest); }
+.reward-icon-crown { background-image: var(--art-crown); }
+
+/* ------------------------------ items ----------------------------- */
 /* One class per rung of the single linear ladder, declared last so they win the cascade over
    .cell-item's own background.
 

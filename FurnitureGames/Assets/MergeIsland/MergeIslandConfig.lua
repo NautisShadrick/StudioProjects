@@ -52,11 +52,12 @@ STATE_OPEN = 2      -- unlocked; may or may not hold an item
 -- that is subtly wrong instead of obviously fresh.
 -- v3: start area moved from the board centre to the bottom-centre rectangle, so boards saved
 -- under the old layout are regenerated rather than kept with a centre-opened start.
-SAVE_VERSION = 3
+-- v4: saves carry the discovery progress (highestTier).
+SAVE_VERSION = 4
 
 -- Energy. A fixed pool is granted per event window; there is no passive regen. Bumping
--- EVENT_ID re-grants the pool to every player on their next load, which is how a new event
--- starts.
+-- EVENT_ID starts a NEW EVENT for every player on their next load: a fresh board, a fresh
+-- energy pool, and a fresh discovery track -- so every event's rewards can be won once.
 EVENT_ID = "event_001"
 ENERGY_POOL_PER_EVENT = 40
 SPAWN_COST = 1
@@ -93,6 +94,17 @@ KIND_MOVE = "move"          -- item relocated to an empty open cell
 KIND_MERGE = "merge"        -- two matching items became one of the next tier
 KIND_UNLOCK = "unlock"      -- a ghost was satisfied: next tier placed AND the board expands
 
+-- Rewards. Decided SERVER-SIDE ONLY, exactly once per event, the first time a player's board
+-- produces a tier they have never had (a "discovery"). See ITEM_TIERS[n].reward and GRAND_PRIZE.
+--
+-- PLACEHOLDER: nothing is actually granted yet. The server only PRINTS each reward it would
+-- give (see grantReward in MergeIslandManager), and the HUD displays them. The kinds below
+-- decide the icon and wording only.
+--   REWARD_GOLD -- shown with the gold coin icon.
+--   REWARD_ITEM -- shown with `icon` (an optional USS class), defaulting to a chest.
+REWARD_GOLD = "gold"
+REWARD_ITEM = "item"
+
 --------------------------------
 ------  TYPE DEFINITIONS  ------
 --------------------------------
@@ -123,12 +135,23 @@ export type DropResult = {
 -- `class` is a USS class name, which is what makes the art swappable: dropping in real sprites
 -- later means editing this table, not the game logic. Adding a tier is one more row here --
 -- nothing else needs to change.
+--
+-- `reward` (optional) is paid the first time the player DISCOVERS that tier, and is what the
+-- progress track's tooltip advertises. Tier 1 is known from the start, so a reward on it would
+-- never be paid. Discovering the TOP tier also wins GRAND_PRIZE.
 ITEM_TIERS = {
     { label = "Shell", class = "item-tier-1" },
-    { label = "Bottle", class = "item-tier-2" },
-    { label = "Compass", class = "item-tier-3" },
-    { label = "Treasure Map", class = "item-tier-4" },
+    { label = "Bottle", class = "item-tier-2", reward = { kind = REWARD_GOLD, amount = 1 } },
+    { label = "Compass", class = "item-tier-3", reward = { kind = REWARD_GOLD, amount = 2 } },
+    { label = "Treasure Map", class = "item-tier-4", reward = { kind = REWARD_GOLD, amount = 3 } },
     { label = "Treasure Chest", class = "item-tier-5" },
+}
+
+-- What the "Find all items to win" panel holds: paid once, when the top tier is discovered.
+-- Up to four entries lay out cleanly. An item reward (display only for now) looks like:
+--     { kind = REWARD_ITEM, itemId = "golden_shovel", amount = 1, label = "Golden Shovel" },
+GRAND_PRIZE = {
+    { kind = REWARD_GOLD, amount = 10 },
 }
 
 -- The top of the ladder. An item here cannot merge any further, and no ghost may ask for it
@@ -408,4 +431,36 @@ function FirstEmptyOpenCell(cells): number | nil
         end
     end
     return nil
+end
+
+-- Every reward earned by DISCOVERING `tier`: its own reward (if any), plus the grand prize when it
+-- is the top of the ladder. Shared so the server pays exactly what the HUD advertises.
+function DiscoveryRewards(tier: number): {any}
+    local _out = {}
+    local _info = TierInfo(tier)
+    if _info and _info.reward then
+        table.insert(_out, _info.reward)
+    end
+    if tier == MAX_TIER then
+        for _, reward in ipairs(GRAND_PRIZE) do
+            table.insert(_out, reward)
+        end
+    end
+    return _out
+end
+
+-- Short player-facing text for a reward, e.g. "3 Gold". An item's own label wins when given.
+function RewardText(reward): string
+    if not reward then
+        return ""
+    end
+    local _amount = tonumber(reward.amount) or 0
+    if reward.kind == REWARD_GOLD then
+        return tostring(_amount) .. " Gold"
+    end
+    local _label = reward.label or reward.itemId or "Item"
+    if _amount > 1 then
+        return tostring(_amount) .. "x " .. _label
+    end
+    return _label
 end

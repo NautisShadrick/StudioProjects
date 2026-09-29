@@ -1,17 +1,15 @@
 {
   "permissions": {
     "allow": [
-      "Skill(rosie:write-highrise-studio-lua)",
-      "Skill(rosie:research-highrise-studio-lua-api)",
-      "Skill(rosie:create-highrise-studio-ui)",
-      "Skill(rosie:understand-networked-events)",
-      "Skill(rosie:use-unity-editor)",
+      "Skill(rosie-research-highrise-studio-docs)",
+      "Skill(rosie-understand-networked-events)",
       "mcp__ide__getDiagnostics",
+      "Bash(powershell:*)",
       "Write"
     ],
     "deny": [],
     "ask": [],
-    "defaultMode": "acceptEdits",
+    "defaultMode": "auto",
     "additionalDirectories": [
       "./.claude",
       "~/.claude/plugins/cache/studio-ai/rosie/"
