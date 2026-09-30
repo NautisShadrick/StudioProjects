@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _version: 1
-  _publishedId: 69d6a5a35bf1f17965655228
+  _publishedId: 6abd472440621f48bffb1f46
   _worldPrefab: {fileID: 2261589748193165057, guid: 8d1077d6915c6cd41a5abfc6aef5d242,
     type: 3}
   _scenePrefab: {fileID: 8410445380251270705, guid: e8a33b600e7693c458fbe02a989e39b8,
@@ -30,8 +30,12 @@ MonoBehaviour:
   _enableRealTimeLight: 0
   _useRemoteServer: 0
   _localServerPorts: a10f0000
+  _playModeWorldId: 
+  _playModePersistentId: 
   _remoteServerUserIds: []
   _checkStudioUpdatesOnLaunch: 1
   _enableSceneButtons: 1
   _enableSceneGuides: 1
   _switchLayoutOnPlayMode: 0
+  _isSubscriber: 0
+  _isAgeVerifiedAbove18: 0

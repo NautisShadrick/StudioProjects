@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <!-- Tier 10: Golden Trident. Glossy item style with a soft sea-green glow. -->
+  <defs>
+    <radialGradient id="glow" cx="256" cy="256" r="230" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#c9fff0" stop-opacity="0.85"/>
+      <stop offset="0.55" stop-color="#5fe0c8" stop-opacity="0.3"/>
+      <stop offset="1" stop-color="#5fe0c8" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#fff09a"/>
+      <stop offset="0.5" stop-color="#ffc62a"/>
+      <stop offset="1" stop-color="#c9800c"/>
+    </linearGradient>
+    <linearGradient id="aqua" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#b8fff0"/>
+      <stop offset="1" stop-color="#0f9c8a"/>
+    </linearGradient>
+  </defs>
+
+  <circle cx="256" cy="256" r="230" fill="url(#glow)"/>
+
+  <!-- tilted so it reads as a weapon being brandished -->
+  <g transform="rotate(-24 256 256)">
+    <!-- shaft -->
+    <rect x="243" y="196" width="26" height="276" rx="10" fill="url(#gold)"/>
+    <rect x="236" y="300" width="40" height="16" rx="6" fill="#d48a0e"/>
+    <rect x="236" y="404" width="40" height="16" rx="6" fill="#d48a0e"/>
+    <path d="M256 462 L276 480 H236 Z" fill="#d48a0e"/>
+    <rect x="248" y="200" width="7" height="264" rx="3" fill="#fff" opacity="0.45"/>
+
+    <!-- head: crossbar + three prongs -->
+    <path d="M150 150 Q150 212 256 212 Q362 212 362 150 L340 150 Q336 186 256 186 Q176 186 172 150 Z" fill="url(#gold)"/>
+    <path d="M150 150 L161 96 L172 150 Z" fill="url(#gold)"/>
+    <path d="M340 150 L351 96 L362 150 Z" fill="url(#gold)"/>
+    <rect x="243" y="72" width="26" height="130" rx="8" fill="url(#gold)"/>
+    <path d="M238 80 L256 36 L274 80 Z" fill="url(#gold)"/>
+    <path d="M150 150 L161 96 L164 150 Z" fill="#fff" opacity="0.4"/>
+    <path d="M340 150 L351 96 L354 150 Z" fill="#fff" opacity="0.4"/>
+    <path d="M238 80 L256 36 L254 80 Z" fill="#fff" opacity="0.4"/>
+
+    <!-- gem at the join -->
+    <circle cx="256" cy="206" r="26" fill="#d48a0e"/>
+    <circle cx="256" cy="206" r="19" fill="url(#aqua)"/>
+    <ellipse cx="249" cy="199" rx="7" ry="5" fill="#fff" opacity="0.85"/>
+  </g>
+
+  <!-- sparkles -->
+  <path d="M418 118 C421 134 424 137 440 140 C424 143 421 146 418 162 C415 146 412 143 396 140 C412 137 415 134 418 118 Z" fill="#fffbe0" stroke="#f2b21b" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M110 330 C112 340 114 342 124 344 C114 346 112 348 110 358 C108 348 106 346 96 344 C106 342 108 340 110 330 Z" fill="#fffbe0" stroke="#f2b21b" stroke-width="3" stroke-linejoin="round"/>
+</svg>

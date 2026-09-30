@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <!-- Tier 9: Treasure Island. Glossy item style. -->
+  <defs>
+    <linearGradient id="sea" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#6fdcff"/>
+      <stop offset="1" stop-color="#1f8fd1"/>
+    </linearGradient>
+    <linearGradient id="sand" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffe7a8"/>
+      <stop offset="1" stop-color="#e8b460"/>
+    </linearGradient>
+    <linearGradient id="trunk" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#b8743a"/>
+      <stop offset="1" stop-color="#7a4418"/>
+    </linearGradient>
+    <linearGradient id="leaf" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#8fe35a"/>
+      <stop offset="1" stop-color="#2f9a3a"/>
+    </linearGradient>
+    <linearGradient id="chest" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#c9793a"/>
+      <stop offset="1" stop-color="#7a3d14"/>
+    </linearGradient>
+  </defs>
+
+  <!-- sea ring -->
+  <ellipse cx="256" cy="378" rx="226" ry="82" fill="url(#sea)"/>
+  <ellipse cx="256" cy="370" rx="200" ry="62" fill="#b5ecff" opacity="0.7"/>
+
+  <!-- island -->
+  <path d="M80 374 Q120 300 256 292 Q392 300 432 374 Q256 414 80 374 Z" fill="url(#sand)"/>
+  <path d="M112 350 Q170 312 256 308" stroke="#fff6d8" stroke-width="10" stroke-linecap="round" fill="none" opacity="0.8"/>
+
+  <!-- X marks the spot -->
+  <path d="M292 336 L332 364 M332 336 L292 364" stroke="#e8323a" stroke-width="12" stroke-linecap="round"/>
+
+  <!-- chest peeking out of the sand -->
+  <path d="M142 344 H222 V374 Q182 384 142 374 Z" fill="url(#chest)"/>
+  <path d="M142 330 Q182 306 222 330 V346 H142 Z" fill="#a4592a"/>
+  <rect x="176" y="336" width="12" height="20" rx="3" fill="#ffd23f"/>
+  <path d="M146 334 Q182 314 218 334" stroke="#ffd23f" stroke-width="5" fill="none"/>
+  <!-- gold spilling out -->
+  <circle cx="232" cy="370" r="10" fill="#ffd23f"/>
+  <circle cx="248" cy="376" r="8" fill="#f2b21b"/>
+  <circle cx="229" cy="367" r="3" fill="#fff" opacity="0.8"/>
+
+  <!-- palm trunk -->
+  <path d="M244 318 Q236 230 270 142 L290 148 Q262 232 268 318 Z" fill="url(#trunk)"/>
+  <path d="M248 292 H266 M246 262 H266 M250 232 H272 M258 202 H280 M266 172 H286" stroke="#6a3310" stroke-width="5" stroke-linecap="round" opacity="0.5"/>
+
+  <!-- palm fronds -->
+  <path d="M280 144 Q206 96 124 140 Q196 120 276 158 Z" fill="url(#leaf)"/>
+  <path d="M280 144 Q236 70 164 60 Q226 96 272 154 Z" fill="url(#leaf)"/>
+  <path d="M280 144 Q324 72 402 76 Q336 102 290 156 Z" fill="url(#leaf)"/>
+  <path d="M280 144 Q364 118 424 170 Q350 146 286 162 Z" fill="url(#leaf)"/>
+  <path d="M280 144 Q290 96 272 50 Q306 94 292 150 Z" fill="url(#leaf)"/>
+  <!-- coconuts -->
+  <circle cx="270" cy="160" r="13" fill="#7a4418"/>
+  <circle cx="292" cy="164" r="13" fill="#8a4a1c"/>
+  <circle cx="266" cy="156" r="4" fill="#fff" opacity="0.4"/>
+
+  <!-- sparkles -->
+  <path d="M410 250 C412 262 414 264 426 266 C414 268 412 270 410 282 C408 270 406 268 394 266 C406 264 408 262 410 250 Z" fill="#fffbe0" stroke="#f2b21b" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M96 236 C98 246 100 248 110 250 C100 252 98 254 96 264 C94 254 92 252 82 250 C92 248 94 246 96 236 Z" fill="#fffbe0" stroke="#f2b21b" stroke-width="3" stroke-linejoin="round"/>
+</svg>

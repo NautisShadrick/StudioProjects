@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
+  <!-- FX: small token particle for fly-to-counter bursts. -->
+  <circle cx="64" cy="70" r="50" fill="#c96f1f" stroke="#4a2b17" stroke-width="7"/>
+  <circle cx="64" cy="62" r="50" fill="#ffc93c" stroke="#4a2b17" stroke-width="7"/>
+  <circle cx="64" cy="62" r="34" fill="#f5a524"/>
+  <path d="M46 80 L64 62 L82 80 M64 62 V42" fill="none" stroke="#fff4cf" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M28 54 A38 38 0 0 1 58 24" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" opacity="0.6"/>
+</svg>

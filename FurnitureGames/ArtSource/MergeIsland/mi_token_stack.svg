@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <!-- Merge Token bonus: a stack of tokens. Flat UI style. -->
+  <defs>
+    <g id="coin">
+      <path d="M48 0 V18 A80 28 0 0 0 208 18 V0 Z" fill="#c96f1f" stroke="#4a2b17" stroke-width="9" stroke-linejoin="round"/>
+      <ellipse cx="128" cy="0" rx="80" ry="28" fill="#ffc93c" stroke="#4a2b17" stroke-width="9"/>
+      <ellipse cx="128" cy="0" rx="54" ry="17" fill="#f5a524"/>
+    </g>
+  </defs>
+  <use href="#coin" y="196"/>
+  <use href="#coin" y="166"/>
+  <use href="#coin" y="136"/>
+  <use href="#coin" y="106"/>
+  <!-- top coin face glyph -->
+  <path d="M104 116 L128 100 L152 116 M128 100 V88" fill="none" stroke="#4a2b17" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" transform="translate(0 0)"/>
+  <path d="M104 116 L128 100 L152 116 M128 100 V88" fill="none" stroke="#fff4cf" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- tipped coin on top -->
+  <g transform="rotate(-18 150 60)">
+    <ellipse cx="150" cy="60" rx="46" ry="46" fill="#c96f1f" stroke="#4a2b17" stroke-width="9" transform="translate(0 8)"/>
+    <circle cx="150" cy="60" r="46" fill="#ffc93c" stroke="#4a2b17" stroke-width="9"/>
+    <circle cx="150" cy="60" r="31" fill="#f5a524"/>
+    <path d="M132 76 L150 58 L168 76 M150 58 V38" fill="none" stroke="#4a2b17" stroke-width="15" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M132 76 L150 58 L168 76 M150 58 V38" fill="none" stroke="#fff4cf" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>

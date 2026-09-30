@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <!-- MAX Battery (top energy bonus). Flat UI style. Full gold charge + MAX tag. -->
+  <defs>
+    <radialGradient id="g" cx="128" cy="124" r="124" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fff2a0" stop-opacity="0.9"/>
+      <stop offset="1" stop-color="#ffd84a" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <circle cx="128" cy="124" r="122" fill="url(#g)"/>
+  <g stroke="#4a2b17" stroke-width="10" stroke-linejoin="round">
+    <rect x="202" y="96" width="24" height="48" rx="8" fill="#9aa6b8"/>
+    <rect x="32" y="74" width="176" height="104" rx="24" fill="#c7700f"/>
+    <rect x="32" y="62" width="176" height="104" rx="24" fill="#fff6d6"/>
+  </g>
+  <rect x="48" y="78" width="144" height="72" rx="12" fill="#ffb81f"/>
+  <rect x="48" y="78" width="144" height="16" rx="8" fill="#fff" opacity="0.5"/>
+  <path d="M128 82 L102 120 H123 L114 146 L148 106 H127 L138 82 Z" fill="#fff" stroke="#4a2b17" stroke-width="7" stroke-linejoin="round"/>
+  <g transform="rotate(-6 128 206)">
+    <rect x="70" y="178" width="116" height="48" rx="16" fill="#e8454f" stroke="#4a2b17" stroke-width="8" stroke-linejoin="round"/>
+    <text x="128" y="213" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-weight="900" font-size="32"
+          fill="#fff" stroke="#4a2b17" stroke-width="6" paint-order="stroke" letter-spacing="1">MAX</text>
+  </g>
+</svg>

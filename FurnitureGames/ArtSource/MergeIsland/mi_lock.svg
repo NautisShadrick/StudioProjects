@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" viewBox="0 0 192 192">
+  <!-- Padlock overlay for locked / ghost tiles. Flat UI style. -->
+  <path d="M60 86 V62 Q60 26 96 26 Q132 26 132 62 V86" fill="none" stroke="#4a2b17" stroke-width="30" stroke-linecap="round"/>
+  <path d="M60 86 V62 Q60 26 96 26 Q132 26 132 62 V86" fill="none" stroke="#c7cfda" stroke-width="16" stroke-linecap="round"/>
+  <g stroke="#4a2b17" stroke-width="10" stroke-linejoin="round">
+    <rect x="34" y="84" width="124" height="90" rx="20" fill="#c96f1f"/>
+    <rect x="34" y="76" width="124" height="90" rx="20" fill="#ffc93c"/>
+  </g>
+  <path d="M96 100 a13 13 0 0 1 8 23 l4 20 h-24 l4 -20 a13 13 0 0 1 8 -23 Z" fill="#4a2b17"/>
+  <path d="M48 92 H144" stroke="#fff" stroke-width="8" stroke-linecap="round" opacity="0.5"/>
+</svg>

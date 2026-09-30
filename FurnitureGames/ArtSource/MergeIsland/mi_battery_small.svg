@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <!-- Small Battery (energy bonus). Flat UI style. Half charge. -->
+  <g stroke="#4a2b17" stroke-width="10" stroke-linejoin="round">
+    <rect x="202" y="104" width="24" height="48" rx="8" fill="#9aa6b8"/>
+    <rect x="32" y="82" width="176" height="104" rx="24" fill="#2e8a4a"/>
+    <rect x="32" y="70" width="176" height="104" rx="24" fill="#e9f6ff"/>
+  </g>
+  <rect x="48" y="86" width="44" height="72" rx="10" fill="#4cd964"/>
+  <rect x="98" y="86" width="44" height="72" rx="10" fill="#4cd964"/>
+  <rect x="148" y="86" width="44" height="72" rx="10" fill="#cfe3ef"/>
+  <rect x="48" y="86" width="94" height="14" rx="7" fill="#fff" opacity="0.5"/>
+  <path d="M128 92 L104 128 H124 L116 152 L146 114 H126 L136 92 Z" fill="#ffe14d" stroke="#4a2b17" stroke-width="7" stroke-linejoin="round"/>
+</svg>

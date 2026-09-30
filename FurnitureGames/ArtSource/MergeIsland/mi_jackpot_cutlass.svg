@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <!-- Jackpot item: Captain's Cutlass. Glossy item style. PLACEHOLDER reward art. -->
+  <defs>
+    <linearGradient id="steel" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="0.5" stop-color="#cfd8e6"/>
+      <stop offset="1" stop-color="#8793a8"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff09a"/>
+      <stop offset="0.5" stop-color="#ffc62a"/>
+      <stop offset="1" stop-color="#d48a0e"/>
+    </linearGradient>
+    <linearGradient id="ruby" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ff9db0"/>
+      <stop offset="1" stop-color="#d0173f"/>
+    </linearGradient>
+  </defs>
+
+  <g transform="rotate(35 128 128)">
+    <!-- curved blade -->
+    <path d="M116 20 Q150 70 146 160 H112 Q120 90 104 30 Z" fill="url(#steel)"/>
+    <path d="M110 30 Q124 84 118 156" stroke="#fff" stroke-width="5" stroke-linecap="round" fill="none" opacity="0.8"/>
+    <!-- guard -->
+    <path d="M88 158 H170 Q176 170 164 176 H94 Q82 170 88 158 Z" fill="url(#gold)"/>
+    <path d="M164 176 Q184 196 160 222" stroke="url(#gold)" stroke-width="9" fill="none" stroke-linecap="round"/>
+    <!-- grip -->
+    <rect x="118" y="176" width="22" height="46" rx="6" fill="#6e3712"/>
+    <path d="M118 188 H140 M118 200 H140 M118 212 H140" stroke="#3b1e0a" stroke-width="3"/>
+    <!-- pommel -->
+    <circle cx="129" cy="230" r="12" fill="url(#gold)"/>
+    <circle cx="129" cy="167" r="7" fill="url(#ruby)"/>
+  </g>
+</svg>

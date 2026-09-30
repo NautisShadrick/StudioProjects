@@ -26,7 +26,7 @@ namespace Highrise.Lua.Generated
         private const string s_scriptGUID = "be0a75302bf24ba44a4f8b1f659151fd";
         public override string ScriptGUID => s_scriptGUID;
 
-        [Tooltip("Item art, ONE SPRITE PER TIER, ordered bottom of the ladder to top. Index 1 = tier 1. Any tier left empty falls back to its placeholder colour and tier number, so a partly-filled list is fine while you are still making art.")]
+        [Tooltip("Only tier 1 is used, as the world-top button icon. Board art comes from MergeIslandHUD.uss (.item-tier-N).")]
         [SerializeField] public System.Collections.Generic.List<UnityEngine.Sprite> m_tierSprites = default;
 
         protected override SerializedPropertyValue[] SerializeProperties()
@@ -95,8 +95,6 @@ namespace Highrise.Lua.Generated
                 CreateSerializedProperty(_script.GetPropertyAt(56), null),
                 CreateSerializedProperty(_script.GetPropertyAt(57), null),
                 CreateSerializedProperty(_script.GetPropertyAt(58), null),
-                CreateSerializedProperty(_script.GetPropertyAt(59), null),
-                CreateSerializedProperty(_script.GetPropertyAt(60), null),
             };
         }
         

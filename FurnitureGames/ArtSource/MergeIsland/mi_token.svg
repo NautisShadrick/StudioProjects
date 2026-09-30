@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <!-- Merge Token: the generator's play currency. Flat UI style (thick brown outline). -->
+  <g stroke="#4a2b17" stroke-width="10" stroke-linejoin="round">
+    <circle cx="128" cy="140" r="98" fill="#c96f1f"/>
+    <circle cx="128" cy="124" r="98" fill="#ffc93c"/>
+  </g>
+  <circle cx="128" cy="124" r="72" fill="#f5a524" stroke="#e08a12" stroke-width="6"/>
+  <!-- merge glyph: two branches joining into one arrow -->
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M90 170 L128 132 L166 170 M128 132 V84 M104 106 L128 82 L152 106" stroke="#4a2b17" stroke-width="30"/>
+    <path d="M90 170 L128 132 L166 170 M128 132 V84 M104 106 L128 82 L152 106" stroke="#fff4cf" stroke-width="16"/>
+  </g>
+  <path d="M52 110 A78 78 0 0 1 116 48" fill="none" stroke="#fff" stroke-width="10" stroke-linecap="round" opacity="0.6"/>
+</svg>

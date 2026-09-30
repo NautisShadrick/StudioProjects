@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
+  <!-- The green "won" check stamped over a jackpot card. Chunky, with a dark outline so it reads
+       over any item art. -->
+  <defs>
+    <linearGradient id="green" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#b6f27a"/>
+      <stop offset="1" stop-color="#3e9c20"/>
+    </linearGradient>
+  </defs>
+  <g transform="translate(64 64) scale(0.8) translate(-64 -64)">
+  <path d="M14 66 L48 100 L114 26" stroke="#1d5a10" stroke-width="30" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <path d="M14 66 L48 100 L114 26" stroke="url(#green)" stroke-width="18" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <path d="M20 62 L48 90" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity="0.55"/>
+  </g>
+</svg>

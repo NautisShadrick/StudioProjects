@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <!-- Ticket (guaranteed delivery reward). Flat UI style. -->
+  <defs>
+    <path id="t" d="M52 80 H204 a12 12 0 0 1 12 12 V112 a16 16 0 0 0 0 32 V164 a12 12 0 0 1 -12 12 H52 a12 12 0 0 1 -12 -12 V144 a16 16 0 0 0 0 -32 V92 a12 12 0 0 1 12 -12 Z"/>
+  </defs>
+  <g transform="rotate(-12 128 128)">
+    <use href="#t" y="10" fill="#c7385a" stroke="#4a2b17" stroke-width="10" stroke-linejoin="round"/>
+    <use href="#t" fill="#ff6b8b" stroke="#4a2b17" stroke-width="10" stroke-linejoin="round"/>
+    <path d="M58 92 H198" stroke="#fff" stroke-width="7" stroke-linecap="round" opacity="0.45"/>
+    <path d="M96 90 V166" stroke="#fff" stroke-width="6" stroke-dasharray="10 9" stroke-linecap="round" opacity="0.8"/>
+    <path d="M152 100 L159 117 L177 118.5 L163.5 130 L167.5 148 L152 138.5 L136.5 148 L140.5 130 L127 118.5 L145 117 Z"
+          fill="#fff3a6" stroke="#4a2b17" stroke-width="6" stroke-linejoin="round"/>
+  </g>
+</svg>

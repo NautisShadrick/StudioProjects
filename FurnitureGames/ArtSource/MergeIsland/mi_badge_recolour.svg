@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <!-- Track tier 10 marker: recoloured item. Paint palette + brush. Flat UI style. -->
+  <path d="M128 36 C186 36 228 74 228 120 C228 150 206 158 186 152 C164 146 150 160 158 180 C168 204 150 222 124 222 C70 222 28 180 28 126 C28 74 72 36 128 36 Z"
+        fill="#ffe7b8" stroke="#4a2b17" stroke-width="10" stroke-linejoin="round"/>
+  <circle cx="84" cy="100" r="18" fill="#ff5a6e" stroke="#4a2b17" stroke-width="7"/>
+  <circle cx="128" cy="76" r="18" fill="#ffc93c" stroke="#4a2b17" stroke-width="7"/>
+  <circle cx="176" cy="96" r="18" fill="#4cc2ff" stroke="#4a2b17" stroke-width="7"/>
+  <circle cx="78" cy="152" r="18" fill="#4cd964" stroke="#4a2b17" stroke-width="7"/>
+  <circle cx="120" cy="184" r="15" fill="#9b6bff" stroke="#4a2b17" stroke-width="7"/>
+  <!-- brush -->
+  <g transform="rotate(38 190 176)">
+    <rect x="182" y="120" width="18" height="84" rx="8" fill="#b8733a" stroke="#4a2b17" stroke-width="8"/>
+    <rect x="180" y="108" width="22" height="20" rx="4" fill="#c7cfda" stroke="#4a2b17" stroke-width="8"/>
+    <path d="M180 110 Q191 70 202 110 Z" fill="#ff5a6e" stroke="#4a2b17" stroke-width="8" stroke-linejoin="round"/>
+  </g>
+</svg>

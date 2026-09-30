@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <!-- Tier 12 (top of the ladder): Royal Crown. Glossy item style with a strong glow. -->
+  <defs>
+    <radialGradient id="glow" cx="256" cy="270" r="236" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fff6b0" stop-opacity="0.95"/>
+      <stop offset="0.55" stop-color="#ffd84a" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#ffd84a" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff09a"/>
+      <stop offset="0.5" stop-color="#ffc62a"/>
+      <stop offset="1" stop-color="#e0930f"/>
+    </linearGradient>
+    <linearGradient id="band" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f2ad1c"/>
+      <stop offset="1" stop-color="#b96f08"/>
+    </linearGradient>
+    <linearGradient id="ruby" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ff9db0"/>
+      <stop offset="1" stop-color="#d0173f"/>
+    </linearGradient>
+    <linearGradient id="sapph" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#9fd8ff"/>
+      <stop offset="1" stop-color="#1f5fd6"/>
+    </linearGradient>
+    <linearGradient id="emer" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#8dffc6"/>
+      <stop offset="1" stop-color="#119a58"/>
+    </linearGradient>
+  </defs>
+
+  <circle cx="256" cy="270" r="236" fill="url(#glow)"/>
+
+  <!-- crown body -->
+  <path d="M112 334 L88 170 L178 252 L256 118 L334 252 L424 170 L400 334 Z" fill="url(#gold)"/>
+  <path d="M256 118 L334 252 L424 170 L400 334 L360 334 L392 226 L330 282 Z" fill="#e0930f" opacity="0.45"/>
+  <path d="M112 334 L88 170 L130 214 L136 334 Z" fill="#fff" opacity="0.35"/>
+
+  <!-- tips -->
+  <circle cx="88" cy="166" r="22" fill="url(#gold)"/>
+  <circle cx="256" cy="112" r="24" fill="url(#gold)"/>
+  <circle cx="424" cy="166" r="22" fill="url(#gold)"/>
+  <circle cx="81" cy="159" r="7" fill="#fff" opacity="0.8"/>
+  <circle cx="248" cy="104" r="8" fill="#fff" opacity="0.8"/>
+  <circle cx="417" cy="159" r="7" fill="#fff" opacity="0.8"/>
+
+  <!-- body gems -->
+  <path d="M256 196 L276 226 L256 256 L236 226 Z" fill="url(#ruby)"/>
+  <path d="M256 196 L276 226 L256 226 Z" fill="#fff" opacity="0.45"/>
+
+  <!-- band -->
+  <path d="M104 326 H408 V392 Q256 418 104 392 Z" fill="url(#band)"/>
+  <path d="M104 326 H408 V340 Q256 352 104 340 Z" fill="#ffe27a"/>
+  <ellipse cx="256" cy="368" rx="26" ry="20" fill="url(#ruby)"/>
+  <ellipse cx="170" cy="366" rx="20" ry="16" fill="url(#sapph)"/>
+  <ellipse cx="342" cy="366" rx="20" ry="16" fill="url(#emer)"/>
+  <ellipse cx="248" cy="361" rx="8" ry="5" fill="#fff" opacity="0.85"/>
+  <ellipse cx="164" cy="360" rx="6" ry="4" fill="#fff" opacity="0.85"/>
+  <ellipse cx="336" cy="360" rx="6" ry="4" fill="#fff" opacity="0.85"/>
+
+  <!-- sparkles -->
+  <path d="M430 88 C433 104 436 107 452 110 C436 113 433 116 430 132 C427 116 424 113 408 110 C424 107 427 104 430 88 Z" fill="#fffbe0" stroke="#f2b21b" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M96 290 C98 300 100 302 110 304 C100 306 98 308 96 318 C94 308 92 306 82 304 C92 302 94 300 96 290 Z" fill="#fffbe0" stroke="#f2b21b" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M378 420 C380 430 382 432 392 434 C382 436 380 438 378 448 C376 438 374 436 364 434 C374 432 376 430 378 420 Z" fill="#fffbe0" stroke="#f2b21b" stroke-width="3" stroke-linejoin="round"/>
+</svg>

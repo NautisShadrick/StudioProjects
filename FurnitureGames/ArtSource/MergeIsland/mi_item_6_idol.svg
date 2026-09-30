@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <!-- Tier 6: Golden Idol. Glossy item style (matches compass/map/chest: no outline, 3/4 view). -->
+  <defs>
+    <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffe98a"/>
+      <stop offset="0.45" stop-color="#f7bd24"/>
+      <stop offset="1" stop-color="#d48a0e"/>
+    </linearGradient>
+    <linearGradient id="goldSide" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#d9960f"/>
+      <stop offset="1" stop-color="#9a5c08"/>
+    </linearGradient>
+    <linearGradient id="gem" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#7dffc0"/>
+      <stop offset="1" stop-color="#139c5c"/>
+    </linearGradient>
+    <linearGradient id="ruby" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ff8aa0"/>
+      <stop offset="1" stop-color="#d11f45"/>
+    </linearGradient>
+  </defs>
+
+  <!-- stone plinth -->
+  <path d="M112 404 L372 404 L406 378 L146 378 Z" fill="#cdd4de"/>
+  <path d="M112 404 H372 V462 H112 Z" fill="#949eae"/>
+  <path d="M372 404 L406 378 V436 L372 462 Z" fill="#6b7585"/>
+  <path d="M112 440 H372 V462 H112 Z" fill="#7c8696"/>
+
+  <!-- body: right side face then front face -->
+  <path d="M184 380 V176 Q184 106 274 106 Q364 106 364 176 V380 L332 400 H152 Z" fill="url(#goldSide)"/>
+  <!-- headdress -->
+  <path d="M168 150 L186 64 L216 126 L244 40 L272 126 L302 64 L322 150 Z" fill="url(#gold)"/>
+  <path d="M244 40 L272 126 L302 64 L322 150 L300 150 L286 104 L268 150 Z" fill="#d9960f" opacity="0.55"/>
+  <circle cx="244" cy="94" r="17" fill="url(#ruby)"/>
+  <ellipse cx="238" cy="88" rx="6" ry="4" fill="#fff" opacity="0.85"/>
+
+  <path d="M152 400 V196 Q152 126 242 126 Q332 126 332 196 V400 Z" fill="url(#gold)"/>
+
+  <!-- gloss strip -->
+  <path d="M168 380 V204 Q168 146 222 136 Q186 160 186 212 V380 Z" fill="#fff" opacity="0.4"/>
+
+  <!-- brow -->
+  <rect x="166" y="186" width="152" height="26" rx="12" fill="#d8960f"/>
+  <rect x="166" y="186" width="152" height="9" rx="4" fill="#ffe27a" opacity="0.7"/>
+
+  <!-- eyes -->
+  <ellipse cx="206" cy="244" rx="33" ry="27" fill="#b87c0b"/>
+  <ellipse cx="278" cy="244" rx="33" ry="27" fill="#b87c0b"/>
+  <ellipse cx="206" cy="244" rx="24" ry="19" fill="url(#gem)"/>
+  <ellipse cx="278" cy="244" rx="24" ry="19" fill="url(#gem)"/>
+  <ellipse cx="198" cy="237" rx="8" ry="5" fill="#fff" opacity="0.9"/>
+  <ellipse cx="270" cy="237" rx="8" ry="5" fill="#fff" opacity="0.9"/>
+
+  <!-- nose -->
+  <path d="M242 258 L224 306 H260 Z" fill="#e4a51a"/>
+  <path d="M242 258 L260 306 H246 Z" fill="#b87c0b" opacity="0.6"/>
+
+  <!-- mouth -->
+  <rect x="194" y="324" width="96" height="36" rx="12" fill="#7a4808"/>
+  <rect x="206" y="324" width="16" height="14" rx="3" fill="#fff3c4"/>
+  <rect x="234" y="324" width="16" height="14" rx="3" fill="#fff3c4"/>
+  <rect x="262" y="324" width="16" height="14" rx="3" fill="#fff3c4"/>
+
+  <!-- cheek marks -->
+  <rect x="172" y="286" width="26" height="8" rx="4" fill="#d8960f"/>
+  <rect x="286" y="286" width="26" height="8" rx="4" fill="#d8960f"/>
+</svg>

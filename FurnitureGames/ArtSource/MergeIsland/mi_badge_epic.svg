@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <!-- Track tier 18 marker: EPIC item. Faceted gem over a ribbon. Flat UI style. -->
+  <defs>
+    <radialGradient id="g" cx="128" cy="108" r="100" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#e3c9ff" stop-opacity="0.9"/>
+      <stop offset="1" stop-color="#b47bff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <circle cx="128" cy="108" r="100" fill="url(#g)"/>
+  <g stroke="#4a2b17" stroke-width="10" stroke-linejoin="round">
+    <path d="M80 40 H176 L216 88 L128 196 L40 88 Z" fill="#9b4dff"/>
+  </g>
+  <path d="M80 40 L100 88 L128 40 L156 88 L176 40" fill="none" stroke="#4a2b17" stroke-width="6" stroke-linejoin="round"/>
+  <path d="M40 88 H216" stroke="#4a2b17" stroke-width="6"/>
+  <path d="M100 88 L128 196 L156 88" fill="none" stroke="#4a2b17" stroke-width="6" stroke-linejoin="round"/>
+  <path d="M80 40 L100 88 H40 Z" fill="#d6b0ff"/>
+  <path d="M128 40 L156 88 H100 Z" fill="#c294ff"/>
+  <path d="M100 88 L128 196 L40 88 Z" fill="#b57aff" opacity="0.6"/>
+  <path d="M40 88 L80 40 L100 88 Z M100 88 L128 40 L156 88 Z M156 88 L176 40 L216 88 Z" fill="none" stroke="#4a2b17" stroke-width="6" stroke-linejoin="round"/>
+  <!-- ribbon -->
+  <g stroke="#4a2b17" stroke-width="8" stroke-linejoin="round">
+    <path d="M30 178 L54 162 V218 L30 234 L40 206 Z" fill="#b8263a"/>
+    <path d="M226 178 L202 162 V218 L226 234 L216 206 Z" fill="#b8263a"/>
+    <rect x="46" y="156" width="164" height="58" rx="12" fill="#e8454f"/>
+  </g>
+  <text x="128" y="197" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-weight="900" font-size="36"
+        fill="#fff" stroke="#4a2b17" stroke-width="6" paint-order="stroke" letter-spacing="2">EPIC</text>
+</svg>

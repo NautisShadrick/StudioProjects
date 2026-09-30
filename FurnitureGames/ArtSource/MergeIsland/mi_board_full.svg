@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" viewBox="0 0 192 192">
+  <!-- Board-full warning. Flat UI style. -->
+  <path d="M96 22 Q106 22 112 32 L176 146 Q182 160 168 166 H24 Q10 160 16 146 L80 32 Q86 22 96 22 Z" fill="#d9822b" stroke="#4a2b17" stroke-width="10" stroke-linejoin="round" transform="translate(0 8)"/>
+  <path d="M96 22 Q106 22 112 32 L176 146 Q182 160 168 166 H24 Q10 160 16 146 L80 32 Q86 22 96 22 Z" fill="#ffc93c" stroke="#4a2b17" stroke-width="10" stroke-linejoin="round"/>
+  <path d="M96 62 V112" stroke="#4a2b17" stroke-width="20" stroke-linecap="round"/>
+  <circle cx="96" cy="140" r="11" fill="#4a2b17"/>
+  <path d="M84 42 L60 84" stroke="#fff" stroke-width="8" stroke-linecap="round" opacity="0.55"/>
+</svg>

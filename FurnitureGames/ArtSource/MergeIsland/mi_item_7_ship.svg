@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <!-- Tier 7: Pirate Ship. Glossy item style. -->
+  <defs>
+    <linearGradient id="wood" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#c9793a"/>
+      <stop offset="1" stop-color="#7a3d14"/>
+    </linearGradient>
+    <linearGradient id="sail" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#fffdf5"/>
+      <stop offset="0.7" stop-color="#fbf1da"/>
+      <stop offset="1" stop-color="#e2cfa6"/>
+    </linearGradient>
+    <linearGradient id="sea" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#5fd0ff"/>
+      <stop offset="1" stop-color="#1f8fd1"/>
+    </linearGradient>
+  </defs>
+
+  <!-- mast + crow's nest -->
+  <rect x="246" y="78" width="18" height="276" rx="6" fill="#6e3712"/>
+  <rect x="222" y="102" width="66" height="20" rx="6" fill="#8a4a1c"/>
+  <rect x="222" y="102" width="66" height="7" rx="3" fill="#c9793a"/>
+
+  <!-- flag -->
+  <path d="M264 50 L342 66 L264 92 Z" fill="#2c2c34"/>
+  <circle cx="290" cy="70" r="8" fill="#fff"/>
+  <rect x="258" y="44" width="10" height="40" rx="4" fill="#6e3712"/>
+
+  <!-- main sail -->
+  <path d="M146 138 Q256 118 366 138 Q350 222 366 300 Q256 284 146 300 Q162 222 146 138 Z" fill="url(#sail)"/>
+  <path d="M146 138 Q256 118 366 138 L362 152 Q256 134 150 152 Z" fill="#d9c49a"/>
+  <!-- sail emblem -->
+  <circle cx="256" cy="212" r="34" fill="#e8454f"/>
+  <path d="M232 238 L280 186 M280 238 L232 186" stroke="#fff3e0" stroke-width="10" stroke-linecap="round"/>
+  <circle cx="256" cy="212" r="15" fill="#fff3e0"/>
+  <circle cx="250" cy="209" r="3.5" fill="#e8454f"/>
+  <circle cx="262" cy="209" r="3.5" fill="#e8454f"/>
+
+  <!-- hull -->
+  <path d="M64 322 H450 L406 420 Q256 450 106 420 Z" fill="url(#wood)"/>
+  <path d="M64 322 H450 L444 340 H70 Z" fill="#e39a55"/>
+  <path d="M84 372 H428 M96 400 H414" stroke="#6a3310" stroke-width="5" stroke-linecap="round" opacity="0.6"/>
+  <circle cx="160" cy="356" r="11" fill="#3b1e0a"/>
+  <circle cx="220" cy="358" r="11" fill="#3b1e0a"/>
+  <circle cx="290" cy="358" r="11" fill="#3b1e0a"/>
+  <circle cx="350" cy="356" r="11" fill="#3b1e0a"/>
+  <circle cx="157" cy="353" r="4" fill="#ffd27a"/>
+  <circle cx="217" cy="355" r="4" fill="#ffd27a"/>
+  <circle cx="287" cy="355" r="4" fill="#ffd27a"/>
+  <circle cx="347" cy="353" r="4" fill="#ffd27a"/>
+  <!-- hull gloss -->
+  <path d="M92 344 H420 L414 354 H96 Z" fill="#fff" opacity="0.25"/>
+
+  <!-- sea -->
+  <path d="M34 424 Q84 398 134 424 T234 424 T334 424 T434 424 Q458 412 478 420 V448 Q256 482 34 448 Z" fill="url(#sea)"/>
+  <path d="M34 424 Q84 398 134 424 T234 424 T334 424 T434 424 Q458 412 478 420 V430 Q458 422 434 434 Q384 410 334 434 Q284 410 234 434 Q184 410 134 434 Q84 410 34 434 Z" fill="#b5ecff"/>
+</svg>

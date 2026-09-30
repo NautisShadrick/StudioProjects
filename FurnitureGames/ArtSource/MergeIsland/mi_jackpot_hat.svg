@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <!-- Jackpot item: Captain's Hat (tricorn). Glossy item style. PLACEHOLDER reward art. -->
+  <defs>
+    <linearGradient id="felt" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#4a4f66"/>
+      <stop offset="1" stop-color="#1f2233"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff09a"/>
+      <stop offset="0.5" stop-color="#ffc62a"/>
+      <stop offset="1" stop-color="#d48a0e"/>
+    </linearGradient>
+    <linearGradient id="plume" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ff9db0"/>
+      <stop offset="1" stop-color="#d0173f"/>
+    </linearGradient>
+  </defs>
+
+  <!-- plume -->
+  <path d="M150 92 Q176 34 226 30 Q204 58 196 96 Z" fill="url(#plume)"/>
+  <path d="M160 88 Q184 48 214 38" stroke="#fff" stroke-width="4" stroke-linecap="round" fill="none" opacity="0.6"/>
+
+  <!-- crown of the hat -->
+  <path d="M70 150 Q70 76 128 72 Q186 76 186 150 Z" fill="url(#felt)"/>
+  <path d="M86 136 Q88 90 122 84" stroke="#8a90aa" stroke-width="8" stroke-linecap="round" fill="none" opacity="0.6"/>
+
+  <!-- tricorn brim -->
+  <path d="M20 150 Q60 118 128 136 Q196 118 236 150 Q214 196 128 196 Q42 196 20 150 Z" fill="url(#felt)"/>
+  <path d="M20 150 Q60 118 128 136 Q196 118 236 150" stroke="url(#gold)" stroke-width="9" fill="none" stroke-linecap="round"/>
+  <path d="M36 160 Q128 206 220 160" stroke="#fff" stroke-width="5" fill="none" opacity="0.18" stroke-linecap="round"/>
+
+  <!-- skull badge -->
+  <circle cx="128" cy="116" r="22" fill="#fff5de"/>
+  <circle cx="120" cy="113" r="5" fill="#1f2233"/>
+  <circle cx="136" cy="113" r="5" fill="#1f2233"/>
+  <rect x="120" y="124" width="16" height="7" rx="2" fill="#1f2233"/>
+</svg>

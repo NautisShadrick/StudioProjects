@@ -1,8 +1,8 @@
 /*
     MergeIslandHUD -- full-screen merge-and-unlock board, beach theme.
 
-    Geometry: 7 columns of 44px cells = 308px of grid. A cell is the (contiguous, gapless) hit
-    area; the visible TILE is inset 1px inside it, so the sand showing through the 2px gaps reads
+    Geometry: 7 columns x 7 rows of 46px cells = 322x322px of grid. A cell is the (contiguous,
+    gapless) hit area; the visible TILE is inset 1px inside it, so the sand showing through the 2px gaps reads
     as grid lines while the drop test still sees one continuous board. The frame HUGS that
     fixed-pixel width rather than taking a percentage, because Yoga counts padding inside `width`
     and a percentage frame would silently clip the last column.
@@ -19,9 +19,8 @@
     Every animation is driven from Lua (MergeIslandHUD.lua). The values here are each
     element's resting state; Lua tweens scale/translate/rotate/opacity away from it and back.
 
-    Art: item art comes from the `tierSprites` array on the MergeIslandHUD component. The
-    .item-tier-N classes are the fallback for any tier with no sprite -- a colour ramp plus the
-    tier number, so the board stays readable before art exists.
+    Art: item art comes from the .item-tier-N classes at the bottom of this file. A sprite in the
+    `tierSprites` array on the MergeIslandHUD component overrides its tier's class art.
 */
 :root {
     --font-museo-700: url("project://database/Packages/com.pz.studio/Assets/Fonts/MuseoSansRounded-700 SDF.asset");
@@ -35,10 +34,36 @@
     --art-crown: url("project://database/Assets/MergeIsland/UI/Art/mi_crown.png");
     --art-castle: url("project://database/Assets/MergeIsland/UI/Art/mi_sandcastle.png");
     --art-shell: url("project://database/Assets/MergeIsland/shell.png");
-    --icon-energy: url("project://database/Assets/MergeIsland/energy.png");
     --icon-gold: url("project://database/Packages/com.pz.studio/Assets/Sprites/Currency/gold_thumbnail.png");
-    --icon-chest: url("project://database/Packages/com.pz.studio/Assets/Sprites/Icons/icon_chest.png");
     --icon-sparkle: url("project://database/Packages/com.pz.studio/Assets/Sprites/CardRewardSparkle.png");
+
+    /* Rendered from ArtSource/MergeIsland/*.svg (node render.mjs). */
+    --art-generator: url("project://database/Assets/MergeIsland/UI/Art/mi_generator.png");
+    --icon-energy: url("project://database/Assets/MergeIsland/UI/Art/mi_token.png");
+    --icon-token: url("project://database/Assets/MergeIsland/UI/Art/mi_token.png");
+    --icon-token-stack: url("project://database/Assets/MergeIsland/UI/Art/mi_token_stack.png");
+    --icon-ticket: url("project://database/Assets/MergeIsland/UI/Art/mi_ticket.png");
+    --icon-ticket-stack: url("project://database/Assets/MergeIsland/UI/Art/mi_ticket_stack.png");
+    --icon-battery: url("project://database/Assets/MergeIsland/UI/Art/mi_battery_small.png");
+    --icon-battery-max: url("project://database/Assets/MergeIsland/UI/Art/mi_battery_max.png");
+    --icon-chest: url("project://database/Assets/MergeIsland/UI/Art/mi_track_chest.png");
+    --icon-recolour: url("project://database/Assets/MergeIsland/UI/Art/mi_badge_recolour.png");
+    --icon-epic: url("project://database/Assets/MergeIsland/UI/Art/mi_badge_epic.png");
+    --icon-check: url("project://database/Assets/MergeIsland/UI/Art/mi_check.png");
+    --jackpot-hat: url("project://database/Assets/MergeIsland/UI/Art/mi_jackpot_hat.png");
+    --jackpot-coat: url("project://database/Assets/MergeIsland/UI/Art/mi_jackpot_coat.png");
+    --jackpot-boots: url("project://database/Assets/MergeIsland/UI/Art/mi_jackpot_boots.png");
+    --jackpot-cutlass: url("project://database/Assets/MergeIsland/UI/Art/mi_jackpot_cutlass.png");
+    --icon-none: url("project://database/Assets/MergeIsland/UI/Art/mi_none.png");
+    --icon-deliver: url("project://database/Assets/MergeIsland/UI/Art/mi_deliver.png");
+    --icon-sell: url("project://database/Assets/MergeIsland/UI/Art/mi_sell.png");
+    --icon-board-full: url("project://database/Assets/MergeIsland/UI/Art/mi_board_full.png");
+    --art-wheel: url("project://database/Assets/MergeIsland/UI/Art/mi_spinner_wheel.png");
+    --art-wheel-frame: url("project://database/Assets/MergeIsland/UI/Art/mi_spinner_frame.png");
+    --art-wheel-pointer: url("project://database/Assets/MergeIsland/UI/Art/mi_spinner_pointer.png");
+    --art-wheel-glow: url("project://database/Assets/MergeIsland/UI/Art/mi_spinner_glow.png");
+    --fx-sparkle-art: url("project://database/Assets/MergeIsland/UI/Art/mi_fx_sparkle.png");
+    --fx-coin-art: url("project://database/Assets/MergeIsland/UI/Art/mi_fx_coin.png");
 
     /* Wood, parchment and sand. */
     --mi-text: #5b3a1e;
@@ -64,6 +89,7 @@
     --mi-green: #72cc42;
     --mi-green-light: #9fe56c;
     --mi-green-dark: #3e8c20;
+    --mi-green-outline: #24591a;
     --mi-red: #ef4d41;
     --mi-red-dark: #b3302a;
     --mi-navy: #2d5d92;
@@ -74,12 +100,9 @@
     --mi-scrim: rgba(18, 22, 40, 0.78);
     --mi-toast-bg: rgba(45, 28, 12, 0.9);
 
-    /* Placeholder item colours, one per rung of the ladder. */
-    --mi-tier-1: #f6e0c0;
-    --mi-tier-2: #66d4b8;
-    --mi-tier-3: #4aa3e0;
-    --mi-tier-4: #9b6ede;
-    --mi-tier-5: #f0b429;
+    --mi-gold: #ffd54a;
+    --mi-purple: #7a47d1;
+    --mi-purple-dark: #4f2c91;
 }
 
 .merge-island-h-u-d {
@@ -143,6 +166,34 @@
     background-color: var(--mi-red);
 }
 
+/* QA reset pill, under the info button. Turns red while armed ("SURE?"). */
+.reset-button {
+    position: absolute;
+    left: 10px;
+    top: 60px;
+    height: 28px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 14px;
+    border-width: 2px;
+    border-color: var(--mi-text-light);
+    background-color: var(--mi-wood);
+    align-items: center;
+    justify-content: center;
+    display: none;
+}
+
+.reset-button-armed {
+    background-color: var(--mi-red);
+}
+
+.reset-label {
+    font-size: 12px;
+    color: var(--mi-text-light);
+    -unity-font-definition: var(--font-museo-900);
+    -unity-text-align: middle-center;
+}
+
 .round-glyph {
     font-size: 18px;
     color: var(--mi-text-light);
@@ -203,11 +254,12 @@
     translate: -60px -12px;
 }
 
+/* One jackpot item. Four of them fill the row (4 x (52 + 8) = 240px inside a 252px row). */
 .prize-card {
-    width: 56px;
-    height: 50px;
-    margin-left: 5px;
-    margin-right: 5px;
+    width: 52px;
+    height: 52px;
+    margin-left: 4px;
+    margin-right: 4px;
     border-radius: 10px;
     background-color: var(--mi-navy-light);
     align-items: center;
@@ -215,67 +267,25 @@
 }
 
 .prize-card-icon {
-    width: 34px;
-    height: 34px;
+    width: 42px;
+    height: 42px;
     -unity-background-scale-mode: scale-to-fit;
 }
 
-.prize-card-label {
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    font-size: 13px;
-    color: var(--mi-text-light);
-    -unity-font-definition: var(--font-museo-900);
-    -unity-text-align: lower-center;
-    -unity-text-outline-width: 1px;
-    -unity-text-outline-color: var(--mi-navy-dark);
-    text-shadow: 0px 2px 0px var(--mi-navy-dark);
-}
-
+/* The won check is stamped across the lower half of the card, over the item art. */
 .prize-card-check {
     position: absolute;
-    right: 2px;
-    top: 2px;
-    width: 16px;
-    height: 16px;
-    border-radius: 8px;
-    background-color: var(--mi-green);
-    border-width: 2px;
-    border-color: var(--mi-text-light);
+    left: 10px;
+    top: 12px;
+    width: 40px;
+    height: 40px;
+    background-image: var(--icon-check);
+    -unity-background-scale-mode: scale-to-fit;
     display: none;
 }
 
 .prize-won .prize-card-check {
     display: flex;
-}
-
-.prize-won .prize-card {
-    opacity: 0.75;
-}
-
-.prize-stamp-row {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    align-items: center;
-    justify-content: center;
-}
-
-.prize-stamp {
-    padding: 4px 12px;
-    border-radius: 8px;
-    border-width: 3px;
-    border-color: #e23c3c;
-    background-color: rgba(255, 250, 240, 0.92);
-    color: #e23c3c;
-    font-size: 20px;
-    -unity-font-definition: var(--font-museo-900);
-    rotate: -10deg;
-    display: none;
 }
 
 .prize-tag-row {
@@ -305,8 +315,9 @@
 
 /* ------------------------------ track ----------------------------- */
 
+/* 12 slots of 26px (312px) plus 8px padding each side fit the bar's 334px content box. */
 .track-panel {
-    width: 330px;
+    width: 340px;
     height: 104px;
     flex-shrink: 0;
 }
@@ -316,7 +327,7 @@
     position: absolute;
     left: 0;
     top: 48px;
-    width: 330px;
+    width: 340px;
     height: 56px;
     border-radius: 28px;
     background-color: var(--mi-cream);
@@ -324,11 +335,12 @@
     border-color: var(--mi-parchment-edge);
 }
 
+/* Runs from the first slot's centre (8 + 13) to the last's (334 - 21). */
 .track-line {
     position: absolute;
-    left: 30px;
+    left: 21px;
     top: 22px;
-    width: 264px;
+    width: 292px;
     height: 6px;
     border-radius: 3px;
     background-color: #ecd3a6;
@@ -358,18 +370,18 @@
 }
 
 .track-slot {
-    width: 40px;
-    height: 40px;
-    border-radius: 20px;
+    width: 26px;
+    height: 26px;
+    border-radius: 13px;
     background-color: #f1dcb4;
     align-items: center;
     justify-content: center;
 }
 
 .track-slot-art {
-    width: 32px;
-    height: 32px;
-    border-radius: 6px;
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
     -unity-background-scale-mode: scale-to-fit;
     -unity-background-image-tint-color: #8a5327;
     opacity: 0.55;
@@ -397,9 +409,10 @@
     opacity: 0.75;
 }
 
-.track-slot-crown .track-slot-art {
-    background-image: var(--art-crown);
-    border-radius: 0;
+/* The top tier's slot wears a gold ring: making it wins the jackpot. */
+.track-slot-crown {
+    border-width: 2px;
+    border-color: var(--mi-gold);
 }
 
 .track-tooltip {
@@ -489,7 +502,7 @@
 }
 
 /* Items draw on their own layer above every tile (see buildGrid), laid out as an identical 7x7
-   of 44px slots so each slot sits exactly over its cell. */
+   of 46px slots so each slot sits exactly over its cell. */
 .item-layer {
     position: absolute;
     left: 0;
@@ -500,16 +513,16 @@
 }
 
 .item-slot {
-    width: 44px;
-    height: 44px;
+    width: 46px;
+    height: 46px;
 }
 
-/* The cell is the tap and drop target: contiguous 44px squares with no margins. Everything
+/* The cell is the tap and drop target: contiguous 46px squares with no margins. Everything
    visible is a child. pickingMode is also set in Lua, since dynamically created elements are
    not reliably tappable from a USS rule alone. */
 .cell {
-    width: 44px;
-    height: 44px;
+    width: 46px;
+    height: 46px;
 }
 
 /* The visible tile, inset 1px so the grid shows between tiles. Its colour is the bevel EDGE;
@@ -518,8 +531,8 @@
     position: absolute;
     left: 1px;
     top: 1px;
-    width: 42px;
-    height: 42px;
+    width: 44px;
+    height: 44px;
     border-radius: 6px;
 }
 
@@ -527,8 +540,8 @@
     position: absolute;
     left: 2px;
     top: 2px;
-    width: 38px;
-    height: 38px;
+    width: 40px;
+    height: 40px;
     border-radius: 4px;
 }
 
@@ -562,8 +575,8 @@
 
 .cell-shadow {
     position: absolute;
-    left: 9px;
-    top: 34px;
+    left: 10px;
+    top: 36px;
     width: 26px;
     height: 7px;
     border-radius: 4px;
@@ -580,8 +593,8 @@
     position: absolute;
     left: 1px;
     top: 1px;
-    width: 42px;
-    height: 42px;
+    width: 44px;
+    height: 44px;
     border-radius: 6px;
     border-width: 3px;
     border-color: var(--mi-highlight);
@@ -602,9 +615,9 @@
     position: absolute;
     left: 3px;
     top: 2px;
-    width: 38px;
-    height: 38px;
-    border-radius: 8px;
+    width: 40px;
+    height: 40px;
+    border-radius: 7px;
     align-items: center;
     justify-content: center;
     /* So an assigned tier sprite fits the cell without distorting its aspect. */
@@ -635,8 +648,8 @@
     position: absolute;
     left: 0;
     top: 0;
-    width: 44px;
-    height: 44px;
+    width: 46px;
+    height: 46px;
     display: none;
 }
 
@@ -657,7 +670,7 @@
 .bracket-br { right: 0; bottom: 0; border-right-width: 3px; border-bottom-width: 3px; border-bottom-right-radius: 4px; }
 
 .cell-tier {
-    font-size: 15px;
+    font-size: 13px;
     color: var(--mi-text-light);
     -unity-font-definition: var(--font-museo-900);
     -unity-text-align: middle-center;
@@ -727,13 +740,18 @@
     text-shadow: 0px 2px 0px var(--mi-wood-dark);
 }
 
-/* Chunky 3D button: the dark body shows below the face as its "depth". */
+/* Chunky 3D button: the dark body shows below the face as its "depth", a darker outline rings
+   it, and a gloss band across the top of the face sells the bevel. It stays green even when a
+   tap would be refused (no tokens, board full); the tap itself toasts the reason. Sized so the
+   outline (drawn outside the box) keeps the old 124x66 footprint. */
 .generator-button {
-    width: 124px;
-    height: 66px;
+    width: 120px;
+    height: 62px;
     padding: 3px;
     padding-bottom: 7px;
     border-radius: 18px;
+    border-width: 2px;
+    border-color: var(--mi-green-outline);
     background-color: var(--mi-green-dark);
 }
 
@@ -747,10 +765,20 @@
     justify-content: center;
 }
 
+.generator-gloss {
+    position: absolute;
+    left: 6px;
+    right: 6px;
+    top: 2px;
+    height: 17px;
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.28);
+}
+
 .generator-castle {
-    width: 52px;
-    height: 52px;
-    background-image: var(--art-castle);
+    width: 56px;
+    height: 56px;
+    background-image: var(--art-generator);
     -unity-background-scale-mode: scale-to-fit;
 }
 
@@ -774,22 +802,6 @@
     background-image: var(--art-shell);
     -unity-background-scale-mode: scale-to-fit;
     rotate: 15deg;
-}
-
-/* Out of energy or nowhere to put an item: greyed so the refusal is legible before the tap. */
-.generator-button-disabled {
-    background-color: #6f6f6f;
-}
-
-.generator-button-disabled .generator-face {
-    background-color: #a9a9a9;
-    border-color: #c4c4c4;
-}
-
-.generator-button-disabled .generator-castle,
-.generator-button-disabled .generator-bolt,
-.generator-button-disabled .generator-shell {
-    opacity: 0.55;
 }
 
 .multiplier-chip {
@@ -890,9 +902,9 @@
    left/top from Lua, never percent translate. */
 .flying-item {
     position: absolute;
-    width: 38px;
-    height: 38px;
-    border-radius: 8px;
+    width: 40px;
+    height: 40px;
+    border-radius: 7px;
     align-items: center;
     justify-content: center;
     -unity-background-scale-mode: scale-to-fit;
@@ -917,6 +929,14 @@
 
 .fx-coin {
     background-image: var(--icon-gold);
+}
+
+.fx-token {
+    background-image: var(--fx-coin-art);
+}
+
+.fx-ticket {
+    background-image: var(--icon-ticket);
 }
 
 .fx-chest {
@@ -967,6 +987,11 @@
 .fx-float-text-energy {
     color: #fff3a0;
     font-size: 17px;
+}
+
+.fx-float-text-points {
+    color: #e2c9ff;
+    font-size: 18px;
 }
 
 /* ---------------------------- overlays ---------------------------- */
@@ -1199,11 +1224,12 @@
     justify-content: center;
 }
 
+/* Four across fit a 360px phone: 4 x (74 + 8) = 328px. */
 .win-prize-card {
-    width: 84px;
-    height: 92px;
-    margin-left: 6px;
-    margin-right: 6px;
+    width: 74px;
+    height: 96px;
+    margin-left: 4px;
+    margin-right: 4px;
     padding: 4px;
     border-radius: 16px;
     background-color: var(--mi-orange-dark);
@@ -1225,7 +1251,10 @@
 
 .win-prize-label {
     margin-top: 2px;
-    font-size: 15px;
+    width: 100%;
+    font-size: 12px;
+    white-space: normal;
+    -unity-text-align: middle-center;
     color: #ffffff;
     -unity-font-definition: var(--font-museo-900);
     text-shadow: 0px 2px 0px var(--mi-navy-dark);
@@ -1296,7 +1325,8 @@
     -unity-background-scale-mode: scale-to-fit;
 }
 
-.info-icon-castle { background-image: var(--art-castle); }
+.info-icon-castle { background-image: var(--art-generator); }
+.info-icon-deliver { background-image: var(--icon-deliver); }
 .info-icon-shell { background-image: var(--art-shell); }
 .info-icon-ghost {
     background-image: var(--art-shell);
@@ -1321,22 +1351,308 @@
     height: 52px;
 }
 
+/* Right-hand balance for the token chip, so the generator stays centred in the bottom bar. */
+.bottom-spacer {
+    width: 104px;
+    height: 44px;
+}
+
+/* ------------------------ selection + actions --------------------- */
+
+/* The hint and the action strip share one fixed-height slot, so selecting never reflows. */
+.hint-area {
+    width: 340px;
+    height: 46px;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+}
+
+.action-strip {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    display: none;
+}
+
+.action-name {
+    flex-grow: 1;
+    flex-shrink: 1;
+    font-size: 15px;
+    color: var(--mi-wood-dark);
+    -unity-font-definition: var(--font-museo-900);
+    -unity-text-align: middle-left;
+    padding-left: 4px;
+}
+
+/* Small chunky buttons with the generator's depth trick. */
+.action-button {
+    height: 42px;
+    margin-left: 6px;
+    padding: 2px;
+    padding-bottom: 5px;
+    border-radius: 14px;
+}
+
+.action-face {
+    flex-grow: 1;
+    flex-direction: row;
+    align-items: center;
+    padding-left: 6px;
+    padding-right: 10px;
+    border-radius: 12px;
+    border-width: 2px;
+}
+
+.action-sell {
+    background-color: var(--mi-orange-dark);
+}
+
+.action-sell .action-face {
+    background-color: var(--mi-orange);
+    border-color: #ffd27a;
+}
+
+.action-deliver {
+    background-color: var(--mi-green-dark);
+}
+
+.action-deliver .action-face {
+    background-color: var(--mi-green);
+    border-color: var(--mi-green-light);
+}
+
+.action-icon {
+    width: 28px;
+    height: 28px;
+    margin-right: 4px;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.action-icon-sell { background-image: var(--icon-sell); }
+.action-icon-deliver { background-image: var(--icon-deliver); }
+
+.action-label {
+    font-size: 15px;
+    color: #ffffff;
+    -unity-font-definition: var(--font-museo-900);
+    text-shadow: 0px 2px 0px rgba(0, 0, 0, 0.3);
+}
+
+.action-button-disabled {
+    opacity: 0.5;
+}
+
+/* The selected item: a gold ring on its slot (reuses the drop-target overlay). */
+.cell-highlight.cell-selected {
+    display: flex;
+    border-color: var(--mi-gold);
+    background-color: rgba(255, 213, 74, 0.22);
+}
+
+/* A deliverable item (tier 5+) sits on a gold-edged tile so it reads as "ready to cash in". */
+.tile-open-a.cell-deliverable,
+.tile-open-b.cell-deliverable {
+    background-color: var(--mi-gold);
+}
+
+/* ----------------------------- delivery ---------------------------- */
+
+.deliver-top {
+    flex-direction: row;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.deliver-item {
+    width: 104px;
+    height: 104px;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.deliver-tickets {
+    height: 48px;
+    margin-left: 10px;
+    padding-left: 10px;
+    padding-right: 16px;
+    border-radius: 24px;
+    background-color: rgba(0, 0, 0, 0.35);
+    border-width: 2px;
+    border-color: rgba(255, 107, 139, 0.8);
+    flex-direction: row;
+    align-items: center;
+}
+
+.deliver-ticket-icon {
+    width: 40px;
+    height: 40px;
+    margin-right: 4px;
+    background-image: var(--icon-ticket);
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.deliver-tickets-label {
+    font-size: 24px;
+    color: #ffffff;
+    -unity-font-definition: var(--font-museo-900);
+    -unity-text-outline-width: 1px;
+    -unity-text-outline-color: #2a1a0c;
+    text-shadow: 0px 2px 0px #2a1a0c;
+}
+
+.deliver-bonus-title {
+    margin-top: 12px;
+    font-size: 18px;
+    color: #ffe45c;
+    -unity-font-definition: var(--font-museo-900);
+    -unity-text-outline-width: 1px;
+    -unity-text-outline-color: #2a1a0c;
+    text-shadow: 0px 2px 0px #2a1a0c;
+}
+
+/* 260 wide so the glow has room; the 220px wheel and frame sit inside at a positive inset
+   (negative insets are ignored in this runtime). */
+.spinner-stage {
+    width: 260px;
+    height: 262px;
+}
+
+.spinner-glow {
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 260px;
+    height: 260px;
+    background-image: var(--art-wheel-glow);
+    -unity-background-scale-mode: scale-to-fit;
+    opacity: 0.8;
+}
+
+.spinner-wheel {
+    position: absolute;
+    left: 20px;
+    top: 30px;
+    width: 220px;
+    height: 220px;
+    background-image: var(--art-wheel);
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.spinner-frame {
+    position: absolute;
+    left: 20px;
+    top: 30px;
+    width: 220px;
+    height: 220px;
+    background-image: var(--art-wheel-frame);
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.spinner-pointer-row {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 260px;
+    align-items: center;
+}
+
+.spinner-pointer {
+    width: 38px;
+    height: 48px;
+    background-image: var(--art-wheel-pointer);
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+/* One reward icon per segment, placed and turned in Lua (popup.buildWheel). */
+.wheel-icon {
+    position: absolute;
+    width: 34px;
+    height: 34px;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.deliver-tap {
+    bottom: 36px;
+}
+
+/* ------------------------------ top-up ----------------------------- */
+
+.topup-panel {
+    width: 300px;
+}
+
+.topup-art {
+    width: 120px;
+    height: 120px;
+    background-image: var(--icon-token-stack);
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.topup-amount {
+    margin-top: 4px;
+    font-size: 22px;
+    color: var(--mi-orange-dark);
+    -unity-font-definition: var(--font-museo-900);
+}
+
+.topup-sub {
+    margin-top: 2px;
+    font-size: 14px;
+    color: var(--mi-text);
+    -unity-font-definition: var(--font-museo-700);
+    white-space: normal;
+}
+
+.topup-buy {
+    margin-top: 12px;
+}
+
+.topup-later {
+    margin-top: 10px;
+    padding: 6px 16px;
+    font-size: 15px;
+    color: var(--mi-wood);
+    -unity-font-definition: var(--font-museo-900);
+}
+
 /* --------------------------- reward icons ------------------------- */
 
-.reward-icon-gold { background-image: var(--icon-gold); }
 .reward-icon-item { background-image: var(--icon-chest); }
 .reward-icon-crown { background-image: var(--art-crown); }
+.reward-icon-token { background-image: var(--icon-token); }
+.reward-icon-token-stack { background-image: var(--icon-token-stack); }
+.reward-icon-ticket { background-image: var(--icon-ticket); }
+.reward-icon-ticket-stack { background-image: var(--icon-ticket-stack); }
+.reward-icon-battery { background-image: var(--icon-battery); }
+.reward-icon-battery-max { background-image: var(--icon-battery-max); }
+.reward-icon-none { background-image: var(--icon-none); }
+.reward-icon-recolour { background-image: var(--icon-recolour); }
+.reward-icon-epic { background-image: var(--icon-epic); }
+.jackpot-icon-hat { background-image: var(--jackpot-hat); }
+.jackpot-icon-coat { background-image: var(--jackpot-coat); }
+.jackpot-icon-boots { background-image: var(--jackpot-boots); }
+.jackpot-icon-cutlass { background-image: var(--jackpot-cutlass); }
 
 /* ------------------------------ items ----------------------------- */
 /* One class per rung of the single linear ladder, declared last so they win the cascade over
-   .cell-item's own background.
+   .cell-item's own background. Each carries that tier's art, so the ladder draws with no
+   inspector setup at all. A sprite assigned to a tier in the MergeIslandHUD inspector still
+   wins (Lua sets backgroundImage inline). (tier 5's art file is chat.png: it is the chest.) */
 
-   These are the PLACEHOLDER fallback only. When a sprite is assigned to a tier in the
-   MergeIslandHUD inspector, Lua sets backgroundImage and the sprite covers this colour. Until
-   then the colour ramp plus the tier number keeps the board readable. */
-
-.item-tier-1 { background-color: var(--mi-tier-1); }
-.item-tier-2 { background-color: var(--mi-tier-2); }
-.item-tier-3 { background-color: var(--mi-tier-3); }
-.item-tier-4 { background-color: var(--mi-tier-4); }
-.item-tier-5 { background-color: var(--mi-tier-5); }
+.item-tier-1 { background-image: url("project://database/Assets/MergeIsland/shell.png"); }
+.item-tier-2 { background-image: url("project://database/Assets/MergeIsland/bottle.png"); }
+.item-tier-3 { background-image: url("project://database/Assets/MergeIsland/compass.png"); }
+.item-tier-4 { background-image: url("project://database/Assets/MergeIsland/map.png"); }
+.item-tier-5 { background-image: url("project://database/Assets/MergeIsland/chat.png"); }
+.item-tier-6 { background-image: url("project://database/Assets/MergeIsland/UI/Art/mi_item_6_idol.png"); }
+.item-tier-7 { background-image: url("project://database/Assets/MergeIsland/UI/Art/mi_item_7_ship.png"); }
+.item-tier-8 { background-image: url("project://database/Assets/MergeIsland/UI/Art/mi_item_8_lighthouse.png"); }
+.item-tier-9 { background-image: url("project://database/Assets/MergeIsland/UI/Art/mi_item_9_island.png"); }
+.item-tier-10 { background-image: url("project://database/Assets/MergeIsland/UI/Art/mi_item_10_trident.png"); }
+.item-tier-11 { background-image: url("project://database/Assets/MergeIsland/UI/Art/mi_item_11_scepter.png"); }
+.item-tier-12 { background-image: url("project://database/Assets/MergeIsland/UI/Art/mi_item_12_crown.png"); }

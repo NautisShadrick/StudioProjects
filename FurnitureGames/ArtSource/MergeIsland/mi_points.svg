@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <!-- Merge Points: star badge. Flat UI style. -->
+  <g stroke="#4a2b17" stroke-width="10" stroke-linejoin="round">
+    <circle cx="128" cy="140" r="98" fill="#5a33a3"/>
+    <circle cx="128" cy="124" r="98" fill="#9b6bff"/>
+  </g>
+  <circle cx="128" cy="124" r="76" fill="#8455e6"/>
+  <path d="M128 60 L144.5 99.3 L187 102.8 L154.6 130.7 L164.5 172.2 L128 150 L91.5 172.2 L101.4 130.7 L69 102.8 L111.5 99.3 Z"
+        fill="#ffd23f" stroke="#4a2b17" stroke-width="9" stroke-linejoin="round"/>
+  <path d="M128 78 L138 102 L116 104 Z" fill="#fff6c9"/>
+  <path d="M52 110 A78 78 0 0 1 116 48" fill="none" stroke="#fff" stroke-width="10" stroke-linecap="round" opacity="0.5"/>
+</svg>

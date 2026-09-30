@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <!-- Jackpot item: Captain's Coat. Glossy item style. PLACEHOLDER reward art. -->
+  <defs>
+    <linearGradient id="cloth" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ff6a60"/>
+      <stop offset="1" stop-color="#a51d27"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff09a"/>
+      <stop offset="0.5" stop-color="#ffc62a"/>
+      <stop offset="1" stop-color="#d48a0e"/>
+    </linearGradient>
+  </defs>
+
+  <!-- sleeves -->
+  <path d="M70 54 L30 92 L22 188 H56 L66 110 Z" fill="url(#cloth)"/>
+  <path d="M186 54 L226 92 L234 188 H200 L190 110 Z" fill="url(#cloth)"/>
+  <rect x="20" y="176" width="38" height="20" rx="6" fill="url(#gold)"/>
+  <rect x="198" y="176" width="38" height="20" rx="6" fill="url(#gold)"/>
+
+  <!-- body -->
+  <path d="M70 46 Q128 30 186 46 L196 226 Q128 238 60 226 Z" fill="url(#cloth)"/>
+  <!-- white shirt + lapels -->
+  <path d="M104 44 L128 120 L152 44 Q128 38 104 44 Z" fill="#fff5de"/>
+  <path d="M94 46 L128 128 L104 150 L82 58 Z" fill="#c42a33"/>
+  <path d="M162 46 L128 128 L152 150 L174 58 Z" fill="#c42a33"/>
+  <path d="M94 46 L128 128" stroke="url(#gold)" stroke-width="6" stroke-linecap="round"/>
+  <path d="M162 46 L128 128" stroke="url(#gold)" stroke-width="6" stroke-linecap="round"/>
+
+  <!-- epaulettes -->
+  <ellipse cx="74" cy="54" rx="24" ry="12" fill="url(#gold)"/>
+  <ellipse cx="182" cy="54" rx="24" ry="12" fill="url(#gold)"/>
+
+  <!-- buttons -->
+  <circle cx="112" cy="166" r="7" fill="url(#gold)"/>
+  <circle cx="144" cy="166" r="7" fill="url(#gold)"/>
+  <circle cx="112" cy="196" r="7" fill="url(#gold)"/>
+  <circle cx="144" cy="196" r="7" fill="url(#gold)"/>
+
+  <!-- gloss -->
+  <path d="M78 70 Q80 150 72 214" stroke="#fff" stroke-width="8" stroke-linecap="round" fill="none" opacity="0.28"/>
+</svg>

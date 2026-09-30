@@ -16,17 +16,14 @@
            phones and compresses on short ones instead of overflowing. -->
       <VisualElement name="_layout" class="layout" picking-mode="Ignore">
 
-        <!-- "Find all items to win": the grand prize. Cards are built in Lua from
-             MergeIslandConfig.GRAND_PRIZE. The tag is drawn AFTER the body so it sits on top of
-             the body's top edge. -->
+        <!-- "Find all items to win": the jackpot set. One card per MergeIslandConfig.JACKPOT
+             entry, built in Lua; each gets a green check once the jackpot is won. The tag is
+             drawn AFTER the body so it sits on top of the body's top edge. -->
         <VisualElement name="_prizePanel" class="prize-panel" picking-mode="Ignore">
           <VisualElement class="prize-body" picking-mode="Ignore">
             <VisualElement class="prize-inner" picking-mode="Ignore">
               <VisualElement name="_prizeRow" class="prize-row" picking-mode="Ignore"/>
               <VisualElement name="_prizeShine" class="prize-shine" picking-mode="Ignore"/>
-            </VisualElement>
-            <VisualElement class="prize-stamp-row" picking-mode="Ignore">
-              <Label name="_prizeStamp" text="COMPLETE!" class="prize-stamp" picking-mode="Ignore"/>
             </VisualElement>
           </VisualElement>
           <VisualElement class="prize-tag-row" picking-mode="Ignore">
@@ -36,8 +33,8 @@
           </VisualElement>
         </VisualElement>
 
-        <!-- Discovery track: one slot per tier, then the crown. Slots are built in Lua. The
-             tooltip floats above the NEXT tier to discover and advertises its reward. -->
+        <!-- Discovery row: one slot per item tier, the crown last. Slots are built in Lua. The
+             tooltip floats above the NEXT tier to discover. -->
         <VisualElement name="_trackPanel" class="track-panel" picking-mode="Ignore">
           <VisualElement name="_trackBar" class="track-bar" picking-mode="Ignore">
             <VisualElement name="_trackLine" class="track-line" picking-mode="Ignore">
@@ -48,7 +45,6 @@
           <VisualElement name="_trackTooltip" class="track-tooltip" picking-mode="Ignore">
             <VisualElement name="_tooltipBob" class="tooltip-bob" picking-mode="Ignore">
               <VisualElement class="tooltip-bubble" picking-mode="Ignore">
-                <VisualElement name="_tooltipIcon" class="tooltip-icon reward-icon-gold" picking-mode="Ignore"/>
                 <Label name="_tooltipLabel" text="" class="tooltip-label" picking-mode="Ignore"/>
               </VisualElement>
               <VisualElement class="tooltip-pointer" picking-mode="Ignore"/>
@@ -70,9 +66,11 @@
         </VisualElement>
 
         <VisualElement name="_bottomBar" class="bottom-bar" picking-mode="Ignore">
-          <!-- The bolt overlaps the chip's left edge; both are absolute inside a wrapper because
-               negative insets are ignored in this runtime. -->
-          <VisualElement name="_energyChip" class="energy-wrap" picking-mode="Ignore">
+          <!-- Merge Tokens. The coin overlaps the chip's left edge; both are absolute inside a
+               wrapper because negative insets are ignored in this runtime. The wrapper takes the
+               tap (an empty wallet reopens the top-up offer), so it is not picking-mode Ignore.
+               (Named _energy* for history: it was the energy pool before tokens.) -->
+          <VisualElement name="_energyChip" class="energy-wrap">
             <VisualElement class="energy-chip" picking-mode="Ignore">
               <Label name="_energyLabel" text="0" class="energy-label" picking-mode="Ignore"/>
             </VisualElement>
@@ -81,21 +79,36 @@
 
           <VisualElement name="_generatorButton" class="generator-button">
             <VisualElement class="generator-face" picking-mode="Ignore">
+              <VisualElement class="generator-gloss" picking-mode="Ignore"/>
               <VisualElement class="generator-castle" picking-mode="Ignore"/>
               <VisualElement class="generator-bolt" picking-mode="Ignore"/>
               <VisualElement class="generator-shell" picking-mode="Ignore"/>
             </VisualElement>
           </VisualElement>
 
-          <!-- Spawn multiplier. Rendered for layout parity with the concept but inert in V1. -->
-          <VisualElement class="multiplier-chip" picking-mode="Ignore">
-            <VisualElement class="multiplier-face" picking-mode="Ignore">
-              <Label name="_multiplierLabel" text="x1" class="multiplier-label" picking-mode="Ignore"/>
+          <VisualElement class="bottom-spacer" picking-mode="Ignore"/>
+        </VisualElement>
+
+        <!-- The hint, swapped for the action strip while an item is selected. Same slot, so the
+             layout never jumps. -->
+        <VisualElement name="_hintArea" class="hint-area" picking-mode="Ignore">
+          <Label name="_hintLabel" text="Drag an item onto a matching item to merge it" class="hint-label" picking-mode="Ignore"/>
+          <VisualElement name="_actionStrip" class="action-strip" picking-mode="Ignore">
+            <Label name="_actionName" text="" class="action-name" picking-mode="Ignore"/>
+            <VisualElement name="_sellButton" class="action-button action-sell">
+              <VisualElement class="action-face" picking-mode="Ignore">
+                <VisualElement class="action-icon action-icon-sell" picking-mode="Ignore"/>
+                <Label name="_sellLabel" text="Sell" class="action-label" picking-mode="Ignore"/>
+              </VisualElement>
+            </VisualElement>
+            <VisualElement name="_deliverButton" class="action-button action-deliver">
+              <VisualElement class="action-face" picking-mode="Ignore">
+                <VisualElement class="action-icon action-icon-deliver" picking-mode="Ignore"/>
+                <Label name="_deliverLabel" text="Deliver" class="action-label" picking-mode="Ignore"/>
+              </VisualElement>
             </VisualElement>
           </VisualElement>
         </VisualElement>
-
-        <Label name="_hintLabel" text="Drag an item onto a matching item to merge it" class="hint-label" picking-mode="Ignore"/>
       </VisualElement>
 
       <!-- Transient feedback ("Board is full!"). The row centres the pill so the label hugs its
@@ -106,6 +119,11 @@
 
       <VisualElement name="_infoButton" class="round-button info-button">
         <Label text="i" class="round-glyph" picking-mode="Ignore"/>
+      </VisualElement>
+      <!-- QA: wipes the island (shown only while MergeIslandManager._debugAllowReset is on).
+           First tap arms it ("SURE?"), second tap within a few seconds resets. -->
+      <VisualElement name="_resetButton" class="reset-button">
+        <Label name="_resetLabel" text="RESET" class="reset-label" picking-mode="Ignore"/>
       </VisualElement>
       <VisualElement name="_closeButton" class="round-button close-button">
         <!-- Plain ASCII rather than a glyph character, so it cannot render as tofu if the
@@ -151,7 +169,7 @@
 
           <Label name="_revealName" text="" class="reveal-name" picking-mode="Ignore"/>
           <VisualElement name="_revealReward" class="reveal-reward" picking-mode="Ignore">
-            <VisualElement name="_revealRewardIcon" class="reveal-reward-icon reward-icon-gold" picking-mode="Ignore"/>
+            <VisualElement name="_revealRewardIcon" class="reveal-reward-icon reward-icon-crown" picking-mode="Ignore"/>
             <Label name="_revealRewardLabel" text="" class="reveal-reward-label" picking-mode="Ignore"/>
           </VisualElement>
         </VisualElement>
@@ -161,7 +179,7 @@
         </VisualElement>
       </VisualElement>
 
-      <!-- Every item found: the grand prize celebration. -->
+      <!-- Every item found: the jackpot celebration. -->
       <VisualElement name="_winOverlay" class="overlay">
         <VisualElement name="_winScrim" class="overlay-scrim" picking-mode="Ignore"/>
         <VisualElement name="_confettiLayer" class="fx-layer" picking-mode="Ignore"/>
@@ -205,7 +223,7 @@
             <Label text="How to Play" class="info-title" picking-mode="Ignore"/>
             <VisualElement class="info-row" picking-mode="Ignore">
               <VisualElement class="info-icon info-icon-castle" picking-mode="Ignore"/>
-              <Label text="Tap the sandcastle to dig up a shell. Each dig costs 1 energy." class="info-text" picking-mode="Ignore"/>
+              <Label text="Tap the dig spot to find a shell. Each dig costs 1 Merge Token." class="info-text" picking-mode="Ignore"/>
             </VisualElement>
             <VisualElement class="info-row" picking-mode="Ignore">
               <VisualElement class="info-icon info-icon-shell" picking-mode="Ignore"/>
@@ -216,14 +234,72 @@
               <Label text="Drop an item on its faded twin in the sand to uncover more island." class="info-text" picking-mode="Ignore"/>
             </VisualElement>
             <VisualElement class="info-row" picking-mode="Ignore">
+              <VisualElement class="info-icon info-icon-deliver" picking-mode="Ignore"/>
+              <Label text="Tap a Treasure Chest or better to Deliver it for tickets and a bonus spin. Tap any item to Sell it." class="info-text" picking-mode="Ignore"/>
+            </VisualElement>
+            <VisualElement class="info-row" picking-mode="Ignore">
               <VisualElement class="info-icon info-icon-crown" picking-mode="Ignore"/>
-              <Label text="Discover every item to earn rewards and win the grand prize!" class="info-text" picking-mode="Ignore"/>
+              <Label text="Find all 12 items to win the Jackpot!" class="info-text" picking-mode="Ignore"/>
             </VisualElement>
             <VisualElement name="_infoOk" class="cta-button info-ok">
               <VisualElement class="cta-face" picking-mode="Ignore">
                 <Label text="Got it!" class="cta-label" picking-mode="Ignore"/>
               </VisualElement>
             </VisualElement>
+          </VisualElement>
+        </VisualElement>
+      </VisualElement>
+
+      <!-- Delivery: guaranteed tickets, then the bonus spin. The overlay itself takes the tap
+           ("Tap to Collect"), once the wheel has stopped. The wheel's segment icons are built
+           in Lua as children of _spinnerWheel so they turn with it. -->
+      <VisualElement name="_deliverOverlay" class="overlay">
+        <VisualElement name="_deliverScrim" class="overlay-scrim" picking-mode="Ignore"/>
+        <VisualElement name="_deliverContent" class="overlay-content" picking-mode="Ignore">
+          <Label name="_deliverTitle" text="DELIVERED!" class="reveal-title" picking-mode="Ignore"/>
+          <VisualElement class="deliver-top" picking-mode="Ignore">
+            <VisualElement name="_deliverItem" class="deliver-item" picking-mode="Ignore"/>
+            <VisualElement class="deliver-tickets" picking-mode="Ignore">
+              <VisualElement class="deliver-ticket-icon" picking-mode="Ignore"/>
+              <Label name="_deliverTicketsLabel" text="+0" class="deliver-tickets-label" picking-mode="Ignore"/>
+            </VisualElement>
+          </VisualElement>
+          <Label text="BONUS SPIN" class="deliver-bonus-title" picking-mode="Ignore"/>
+          <VisualElement name="_spinnerStage" class="spinner-stage" picking-mode="Ignore">
+            <VisualElement name="_spinnerGlow" class="spinner-glow" picking-mode="Ignore"/>
+            <VisualElement name="_spinnerWheel" class="spinner-wheel" picking-mode="Ignore"/>
+            <VisualElement class="spinner-frame" picking-mode="Ignore"/>
+            <VisualElement class="spinner-pointer-row" picking-mode="Ignore">
+              <VisualElement class="spinner-pointer" picking-mode="Ignore"/>
+            </VisualElement>
+          </VisualElement>
+          <VisualElement name="_deliverResult" class="reveal-reward" picking-mode="Ignore">
+            <VisualElement name="_deliverResultIcon" class="reveal-reward-icon reward-icon-none" picking-mode="Ignore"/>
+            <Label name="_deliverResultLabel" text="" class="reveal-reward-label" picking-mode="Ignore"/>
+          </VisualElement>
+        </VisualElement>
+        <VisualElement name="_deliverTap" class="tap-prompt deliver-tap" picking-mode="Ignore">
+          <Label text="Tap to Collect" class="tap-label" picking-mode="Ignore"/>
+          <VisualElement class="tap-underline" picking-mode="Ignore"/>
+        </VisualElement>
+      </VisualElement>
+
+      <!-- Out of Merge Tokens: the empty-state top-up offer. The Buy button is a PLACEHOLDER
+           (see MergeIslandManager TopUpRequest). -->
+      <VisualElement name="_topupOverlay" class="overlay">
+        <VisualElement name="_topupScrim" class="overlay-scrim" picking-mode="Ignore"/>
+        <VisualElement name="_topupContent" class="overlay-content" picking-mode="Ignore">
+          <VisualElement name="_topupPanel" class="info-panel topup-panel" picking-mode="Ignore">
+            <Label text="Out of Merge Tokens!" class="info-title" picking-mode="Ignore"/>
+            <VisualElement class="topup-art" picking-mode="Ignore"/>
+            <Label name="_topupAmount" text="+25 Merge Tokens" class="topup-amount" picking-mode="Ignore"/>
+            <Label text="Keep digging and finish your chain!" class="topup-sub" picking-mode="Ignore"/>
+            <VisualElement name="_topupBuy" class="cta-button topup-buy">
+              <VisualElement class="cta-face" picking-mode="Ignore">
+                <Label name="_topupPrice" text="900 Gold" class="cta-label" picking-mode="Ignore"/>
+              </VisualElement>
+            </VisualElement>
+            <Label name="_topupLater" text="Not now" class="topup-later"/>
           </VisualElement>
         </VisualElement>
       </VisualElement>

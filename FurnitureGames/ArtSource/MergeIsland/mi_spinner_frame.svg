@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <!-- Bonus spinner frame (static): gold rim with bulbs and a centre hub. Transparent inside the
+       rim so the wheel shows through. -->
+  <circle cx="256" cy="256" r="232" fill="none" stroke="#4a2b17" stroke-width="40"/>
+  <circle cx="256" cy="256" r="232" fill="none" stroke="#ffc93c" stroke-width="24"/>
+  <circle cx="256" cy="256" r="240" fill="none" stroke="#c96f1f" stroke-width="6"/>
+  <g stroke="#4a2b17" stroke-width="5">
+    <circle cx="488" cy="256" r="9" fill="#fff"/>
+    <circle cx="470.3" cy="344.8" r="9" fill="#ffe14d"/>
+    <circle cx="420" cy="420" r="9" fill="#fff"/>
+    <circle cx="344.8" cy="470.3" r="9" fill="#ffe14d"/>
+    <circle cx="256" cy="488" r="9" fill="#fff"/>
+    <circle cx="167.2" cy="470.3" r="9" fill="#ffe14d"/>
+    <circle cx="92" cy="420" r="9" fill="#fff"/>
+    <circle cx="41.7" cy="344.8" r="9" fill="#ffe14d"/>
+    <circle cx="24" cy="256" r="9" fill="#fff"/>
+    <circle cx="41.7" cy="167.2" r="9" fill="#ffe14d"/>
+    <circle cx="92" cy="92" r="9" fill="#fff"/>
+    <circle cx="167.2" cy="41.7" r="9" fill="#ffe14d"/>
+    <circle cx="256" cy="24" r="9" fill="#fff"/>
+    <circle cx="344.8" cy="41.7" r="9" fill="#ffe14d"/>
+    <circle cx="420" cy="92" r="9" fill="#fff"/>
+    <circle cx="470.3" cy="167.2" r="9" fill="#ffe14d"/>
+  </g>
+  <!-- hub -->
+  <circle cx="256" cy="264" r="42" fill="#c96f1f" stroke="#4a2b17" stroke-width="10"/>
+  <circle cx="256" cy="256" r="42" fill="#ffc93c" stroke="#4a2b17" stroke-width="10"/>
+  <circle cx="244" cy="244" r="12" fill="#fff" opacity="0.6"/>
+</svg>

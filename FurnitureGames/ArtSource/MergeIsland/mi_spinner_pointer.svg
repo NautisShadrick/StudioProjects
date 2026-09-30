@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="160" viewBox="0 0 128 160">
+  <!-- Bonus spinner pointer (sits over 12 o'clock, tip pointing down into the wheel). -->
+  <g transform="translate(9.6 10) scale(0.85)">
+  <path d="M64 150 L20 70 A48 48 0 1 1 108 70 Z" fill="#b8263a" stroke="#4a2b17" stroke-width="9" stroke-linejoin="round" transform="translate(0 4)"/>
+  <path d="M64 150 L20 70 A48 48 0 1 1 108 70 Z" fill="#ff4d5e" stroke="#4a2b17" stroke-width="9" stroke-linejoin="round"/>
+  <circle cx="64" cy="54" r="18" fill="#fff3e0" stroke="#4a2b17" stroke-width="7"/>
+  <path d="M34 50 Q38 26 58 20" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round" opacity="0.55"/>
+  </g>
+</svg>

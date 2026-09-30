@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <!-- Tier 8: Lighthouse. Glossy item style. -->
+  <defs>
+    <radialGradient id="beam" cx="256" cy="118" r="210" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fff6b0" stop-opacity="0.9"/>
+      <stop offset="1" stop-color="#fff6b0" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="tower" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="0.65" stop-color="#f4eee2"/>
+      <stop offset="1" stop-color="#cfc4ae"/>
+    </linearGradient>
+    <linearGradient id="stripe" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#ff6a60"/>
+      <stop offset="0.65" stop-color="#e8323a"/>
+      <stop offset="1" stop-color="#a51d27"/>
+    </linearGradient>
+    <linearGradient id="rock" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#9aa3b0"/>
+      <stop offset="1" stop-color="#5b6472"/>
+    </linearGradient>
+    <linearGradient id="sea" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#5fd0ff"/>
+      <stop offset="1" stop-color="#1f8fd1"/>
+    </linearGradient>
+  </defs>
+
+  <!-- light beams -->
+  <path d="M256 118 L46 60 L46 176 Z" fill="url(#beam)"/>
+  <path d="M256 118 L466 60 L466 176 Z" fill="url(#beam)"/>
+
+  <!-- tower -->
+  <path d="M206 172 H306 L330 404 H182 Z" fill="url(#tower)"/>
+  <path d="M204 192 H308 L313 240 H199 Z" fill="url(#stripe)"/>
+  <path d="M195 280 H317 L322 328 H190 Z" fill="url(#stripe)"/>
+  <path d="M186 366 H326 L330 404 H182 Z" fill="url(#stripe)"/>
+  <!-- tower gloss -->
+  <path d="M214 176 H232 L214 400 H196 Z" fill="#fff" opacity="0.45"/>
+  <!-- door + window -->
+  <path d="M240 404 V372 Q256 356 272 372 V404 Z" fill="#6e3712"/>
+  <rect x="246" y="250" width="20" height="22" rx="6" fill="#2d5d92"/>
+
+  <!-- gallery -->
+  <rect x="186" y="156" width="140" height="22" rx="8" fill="#2c2c34"/>
+  <rect x="186" y="156" width="140" height="7" rx="3" fill="#5a5a66"/>
+  <!-- lantern room -->
+  <rect x="214" y="96" width="84" height="62" rx="10" fill="#2c2c34"/>
+  <rect x="224" y="104" width="64" height="48" rx="8" fill="#ffe36a"/>
+  <circle cx="256" cy="128" r="18" fill="#fffbe0"/>
+  <path d="M224 104 H288 V116 H224 Z" fill="#fff" opacity="0.4"/>
+  <!-- roof -->
+  <path d="M202 100 L256 50 L310 100 Z" fill="url(#stripe)"/>
+  <path d="M202 100 L256 50 L240 100 Z" fill="#fff" opacity="0.25"/>
+  <circle cx="256" cy="46" r="10" fill="#2c2c34"/>
+
+  <!-- rocks -->
+  <path d="M112 432 Q128 390 176 392 Q206 376 238 396 H300 Q330 378 356 394 Q398 392 406 432 Z" fill="url(#rock)"/>
+  <path d="M130 410 Q150 392 180 398" stroke="#c6ccd6" stroke-width="7" stroke-linecap="round" fill="none"/>
+  <path d="M330 398 Q360 390 386 406" stroke="#c6ccd6" stroke-width="7" stroke-linecap="round" fill="none"/>
+
+  <!-- sea -->
+  <path d="M34 432 Q84 406 134 432 T234 432 T334 432 T434 432 Q458 420 478 428 V452 Q256 486 34 452 Z" fill="url(#sea)"/>
+  <path d="M34 432 Q84 406 134 432 T234 432 T334 432 T434 432 Q458 420 478 428 V438 Q458 430 434 442 Q384 418 334 442 Q284 418 234 442 Q184 418 134 442 Q84 418 34 442 Z" fill="#b5ecff"/>
+</svg>

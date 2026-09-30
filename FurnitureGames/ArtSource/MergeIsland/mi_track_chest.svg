@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <!-- Progression-track reward chest. Flat UI style (purple + gold). -->
+  <g stroke="#4a2b17" stroke-width="10" stroke-linejoin="round">
+    <!-- body -->
+    <rect x="36" y="118" width="184" height="100" rx="14" fill="#7a47d1"/>
+    <!-- lid -->
+    <path d="M36 122 V100 Q36 44 128 44 Q220 44 220 100 V122 Z" fill="#9b6bff"/>
+    <!-- straps -->
+    <rect x="62" y="44" width="28" height="174" rx="6" fill="#ffc93c"/>
+    <rect x="166" y="44" width="28" height="174" rx="6" fill="#ffc93c"/>
+    <!-- lid seam -->
+    <rect x="30" y="112" width="196" height="22" rx="8" fill="#ffc93c"/>
+    <!-- lock -->
+    <rect x="106" y="104" width="44" height="54" rx="10" fill="#ffe27a"/>
+  </g>
+  <path d="M128 120 a8 8 0 0 1 5 14 l3 12 h-16 l3 -12 a8 8 0 0 1 5 -14 Z" fill="#4a2b17"/>
+  <path d="M52 96 Q56 62 104 56" fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round" opacity="0.5"/>
+</svg>

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
+  <!-- FX: 4-point sparkle. White so the HUD can tint it (-unity-background-image-tint-color). -->
+  <defs>
+    <radialGradient id="g" cx="64" cy="64" r="60" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fff" stop-opacity="0.9"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <circle cx="64" cy="64" r="36" fill="url(#g)"/>
+  <path d="M64 6 C69 50 78 59 122 64 C78 69 69 78 64 122 C59 78 50 69 6 64 C50 59 59 50 64 6 Z" fill="#fff"/>
+</svg>

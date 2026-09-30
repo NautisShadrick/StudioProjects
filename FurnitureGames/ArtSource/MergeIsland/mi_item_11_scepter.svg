@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <!-- Tier 11: Jeweled Scepter. Glossy item style with a violet glow. -->
+  <defs>
+    <radialGradient id="glow" cx="256" cy="232" r="226" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#f1dcff" stop-opacity="0.9"/>
+      <stop offset="0.55" stop-color="#b57bff" stop-opacity="0.32"/>
+      <stop offset="1" stop-color="#b57bff" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#fff09a"/>
+      <stop offset="0.5" stop-color="#ffc62a"/>
+      <stop offset="1" stop-color="#c9800c"/>
+    </linearGradient>
+    <radialGradient id="orb" cx="0.38" cy="0.34" r="0.7">
+      <stop offset="0" stop-color="#f3d9ff"/>
+      <stop offset="0.45" stop-color="#a45cf0"/>
+      <stop offset="1" stop-color="#5a1fa8"/>
+    </radialGradient>
+    <linearGradient id="ruby" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ff9db0"/>
+      <stop offset="1" stop-color="#d0173f"/>
+    </linearGradient>
+    <linearGradient id="sapph" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#9fd8ff"/>
+      <stop offset="1" stop-color="#1f5fd6"/>
+    </linearGradient>
+  </defs>
+
+  <circle cx="256" cy="232" r="226" fill="url(#glow)"/>
+
+  <g transform="rotate(28 256 256)">
+    <!-- rod -->
+    <rect x="242" y="214" width="28" height="238" rx="12" fill="url(#gold)"/>
+    <rect x="248" y="220" width="7" height="226" rx="3" fill="#fff" opacity="0.45"/>
+    <!-- grip bands -->
+    <rect x="234" y="300" width="44" height="18" rx="7" fill="#d48a0e"/>
+    <rect x="234" y="370" width="44" height="18" rx="7" fill="#d48a0e"/>
+    <ellipse cx="256" cy="309" rx="9" ry="6" fill="url(#ruby)"/>
+    <ellipse cx="256" cy="379" rx="9" ry="6" fill="url(#sapph)"/>
+    <!-- pommel -->
+    <circle cx="256" cy="456" r="22" fill="url(#gold)"/>
+    <circle cx="249" cy="449" r="6" fill="#fff" opacity="0.7"/>
+
+    <!-- collar -->
+    <path d="M204 212 Q256 244 308 212 L296 190 Q256 212 216 190 Z" fill="url(#gold)"/>
+    <!-- orb -->
+    <circle cx="256" cy="150" r="68" fill="url(#orb)"/>
+    <ellipse cx="232" cy="124" rx="22" ry="15" fill="#fff" opacity="0.6"/>
+    <!-- orb band -->
+    <path d="M190 162 Q256 186 322 162" stroke="#ffc62a" stroke-width="12" fill="none" stroke-linecap="round"/>
+    <circle cx="256" cy="174" r="10" fill="url(#ruby)"/>
+    <!-- cross on top -->
+    <rect x="248" y="44" width="16" height="48" rx="5" fill="url(#gold)"/>
+    <rect x="234" y="56" width="44" height="14" rx="5" fill="url(#gold)"/>
+  </g>
+
+  <!-- sparkles -->
+  <path d="M404 104 C407 120 410 123 426 126 C410 129 407 132 404 148 C401 132 398 129 382 126 C398 123 401 120 404 104 Z" fill="#fffbe0" stroke="#f2b21b" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M104 352 C106 362 108 364 118 366 C108 368 106 370 104 380 C102 370 100 368 90 366 C100 364 102 362 104 352 Z" fill="#fffbe0" stroke="#f2b21b" stroke-width="3" stroke-linejoin="round"/>
+</svg>

@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <!-- Jackpot item: Captain's Boots. Glossy item style. PLACEHOLDER reward art. -->
+  <defs>
+    <linearGradient id="leather" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#b8743a"/>
+      <stop offset="1" stop-color="#6a3310"/>
+    </linearGradient>
+    <linearGradient id="leatherB" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#9a5a28"/>
+      <stop offset="1" stop-color="#55280b"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff09a"/>
+      <stop offset="0.5" stop-color="#ffc62a"/>
+      <stop offset="1" stop-color="#d48a0e"/>
+    </linearGradient>
+  </defs>
+
+  <!-- back boot -->
+  <path d="M134 40 H196 L192 176 Q232 180 236 206 V220 H132 Z" fill="url(#leatherB)"/>
+  <path d="M126 30 H204 L198 66 H132 Z" fill="#7a4418"/>
+
+  <!-- front boot -->
+  <path d="M40 58 H102 L98 190 Q140 194 144 220 V232 H38 Z" fill="url(#leather)"/>
+  <!-- cuff -->
+  <path d="M30 46 H112 L106 86 H36 Z" fill="#a4592a"/>
+  <path d="M30 46 H112 L110 56 H32 Z" fill="#d49258"/>
+  <!-- buckle strap -->
+  <rect x="40" y="136" width="60" height="16" fill="#3b1e0a"/>
+  <rect x="58" y="130" width="26" height="28" rx="4" fill="none" stroke="url(#gold)" stroke-width="6"/>
+  <!-- sole -->
+  <rect x="36" y="224" width="110" height="12" rx="5" fill="#2c1606"/>
+  <!-- gloss -->
+  <path d="M52 96 V184" stroke="#fff" stroke-width="8" stroke-linecap="round" opacity="0.3"/>
+</svg>
