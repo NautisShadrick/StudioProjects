@@ -17,8 +17,9 @@
 -- NewBoard, RandomEmptyOpenCell, RollBonus) are only ever called by the server.
 --
 -- Economy (Merge minigame spec v1, north star: Coin Master's Merge Island):
---   * Every generator tap costs 1 Merge Token, spawns a tier-1 item on a random free cell, and
---     has a 10% chance of a second bonus tier-1 item.
+--   * Every generator tap costs 1 Merge Token and spawns a tier-1 item on a random free cell.
+--     The spawn multiplier (x1/x2/x4/x8) spends M tokens for the item M tier-1s would merge
+--     into (see SPAWN_MULTIPLIERS), and a 10% "Lucky!" roll spawns one tier above that instead.
 --   * The first time an item is made it fills its slot on the 12-item discovery track.
 --     Discoveries pay nothing on their own; filling the whole track wins the JACKPOT set, once
 --     per event.
@@ -74,10 +75,16 @@ EVENT_ID = "event_003"
 -- participation-track grant (51 in the spec) until this runs inside the Game Event Kit.
 TOKENS_START = 51
 SPAWN_COST = 1
--- Every spawn enters the ladder at the bottom.
+-- Spawns enter the ladder at the bottom...
 SPAWN_TIER = 1
--- Chance a tap spawns a SECOND tier-1 item (only when a second free cell exists).
-BONUS_SPAWN_CHANCE = 0.10
+-- ...unless the player raised the spawn multiplier. The HUD's multiplier button cycles through
+-- these; a tap at multiplier M costs M * SPAWN_COST and spawns the item that M bottom-tier items
+-- would merge into: x1 -> tier 1, x2 -> tier 2, x4 -> tier 3, x8 -> tier 4. Each entry must be a
+-- power of two, in ascending order, starting at 1.
+SPAWN_MULTIPLIERS = { 1, 2, 4, 8 }
+-- A "Lucky!" spawn rolls this many tiers ABOVE the multiplier's tier.
+LUCKY_SPAWN_CHANCE = 0.10
+LUCKY_TIER_BONUS = 1
 -- The empty-state flash top-up. PLACEHOLDER purchase: see MergeIslandManager's TopUpRequest.
 TOPUP_AMOUNT = 25
 TOPUP_PRICE_LABEL = "900 Gold"
@@ -606,6 +613,36 @@ end
 
 function IsDeliverable(tier: number?): boolean
     return DeliveryFor(tier) ~= nil
+end
+
+-- Is `mult` one of the offered spawn multipliers? The server checks every spawn request with it.
+function IsSpawnMultiplier(mult): boolean
+    for _, m in ipairs(SPAWN_MULTIPLIERS) do
+        if m == mult then
+            return true
+        end
+    end
+    return false
+end
+
+-- Tokens one generator tap costs at multiplier `mult`.
+function SpawnCost(mult: number): number
+    return SPAWN_COST * mult
+end
+
+-- The tier one generator tap spawns at multiplier `mult` (log2 of it, above SPAWN_TIER), plus
+-- LUCKY_TIER_BONUS on a lucky roll. Never the top tier, which could only auto-deliver.
+function SpawnTierFor(mult: number, lucky: boolean?): number
+    local _tier = SPAWN_TIER
+    local _m = 1
+    while _m < mult do
+        _m = _m * 2
+        _tier = _tier + 1
+    end
+    if lucky then
+        _tier = _tier + LUCKY_TIER_BONUS
+    end
+    return math.min(_tier, math.max(1, MAX_TIER - 1))
 end
 
 -- Tokens refunded for selling an item of `tier`.

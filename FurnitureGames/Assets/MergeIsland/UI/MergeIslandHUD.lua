@@ -18,9 +18,14 @@
 -- everything it is asked to do.
 --
 -- Spawns launch IMMEDIATELY but land where the SERVER says: the server picks a random free cell
--- (and sometimes a bonus second one), so the flight leaves the generator at once, aims at the
--- board, and bends onto the real cell the moment the confirming snapshot names it. The cell is
--- held empty until the flight lands, so an item never pops in before its flight arrives.
+-- (and sometimes rolls a "Lucky!" item a tier higher), so the flight leaves the generator at once
+-- as the multiplier's tier, aims at the board, and bends onto the real cell -- repainted to the
+-- real tier -- the moment the confirming snapshot names it. The cell is held empty until the
+-- flight lands, so an item never pops in before its flight arrives.
+--
+-- The multiplier button (x1/x2/x4/x8) picks what one generator tap spends and spawns: M tokens
+-- for the item M tier-1s would merge into. It cycles only through what the wallet can afford,
+-- and steps itself down when the wallet no longer covers it.
 --
 -- Tapping (not dragging) an item SELECTS it and opens the action strip: Sell always, Deliver
 -- for tier 5+. Deliveries, first discoveries and the jackpot queue up as full-screen overlays
@@ -97,6 +102,7 @@ local CLASSES = {
     floatText = "fx-float-text",
     floatTextEnergy = "fx-float-text-energy",
     floatTextPoints = "fx-float-text-points",
+    luckyText = "fx-lucky-text",
     ticket = "fx-ticket",
     token = "fx-token",
     rewardItem = "reward-icon-item",
@@ -283,7 +289,7 @@ local TIMING = {
     hintRepeat = 3.5,
     spawnGlide = 0.16,     -- a flight that arrived before the server named its cell glides there
     spawnTapGap = 0.12,    -- generator taps closer than this are ignored (server throttles too)
-    bonusSpawnDelay = 0.12,
+    lucky = 1.3,           -- the "Lucky!" label's whole pop, hold and fade
     ticketCount = 0.7,
     spin = 2.8,
     deliverArm = 0.5,      -- after the wheel stops, before "Tap to Collect" accepts taps
@@ -415,6 +421,10 @@ local ui: any = {
     wheelIcons = {},
     deliverData = nil,
     boardFullHint = false,
+    -- Index into config.SPAWN_MULTIPLIERS of the selected spawn multiplier, and the item-tier
+    -- class currently painted on the generator's badge.
+    multiplierIndex = 1,
+    generatorShellClass = nil,
 }
 
 -- Tap selection. { index = cell or nil, busy = a deliver/sell is awaiting its snapshot }
@@ -713,6 +723,31 @@ function fx.floatText(point: Vector2, text: string, extraClass: string?, layer: 
         anim.move(_label, 0, -52 * anim.outCubic(t))
         anim.scale(_label, if t < 0.2 then lerp(0.3, 1, anim.outBackStrong(t / 0.2)) else 1)
         anim.fade(_label, if t < 0.65 then 1 else 1 - (t - 0.65) / 0.35)
+    end, function()
+        _label:RemoveFromHierarchy()
+    end)
+end
+
+-- The "Lucky!" stamp over a lucky spawn: slams in tilted and oversized, wobbles upright-ish,
+-- drifts up and fades, with a gold ring and a spray of stars behind it.
+function fx.lucky(point: Vector2)
+    fx.ring(point, 64, 0.45, true)
+    fx.burst(point, 8, 44, CLASSES.star, 14, 0.6)
+
+    local _label = Label.new()
+    _label:AddToClassList(CLASSES.luckyText)
+    _label.pickingMode = PickingMode.Ignore
+    _label.text = "Lucky!"
+    -- Centred on the item, lifted so it sits over the item's top edge like a stamp.
+    anim.place(_label, point.x - 75, point.y - 22 - 30)
+    _fxLayer:Add(_label)
+    _label:BringToFront()
+    anim.run(TIMING.lucky, Easing.linear, function(t)
+        local _in = clamp(t / 0.22, 0, 1)
+        anim.scale(_label, lerp(0.2, 1, anim.outBackStrong(_in)))
+        anim.rotate(_label, -14 + math.sin(_in * math.pi * 2) * 8 * (1 - _in))
+        anim.move(_label, 0, if t < 0.6 then 0 else -18 * anim.outCubic((t - 0.6) / 0.4))
+        anim.fade(_label, if t < 0.7 then 1 else 1 - (t - 0.7) / 0.3)
     end, function()
         _label:RemoveFromHierarchy()
     end)
@@ -1046,15 +1081,24 @@ local function renderCell(index: number)
     setClass(_ui.tile, CLASSES.deliverable, _isItem and config.IsDeliverable(_cell.tier))
 end
 
--- Tokens as SHOWN: the server's count, less the taps still awaiting their snapshot.
+-- Tokens as SHOWN: the server's count, less what the taps still awaiting their snapshot cost.
 local function displayedEnergy(): number
     local _unconfirmed = 0
     for _, entry in ipairs(pendingSpawns) do
         if not entry.confirmed then
-            _unconfirmed = _unconfirmed + 1
+            _unconfirmed = _unconfirmed + (entry.cost or config.SPAWN_COST)
         end
     end
-    return math.max(0, manager.GetTokens() - _unconfirmed * config.SPAWN_COST)
+    return math.max(0, manager.GetTokens() - _unconfirmed)
+end
+
+-- The selected spawn multiplier, and what one generator tap costs at it.
+function spawn.multiplier(): number
+    return config.SPAWN_MULTIPLIERS[ui.multiplierIndex] or 1
+end
+
+function spawn.cost(): number
+    return config.SpawnCost(spawn.multiplier())
 end
 
 -- Is there somewhere for one more tap to land? Counts empty open cells not already held by a
@@ -1077,7 +1121,7 @@ local function hasSpawnRoom(): boolean
 end
 
 local function canSpawnNow(): boolean
-    return manager.IsLoaded() and displayedEnergy() >= config.SPAWN_COST and hasSpawnRoom()
+    return manager.IsLoaded() and displayedEnergy() >= spawn.cost() and hasSpawnRoom()
 end
 
 -- The button always stays green; only the idle "tap me" pulse stops while a spawn is impossible.
@@ -1088,8 +1132,50 @@ local function refreshGenerator()
     end
 end
 
+-- Repaint the multiplier button and the generator's badge (the item one tap will dig up). A
+-- multiplier the wallet no longer covers steps down to the largest one it does, so a tap never
+-- asks for more than the player has.
+function spawn.refreshMultiplier()
+    local _energy = displayedEnergy()
+    while ui.multiplierIndex > 1 and _energy < spawn.cost() do
+        ui.multiplierIndex = ui.multiplierIndex - 1
+    end
+    local _mult = spawn.multiplier()
+    ui.multiplierLabel.text = "x" .. tostring(_mult)
+    ui.generatorShellClass = paintTier(ui.generatorShell, config.SpawnTierFor(_mult),
+        ui.generatorShellClass)
+end
+
+-- The multiplier button: step to the next multiplier the wallet can afford, wrapping to x1.
+function spawn.cycleMultiplier()
+    markInteraction()
+    if not isOpen or not manager.IsLoaded() or phase ~= PHASE_IDLE then
+        return
+    end
+    local _next = (ui.multiplierIndex % #config.SPAWN_MULTIPLIERS) + 1
+    local _nextMult = config.SPAWN_MULTIPLIERS[_next]
+    if displayedEnergy() < config.SpawnCost(_nextMult) then
+        if ui.multiplierIndex == 1 then
+            -- Nothing above x1 is affordable: say why the tap did nothing.
+            showToast("Need " .. tostring(config.SpawnCost(_nextMult)) .. " Merge Tokens for x"
+                .. tostring(_nextMult))
+            anim.shake(ui.multiplierButton, 5, 0.35)
+            playSound("HapticsLight")
+            return
+        end
+        _next = 1
+    end
+    ui.multiplierIndex = _next
+    spawn.refreshMultiplier()
+    anim.pop(ui.multiplierLabel, 1.4, 0.35)
+    anim.pop(ui.generatorShell, 1.5, 0.4)
+    playSound("ButtonClick")
+    playSound("HapticsLight")
+end
+
 local function refreshEnergy(bump: boolean)
     _energyLabel.text = tostring(displayedEnergy())
+    spawn.refreshMultiplier()
     if bump then
         anim.pop(_energyBolt, 1.5, 0.55)
         anim.pop(_energyLabel, 1.35, 0.45)
@@ -1560,6 +1646,10 @@ function spawn.finishSpawn(entry)
         local _point = cellPoint(entry.target)
         fx.burst(_point, 6, 30, CLASSES.bubble, 8, 0.45, nil, true)
         fx.ring(_point, 48, 0.35, false)
+        if entry.lucky then
+            fx.lucky(_point)
+            playSound("TilePop")
+        end
     end
     playSound("ItemLand")
 end
@@ -1601,7 +1691,7 @@ end
 -- naming the cell mid-flight simply bends the arc onto it.
 function spawn.launchSpawnFlight(entry, delay: number?)
     local _start = fx.point(_flightLayer, _generatorButton)
-    local _element = makeFlyingItem(config.SPAWN_TIER)
+    local _element = makeFlyingItem(entry.tier)
     anim.place(_element, _start.x - SIZES.item / 2, _start.y - SIZES.item / 2)
     entry.element = _element
     table.insert(spawn.flights, entry)
@@ -1622,12 +1712,19 @@ function spawn.launchSpawnFlight(entry, delay: number?)
 end
 
 -- The server named this flight's cell. A flight still in the air bends onto it; one that has
--- already arrived (at the board's middle) glides the short way over.
-function spawn.confirmSpawn(entry, index: number)
+-- already arrived (at the board's middle) glides the short way over. A flight whose real tier
+-- differs from the one it launched as (a lucky roll) swaps its art for the real one.
+function spawn.confirmSpawn(entry, index: number, lucky: boolean, tier: number?)
     entry.target = index
     entry.confirmed = true
+    entry.lucky = lucky
     spawnHolds[index] = true
     renderCell(index)
+    if tier and tier ~= entry.tier and entry.element then
+        local _launchInfo = config.TierInfo(entry.tier)
+        paintTier(entry.element, tier, _launchInfo and _launchInfo.class)
+        entry.tier = tier
+    end
     if not entry.landed then
         return
     end
@@ -1656,8 +1753,12 @@ function spawn.pressGenerator()
     end)
 end
 
-function spawn.newEntry()
+-- `cost` is what the tap spent (held off the shown wallet until its snapshot lands) and `tier`
+-- is what the flight launches as.
+function spawn.newEntry(cost: number, tier: number)
     return {
+        cost = cost,
+        tier = tier,
         target = nil,
         element = nil,
         tween = nil,
@@ -1679,14 +1780,19 @@ function spawn.requestSpawn()
     sel.clear()
     spawn.pressGenerator()
 
-    if displayedEnergy() < config.SPAWN_COST then
+    -- Step the multiplier down first if the wallet no longer covers it, so the only refusal
+    -- left is an empty wallet.
+    spawn.refreshMultiplier()
+    local _mult = spawn.multiplier()
+    local _cost = config.SpawnCost(_mult)
+    if displayedEnergy() < _cost then
         -- Still sent to the server (it is cheap), because the server decides whether the
         -- out-of-tokens offer shows; it answers with a rejection, never a spawn, so no flight
         -- is launched here.
         showToast(REJECT_MESSAGES.no_energy)
         anim.shake(_energyChip, 7, 0.4)
         playSound("HapticsLight")
-        manager.RequestSpawn()
+        manager.RequestSpawn(_mult)
         return
     end
     if not hasSpawnRoom() then
@@ -1696,7 +1802,7 @@ function spawn.requestSpawn()
         return
     end
 
-    local _entry = spawn.newEntry()
+    local _entry = spawn.newEntry(_cost, config.SpawnTierFor(_mult))
     table.insert(pendingSpawns, _entry)
     -- Safety net: an answer that never comes must not hold the flight or the tokens forever.
     _entry.timeout = Timer.After(TIMING.spawnTimeout, function()
@@ -1711,16 +1817,17 @@ function spawn.requestSpawn()
     end)
 
     refreshEnergy(true)
-    fx.floatText(fx.point(_fxLayer, _energyChip), "-" .. tostring(config.SPAWN_COST), CLASSES.floatTextEnergy)
+    fx.floatText(fx.point(_fxLayer, _energyChip), "-" .. tostring(_cost), CLASSES.floatTextEnergy)
     spawn.launchSpawnFlight(_entry)
     refreshGenerator()
     playSound("ItemWhoosh")
     playSound("HapticsLight")
-    manager.RequestSpawn()
+    manager.RequestSpawn(_mult)
 end
 
--- The server's answer to one tap: `indices` holds 1 cell, or 2 when the bonus item rolled.
-function spawn.onSpawned(indices)
+-- The server's answer to one tap: `indices` holds the cell it landed on, `tier` what landed
+-- there; `lucky` marks a roll above the multiplier's tier.
+function spawn.onSpawned(indices, lucky: boolean, tier: number?)
     local _first = indices and indices[1]
     if not _first then
         return
@@ -1738,8 +1845,9 @@ function spawn.onSpawned(indices)
         -- the board is painted.
         Timer.After(0, function()
             if isOpen then
-                for _, index in ipairs(indices) do
-                    popItem(index, 0.3)
+                popItem(_first, 0.3)
+                if lucky then
+                    fx.lucky(cellPoint(_first))
                 end
             end
         end)
@@ -1749,20 +1857,7 @@ function spawn.onSpawned(indices)
         _entry.timeout:Stop()
         _entry.timeout = nil
     end
-    spawn.confirmSpawn(_entry, _first)
-
-    -- The bonus item gets its own flight, a beat behind the first.
-    for k = 2, #indices do
-        local _bonus = spawn.newEntry()
-        spawn.confirmSpawn(_bonus, indices[k])
-        if isOpen then
-            spawn.launchSpawnFlight(_bonus, TIMING.bonusSpawnDelay * (k - 1))
-            fx.floatText(fx.point(_fxLayer, _generatorButton), "BONUS!", CLASSES.floatTextPoints)
-            playSound("TilePop")
-        else
-            spawn.finishSpawn(_bonus)
-        end
-    end
+    spawn.confirmSpawn(_entry, _first, lucky, tier)
 end
 
 -- Closing the HUD mid-flight: every flight loses its visuals. Pending taps stay in the queue
@@ -2902,6 +2997,7 @@ local function bindExtraUi()
         "topupOverlay", "topupScrim", "topupContent", "topupPanel", "topupAmount",
         "topupBuy", "topupPrice", "topupLater",
         "resetButton", "resetLabel",
+        "multiplierButton", "multiplierLabel", "generatorShell",
     }
     for _, name in ipairs(_names) do
         local _element = _hudRoot:Q("_" .. name)
@@ -3065,6 +3161,9 @@ function self:Start()
     _generatorButton:RegisterPressCallback(function()
         spawn.requestSpawn()
     end)
+    ui.multiplierButton:RegisterPressCallback(function()
+        spawn.cycleMultiplier()
+    end)
     ui.deliverOverlay:RegisterPressCallback(function()
         popup.collectDeliver()
     end)
@@ -3201,8 +3300,8 @@ function self:Start()
         popup.onReset()
     end)
 
-    manager.OnSpawned(function(indices)
-        spawn.onSpawned(indices)
+    manager.OnSpawned(function(indices, lucky, tier)
+        spawn.onSpawned(indices, lucky == true, tier)
     end)
 
     manager.OnRejected(function(reason)

@@ -82,11 +82,22 @@
               <VisualElement class="generator-gloss" picking-mode="Ignore"/>
               <VisualElement class="generator-castle" picking-mode="Ignore"/>
               <VisualElement class="generator-bolt" picking-mode="Ignore"/>
-              <VisualElement class="generator-shell" picking-mode="Ignore"/>
+              <!-- Shows the item one tap will dig up at the current multiplier (Lua paints it). -->
+              <VisualElement name="_generatorShell" class="generator-shell" picking-mode="Ignore"/>
             </VisualElement>
           </VisualElement>
 
-          <VisualElement class="bottom-spacer" picking-mode="Ignore"/>
+          <!-- Spawn multiplier (x1, x2, x4, x8). Each tap cycles to the next one the wallet can
+               afford. The wrapper matches the token chip's width so the generator stays centred,
+               and the whole wrapper takes the tap. -->
+          <VisualElement name="_multiplierButton" class="multiplier-wrap">
+            <VisualElement class="multiplier-chip" picking-mode="Ignore">
+              <VisualElement class="multiplier-face" picking-mode="Ignore">
+                <VisualElement class="multiplier-gloss" picking-mode="Ignore"/>
+                <Label name="_multiplierLabel" text="x1" class="multiplier-label" picking-mode="Ignore"/>
+              </VisualElement>
+            </VisualElement>
+          </VisualElement>
         </VisualElement>
 
         <!-- The hint, swapped for the action strip while an item is selected. Same slot, so the
@@ -223,7 +234,7 @@
             <Label text="How to Play" class="info-title" picking-mode="Ignore"/>
             <VisualElement class="info-row" picking-mode="Ignore">
               <VisualElement class="info-icon info-icon-castle" picking-mode="Ignore"/>
-              <Label text="Tap the dig spot to find a shell. Each dig costs 1 Merge Token." class="info-text" picking-mode="Ignore"/>
+              <Label text="Tap the dig spot to find a shell for 1 Merge Token. Raise the multiplier to spend 2, 4 or 8 tokens on a better find." class="info-text" picking-mode="Ignore"/>
             </VisualElement>
             <VisualElement class="info-row" picking-mode="Ignore">
               <VisualElement class="info-icon info-icon-shell" picking-mode="Ignore"/>

@@ -74,6 +74,7 @@ local config = require("MergeIslandConfig")
 --------------------------------
 -- Client -> server intents. Every one of these is re-validated server-side; a tampered client
 -- gains nothing.
+-- (multiplier) -- one of Config.SPAWN_MULTIPLIERS.
 SpawnRequest = Event.new("MIslandSpawnRequest")
 MoveRequest = Event.new("MIslandMoveRequest")
 DeliverRequest = Event.new("MIslandDeliverRequest")
@@ -90,7 +91,8 @@ StateRequest = Event.new("MIslandStateRequest")
 
 -- Server -> owning player only. The board truth, plus (optionally) what produced it:
 --   { cells, tokens, highestTier,
---     spawned = {index}?, rejected = reason?,
+--     spawned = {index}?, spawnedTier = tier?, lucky = true? (the spawn rolled
+--     LUCKY_TIER_BONUS above its multiplier's tier), rejected = reason?,
 --     unlocked = { index, opened = {index} }?, discovered = tier?, jackpot = true?,
 --     delivered = { index, tier, tickets, bonusId, bonus?, auto }?,
 --     sold = { index, tier, refund }?,
@@ -577,8 +579,8 @@ function ResolveLocalDrop(from: number, to: number)
     return config.ResolveDrop(localCells, from, to)
 end
 
-function RequestSpawn()
-    SpawnRequest:FireServer()
+function RequestSpawn(multiplier: number)
+    SpawnRequest:FireServer(multiplier)
 end
 
 function RequestMove(from: number, to: number)
@@ -629,7 +631,8 @@ function OnBoardChanged(fn)
     subscribe(listeners.boardChanged, fn)
 end
 
--- fn(indices): items were placed at these cells by one generator tap (1, or 2 with the bonus).
+-- fn(indices, lucky, tier): items of `tier` were placed at these cells by one generator tap;
+-- `lucky` marks a roll LUCKY_TIER_BONUS above the multiplier's tier.
 function OnSpawned(fn)
     subscribe(listeners.spawned, fn)
 end
@@ -699,7 +702,8 @@ function self:ClientAwake()
             notify(listeners.reset)
         end
         if snapshot.spawned then
-            notify(listeners.spawned, snapshot.spawned)
+            notify(listeners.spawned, snapshot.spawned, snapshot.lucky == true,
+                tonumber(snapshot.spawnedTier))
         end
         if snapshot.rejected then
             notify(listeners.rejected, snapshot.rejected)
@@ -791,13 +795,18 @@ function self:ServerAwake()
         end
     end)
 
-    SpawnRequest:Connect(function(player)
+    SpawnRequest:Connect(function(player, multiplier)
         local _board = boards[player]
         if not acceptIntent(_board) then
             return
         end
+        -- Only an offered multiplier is honoured; anything else is a tampered client.
+        if not config.IsSpawnMultiplier(multiplier) then
+            return
+        end
+        local _cost = config.SpawnCost(multiplier)
         local _extras = {}
-        if _board.tokens < config.SPAWN_COST then
+        if _board.tokens < _cost then
             maybeOfferTopUp(_board, _extras)
             reject(player, config.REJECT_NO_ENERGY, _extras)
             return
@@ -809,31 +818,30 @@ function self:ServerAwake()
             return
         end
 
-        _board.tokens = _board.tokens - config.SPAWN_COST
-        -- Every spawn enters at the bottom of the single ladder; there is no type to roll.
-        _board.cells[_first] = { state = config.STATE_OPEN, tier = config.SPAWN_TIER }
-        local _spawned = { _first }
-        local _bonus = false
-        if math.random() < config.BONUS_SPAWN_CHANCE then
-            local _second = config.RandomEmptyOpenCell(_board.cells)
-            if _second then
-                _board.cells[_second] = { state = config.STATE_OPEN, tier = config.SPAWN_TIER }
-                table.insert(_spawned, _second)
-                _bonus = true
-            end
-        end
+        _board.tokens = _board.tokens - _cost
+        -- The multiplier picks the rung (x2 -> tier 2, x4 -> tier 3, ...); the lucky roll bumps
+        -- it one higher.
+        local _lucky = math.random() < config.LUCKY_SPAWN_CHANCE
+        local _tier = config.SpawnTierFor(multiplier, _lucky)
+        _board.cells[_first] = { state = config.STATE_OPEN, tier = _tier }
         if _board.session then
-            _board.session.tokensSpent = _board.session.tokensSpent + config.SPAWN_COST
+            _board.session.tokensSpent = _board.session.tokensSpent + _cost
         end
         markDirty(_board)
 
         telemetry("generator_tapped", player, {
-            spawned_tier = config.SPAWN_TIER,
-            bonus_item_spawned = _bonus,
+            spawned_tier = _tier,
+            lucky_spawn = _lucky,
+            multiplier = multiplier,
+            tokens_spent = _cost,
             free_cells_after = #config.EmptyOpenCells(_board.cells),
         })
 
-        _extras.spawned = _spawned
+        _extras.spawned = { _first }
+        _extras.spawnedTier = _tier
+        _extras.lucky = _lucky or nil
+        -- A multiplied or lucky spawn can produce a tier before any merge has.
+        _extras.discovered = discover(_board, _tier)
         checkBoardFull(player, _board, _extras)
         maybeOfferTopUp(_board, _extras)
         sendSnapshot(player, _extras)

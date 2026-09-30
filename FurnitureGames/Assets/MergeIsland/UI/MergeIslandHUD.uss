@@ -103,6 +103,12 @@
     --mi-gold: #ffd54a;
     --mi-purple: #7a47d1;
     --mi-purple-dark: #4f2c91;
+
+    /* Spawn multiplier button. */
+    --mi-pink: #f26ee0;
+    --mi-pink-light: #ffa8f1;
+    --mi-pink-dark: #b22ea3;
+    --mi-pink-outline: #6e1466;
 }
 
 .merge-island-h-u-d {
@@ -804,29 +810,54 @@
     rotate: 15deg;
 }
 
+/* Spawn multiplier. The wrapper is the token chip's width (so the generator stays centred) and
+   takes the tap; the chip inside hugs its right edge. Same depth trick as the generator. */
+.multiplier-wrap {
+    width: 104px;
+    height: 48px;
+    align-items: flex-end;
+    justify-content: center;
+}
+
 .multiplier-chip {
     width: 80px;
     height: 44px;
     padding: 2px;
     padding-bottom: 5px;
     border-radius: 14px;
-    background-color: var(--mi-orange-dark);
+    border-width: 2px;
+    border-color: var(--mi-pink-outline);
+    background-color: var(--mi-pink-dark);
 }
 
 .multiplier-face {
     flex-grow: 1;
-    border-radius: 12px;
-    background-color: var(--mi-orange);
+    border-radius: 11px;
+    background-color: var(--mi-pink);
+    border-width: 2px;
+    border-color: var(--mi-pink-light);
     align-items: center;
     justify-content: center;
 }
 
+.multiplier-gloss {
+    position: absolute;
+    left: 5px;
+    right: 5px;
+    top: 2px;
+    height: 11px;
+    border-radius: 7px;
+    background-color: rgba(255, 255, 255, 0.28);
+}
+
 .multiplier-label {
-    font-size: 19px;
-    color: var(--mi-text-light);
+    font-size: 21px;
+    color: #ffffff;
     -unity-font-definition: var(--font-museo-900);
     -unity-text-align: middle-center;
-    text-shadow: 0px 2px 0px var(--mi-orange-dark);
+    -unity-text-outline-width: 1px;
+    -unity-text-outline-color: var(--mi-pink-outline);
+    text-shadow: 0px 2px 0px var(--mi-pink-outline);
 }
 
 .hint-label {
@@ -992,6 +1023,22 @@
 .fx-float-text-points {
     color: #e2c9ff;
     font-size: 18px;
+}
+
+/* The "Lucky!" stamp over a lucky spawn: hot pink, thick white outline, a deep pink drop.
+   Size must match fx.lucky's centring (150x44). */
+.fx-lucky-text {
+    position: absolute;
+    width: 150px;
+    height: 44px;
+    font-size: 30px;
+    color: #ff4fb4;
+    -unity-font-definition: var(--font-museo-900);
+    -unity-font-style: italic;
+    -unity-text-align: middle-center;
+    -unity-text-outline-width: 3px;
+    -unity-text-outline-color: #ffffff;
+    text-shadow: 0px 3px 0px #b0166e;
 }
 
 /* ---------------------------- overlays ---------------------------- */
@@ -1349,12 +1396,6 @@
     margin-top: 12px;
     width: 150px;
     height: 52px;
-}
-
-/* Right-hand balance for the token chip, so the generator stays centred in the bottom bar. */
-.bottom-spacer {
-    width: 104px;
-    height: 44px;
 }
 
 /* ------------------------ selection + actions --------------------- */
