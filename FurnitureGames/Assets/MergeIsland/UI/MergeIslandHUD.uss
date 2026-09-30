@@ -421,11 +421,12 @@
     border-color: var(--mi-gold);
 }
 
+/* Wide enough for a two-reward bubble; the bubble centres inside it, over its slot. */
 .track-tooltip {
     position: absolute;
     left: 0;
     top: 0;
-    width: 64px;
+    width: 120px;
     height: 50px;
     align-items: center;
 }
@@ -435,9 +436,9 @@
 }
 
 .tooltip-bubble {
-    height: 36px;
-    padding-left: 8px;
-    padding-right: 8px;
+    height: 40px;
+    padding-left: 5px;
+    padding-right: 5px;
     border-radius: 12px;
     background-color: #ffffff;
     border-width: 2px;
@@ -447,17 +448,25 @@
     justify-content: center;
 }
 
+/* One reward in the bubble: its icon with the amount tucked under it. */
+.tooltip-reward {
+    align-items: center;
+    margin-left: 2px;
+    margin-right: 2px;
+}
+
 .tooltip-icon {
     width: 22px;
     height: 22px;
-    margin-right: 3px;
     -unity-background-scale-mode: scale-to-fit;
 }
 
-.tooltip-label {
-    font-size: 14px;
+.tooltip-amount {
+    margin-top: -3px;
+    font-size: 11px;
     color: var(--mi-wood-dark);
     -unity-font-definition: var(--font-museo-900);
+    -unity-text-align: middle-center;
 }
 
 /* A square turned 45deg: its right and bottom borders become the pointer's V. It overlaps
@@ -1223,6 +1232,24 @@
     font-size: 18px;
     color: #ffffff;
     -unity-font-definition: var(--font-museo-900);
+}
+
+.reveal-reward-chips {
+    flex-direction: row;
+    align-items: center;
+}
+
+.reveal-reward-chip {
+    flex-direction: row;
+    align-items: center;
+    margin-left: 8px;
+}
+
+.reveal-reward-chip-icon {
+    width: 28px;
+    height: 28px;
+    margin-right: 3px;
+    -unity-background-scale-mode: scale-to-fit;
 }
 
 .tap-prompt {

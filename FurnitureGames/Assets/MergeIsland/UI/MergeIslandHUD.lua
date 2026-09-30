@@ -79,6 +79,12 @@ local CLASSES = {
     slotFound = "track-slot-found",
     slotNext = "track-slot-next",
     slotCrown = "track-slot-crown",
+    tooltipReward = "tooltip-reward",
+    tooltipIcon = "tooltip-icon",
+    tooltipAmount = "tooltip-amount",
+    revealChip = "reveal-reward-chip",
+    revealChipIcon = "reveal-reward-chip-icon",
+    revealChipLabel = "reveal-reward-label",
     prizeCard = "prize-card",
     prizeCardIcon = "prize-card-icon",
     prizeCardCheck = "prize-card-check",
@@ -155,7 +161,7 @@ local _trackTooltip : VisualElement = nil
 --!Bind
 local _tooltipBob : VisualElement = nil
 --!Bind
-local _tooltipLabel : Label = nil
+local _tooltipRewards : VisualElement = nil
 --!Bind
 local _boardFrame : VisualElement = nil
 --!Bind
@@ -254,7 +260,7 @@ local SIZES = {
     itemTopOffset = -1, -- .cell-item sits 1px above the cell centre (top 2px in a 46px cell)
     revealItem = 124,   -- .reveal-item
     slotArt = 22,       -- .track-slot-art
-    tooltipWidth = 64,  -- .track-tooltip
+    tooltipWidth = 120, -- .track-tooltip
     stage = 230,        -- .stage-fill
     wheel = 220,        -- .spinner-wheel
     wheelIcon = 34,     -- .wheel-icon
@@ -425,6 +431,8 @@ local ui: any = {
     -- class currently painted on the generator's badge.
     multiplierIndex = 1,
     generatorShellClass = nil,
+    -- The tier the track's reward bubble currently sits over, or nil while it is hidden.
+    tooltipTier = nil,
 }
 
 -- Tap selection. { index = cell or nil, busy = a deliver/sell is awaiting its snapshot }
@@ -1081,13 +1089,18 @@ local function renderCell(index: number)
     setClass(_ui.tile, CLASSES.deliverable, _isItem and config.IsDeliverable(_cell.tier))
 end
 
--- Tokens as SHOWN: the server's count, less what the taps still awaiting their snapshot cost.
+-- Tokens as SHOWN: the server's count, less what the taps still awaiting their snapshot cost,
+-- less the discovery rewards not yet collected (they land in the wallet on "Tap to Collect").
 local function displayedEnergy(): number
     local _unconfirmed = 0
     for _, entry in ipairs(pendingSpawns) do
         if not entry.confirmed then
             _unconfirmed = _unconfirmed + (entry.cost or config.SPAWN_COST)
         end
+    end
+    if trackSeeded then
+        _unconfirmed = _unconfirmed
+            + config.DiscoveryTokensBetween(shownHighestTier + 1, manager.GetHighestTier())
     end
     return math.max(0, manager.GetTokens() - _unconfirmed)
 end
@@ -1232,27 +1245,52 @@ function track.layoutTrack(animate: boolean)
         end
     end
 
-    local _next = slotElements[shownHighestTier + 1]
+    local _next = ui.tooltipTier and slotElements[ui.tooltipTier]
     if _next then
         local _x = fx.point(_trackPanel, _next.root).x - SIZES.tooltipWidth / 2
         _trackTooltip.style.left = Length.new(_x)
     end
 end
 
--- The tooltip marks the NEXT item tier to discover ("WIN" over the crown). Returns false when
--- every tier has been found.
+-- Fill `container` with one icon + amount per reward: the track bubble's compact column chips,
+-- or the reveal overlay's wider row chips ("+20").
+function track.fillRewards(container: VisualElement, rewards: {any}, big: boolean)
+    container:Clear()
+    for _, reward in ipairs(rewards) do
+        local _chip = VisualElement.new()
+        _chip.pickingMode = PickingMode.Ignore
+        _chip:AddToClassList(if big then CLASSES.revealChip else CLASSES.tooltipReward)
+        local _icon = VisualElement.new()
+        _icon.pickingMode = PickingMode.Ignore
+        _icon:AddToClassList(if big then CLASSES.revealChipIcon else CLASSES.tooltipIcon)
+        _icon:AddToClassList(rewardIconClass(reward))
+        local _amount = Label.new()
+        _amount.pickingMode = PickingMode.Ignore
+        _amount:AddToClassList(if big then CLASSES.revealChipLabel else CLASSES.tooltipAmount)
+        _amount.text = (if big then "+" else "") .. tostring(reward.amount)
+        _chip:Add(_icon)
+        _chip:Add(_amount)
+        container:Add(_chip)
+    end
+end
+
+-- The bubble advertises the NEXT tier that pays a discovery reward (tiers without one are
+-- skipped), and only that one. Returns false when no reward is left on the track.
 function track.paintTooltip(): boolean
-    local _next = shownHighestTier + 1
-    if _next > config.MAX_TIER then
+    local _tier = config.NextRewardTier(shownHighestTier)
+    ui.tooltipTier = _tier
+    if not _tier then
+        _tooltipRewards:Clear()
         return false
     end
-    _tooltipLabel.text = if _next == config.MAX_TIER then "WIN" else "NEXT"
+    track.fillRewards(_tooltipRewards, config.DiscoveryRewards(_tier), false)
     return true
 end
 
 -- Repaint the discovery row and the jackpot panel from shownHighestTier. `animate` plays the
--- transitions a collect earns: the fill sweeps and the tooltip hops to its new slot. (When
--- animating, the jackpot cards' checks are left to collectWin, so they land with the prize.)
+-- transitions a collect earns: the fill sweeps and, when the reward it pointed at was just
+-- collected, the bubble hops to the next one. (When animating, the jackpot cards' checks are
+-- left to collectWin, so they land with the prize.)
 function track.refreshTrack(animate: boolean)
     for tier, slot in pairs(slotElements) do
         setClass(slot.root, CLASSES.slotFound, tier <= shownHighestTier)
@@ -1264,24 +1302,28 @@ function track.refreshTrack(animate: boolean)
         setClass(_prizePanel, CLASSES.prizeWon, shownHighestTier >= config.MAX_TIER)
     end
 
-    local _hasTooltip = track.paintTooltip()
-    if animate and _hasTooltip then
-        -- Hop: shrink away, jump to the new slot, bounce back in.
+    local _oldTier = ui.tooltipTier
+    local _newTier = config.NextRewardTier(shownHighestTier)
+    if animate and _oldTier and _newTier ~= _oldTier then
+        -- Hop: shrink away, repaint for (and jump to) the next reward, bounce back in. The
+        -- repaint reads shownHighestTier again, in case another collect landed mid-hop.
         anim.run(0.16, anim.inCubic, function(t)
             anim.scale(_trackTooltip, 1 - t)
         end, function()
+            local _hasTooltip = track.paintTooltip()
+            anim.show(_trackTooltip, _hasTooltip)
             track.layoutTrack(true)
-            anim.run(0.5, anim.outBackStrong, function(t)
-                anim.scale(_trackTooltip, t)
-            end, nil, 0.25)
+            if _hasTooltip then
+                anim.run(0.5, anim.outBackStrong, function(t)
+                    anim.scale(_trackTooltip, t)
+                end, nil, 0.25)
+            end
         end)
     else
+        local _hasTooltip = track.paintTooltip()
         anim.show(_trackTooltip, _hasTooltip)
         anim.scale(_trackTooltip, 1)
         track.layoutTrack(animate)
-    end
-    if not _hasTooltip then
-        anim.show(_trackTooltip, false)
     end
 end
 
@@ -2147,8 +2189,9 @@ function popup.startShowcaseLoops(rays: VisualElement, raysBack: VisualElement?,
 end
 
 -- Paint the reveal overlay's art and copy for a discovered item. The line under the name says
--- what the item is good for: the jackpot for the top tier, a delivery for tier 5+, otherwise how
--- far the player still is from the jackpot. Returns false when there is nothing to show.
+-- what the item is good for: the jackpot for the top tier, its first-discovery reward, a delivery
+-- for tier 5+, otherwise how far the player still is from the jackpot. Returns false when there
+-- is nothing to show.
 function popup.paintReveal(entry): boolean
     local _info = config.TierInfo(entry.tier)
     if not _info then
@@ -2158,9 +2201,17 @@ function popup.paintReveal(entry): boolean
     _revealTitle.text = "NEW ITEM REVEALED!"
     _revealName.text = _info.label
     local _delivery = config.DeliveryFor(entry.tier)
+    -- Everything this collect pays: this tier's rewards plus any a jump skipped past.
+    local _rewards = config.DiscoveryRewardsBetween(shownHighestTier + 1, entry.tier)
+    ui.revealRewardChips:Clear()
+    anim.show(_revealRewardIcon, true)
     if entry.tier >= config.MAX_TIER then
         setRewardIcon(_revealRewardIcon, CLASSES.rewardCrown)
         _revealRewardLabel.text = "Jackpot unlocked!"
+    elseif #_rewards > 0 then
+        anim.show(_revealRewardIcon, false)
+        _revealRewardLabel.text = "Reward:"
+        track.fillRewards(ui.revealRewardChips, _rewards, true)
     elseif _delivery then
         setRewardIcon(_revealRewardIcon, CLASSES.rewardTicket)
         _revealRewardLabel.text = "Deliver it for " .. tostring(_delivery.tickets) .. " Tickets!"
@@ -2356,9 +2407,37 @@ function popup.collectWin()
     end)
 end
 
+-- Show a collected discovery's rewards landing: tokens shower the wallet (whose count was held
+-- back until now, see displayedEnergy), everything else floats up off the item's track slot.
+function popup.payDiscovery(rewards: {any}, slot: VisualElement?)
+    if #rewards == 0 or not isOpen then
+        refreshEnergy(false)
+        return
+    end
+    local _slotPoint = if slot then fx.point(_fxLayer, slot) else fx.point(_fxLayer, _trackPanel)
+    local _lift = 0
+    for _, reward in ipairs(rewards) do
+        if reward.kind == config.REWARD_TOKENS then
+            local _chip = fx.point(_fxLayer, _energyChip)
+            fx.coins(_chip, 6, CLASSES.token)
+            fx.floatText(_chip, "+" .. tostring(reward.amount), CLASSES.floatTextEnergy)
+        else
+            -- Stacked so two float-ups off the same slot do not overprint.
+            local _point = Vector2.new(_slotPoint.x, _slotPoint.y + 30 + _lift)
+            fx.coins(_point, 5, rewardParticleClass(reward))
+            fx.floatText(_point, "+" .. config.RewardText(reward))
+            _lift = _lift + 26
+        end
+    end
+    refreshEnergy(true)
+    playSound("CoinLandGold")
+end
+
 -- The collected item has reached its slot: fill it, advance the track, and pay out the fx. The
 -- top tier then plays the jackpot screen, if this snapshot won it.
 function popup.onCollected(entry)
+    -- Read before the track advances: shownHighestTier is what bounds the uncollected rewards.
+    local _rewards = config.DiscoveryRewardsBetween(shownHighestTier + 1, entry.tier)
     shownHighestTier = math.max(shownHighestTier, entry.tier)
     track.refreshTrack(true)
     setBrackets(nil)
@@ -2378,6 +2457,7 @@ function popup.onCollected(entry)
     end
     playSound("TilePop")
     playSound("HapticsLight")
+    popup.payDiscovery(_rewards, _target)
 
     if entry.tier >= config.MAX_TIER and not ui.jackpotPending then
         -- The top tier without a win screen (the jackpot was already paid): just check it off.
@@ -2741,6 +2821,8 @@ function popup.abortOverlays()
     if trackSeeded then
         shownHighestTier = manager.GetHighestTier()
         track.refreshTrack(false)
+        -- Discovery tokens held back for an uncollected reveal are shown now.
+        refreshEnergy(false)
     end
 end
 
@@ -2998,6 +3080,7 @@ local function bindExtraUi()
         "topupBuy", "topupPrice", "topupLater",
         "resetButton", "resetLabel",
         "multiplierButton", "multiplierLabel", "generatorShell",
+        "revealRewardChips",
     }
     for _, name in ipairs(_names) do
         local _element = _hudRoot:Q("_" .. name)
@@ -3345,6 +3428,7 @@ function self:Start()
         if not isOpen then
             shownHighestTier = math.max(shownHighestTier, tier)
             track.refreshTrack(false)
+            refreshEnergy(false)
             return
         end
         setBrackets(lastLandingIndex)

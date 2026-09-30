@@ -20,9 +20,9 @@
 --   * Every generator tap costs 1 Merge Token and spawns a tier-1 item on a random free cell.
 --     The spawn multiplier (x1/x2/x4/x8) spends M tokens for the item M tier-1s would merge
 --     into (see SPAWN_MULTIPLIERS), and a 10% "Lucky!" roll spawns one tier above that instead.
---   * The first time an item is made it fills its slot on the 12-item discovery track.
---     Discoveries pay nothing on their own; filling the whole track wins the JACKPOT set, once
---     per event.
+--   * The first time an item is made it fills its slot on the 12-item discovery track and pays
+--     that tier's `rewards` table (tiers 1-3 pay nothing). Filling the whole track wins the
+--     JACKPOT set, once per event.
 --   * Items at DELIVER_MIN_TIER+ can be delivered for guaranteed tickets plus a bonus spin;
 --     the top tier delivers itself.
 --   * Any item can be sold; tier 3+ refunds a token.
@@ -99,10 +99,9 @@ GHOST_RAMP_CURVE = 1.2
 -- Chance a ghost rolls one tier above its ring's base, so a ring is not visually uniform.
 GHOST_TIER_JITTER_CHANCE = 0.25
 
--- PENDING PLAYTEST DECISION. On satisfying a ghost, do its locked neighbours become fully
--- playable (true), or merely turn into new ghosts (false)? The prototype is ambiguous and this
--- materially changes pacing, so it is one flag.
-UNLOCK_NEIGHBOURS_OPEN = true
+-- On satisfying a ghost, do its locked neighbours become fully playable (true), or merely get
+-- revealed as new ghosts (false)? Existing ghost neighbours stay ghosts when false.
+UNLOCK_NEIGHBOURS_OPEN = false
 -- PENDING PLAYTEST DECISION. Whether adjacency (for both unlocking and ghost seeding) counts
 -- the four diagonals as well as the four orthogonals.
 ADJACENCY_INCLUDES_DIAGONALS = false
@@ -134,9 +133,9 @@ KIND_MERGE = "merge"        -- two matching items became one of the next tier
 KIND_UNLOCK = "unlock"      -- a ghost was satisfied: next tier placed AND the board expands
 
 -- Reward kinds. Tokens are REAL in this build (they go straight into the player's wallet).
--- Everything else (delivery tickets, spinner batteries, the jackpot) is a PLACEHOLDER: the
--- server logs what it would grant (see grantReward in MergeIslandManager) and the HUD displays
--- it. The kind decides the icon and the wording.
+-- Everything else (delivery and discovery tickets, spinner batteries, the jackpot) is a
+-- PLACEHOLDER: the server logs what it would grant (see grantReward in MergeIslandManager) and
+-- the HUD displays it. The kind decides the icon and the wording.
 REWARD_TOKENS = "tokens"
 REWARD_TICKETS = "tickets"
 REWARD_ENERGY = "energy"
@@ -171,19 +170,49 @@ export type DropResult = {
 --
 -- `class` is the USS class that carries the tier's art. The ladder IS the discovery track (one
 -- slot per row), so adding a tier is one more row here, plus a DELIVERY row if it delivers.
+--
+-- `rewards` is paid ONCE, the first time the tier is made this event, and the HUD's track bubble
+-- advertises the next one. Tokens are real; the rest are PLACEHOLDERS (see REWARD_* above), and
+-- every amount is a PLACEHOLDER pending the economy spec. A row without `rewards` pays nothing.
 ITEM_TIERS = {
     { label = "Shell", class = "item-tier-1" },
     { label = "Bottle", class = "item-tier-2" },
     { label = "Compass", class = "item-tier-3" },
-    { label = "Treasure Map", class = "item-tier-4" },
-    { label = "Treasure Chest", class = "item-tier-5" },
-    { label = "Golden Idol", class = "item-tier-6" },
-    { label = "Pirate Ship", class = "item-tier-7" },
-    { label = "Lighthouse", class = "item-tier-8" },
-    { label = "Treasure Island", class = "item-tier-9" },
-    { label = "Golden Trident", class = "item-tier-10" },
-    { label = "Jeweled Scepter", class = "item-tier-11" },
-    { label = "Royal Crown", class = "item-tier-12" },
+    { label = "Treasure Map", class = "item-tier-4", rewards = {
+        { kind = REWARD_TOKENS, amount = 5, label = "Merge Tokens" },
+    } },
+    { label = "Treasure Chest", class = "item-tier-5", rewards = {
+        { kind = REWARD_TOKENS, amount = 5, label = "Merge Tokens" },
+        { kind = REWARD_TICKETS, amount = 50, label = "Tickets" },
+    } },
+    { label = "Golden Idol", class = "item-tier-6", rewards = {
+        { kind = REWARD_TOKENS, amount = 10, label = "Merge Tokens" },
+        { kind = REWARD_TICKETS, amount = 75, label = "Tickets" },
+    } },
+    { label = "Pirate Ship", class = "item-tier-7", rewards = {
+        { kind = REWARD_TOKENS, amount = 10, label = "Merge Tokens" },
+        { kind = REWARD_TICKETS, amount = 125, label = "Tickets" },
+    } },
+    { label = "Lighthouse", class = "item-tier-8", rewards = {
+        { kind = REWARD_TOKENS, amount = 15, label = "Merge Tokens" },
+        { kind = REWARD_TICKETS, amount = 200, label = "Tickets" },
+    } },
+    { label = "Treasure Island", class = "item-tier-9", rewards = {
+        { kind = REWARD_TOKENS, amount = 20, label = "Merge Tokens" },
+        { kind = REWARD_TICKETS, amount = 300, label = "Tickets" },
+    } },
+    { label = "Golden Trident", class = "item-tier-10", rewards = {
+        { kind = REWARD_TOKENS, amount = 20, label = "Merge Tokens" },
+        { kind = REWARD_TICKETS, amount = 500, label = "Tickets" },
+    } },
+    { label = "Jeweled Scepter", class = "item-tier-11", rewards = {
+        { kind = REWARD_TOKENS, amount = 25, label = "Merge Tokens" },
+        { kind = REWARD_TICKETS, amount = 800, label = "Tickets" },
+    } },
+    { label = "Royal Crown", class = "item-tier-12", rewards = {
+        { kind = REWARD_TOKENS, amount = 30, label = "Merge Tokens" },
+        { kind = REWARD_TICKETS, amount = 1200, label = "Tickets" },
+    } },
 }
 
 -- The top of the ladder. An item here cannot merge any further (it auto-delivers), and no ghost
@@ -347,6 +376,62 @@ function TierInfo(tier: number?)
     return ITEM_TIERS[tier]
 end
 
+-- A tier's first-discovery rewards, or an empty list when it pays nothing.
+function DiscoveryRewards(tier: number?): {any}
+    local _info = TierInfo(tier)
+    return (_info and _info.rewards) or {}
+end
+
+-- Every first-discovery reward for tiers fromTier..toTier, summed per kind (and item/icon), in
+-- ladder order. A multiplied or lucky spawn can jump the track several tiers at once, and each
+-- tier it skips over counts as discovered, so each one pays. Shared so the HUD shows exactly
+-- what the server pays.
+function DiscoveryRewardsBetween(fromTier: number, toTier: number): {any}
+    local _out = {}
+    local _byKey = {}
+    for tier = math.max(1, fromTier), math.min(MAX_TIER, toTier) do
+        for _, reward in ipairs(DiscoveryRewards(tier)) do
+            local _key = tostring(reward.kind) .. "|" .. tostring(reward.itemId or reward.icon or "")
+            local _merged = _byKey[_key]
+            if _merged then
+                _merged.amount = _merged.amount + reward.amount
+            else
+                _merged = {
+                    kind = reward.kind,
+                    amount = reward.amount,
+                    label = reward.label,
+                    icon = reward.icon,
+                    itemId = reward.itemId,
+                }
+                _byKey[_key] = _merged
+                table.insert(_out, _merged)
+            end
+        end
+    end
+    return _out
+end
+
+-- The Merge Tokens part of DiscoveryRewardsBetween.
+function DiscoveryTokensBetween(fromTier: number, toTier: number): number
+    local _total = 0
+    for _, reward in ipairs(DiscoveryRewardsBetween(fromTier, toTier)) do
+        if reward.kind == REWARD_TOKENS then
+            _total = _total + reward.amount
+        end
+    end
+    return _total
+end
+
+-- The lowest tier above `highestTier` that pays a discovery reward, or nil when none is left.
+function NextRewardTier(highestTier: number): number | nil
+    for tier = math.max(1, highestTier + 1), MAX_TIER do
+        if #DiscoveryRewards(tier) > 0 then
+            return tier
+        end
+    end
+    return nil
+end
+
 -- Does this cell hold a draggable item?
 function HasItem(cells, index: number): boolean
     local _cell = CellAt(cells, index)
@@ -482,10 +567,10 @@ end
 
 -- SERVER ONLY (rolls dice). Any HIDDEN cell touching an OPEN cell becomes a ghost. This is what
 -- makes new objectives appear every time the board grows -- the frontier is always ghosted,
--- everything beyond it stays blank.
-function SeedGhostRing(cells)
+-- everything beyond it stays blank. Returns the indices that were ghosted.
+function SeedGhostRing(cells): {number}
     if not cells then
-        return
+        return {}
     end
     -- Collect first, then write: reading and writing in one pass is a trap worth not setting.
     local _toGhost = {}
@@ -502,11 +587,13 @@ function SeedGhostRing(cells)
     for _, i in ipairs(_toGhost) do
         cells[i] = RandomGhostFor(i)
     end
+    return _toGhost
 end
 
 -- SERVER ONLY (rolls dice). Grow the board outward from a just-satisfied ghost at `index`: break
--- its locked neighbours open, then re-seed a fresh ghost ring against the new frontier. Returns
--- the indices that became playable, so the client can animate them breaking.
+-- its locked neighbours open (UNLOCK_NEIGHBOURS_OPEN) or just reveal them as ghosts, then re-seed
+-- a fresh ghost ring against the new frontier. Returns the indices that changed (opened, or newly
+-- revealed ghosts), so the client can animate them breaking.
 function ExpandFrom(cells, index: number): {number}
     if not cells then
         return {}
@@ -523,8 +610,11 @@ function ExpandFrom(cells, index: number): {number}
     -- Re-ghost the new frontier. This is also what grows the board in the
     -- UNLOCK_NEIGHBOURS_OPEN = false mode: the satisfied ghost itself became playable in
     -- ApplyDrop, so its hidden neighbours are now adjacent to an open cell and get ghosted here.
-    SeedGhostRing(cells)
-    return _opened
+    local _revealed = SeedGhostRing(cells)
+    if UNLOCK_NEIGHBOURS_OPEN then
+        return _opened
+    end
+    return _revealed
 end
 
 -- SERVER ONLY (rolls dice). A brand-new board: everything hidden, the start rectangle opened,

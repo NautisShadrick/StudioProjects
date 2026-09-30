@@ -34,7 +34,8 @@
         </VisualElement>
 
         <!-- Discovery row: one slot per item tier, the crown last. Slots are built in Lua. The
-             tooltip floats above the NEXT tier to discover. -->
+             speech bubble floats above the NEXT tier that pays a discovery reward, showing that
+             reward (one icon + amount per entry, built in Lua). -->
         <VisualElement name="_trackPanel" class="track-panel" picking-mode="Ignore">
           <VisualElement name="_trackBar" class="track-bar" picking-mode="Ignore">
             <VisualElement name="_trackLine" class="track-line" picking-mode="Ignore">
@@ -44,9 +45,7 @@
           </VisualElement>
           <VisualElement name="_trackTooltip" class="track-tooltip" picking-mode="Ignore">
             <VisualElement name="_tooltipBob" class="tooltip-bob" picking-mode="Ignore">
-              <VisualElement class="tooltip-bubble" picking-mode="Ignore">
-                <Label name="_tooltipLabel" text="" class="tooltip-label" picking-mode="Ignore"/>
-              </VisualElement>
+              <VisualElement name="_tooltipRewards" class="tooltip-bubble" picking-mode="Ignore"/>
               <VisualElement class="tooltip-pointer" picking-mode="Ignore"/>
             </VisualElement>
           </VisualElement>
@@ -182,6 +181,8 @@
           <VisualElement name="_revealReward" class="reveal-reward" picking-mode="Ignore">
             <VisualElement name="_revealRewardIcon" class="reveal-reward-icon reward-icon-crown" picking-mode="Ignore"/>
             <Label name="_revealRewardLabel" text="" class="reveal-reward-label" picking-mode="Ignore"/>
+            <!-- The item's first-discovery rewards, built in Lua (empty when it pays nothing). -->
+            <VisualElement name="_revealRewardChips" class="reveal-reward-chips" picking-mode="Ignore"/>
           </VisualElement>
         </VisualElement>
         <VisualElement name="_revealTap" class="tap-prompt" picking-mode="Ignore">

@@ -366,12 +366,42 @@ local function maybeOfferTopUp(board, extras)
     extras.showTopUp = true
 end
 
--- Record a newly produced tier. Returns the tier when it is a first-time discovery, else nil.
-local function discover(board, tier: number): number | nil
+-- Record a newly produced tier and pay the discovery rewards of every tier it moves the track
+-- past (a jump skips tiers, and each skipped one counts as found). Tokens ride the same write as
+-- the discovery; that write is flushed before the placeholder grants, so neither can pay twice.
+-- Returns the tier when it is a first-time discovery, else nil.
+local function discover(player: Player, board, tier: number): number | nil
     if type(tier) ~= "number" or tier <= board.highestTier then
         return nil
     end
+    local _from = board.highestTier + 1
     board.highestTier = tier
+
+    local _rewards = config.DiscoveryRewardsBetween(_from, tier)
+    if #_rewards == 0 then
+        -- Pays nothing, so it rides the sweep (the caller has already marked the board dirty).
+        return tier
+    end
+    local _source = "discovery (tier " .. tostring(tier) .. ")"
+    local _grants = {}
+    local _tokens = 0
+    for _, reward in ipairs(_rewards) do
+        if reward.kind == config.REWARD_TOKENS then
+            _tokens = _tokens + reward.amount
+        else
+            table.insert(_grants, function()
+                grantReward(player, reward, _source)
+            end)
+        end
+    end
+    addTokens(board, _tokens)
+    markDirty(board)
+    flushThenGrant(player, board, _grants, "discovery")
+    telemetry("discovery_rewarded", player, {
+        tier = tier,
+        tiers_crossed = tier - _from + 1,
+        tokens_granted = _tokens,
+    })
     return tier
 end
 
@@ -637,7 +667,8 @@ function OnSpawned(fn)
     subscribe(listeners.spawned, fn)
 end
 
--- fn(index, openedIndices): the ghost at `index` was satisfied and these cells broke open.
+-- fn(index, openedIndices): the ghost at `index` was satisfied and these cells broke open (or,
+-- with UNLOCK_NEIGHBOURS_OPEN off, were revealed as new ghosts).
 function OnUnlocked(fn)
     subscribe(listeners.unlocked, fn)
 end
@@ -841,7 +872,7 @@ function self:ServerAwake()
         _extras.spawnedTier = _tier
         _extras.lucky = _lucky or nil
         -- A multiplied or lucky spawn can produce a tier before any merge has.
-        _extras.discovered = discover(_board, _tier)
+        _extras.discovered = discover(player, _board, _tier)
         checkBoardFull(player, _board, _extras)
         maybeOfferTopUp(_board, _extras)
         sendSnapshot(player, _extras)
@@ -881,9 +912,8 @@ function self:ServerAwake()
                 board_fill_pct = config.BoardFillPct(_board.cells),
                 unlock = _result.kind == config.KIND_UNLOCK,
             })
-            -- A discovery pays nothing itself, so it rides the sweep -- unless it completes the
-            -- track, in which case settleJackpot flushes before paying.
-            _extras.discovered = discover(_board, _result.tier)
+            -- discover pays the tier's own rewards; completing the track also pays the jackpot.
+            _extras.discovered = discover(player, _board, _result.tier)
             if settleJackpot(player, _board) then
                 _extras.jackpot = true
             end
