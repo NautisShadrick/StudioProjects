@@ -3,9 +3,9 @@
 -- MergeIslandManager -- the authoritative engine and persistence layer for Merge Island.
 --
 -- Merge Island is SINGLE PLAYER PER PLAYER: every player has their own private board. It is
--- still fully server-authoritative -- the client sends intents ("spawn", "move from A to B",
--- "deliver", "sell") and the server decides what actually happens, using the shared rules and
--- economy tables in MergeIslandConfig.
+-- still fully server-authoritative -- the client sends intents ("spawn", "move from A to B")
+-- and the server decides what actually happens, using the shared rules and economy tables in
+-- MergeIslandConfig.
 --
 -- Boards are NOT replicated with per-player networked values. That pattern creates matching
 -- values on every client for every player, which would push every cell of everyone's board to
@@ -13,19 +13,19 @@
 -- 49 cells is small enough that a full snapshot per action beats the complexity of deltas.
 --
 -- Each snapshot also carries what the action that produced it DID (items spawned, a ghost
--- unlocked, a tier discovered, the jackpot won, an item delivered or sold, a refusal).
+-- unlocked, a tier discovered, the jackpot won, a refusal).
 -- Delivering the truth and its animation trigger in ONE message is what keeps the HUD from ever
 -- animating a state it has not received yet, or receiving a state a frame before it knows why.
 --
 -- Economy: Merge Tokens and the discovery progress live in the board record, so the board, the
 -- wallet and the discovery track can never disagree. Tokens are real in this build. Every other
--- reward (tickets, batteries, the jackpot) is a PLACEHOLDER: grantReward logs it and grants
--- nothing. When this moves into the Game Event Kit, grantReward is the swap point (GEK:
+-- reward (tickets, the jackpot) is a PLACEHOLDER: grantReward logs it and grants nothing. When
+-- this moves into the Game Event Kit, grantReward is the swap point (GEK:
 -- MinigameUtils.GrantRewards).
 --
--- Money safety: anything that pays out (a delivery, a sell refund, the jackpot) is committed to
--- the board record and FLUSHED before the grant is issued, so a crash between the two can never
--- let the same payout be earned twice.
+-- Money safety: anything that pays out (a discovery reward, the jackpot) is committed to the
+-- board record and FLUSHED before the grant is issued, so a crash between the two can never let
+-- the same payout be earned twice.
 --
 -- Storage is server-only and rate limited (~10-20 calls/sec), so ordinary moves are debounced
 -- through a dirty flag and one sweep timer. Payouts flush immediately; they are rare enough not
@@ -36,8 +36,9 @@
 --------------------------------
 ------ SERIALIZED FIELDS  ------
 --------------------------------
--- QA ONLY: the out-of-tokens top-up grants its tokens for free (there is no purchase flow in
--- this standalone build). MUST BE OFF FOR RELEASE; with it off the offer only logs.
+-- QA ONLY: the out-of-tokens offers grant their tokens for free (there is no purchase flow in
+-- this standalone build), and are marked bought. MUST BE OFF FOR RELEASE; with it off an offer
+-- tap only logs.
 --!SerializeField
 local _debugFreeTopUp: boolean = false
 
@@ -74,11 +75,10 @@ local config = require("MergeIslandConfig")
 --------------------------------
 -- Client -> server intents. Every one of these is re-validated server-side; a tampered client
 -- gains nothing.
--- (multiplier) -- one of Config.SPAWN_MULTIPLIERS.
+-- (multiplier) -- one of Config.SPAWN_MULTIPLIERS, and unlocked.
 SpawnRequest = Event.new("MIslandSpawnRequest")
 MoveRequest = Event.new("MIslandMoveRequest")
-DeliverRequest = Event.new("MIslandDeliverRequest")
-SellRequest = Event.new("MIslandSellRequest")
+-- (offerIndex) -- an index into Config.TOPUP_OFFERS.
 TopUpRequest = Event.new("MIslandTopUpRequest")
 -- QA: wipe this player's island (gated by _debugAllowReset).
 ResetRequest = Event.new("MIslandResetRequest")
@@ -90,13 +90,11 @@ SessionRequest = Event.new("MIslandSessionRequest")
 StateRequest = Event.new("MIslandStateRequest")
 
 -- Server -> owning player only. The board truth, plus (optionally) what produced it:
---   { cells, tokens, highestTier,
---     spawned = {index}?, spawnedTier = tier?, lucky = true? (the spawn rolled
---     LUCKY_TIER_BONUS above its multiplier's tier), rejected = reason?,
+--   { cells, tokens, highestTier, offersBought = {boolean},
+--     spawned = {index}?, spawnedTier = tier?, luck = Config.LUCK_*? (set when the spawn rolled
+--     Lucky or Legendary), rejected = reason?,
 --     unlocked = { index, opened = {index} }?, discovered = tier?, jackpot = true?,
---     delivered = { index, tier, tickets, bonusId, bonus?, auto }?,
---     sold = { index, tier, refund }?,
---     boardFull = true?, showTopUp = true?, toppedUp = amount?,
+--     toppedUp = amount?,
 --     moved = true? (this snapshot answers a MoveRequest, accepted or rejected),
 --     reset = true? (the island was just wiped), canReset }
 BoardStateEvent = Event.new("MIslandBoardStateEvent")
@@ -113,7 +111,7 @@ BoardStateEvent = Event.new("MIslandBoardStateEvent")
 --   highestTier -- the highest item tier this board has ever produced this event. The ladder is
 --                  linear, so "discovered" is always exactly 1..highestTier.
 --   jackpotWon  -- the jackpot (every tier discovered) has been paid this event
---   zeroOfferShown -- the out-of-tokens offer has been shown since tokens last rose above 0
+--   offersBought -- {boolean}, one per Config.TOPUP_OFFERS entry: bought this event
 --   dirty       -- has changed since the last successful save
 --   loaded      -- storage read has completed; intents are refused before this
 --   readFailed  -- the storage read ERRORED. We play in memory but NEVER save, because
@@ -132,6 +130,7 @@ local saveCursor: number = 0
 local localCells: {any} = {}
 local localTokens: number = 0
 local localHighestTier: number = 1
+local localOffersBought: {boolean} = {}
 local localLoaded: boolean = false
 local localCanReset: boolean = false
 -- Listener lists, so the HUD can subscribe without the manager knowing about the UI.
@@ -142,9 +141,6 @@ local listeners = {
     rejected = {},
     discovered = {},
     jackpot = {},
-    delivered = {},
-    sold = {},
-    boardFull = {},
     topUp = {},
     reset = {},
 }
@@ -188,6 +184,19 @@ local function cloneCells(cells): {any}
     return _copy
 end
 
+-- A fresh copy of a "which offers were bought" list, read defensively: anything missing or
+-- malformed reads as not bought (saves from before the offers existed have no list at all).
+-- Used for sending, storing and loading alike, so the list is never shared by reference.
+local function readOffersBought(value): {boolean}
+    local _out = config.NewOffersBought()
+    if type(value) == "table" then
+        for i = 1, #_out do
+            _out[i] = value[i] == true
+        end
+    end
+    return _out
+end
+
 -- `extras` describes what just happened, for the HUD to animate. See BoardStateEvent.
 local function sendSnapshot(player: Player, extras)
     local _board = boards[player]
@@ -198,6 +207,7 @@ local function sendSnapshot(player: Player, extras)
         cells = cloneCells(_board.cells),
         tokens = _board.tokens,
         highestTier = _board.highestTier,
+        offersBought = readOffersBought(_board.offersBought),
         canReset = _debugAllowReset,
     }
     if extras then
@@ -240,7 +250,7 @@ local function flush(player: Player, board, onSaved)
         createdAt = board.createdAt,
         highestTier = board.highestTier,
         jackpotWon = board.jackpotWon,
-        zeroOfferShown = board.zeroOfferShown,
+        offersBought = readOffersBought(board.offersBought),
     }, function(error)
         local _ok = error == StorageError.None
         if not _ok then
@@ -308,7 +318,7 @@ local function freshBoard(): any
         -- Every spawn is tier 1, so the bottom rung is known from the very first tap.
         highestTier = config.SPAWN_TIER,
         jackpotWon = false,
-        zeroOfferShown = false,
+        offersBought = config.NewOffersBought(),
         dirty = false,
         loaded = true,
         readFailed = false,
@@ -347,23 +357,11 @@ local function acceptIntent(board): boolean
     return true
 end
 
--- Tokens rose above zero: the next time they run out, the offer may show again.
 local function addTokens(board, amount: number)
     if amount <= 0 then
         return
     end
     board.tokens = board.tokens + amount
-    board.zeroOfferShown = false
-end
-
--- The out-of-tokens offer shows once per time the wallet hits zero (a second 0-token tap does
--- not resurface it). Sets extras.showTopUp when it should appear now.
-local function maybeOfferTopUp(board, extras)
-    if board.tokens > 0 or board.zeroOfferShown then
-        return
-    end
-    board.zeroOfferShown = true
-    extras.showTopUp = true
 end
 
 -- Record a newly produced tier and pay the discovery rewards of every tier it moves the track
@@ -427,60 +425,6 @@ local function settleJackpot(player: Player, board): boolean
     return true
 end
 
--- Deliver the item at `index`: clear the cell, pay the guaranteed tickets, roll and pay the
--- bonus. Assumes the caller validated that the cell holds a deliverable item. Returns the
--- snapshot's `delivered` extra.
-local function deliverAt(player: Player, board, index: number, auto: boolean)
-    local _tier = config.CellAt(board.cells, index).tier or 0
-    local _row = config.DeliveryFor(_tier)
-    if not _row then
-        return nil
-    end
-    board.cells[index] = { state = config.STATE_OPEN }
-    local _bonusId = config.RollBonus(_tier)
-    local _bonus = config.BonusReward(_bonusId, _row.mult)
-    if _bonus and _bonus.kind == config.REWARD_TOKENS then
-        -- Tokens ride the same write that clears the cell, so they cannot be paid twice.
-        addTokens(board, _bonus.amount)
-    end
-    markDirty(board)
-    local _tickets = { kind = config.REWARD_TICKETS, amount = _row.tickets, label = "Tickets" }
-    local _source = "delivery (tier " .. tostring(_tier) .. ")"
-    flushThenGrant(player, board, {
-        function() grantReward(player, _tickets, _source) end,
-        function() grantReward(player, _bonus, _source .. " bonus") end,
-    }, "delivery")
-    telemetry("item_delivered", player, {
-        tier = _tier,
-        auto = auto,
-        reward_multiplier = _row.mult,
-        guaranteed_reward_type = config.REWARD_TICKETS,
-        guaranteed_reward_amount = _row.tickets,
-        bonus_reward_type = if _bonus then _bonus.kind else config.BONUS_NONE,
-        bonus_reward_amount = if _bonus then _bonus.amount else 0,
-    })
-    return {
-        index = index,
-        tier = _tier,
-        tickets = _row.tickets,
-        bonusId = _bonusId,
-        bonus = _bonus,
-        auto = auto,
-    }
-end
-
--- Board is full and nothing can merge: tell the HUD (and telemetry) so it can point at Sell.
-local function checkBoardFull(player: Player, board, extras)
-    if #config.EmptyOpenCells(board.cells) > 0 or config.HasLegalMerge(board.cells) then
-        return
-    end
-    extras.boardFull = true
-    telemetry("board_full_reached", player, {
-        timestamp = os.time(),
-        tokens_remaining = board.tokens,
-    })
-end
-
 local function endSession(player: Player, board)
     local _session = board and board.session
     if not _session then
@@ -538,7 +482,7 @@ local function loadBoard(player: Player)
             _board.highestTier = math.max(config.SPAWN_TIER, math.min(config.MAX_TIER,
                 tonumber(value.highestTier) or config.SPAWN_TIER))
             _board.jackpotWon = value.jackpotWon == true
-            _board.zeroOfferShown = value.zeroOfferShown == true
+            _board.offersBought = readOffersBought(value.offersBought)
         end
 
         boards[player] = _board
@@ -620,22 +564,18 @@ function RequestMove(from: number, to: number)
     MoveRequest:FireServer(from, to)
 end
 
-function RequestDeliver(index: number)
-    if type(index) ~= "number" then
-        return
-    end
-    DeliverRequest:FireServer(index)
+function RequestTopUp(offerIndex: number)
+    TopUpRequest:FireServer(offerIndex)
 end
 
-function RequestSell(index: number)
-    if type(index) ~= "number" then
-        return
-    end
-    SellRequest:FireServer(index)
+-- Has the offer at `offerIndex` (into Config.TOPUP_OFFERS) been bought this event?
+function IsOfferBought(offerIndex: number): boolean
+    return localOffersBought[offerIndex] == true
 end
 
-function RequestTopUp()
-    TopUpRequest:FireServer()
+-- Is any out-of-tokens offer still for sale?
+function HasOffersLeft(): boolean
+    return config.HasOffersLeft(localOffersBought)
 end
 
 -- QA: is the reset button enabled on the server?
@@ -653,7 +593,7 @@ end
 
 -- Subscriptions for the HUD. For any one snapshot they fire in this order, AFTER the local
 -- mirror has been updated: OnSpawned / OnRejected, then OnBoardChanged, then OnUnlocked,
--- OnDiscovered, OnJackpot, OnDelivered, OnSold, OnBoardFull, OnTopUp. Spawn/reject come
+-- OnDiscovered, OnJackpot, OnTopUp. Spawn/reject come
 -- first so the HUD can settle its optimistic spawn state before it repaints.
 -- fn(isMoveAnswer, rejected): the board was repainted from a snapshot; isMoveAnswer marks the
 -- server's answer to a MoveRequest.
@@ -661,8 +601,8 @@ function OnBoardChanged(fn)
     subscribe(listeners.boardChanged, fn)
 end
 
--- fn(indices, lucky, tier): items of `tier` were placed at these cells by one generator tap;
--- `lucky` marks a roll LUCKY_TIER_BONUS above the multiplier's tier.
+-- fn(indices, luck, tier): items of `tier` were placed at these cells by one generator tap;
+-- `luck` is the Config.LUCK_* it rolled.
 function OnSpawned(fn)
     subscribe(listeners.spawned, fn)
 end
@@ -689,22 +629,7 @@ function OnJackpot(fn)
     subscribe(listeners.jackpot, fn)
 end
 
--- fn(delivered): see BoardStateEvent. Already paid by the server.
-function OnDelivered(fn)
-    subscribe(listeners.delivered, fn)
-end
-
--- fn(sold): { index, tier, refund }.
-function OnSold(fn)
-    subscribe(listeners.sold, fn)
-end
-
--- fn(): the board is full with no legal merge left.
-function OnBoardFull(fn)
-    subscribe(listeners.boardFull, fn)
-end
-
--- fn(showOffer, toppedUp): the out-of-tokens offer should show, and/or a top-up landed.
+-- fn(toppedUp): an out-of-tokens offer was bought and `toppedUp` tokens landed.
 function OnTopUp(fn)
     subscribe(listeners.topUp, fn)
 end
@@ -726,6 +651,7 @@ function self:ClientAwake()
         localCells = snapshot.cells or {}
         localTokens = tonumber(snapshot.tokens) or 0
         localHighestTier = tonumber(snapshot.highestTier) or config.SPAWN_TIER
+        localOffersBought = readOffersBought(snapshot.offersBought)
         localLoaded = true
         localCanReset = snapshot.canReset == true
 
@@ -733,7 +659,7 @@ function self:ClientAwake()
             notify(listeners.reset)
         end
         if snapshot.spawned then
-            notify(listeners.spawned, snapshot.spawned, snapshot.lucky == true,
+            notify(listeners.spawned, snapshot.spawned, snapshot.luck or config.LUCK_NONE,
                 tonumber(snapshot.spawnedTier))
         end
         if snapshot.rejected then
@@ -749,17 +675,8 @@ function self:ClientAwake()
         if snapshot.jackpot then
             notify(listeners.jackpot)
         end
-        if snapshot.delivered then
-            notify(listeners.delivered, snapshot.delivered)
-        end
-        if snapshot.sold then
-            notify(listeners.sold, snapshot.sold)
-        end
-        if snapshot.boardFull then
-            notify(listeners.boardFull)
-        end
-        if snapshot.showTopUp or snapshot.toppedUp then
-            notify(listeners.topUp, snapshot.showTopUp == true, tonumber(snapshot.toppedUp) or 0)
+        if snapshot.toppedUp then
+            notify(listeners.topUp, tonumber(snapshot.toppedUp) or 0)
         end
     end)
 
@@ -774,8 +691,8 @@ function self:ServerAwake()
             .. " island from the HUD (QA only, must be OFF for release)")
     end
     if _debugFreeTopUp then
-        print("[MergeIslandManager] WARNING: _debugFreeTopUp ENABLED -- the out-of-tokens top-up"
-            .. " is free (QA only, must be OFF for release)")
+        print("[MergeIslandManager] WARNING: _debugFreeTopUp ENABLED -- the out-of-tokens offers"
+            .. " are free (QA only, must be OFF for release)")
     end
 
     -- The first parameter is the scene the player joined; named _joinedScene so it does not
@@ -831,29 +748,26 @@ function self:ServerAwake()
         if not acceptIntent(_board) then
             return
         end
-        -- Only an offered multiplier is honoured; anything else is a tampered client.
-        if not config.IsSpawnMultiplier(multiplier) then
+        -- Only an offered, unlocked multiplier is honoured; anything else is a tampered client.
+        if not config.IsMultiplierUnlocked(multiplier, _board.highestTier) then
             return
         end
         local _cost = config.SpawnCost(multiplier)
-        local _extras = {}
         if _board.tokens < _cost then
-            maybeOfferTopUp(_board, _extras)
-            reject(player, config.REJECT_NO_ENERGY, _extras)
+            reject(player, config.REJECT_NO_ENERGY)
             return
         end
         local _first = config.RandomEmptyOpenCell(_board.cells)
         if not _first then
-            checkBoardFull(player, _board, _extras)
-            reject(player, config.REJECT_BOARD_FULL, _extras)
+            reject(player, config.REJECT_BOARD_FULL)
             return
         end
 
         _board.tokens = _board.tokens - _cost
-        -- The multiplier picks the rung (x2 -> tier 2, x4 -> tier 3, ...); the lucky roll bumps
-        -- it one higher.
-        local _lucky = math.random() < config.LUCKY_SPAWN_CHANCE
-        local _tier = config.SpawnTierFor(multiplier, _lucky)
+        -- The multiplier picks the rung (x2 -> tier 2, x4 -> tier 3); a Lucky or Legendary roll
+        -- bumps it higher.
+        local _luck = config.RollSpawnLuck(multiplier)
+        local _tier = config.SpawnTierFor(multiplier, _luck)
         _board.cells[_first] = { state = config.STATE_OPEN, tier = _tier }
         if _board.session then
             _board.session.tokensSpent = _board.session.tokensSpent + _cost
@@ -862,19 +776,19 @@ function self:ServerAwake()
 
         telemetry("generator_tapped", player, {
             spawned_tier = _tier,
-            lucky_spawn = _lucky,
+            luck = _luck,
             multiplier = multiplier,
             tokens_spent = _cost,
             free_cells_after = #config.EmptyOpenCells(_board.cells),
         })
 
-        _extras.spawned = { _first }
-        _extras.spawnedTier = _tier
-        _extras.lucky = _lucky or nil
+        local _extras = {
+            spawned = { _first },
+            spawnedTier = _tier,
+            luck = if _luck ~= config.LUCK_NONE then _luck else nil,
+        }
         -- A multiplied or lucky spawn can produce a tier before any merge has.
         _extras.discovered = discover(player, _board, _tier)
-        checkBoardFull(player, _board, _extras)
-        maybeOfferTopUp(_board, _extras)
         sendSnapshot(player, _extras)
     end)
 
@@ -917,57 +831,8 @@ function self:ServerAwake()
             if settleJackpot(player, _board) then
                 _extras.jackpot = true
             end
-            -- The top tier cannot merge any further: it delivers itself.
-            if _result.tier >= config.AUTO_DELIVER_TIER then
-                _extras.delivered = deliverAt(player, _board, _result.to, true)
-            end
         end
         sendSnapshot(player, _extras)
-    end)
-
-    DeliverRequest:Connect(function(player, index)
-        local _board = boards[player]
-        if not acceptIntent(_board) then
-            return
-        end
-        if type(index) ~= "number" or index ~= index then
-            return
-        end
-        index = math.floor(index)
-        if not config.HasItem(_board.cells, index) then
-            reject(player, config.REJECT_NO_ITEM)
-            return
-        end
-        if not config.IsDeliverable(config.CellAt(_board.cells, index).tier) then
-            reject(player, config.REJECT_NOT_DELIVERABLE)
-            return
-        end
-        sendSnapshot(player, { delivered = deliverAt(player, _board, index, false) })
-    end)
-
-    SellRequest:Connect(function(player, index)
-        local _board = boards[player]
-        if not acceptIntent(_board) then
-            return
-        end
-        if type(index) ~= "number" or index ~= index then
-            return
-        end
-        index = math.floor(index)
-        if not config.HasItem(_board.cells, index) then
-            reject(player, config.REJECT_NO_ITEM)
-            return
-        end
-        local _tier = config.CellAt(_board.cells, index).tier or 0
-        local _refund = config.SellRefund(_tier)
-        _board.cells[index] = { state = config.STATE_OPEN }
-        addTokens(_board, _refund)
-        markDirty(_board)
-        if _refund > 0 then
-            flush(player, _board)
-        end
-        telemetry("item_sold", player, { tier = _tier, tokens_refunded = _refund })
-        sendSnapshot(player, { sold = { index = index, tier = _tier, refund = _refund } })
     end)
 
     ResetRequest:Connect(function(player)
@@ -991,26 +856,47 @@ function self:ServerAwake()
         sendSnapshot(player, { reset = true })
     end)
 
-    TopUpRequest:Connect(function(player)
+    TopUpRequest:Connect(function(player, offerIndex)
         local _board = boards[player]
         if not acceptIntent(_board) then
             return
         end
+        if type(offerIndex) ~= "number" or offerIndex ~= offerIndex then
+            return
+        end
+        offerIndex = math.floor(offerIndex)
+        local _offer = config.TOPUP_OFFERS[offerIndex]
+        if not _offer then
+            return
+        end
+        -- Each offer sells once per event.
+        if _board.offersBought[offerIndex] then
+            reject(player, config.REJECT_OFFER_BOUGHT)
+            return
+        end
         if not _debugFreeTopUp then
             -- PLACEHOLDER: no purchase flow in this build. The GEK port routes this through a
-            -- real token pack (PurchaseManager_GEK / the coin-sale deeplink).
+            -- real token pack (PurchaseManager_GEK / the coin-sale deeplink), and marks the offer
+            -- bought only once the purchase succeeds.
             print("[MergeIslandManager] TOP-UP (placeholder, not granted): " .. tostring(player.name)
-                .. " tapped Buy " .. tostring(config.TOPUP_AMOUNT) .. " Merge Tokens for "
-                .. config.TOPUP_PRICE_LABEL)
+                .. " tapped offer " .. tostring(offerIndex) .. ": " .. tostring(_offer.amount)
+                .. " Merge Tokens for " .. _offer.priceLabel)
             reject(player, config.REJECT_TOPUP_UNAVAILABLE)
             return
         end
-        addTokens(_board, config.TOPUP_AMOUNT)
+        -- Marked bought in the same write as the tokens, so it cannot be bought twice.
+        _board.offersBought[offerIndex] = true
+        addTokens(_board, _offer.amount)
         markDirty(_board)
         flush(player, _board)
+        telemetry("offer_purchased", player, {
+            offer = offerIndex,
+            tokens_granted = _offer.amount,
+            offers_left = if config.HasOffersLeft(_board.offersBought) then "yes" else "no",
+        })
         print("[MergeIslandManager] TOP-UP (debug, free): " .. tostring(player.name) .. " +"
-            .. tostring(config.TOPUP_AMOUNT) .. " Merge Tokens")
-        sendSnapshot(player, { toppedUp = config.TOPUP_AMOUNT })
+            .. tostring(_offer.amount) .. " Merge Tokens (offer " .. tostring(offerIndex) .. ")")
+        sendSnapshot(player, { toppedUp = _offer.amount })
     end)
 
     -- One sweep drives every player's persistence. Capped per tick so a room full of players

@@ -2,8 +2,7 @@
     MergeIslandHUD -- full-screen merge-and-unlock board, beach theme.
 
     Geometry: 7 columns x 7 rows of 46px cells = 322x322px of grid. A cell is the (contiguous,
-    gapless) hit area; the visible TILE is inset 1px inside it, so the sand showing through the 2px gaps reads
-    as grid lines while the drop test still sees one continuous board. The frame HUGS that
+    gapless) hit area and the visible TILE fills it edge to edge, so tiles sit flush with no gaps. The frame HUGS that
     fixed-pixel width rather than taking a percentage, because Yoga counts padding inside `width`
     and a percentage frame would silently clip the last column.
 
@@ -27,13 +26,15 @@
     --font-museo-900: url("project://database/Packages/com.pz.studio/Assets/Fonts/MuseoSansRounded-900 SDF.asset");
 
     --art-bg: url("project://database/Assets/MergeIsland/UI/Art/mi_bg_beach.png");
-    --art-map: url("project://database/Assets/MergeIsland/UI/Art/mi_board_map.png");
+    --art-board-frame: url("project://database/Assets/MergeIsland/UI/Art/mi_board_frame.png");
     --art-sunburst: url("project://database/Assets/MergeIsland/UI/Art/mi_sunburst.png");
     --art-glow: url("project://database/Assets/MergeIsland/UI/Art/mi_glow.png");
     --art-star: url("project://database/Assets/MergeIsland/UI/Art/mi_star.png");
     --art-crown: url("project://database/Assets/MergeIsland/UI/Art/mi_crown.png");
     --art-castle: url("project://database/Assets/MergeIsland/UI/Art/mi_sandcastle.png");
     --art-shell: url("project://database/Assets/MergeIsland/shell.png");
+    --art-tile-sand: url("project://database/Assets/MergeIsland/UI/Art/mi_tile_sand.png");
+    --art-tile-locked: url("project://database/Assets/MergeIsland/UI/Art/mi_tile_locked.png");
     --icon-gold: url("project://database/Packages/com.pz.studio/Assets/Sprites/Currency/gold_thumbnail.png");
     --icon-sparkle: url("project://database/Packages/com.pz.studio/Assets/Sprites/CardRewardSparkle.png");
 
@@ -43,9 +44,6 @@
     --icon-token: url("project://database/Assets/MergeIsland/UI/Art/mi_token.png");
     --icon-token-stack: url("project://database/Assets/MergeIsland/UI/Art/mi_token_stack.png");
     --icon-ticket: url("project://database/Assets/MergeIsland/UI/Art/mi_ticket.png");
-    --icon-ticket-stack: url("project://database/Assets/MergeIsland/UI/Art/mi_ticket_stack.png");
-    --icon-battery: url("project://database/Assets/MergeIsland/UI/Art/mi_battery_small.png");
-    --icon-battery-max: url("project://database/Assets/MergeIsland/UI/Art/mi_battery_max.png");
     --icon-chest: url("project://database/Assets/MergeIsland/UI/Art/mi_track_chest.png");
     --icon-recolour: url("project://database/Assets/MergeIsland/UI/Art/mi_badge_recolour.png");
     --icon-epic: url("project://database/Assets/MergeIsland/UI/Art/mi_badge_epic.png");
@@ -54,14 +52,6 @@
     --jackpot-coat: url("project://database/Assets/MergeIsland/UI/Art/mi_jackpot_coat.png");
     --jackpot-boots: url("project://database/Assets/MergeIsland/UI/Art/mi_jackpot_boots.png");
     --jackpot-cutlass: url("project://database/Assets/MergeIsland/UI/Art/mi_jackpot_cutlass.png");
-    --icon-none: url("project://database/Assets/MergeIsland/UI/Art/mi_none.png");
-    --icon-deliver: url("project://database/Assets/MergeIsland/UI/Art/mi_deliver.png");
-    --icon-sell: url("project://database/Assets/MergeIsland/UI/Art/mi_sell.png");
-    --icon-board-full: url("project://database/Assets/MergeIsland/UI/Art/mi_board_full.png");
-    --art-wheel: url("project://database/Assets/MergeIsland/UI/Art/mi_spinner_wheel.png");
-    --art-wheel-frame: url("project://database/Assets/MergeIsland/UI/Art/mi_spinner_frame.png");
-    --art-wheel-pointer: url("project://database/Assets/MergeIsland/UI/Art/mi_spinner_pointer.png");
-    --art-wheel-glow: url("project://database/Assets/MergeIsland/UI/Art/mi_spinner_glow.png");
     --fx-sparkle-art: url("project://database/Assets/MergeIsland/UI/Art/mi_fx_sparkle.png");
     --fx-coin-art: url("project://database/Assets/MergeIsland/UI/Art/mi_fx_coin.png");
 
@@ -77,12 +67,12 @@
 
     /* Board tiles. */
     --mi-grid: #e7b97e;
-    --mi-hidden-face: rgba(255, 244, 222, 0.5);
-    --mi-ghost-edge: #c07f43;
-    --mi-ghost-face: #dea464;
-    --mi-water-edge: #5eb6cf;
-    --mi-water-a: #7fcde0;
-    --mi-water-b: #8bd3e5;
+    --mi-hidden-edge: #f5c081;
+    --mi-hidden-sheen: rgba(255, 255, 255, 0.4);
+    --mi-ghost-edge: #b0805f;
+    --mi-ghost-face: #ce9172;
+    --mi-open-a: #cee3f8;
+    --mi-open-b: #d7edfb;
 
     --mi-orange: #f7a928;
     --mi-orange-dark: #c96f14;
@@ -336,20 +326,19 @@
     width: 340px;
     height: 56px;
     border-radius: 28px;
-    background-color: var(--mi-cream);
+    background-color: #ffd08c;
     border-width: 3px;
-    border-color: var(--mi-parchment-edge);
+    border-color: #a95d34;
 }
 
-/* Runs from the first slot's centre (8 + 13) to the last's (334 - 21). */
+/* A thin line threaded through every slot, end to end. */
 .track-line {
     position: absolute;
-    left: 21px;
-    top: 22px;
-    width: 292px;
-    height: 6px;
-    border-radius: 3px;
-    background-color: #ecd3a6;
+    left: 10px;
+    top: 24px;
+    width: 314px;
+    height: 2px;
+    background-color: #cc9254;
 }
 
 .track-fill {
@@ -357,9 +346,8 @@
     left: 0;
     top: 0;
     width: 0;
-    height: 6px;
-    border-radius: 3px;
-    background-color: var(--mi-orange);
+    height: 2px;
+    background-color: var(--mi-orange-dark);
 }
 
 .track-slots {
@@ -375,51 +363,63 @@
     padding-right: 8px;
 }
 
+/* No disc behind the slot: an unfound item is just its flat brown silhouette sitting on the
+   line, and a found one is its full-colour art. */
 .track-slot {
     width: 26px;
     height: 26px;
-    border-radius: 13px;
-    background-color: #f1dcb4;
     align-items: center;
     justify-content: center;
 }
 
+/* The art element stays laid out (the collect flight and the next-slot pulse both target it);
+   until the tier is found its own image is tinted fully clear and only the silhouette child,
+   which it scales along with, shows. */
 .track-slot-art {
-    width: 22px;
-    height: 22px;
-    border-radius: 5px;
+    width: 24px;
+    height: 24px;
     -unity-background-scale-mode: scale-to-fit;
-    -unity-background-image-tint-color: #8a5327;
-    opacity: 0.55;
+    -unity-background-image-tint-color: rgba(255, 255, 255, 0);
 }
 
-.track-slot-found {
-    background-color: #ffffff;
-    border-width: 2px;
-    border-color: var(--mi-orange);
+.track-slot-sil {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-background-image-tint-color: #d6834b;
 }
 
 .track-slot-found .track-slot-art {
     -unity-background-image-tint-color: #ffffff;
-    opacity: 1;
 }
 
-/* The next tier to find: a warmer ring so the eye knows where the tooltip points. */
+.track-slot-found .track-slot-sil {
+    display: none;
+}
+
+/* The next tier to find: a warm glow behind its silhouette, where the tooltip points. */
 .track-slot-next {
-    background-color: #ffe9a8;
-    border-width: 2px;
-    border-color: #f2c35a;
+    background-image: var(--art-glow);
+    -unity-background-scale-mode: scale-to-fit;
 }
 
-.track-slot-next .track-slot-art {
-    opacity: 0.75;
-}
-
-/* The top tier's slot wears a gold ring: making it wins the jackpot. */
-.track-slot-crown {
-    border-width: 2px;
-    border-color: var(--mi-gold);
-}
+/* Flat white silhouettes baked from each .item-tier-N image (mi_sil_N.png; regenerate if that
+   art changes). Tinted brown by .track-slot-sil. */
+.track-sil-1 { background-image: url("project://database/Assets/MergeIsland/UI/Art/mi_sil_1.png"); }
+.track-sil-2 { background-image: url("project://database/Assets/MergeIsland/UI/Art/mi_sil_2.png"); }
+.track-sil-3 { background-image: url("project://database/Assets/MergeIsland/UI/Art/mi_sil_3.png"); }
+.track-sil-4 { background-image: url("project://database/Assets/MergeIsland/UI/Art/mi_sil_4.png"); }
+.track-sil-5 { background-image: url("project://database/Assets/MergeIsland/UI/Art/mi_sil_5.png"); }
+.track-sil-6 { background-image: url("project://database/Assets/MergeIsland/UI/Art/mi_sil_6.png"); }
+.track-sil-7 { background-image: url("project://database/Assets/MergeIsland/UI/Art/mi_sil_7.png"); }
+.track-sil-8 { background-image: url("project://database/Assets/MergeIsland/UI/Art/mi_sil_8.png"); }
+.track-sil-9 { background-image: url("project://database/Assets/MergeIsland/UI/Art/mi_sil_9.png"); }
+.track-sil-10 { background-image: url("project://database/Assets/MergeIsland/UI/Art/mi_sil_10.png"); }
+.track-sil-11 { background-image: url("project://database/Assets/MergeIsland/UI/Art/mi_sil_11.png"); }
+.track-sil-12 { background-image: url("project://database/Assets/MergeIsland/UI/Art/mi_sil_12.png"); }
 
 /* Wide enough for a two-reward bubble; the bubble centres inside it, over its slot. */
 .track-tooltip {
@@ -490,26 +490,23 @@
     flex-shrink: 0;
 }
 
+/* The treasure-map paper (mi_board_frame.png, map.png cropped to the paper's edges). It is
+   stretched so the art's inner map area (891x986 of 991x1246) lands exactly on the 322x322 grid,
+   and the blank strip below it holds the bottom bar. If the art changes, recompute these from
+   its inner-area bounds. */
 .board-frame {
-    padding: 4px;
-    border-radius: 18px;
-    background-color: var(--mi-parchment-edge);
-    align-items: center;
-}
-
-.board-inner {
-    padding: 6px;
-    border-radius: 14px;
-    background-color: var(--mi-parchment);
+    width: 358px;
+    height: 407px;
+    background-image: var(--art-board-frame);
+    -unity-background-scale-mode: stretch-to-fill;
 }
 
 .board-grid {
+    position: absolute;
+    left: 18px;
+    top: 15px;
     flex-direction: column;
     align-items: center;
-    border-radius: 6px;
-    background-color: var(--mi-grid);
-    background-image: var(--art-map);
-    -unity-background-scale-mode: stretch-to-fill;
 }
 
 .board-row {
@@ -540,52 +537,81 @@
     height: 46px;
 }
 
-/* The visible tile, inset 1px so the grid shows between tiles. Its colour is the bevel EDGE;
-   the face child inset 2px inside it is the fill. */
+/* The visible tile fills its cell edge to edge, so tiles butt up with no gap. Its colour is the
+   bevel EDGE; the face child inset 2px inside it is the fill. */
 .tile {
     position: absolute;
-    left: 1px;
-    top: 1px;
-    width: 44px;
-    height: 44px;
-    border-radius: 6px;
+    left: 0;
+    top: 0;
+    width: 46px;
+    height: 46px;
+    border-radius: 3px;
 }
 
 .tile-face {
     position: absolute;
     left: 2px;
     top: 2px;
-    width: 40px;
-    height: 40px;
-    border-radius: 4px;
+    width: 42px;
+    height: 42px;
+    border-radius: 2px;
 }
 
-/* Locked and blank: pale sand with the treasure map showing through. */
+/* Locked and blank: mostly clear so the treasure map shows through, with a thin dark outline
+   and a white-to-clear sheen (mi_tile_sand.png, tinted down by --mi-hidden-sheen). The outline is
+   a real border here because the tile has no fill for a face to sit on. Only the right and
+   bottom edges draw, so two neighbouring sand tiles share one 1px line instead of doubling it. */
+.tile-hidden {
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-color: var(--mi-hidden-edge);
+}
+
 .tile-hidden .tile-face {
-    background-color: var(--mi-hidden-face);
+    left: 0;
+    top: 0;
+    width: 45px;
+    height: 45px;
+    border-radius: 2px;
+    background-image: var(--art-tile-sand);
+    -unity-background-image-tint-color: var(--mi-hidden-sheen);
+    -unity-background-scale-mode: stretch-to-fill;
 }
 
-/* Locked but ghosted: a darker, bevelled sand tile showing what it accepts. */
+/* Locked but ghosted: tan with a soft inner shadow (mi_tile_locked.png) and a thin darker edge. */
 .tile-ghost {
+    border-radius: 3px;
     background-color: var(--mi-ghost-edge);
 }
 
 .tile-ghost .tile-face {
+    left: 1px;
+    top: 1px;
+    width: 44px;
+    height: 44px;
+    border-radius: 2px;
     background-color: var(--mi-ghost-face);
+    background-image: var(--art-tile-locked);
+    -unity-background-scale-mode: stretch-to-fill;
 }
 
-/* Unlocked and playable: water, alternating by (row + col) parity. */
+/* Unlocked and playable: flat, square, pale blue, checkered by (row + col) parity. */
 .tile-open-a,
 .tile-open-b {
-    background-color: var(--mi-water-edge);
+    border-radius: 0;
 }
 
-.tile-open-a .tile-face {
-    background-color: var(--mi-water-a);
+.tile-open-a {
+    background-color: var(--mi-open-a);
 }
 
+.tile-open-b {
+    background-color: var(--mi-open-b);
+}
+
+.tile-open-a .tile-face,
 .tile-open-b .tile-face {
-    background-color: var(--mi-water-b);
+    display: none;
 }
 
 .cell-shadow {
@@ -606,11 +632,11 @@
 /* Legal drop target under the dragged item: a ring on the tile. */
 .cell-highlight {
     position: absolute;
-    left: 1px;
-    top: 1px;
-    width: 44px;
-    height: 44px;
-    border-radius: 6px;
+    left: 0;
+    top: 0;
+    width: 46px;
+    height: 46px;
+    border-radius: 3px;
     border-width: 3px;
     border-color: var(--mi-highlight);
     background-color: rgba(160, 255, 110, 0.18);
@@ -706,10 +732,13 @@
 
 /* ---------------------------- bottom bar -------------------------- */
 
+/* Sits in the blank strip at the foot of the map paper (inside .board-frame). */
 .bottom-bar {
-    width: 340px;
-    height: 70px;
-    flex-shrink: 0;
+    position: absolute;
+    left: 12px;
+    top: 337px;
+    width: 334px;
+    height: 67px;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
@@ -869,6 +898,53 @@
     text-shadow: 0px 2px 0px var(--mi-pink-outline);
 }
 
+/* "Higher Power Boost Available!" over the multiplier chip. Placed in frame space: the chip's
+   centre is x 306 (bottom bar left 12 + 334 wide, chip 80 wide at its right edge) and its top
+   is y ~348. The bubble sits left of centre so it stays on screen, and its pointer is moved
+   across to the chip's centre (306 - 226 - 5 = 75). Starts hidden; Lua shows it. */
+.boost-bubble {
+    position: absolute;
+    left: 226px;
+    top: 296px;
+    width: 120px;
+    height: 54px;
+    display: none;
+}
+
+.boost-bob {
+    width: 100%;
+}
+
+.boost-body {
+    height: 44px;
+    padding-left: 6px;
+    padding-right: 6px;
+    border-radius: 12px;
+    background-color: #ffffff;
+    border-width: 2px;
+    border-color: var(--mi-pink-dark);
+    align-items: center;
+    justify-content: center;
+}
+
+.boost-label {
+    font-size: 12px;
+    color: var(--mi-pink-outline);
+    -unity-font-definition: var(--font-museo-900);
+    -unity-text-align: middle-center;
+    white-space: normal;
+}
+
+.boost-pointer-row {
+    width: 100%;
+    padding-left: 75px;
+    align-items: flex-start;
+}
+
+.boost-pointer {
+    border-color: var(--mi-pink-dark);
+}
+
 .hint-label {
     width: 90%;
     font-size: 13px;
@@ -983,10 +1059,6 @@
     background-image: var(--icon-chest);
 }
 
-.fx-energy {
-    background-image: var(--icon-energy);
-}
-
 .fx-ring {
     border-width: 4px;
     border-color: #fffbe6;
@@ -1034,6 +1106,14 @@
     font-size: 18px;
 }
 
+/* "MAX X<n>" off the multiplier button, in the button's pink. */
+.fx-float-text-max {
+    color: #ffffff;
+    font-size: 18px;
+    -unity-text-outline-color: var(--mi-pink-outline);
+    text-shadow: 0px 2px 0px var(--mi-pink-outline);
+}
+
 /* The "Lucky!" stamp over a lucky spawn: hot pink, thick white outline, a deep pink drop.
    Size must match fx.lucky's centring (150x44). */
 .fx-lucky-text {
@@ -1048,6 +1128,14 @@
     -unity-text-outline-width: 3px;
     -unity-text-outline-color: #ffffff;
     text-shadow: 0px 3px 0px #b0166e;
+}
+
+/* Legendary (+2 tiers): molten gold over a deep orange drop, a touch smaller so the longer word
+   fits the same 150x44 box. */
+.fx-legendary-text {
+    font-size: 26px;
+    color: #ffc21a;
+    text-shadow: 0px 3px 0px #b34a00;
 }
 
 /* ---------------------------- overlays ---------------------------- */
@@ -1400,7 +1488,6 @@
 }
 
 .info-icon-castle { background-image: var(--art-generator); }
-.info-icon-deliver { background-image: var(--icon-deliver); }
 .info-icon-shell { background-image: var(--art-shell); }
 .info-icon-ghost {
     background-image: var(--art-shell);
@@ -1425,227 +1512,15 @@
     height: 52px;
 }
 
-/* ------------------------ selection + actions --------------------- */
+/* ------------------------------- hint ------------------------------ */
 
-/* The hint and the action strip share one fixed-height slot, so selecting never reflows. */
+/* The hint sits in one fixed-height slot, so a longer line never reflows the column. */
 .hint-area {
     width: 340px;
     height: 46px;
     flex-shrink: 0;
     align-items: center;
     justify-content: center;
-}
-
-.action-strip {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    display: none;
-}
-
-.action-name {
-    flex-grow: 1;
-    flex-shrink: 1;
-    font-size: 15px;
-    color: var(--mi-wood-dark);
-    -unity-font-definition: var(--font-museo-900);
-    -unity-text-align: middle-left;
-    padding-left: 4px;
-}
-
-/* Small chunky buttons with the generator's depth trick. */
-.action-button {
-    height: 42px;
-    margin-left: 6px;
-    padding: 2px;
-    padding-bottom: 5px;
-    border-radius: 14px;
-}
-
-.action-face {
-    flex-grow: 1;
-    flex-direction: row;
-    align-items: center;
-    padding-left: 6px;
-    padding-right: 10px;
-    border-radius: 12px;
-    border-width: 2px;
-}
-
-.action-sell {
-    background-color: var(--mi-orange-dark);
-}
-
-.action-sell .action-face {
-    background-color: var(--mi-orange);
-    border-color: #ffd27a;
-}
-
-.action-deliver {
-    background-color: var(--mi-green-dark);
-}
-
-.action-deliver .action-face {
-    background-color: var(--mi-green);
-    border-color: var(--mi-green-light);
-}
-
-.action-icon {
-    width: 28px;
-    height: 28px;
-    margin-right: 4px;
-    -unity-background-scale-mode: scale-to-fit;
-}
-
-.action-icon-sell { background-image: var(--icon-sell); }
-.action-icon-deliver { background-image: var(--icon-deliver); }
-
-.action-label {
-    font-size: 15px;
-    color: #ffffff;
-    -unity-font-definition: var(--font-museo-900);
-    text-shadow: 0px 2px 0px rgba(0, 0, 0, 0.3);
-}
-
-.action-button-disabled {
-    opacity: 0.5;
-}
-
-/* The selected item: a gold ring on its slot (reuses the drop-target overlay). */
-.cell-highlight.cell-selected {
-    display: flex;
-    border-color: var(--mi-gold);
-    background-color: rgba(255, 213, 74, 0.22);
-}
-
-/* A deliverable item (tier 5+) sits on a gold-edged tile so it reads as "ready to cash in". */
-.tile-open-a.cell-deliverable,
-.tile-open-b.cell-deliverable {
-    background-color: var(--mi-gold);
-}
-
-/* ----------------------------- delivery ---------------------------- */
-
-.deliver-top {
-    flex-direction: row;
-    align-items: center;
-    margin-top: 10px;
-}
-
-.deliver-item {
-    width: 104px;
-    height: 104px;
-    -unity-background-scale-mode: scale-to-fit;
-}
-
-.deliver-tickets {
-    height: 48px;
-    margin-left: 10px;
-    padding-left: 10px;
-    padding-right: 16px;
-    border-radius: 24px;
-    background-color: rgba(0, 0, 0, 0.35);
-    border-width: 2px;
-    border-color: rgba(255, 107, 139, 0.8);
-    flex-direction: row;
-    align-items: center;
-}
-
-.deliver-ticket-icon {
-    width: 40px;
-    height: 40px;
-    margin-right: 4px;
-    background-image: var(--icon-ticket);
-    -unity-background-scale-mode: scale-to-fit;
-}
-
-.deliver-tickets-label {
-    font-size: 24px;
-    color: #ffffff;
-    -unity-font-definition: var(--font-museo-900);
-    -unity-text-outline-width: 1px;
-    -unity-text-outline-color: #2a1a0c;
-    text-shadow: 0px 2px 0px #2a1a0c;
-}
-
-.deliver-bonus-title {
-    margin-top: 12px;
-    font-size: 18px;
-    color: #ffe45c;
-    -unity-font-definition: var(--font-museo-900);
-    -unity-text-outline-width: 1px;
-    -unity-text-outline-color: #2a1a0c;
-    text-shadow: 0px 2px 0px #2a1a0c;
-}
-
-/* 260 wide so the glow has room; the 220px wheel and frame sit inside at a positive inset
-   (negative insets are ignored in this runtime). */
-.spinner-stage {
-    width: 260px;
-    height: 262px;
-}
-
-.spinner-glow {
-    position: absolute;
-    left: 0;
-    top: 10px;
-    width: 260px;
-    height: 260px;
-    background-image: var(--art-wheel-glow);
-    -unity-background-scale-mode: scale-to-fit;
-    opacity: 0.8;
-}
-
-.spinner-wheel {
-    position: absolute;
-    left: 20px;
-    top: 30px;
-    width: 220px;
-    height: 220px;
-    background-image: var(--art-wheel);
-    -unity-background-scale-mode: scale-to-fit;
-}
-
-.spinner-frame {
-    position: absolute;
-    left: 20px;
-    top: 30px;
-    width: 220px;
-    height: 220px;
-    background-image: var(--art-wheel-frame);
-    -unity-background-scale-mode: scale-to-fit;
-}
-
-.spinner-pointer-row {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 260px;
-    align-items: center;
-}
-
-.spinner-pointer {
-    width: 38px;
-    height: 48px;
-    background-image: var(--art-wheel-pointer);
-    -unity-background-scale-mode: scale-to-fit;
-}
-
-/* One reward icon per segment, placed and turned in Lua (popup.buildWheel). */
-.wheel-icon {
-    position: absolute;
-    width: 34px;
-    height: 34px;
-    -unity-background-scale-mode: scale-to-fit;
-}
-
-.deliver-tap {
-    bottom: 36px;
 }
 
 /* ------------------------------ top-up ----------------------------- */
@@ -1655,17 +1530,10 @@
 }
 
 .topup-art {
-    width: 120px;
-    height: 120px;
+    width: 90px;
+    height: 90px;
     background-image: var(--icon-token-stack);
     -unity-background-scale-mode: scale-to-fit;
-}
-
-.topup-amount {
-    margin-top: 4px;
-    font-size: 22px;
-    color: var(--mi-orange-dark);
-    -unity-font-definition: var(--font-museo-900);
 }
 
 .topup-sub {
@@ -1676,8 +1544,72 @@
     white-space: normal;
 }
 
-.topup-buy {
-    margin-top: 12px;
+/* Three offer cards side by side (256px of panel inside its padding and border). */
+.topup-offers {
+    width: 100%;
+    margin-top: 10px;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.topup-offer {
+    width: 82px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    border-radius: 14px;
+    background-color: var(--mi-cream);
+    border-width: 2px;
+    border-color: var(--mi-parchment-edge);
+    align-items: center;
+}
+
+.topup-offer-icon {
+    width: 48px;
+    height: 48px;
+    background-image: var(--icon-token-stack);
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.topup-offer-amount {
+    font-size: 18px;
+    color: var(--mi-orange-dark);
+    -unity-font-definition: var(--font-museo-900);
+}
+
+/* A compact .cta-button. */
+.topup-offer-buy {
+    width: 74px;
+    height: 40px;
+    margin-top: 4px;
+    padding: 2px;
+    padding-bottom: 5px;
+    border-radius: 14px;
+}
+
+.topup-offer-buy .cta-face {
+    border-radius: 12px;
+}
+
+.topup-offer-price {
+    font-size: 12px;
+}
+
+/* Already bought this event: dimmed, with a wooden "Bought" button. */
+.topup-offer-bought {
+    opacity: 0.6;
+}
+
+.topup-offer-bought .topup-offer-buy {
+    background-color: var(--mi-wood-dark);
+}
+
+.topup-offer-bought .cta-face {
+    background-color: var(--mi-wood);
+    border-color: var(--mi-parchment-edge);
+}
+
+.topup-offer-bought .cta-label {
+    text-shadow: 0px 2px 0px var(--mi-wood-dark);
 }
 
 .topup-later {
@@ -1693,12 +1625,7 @@
 .reward-icon-item { background-image: var(--icon-chest); }
 .reward-icon-crown { background-image: var(--art-crown); }
 .reward-icon-token { background-image: var(--icon-token); }
-.reward-icon-token-stack { background-image: var(--icon-token-stack); }
 .reward-icon-ticket { background-image: var(--icon-ticket); }
-.reward-icon-ticket-stack { background-image: var(--icon-ticket-stack); }
-.reward-icon-battery { background-image: var(--icon-battery); }
-.reward-icon-battery-max { background-image: var(--icon-battery-max); }
-.reward-icon-none { background-image: var(--icon-none); }
 .reward-icon-recolour { background-image: var(--icon-recolour); }
 .reward-icon-epic { background-image: var(--icon-epic); }
 .jackpot-icon-hat { background-image: var(--jackpot-hat); }

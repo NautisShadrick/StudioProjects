@@ -13,19 +13,20 @@
 -- economy table below: the HUD advertises exactly what the server pays.
 --
 -- Randomness is deliberately kept OUT of ResolveDrop/ApplyDrop -- they are deterministic, so
--- both sides agree. The functions that roll dice (RandomGhostFor, SeedGhostRing, ExpandFrom,
--- NewBoard, RandomEmptyOpenCell, RollBonus) are only ever called by the server.
+-- both sides agree. The functions that roll dice (RandomEmptyOpenCell, RollSpawnLuck) are only
+-- ever called by the server. The board layout itself is fixed (see GHOST_MAP).
 --
 -- Economy (Merge minigame spec v1, north star: Coin Master's Merge Island):
 --   * Every generator tap costs 1 Merge Token and spawns a tier-1 item on a random free cell.
---     The spawn multiplier (x1/x2/x4/x8) spends M tokens for the item M tier-1s would merge
---     into (see SPAWN_MULTIPLIERS), and a 10% "Lucky!" roll spawns one tier above that instead.
+--     The spawn multiplier spends M tokens for the item M tier-1s would merge into. Only x1
+--     exists at first; making item 8 unlocks x2 and item 10 unlocks x4 (see SPAWN_MULTIPLIERS).
+--   * A spawn can roll "Lucky!" (+1 tier) or, at x2 and up, "Legendary!" (+2 tiers). See
+--     SPAWN_LUCK.
 --   * The first time an item is made it fills its slot on the 12-item discovery track and pays
 --     that tier's `rewards` table (tiers 1-3 pay nothing). Filling the whole track wins the
---     JACKPOT set, once per event.
---   * Items at DELIVER_MIN_TIER+ can be delivered for guaranteed tickets plus a bonus spin;
---     the top tier delivers itself.
---   * Any item can be sold; tier 3+ refunds a token.
+--     JACKPOT set, once per event. After that the player can keep playing for fun but earns
+--     nothing more, and the top tier cannot merge any further.
+--   * Out of tokens, the dispenser offers TOPUP_OFFERS, each buyable once per event.
 --
 -- NOTE: this module must be attached to a GameObject in the scene to be require-able.
 
@@ -37,20 +38,18 @@ COLS = 7
 ROWS = 7
 CELL_COUNT = COLS * ROWS
 
--- The starting playable area, as an inclusive row/col rectangle: the bottom-centre 3x2 block.
---     1111111
---     1111111
---     1111111
---     1111111
---     1111111
---     1100011
---     1100011
--- Everything outside it starts locked, and ghost rings are measured outward FROM this rectangle
--- (not from the board centre), so moving or resizing it re-tiers the whole board automatically.
-START_ROW_MIN = 6
-START_ROW_MAX = 7
-START_COL_MIN = 3
-START_COL_MAX = 5
+-- The fixed board layout, one row per line, top row first. Each number is the tier a cell's
+-- ghost ACCEPTS (the item that unlocks it); 0 marks the starting playable area. Every board
+-- uses this same map. A ghost can never ask for MAX_TIER (satisfying a tier-T ghost yields T+1).
+GHOST_MAP = {
+    { 6, 2, 3, 3, 1, 3, 3 },
+    { 3, 1, 6, 3, 8, 3, 8 },
+    { 1, 1, 6, 3, 6, 6, 3 },
+    { 8, 1, 1, 1, 6, 1, 3 },
+    { 1, 8, 1, 1, 1, 6, 3 },
+    { 8, 8, 0, 0, 0, 1, 6 },
+    { 1, 1, 0, 0, 0, 1, 3 },
+}
 
 -- Cell states. Numeric so the persisted payload stays small.
 STATE_HIDDEN = 0    -- locked, nothing shown (plain tile)
@@ -65,7 +64,8 @@ STATE_OPEN = 2      -- unlocked; may or may not hold an item
 -- v5: 5x7 board, 8 tiers, Merge Tokens, Merge Points and the progression track.
 -- v6: 7x7 board.
 -- v7: 12 tiers; points and the track are gone, saves carry jackpotWon.
-SAVE_VERSION = 7
+-- v8: ghost tiers come from the fixed GHOST_MAP instead of a random ramp.
+SAVE_VERSION = 8
 
 -- Bumping EVENT_ID starts a NEW EVENT for every player on their next load: a fresh board, a
 -- fresh token grant and an empty discovery track -- so every event's jackpot can be won once.
@@ -78,26 +78,38 @@ SPAWN_COST = 1
 -- Spawns enter the ladder at the bottom...
 SPAWN_TIER = 1
 -- ...unless the player raised the spawn multiplier. The HUD's multiplier button cycles through
--- these; a tap at multiplier M costs M * SPAWN_COST and spawns the item that M bottom-tier items
--- would merge into: x1 -> tier 1, x2 -> tier 2, x4 -> tier 3, x8 -> tier 4. Each entry must be a
--- power of two, in ascending order, starting at 1.
-SPAWN_MULTIPLIERS = { 1, 2, 4, 8 }
--- A "Lucky!" spawn rolls this many tiers ABOVE the multiplier's tier.
-LUCKY_SPAWN_CHANCE = 0.10
-LUCKY_TIER_BONUS = 1
--- The empty-state flash top-up. PLACEHOLDER purchase: see MergeIslandManager's TopUpRequest.
-TOPUP_AMOUNT = 25
-TOPUP_PRICE_LABEL = "900 Gold"
+-- the UNLOCKED ones; a tap at multiplier M costs M * SPAWN_COST and spawns the item that M
+-- bottom-tier items would merge into: x1 -> tier 1, x2 -> tier 2, x4 -> tier 3. `unlockTier` is
+-- the item whose first discovery unlocks it (x1 is always there). Each `mult` must be a power of
+-- two, in ascending order, starting at 1. x4 is the cap: grinding low tiers at the late stages is
+-- what the multiplier exists to spare the player.
+SPAWN_MULTIPLIERS = {
+    { mult = 1, unlockTier = 1 },
+    { mult = 2, unlockTier = 8 },
+    { mult = 4, unlockTier = 10 },
+}
 
--- Ghost tier ramp. Ghost rings are numbered outward from the edge of the start area, so ring 1
--- is the first locked ring. The ramp is spread over the board's REAL depth: ring 1 asks for
--- tier 1 and the farthest ring asks for the top ghost tier (MAX_TIER - 1), so every item in the
--- ladder shows up as a lock and the island gets harder the further out it grows. The curve
--- (> 1) keeps the first rings gentle and steepens toward the far edge. On the 7x7 board with a
--- bottom 3x2 start (five rings) that is: ring 1 -> 1, 2 -> 3, 3 -> 5, 4 -> 8, 5 -> 11.
-GHOST_RAMP_CURVE = 1.2
--- Chance a ghost rolls one tier above its ring's base, so a ring is not visually uniform.
-GHOST_TIER_JITTER_CHANCE = 0.25
+-- Spawn luck, per multiplier: the chance a spawn comes out "Lucky!" (LUCK_BONUS.lucky tiers above
+-- the multiplier's tier) or "Legendary!" (LUCK_BONUS.legendary tiers above it). x1 has no
+-- Legendary.
+LUCK_NONE = "none"
+LUCK_LUCKY = "lucky"
+LUCK_LEGENDARY = "legendary"
+LUCK_BONUS = { [LUCK_NONE] = 0, [LUCK_LUCKY] = 1, [LUCK_LEGENDARY] = 2 }
+SPAWN_LUCK = {
+    [1] = { lucky = 0.036, legendary = 0 },
+    [2] = { lucky = 0.036, legendary = 0.041 },
+    [4] = { lucky = 0.036, legendary = 0.041 },
+}
+
+-- The out-of-tokens offers. Each can be bought ONCE per event; once all are bought, an empty
+-- dispenser just shakes. PLACEHOLDER amounts and prices (TODO Charles), and a PLACEHOLDER
+-- purchase: see MergeIslandManager's TopUpRequest.
+TOPUP_OFFERS = {
+    { amount = 25, priceLabel = "900 Gold" },
+    { amount = 60, priceLabel = "1,800 Gold" },
+    { amount = 150, priceLabel = "3,900 Gold" },
+}
 
 -- On satisfying a ghost, do its locked neighbours become fully playable (true), or merely get
 -- revealed as new ghosts (false)? Existing ghost neighbours stay ghosts when false.
@@ -105,15 +117,6 @@ UNLOCK_NEIGHBOURS_OPEN = false
 -- PENDING PLAYTEST DECISION. Whether adjacency (for both unlocking and ghost seeding) counts
 -- the four diagonals as well as the four orthogonals.
 ADJACENCY_INCLUDES_DIAGONALS = false
-
--- Delivery. Items at DELIVER_MIN_TIER and above can be tapped and delivered; the top tier is
--- delivered automatically the moment it is made (it cannot merge any further).
-DELIVER_MIN_TIER = 5
-
--- Sell refunds: tiers below SELL_REFUND_MIN_TIER refund nothing (a sell is a board-space
--- relief valve, not a token source); tier SELL_REFUND_MIN_TIER and above refund SELL_REFUND.
-SELL_REFUND_MIN_TIER = 3
-SELL_REFUND = 1
 
 -- Rejection reasons, surfaced to the client so the UI can explain a refused action.
 REJECT_OUT_OF_BOUNDS = "out_of_bounds"
@@ -124,8 +127,8 @@ REJECT_MISMATCH = "mismatch"
 REJECT_MAX_TIER = "max_tier"
 REJECT_NO_ENERGY = "no_energy"
 REJECT_BOARD_FULL = "board_full"
-REJECT_NOT_DELIVERABLE = "not_deliverable"
 REJECT_TOPUP_UNAVAILABLE = "topup_unavailable"
+REJECT_OFFER_BOUGHT = "offer_bought"
 
 -- Drop outcome kinds.
 KIND_MOVE = "move"          -- item relocated to an empty open cell
@@ -133,12 +136,11 @@ KIND_MERGE = "merge"        -- two matching items became one of the next tier
 KIND_UNLOCK = "unlock"      -- a ghost was satisfied: next tier placed AND the board expands
 
 -- Reward kinds. Tokens are REAL in this build (they go straight into the player's wallet).
--- Everything else (delivery and discovery tickets, spinner batteries, the jackpot) is a
--- PLACEHOLDER: the server logs what it would grant (see grantReward in MergeIslandManager) and
--- the HUD displays it. The kind decides the icon and the wording.
+-- Everything else (discovery tickets, the jackpot) is a PLACEHOLDER: the server logs what it
+-- would grant (see grantReward in MergeIslandManager) and the HUD displays it. The kind decides
+-- the icon and the wording.
 REWARD_TOKENS = "tokens"
 REWARD_TICKETS = "tickets"
-REWARD_ENERGY = "energy"
 REWARD_ITEM = "item"
 
 --------------------------------
@@ -169,7 +171,7 @@ export type DropResult = {
 -- because both the server (validation) and the UI (tile art and labels) read it.
 --
 -- `class` is the USS class that carries the tier's art. The ladder IS the discovery track (one
--- slot per row), so adding a tier is one more row here, plus a DELIVERY row if it delivers.
+-- slot per row), so adding a tier is one more row here.
 --
 -- `rewards` is paid ONCE, the first time the tier is made this event, and the HUD's track bubble
 -- advertises the next one. Tokens are real; the rest are PLACEHOLDERS (see REWARD_* above), and
@@ -215,10 +217,9 @@ ITEM_TIERS = {
     } },
 }
 
--- The top of the ladder. An item here cannot merge any further (it auto-delivers), and no ghost
--- may ask for it (satisfying a tier-T ghost yields T+1, so there would be nothing to produce).
+-- The top of the ladder. An item here cannot merge any further, and no ghost may ask for it
+-- (satisfying a tier-T ghost yields T+1, so there would be nothing to produce).
 MAX_TIER = #ITEM_TIERS
-AUTO_DELIVER_TIER = MAX_TIER
 
 -- The jackpot: won once per event, the first time the player makes the top tier -- which is
 -- also the moment the discovery track fills. PLACEHOLDER set: the server logs it rather than
@@ -233,64 +234,6 @@ JACKPOT = {
       icon = "jackpot-icon-boots" },
     { kind = REWARD_ITEM, itemId = "merge_jackpot_cutlass", amount = 1, label = "Captain's Cutlass",
       icon = "jackpot-icon-cutlass" },
-}
-
--- Per deliverable tier: the reward-value multiplier (applied to the guaranteed tickets and to
--- any variable-quantity bonus) and the guaranteed tickets. Scales slightly below the 1x/2x/4x/8x
--- item cost so higher tiers are clearly better without being strictly proportional.
-DELIVERY = {
-    [5] = { mult = 1.0, tickets = 100 },
-    [6] = { mult = 1.8, tickets = 180 },
-    [7] = { mult = 3.2, tickets = 320 },
-    [8] = { mult = 5.5, tickets = 550 },
-    [9] = { mult = 9.5, tickets = 950 },
-    [10] = { mult = 16, tickets = 1600 },
-    [11] = { mult = 28, tickets = 2800 },
-    [12] = { mult = 48, tickets = 4800 },
-}
-
--- Bonus spinner outcomes. `scales` marks the variable-quantity rewards the delivery multiplier
--- applies to. Battery and ticket amounts are PLACEHOLDERS pending the economy spec; token
--- amounts are the spec's.
-BONUS_REWARDS = {
-    battery_max = { kind = REWARD_ENERGY, amount = 100, label = "MAX Battery", icon = "reward-icon-battery-max" },
-    battery_small = { kind = REWARD_ENERGY, amount = 25, label = "Small Battery", icon = "reward-icon-battery" },
-    tickets_large = { kind = REWARD_TICKETS, amount = 200, label = "Tickets", icon = "reward-icon-ticket-stack", scales = true },
-    tickets_small = { kind = REWARD_TICKETS, amount = 50, label = "Tickets", icon = "reward-icon-ticket", scales = true },
-    tokens_5 = { kind = REWARD_TOKENS, amount = 5, label = "Merge Tokens", icon = "reward-icon-token-stack" },
-    tokens_2 = { kind = REWARD_TOKENS, amount = 2, label = "Merge Tokens", icon = "reward-icon-token" },
-}
-BONUS_NONE = "none"
-
--- Weighted odds per delivery band (weights read as percentages; each band sums to 100).
-BONUS_TABLES = {
-    low = {   -- tier 5-6 deliveries
-        { id = "battery_max", weight = 3 },
-        { id = "battery_small", weight = 10 },
-        { id = "tickets_large", weight = 5 },
-        { id = "tickets_small", weight = 15 },
-        { id = "tokens_5", weight = 2 },
-        { id = "tokens_2", weight = 10 },
-        { id = BONUS_NONE, weight = 55 },
-    },
-    high = {  -- tier 7+ deliveries
-        { id = "battery_max", weight = 10 },
-        { id = "battery_small", weight = 20 },
-        { id = "tickets_large", weight = 15 },
-        { id = "tickets_small", weight = 25 },
-        { id = "tokens_5", weight = 10 },
-        { id = "tokens_2", weight = 15 },
-        { id = BONUS_NONE, weight = 5 },
-    },
-}
-BONUS_HIGH_MIN_TIER = 7
-
--- The spinner wheel's 8 segments, clockwise from 12 o'clock. PRESENTATION ONLY: the server rolls
--- the outcome from BONUS_TABLES and the HUD spins to a segment showing it. The big prizes sit
--- next to "none" so a miss lands one segment away from a win (near-miss).
-SPINNER_SEGMENTS = {
-    "tickets_small", "battery_small", "tokens_2", BONUS_NONE,
-    "battery_max", "tokens_5", BONUS_NONE, "tickets_large",
 }
 
 --------------------------------
@@ -438,64 +381,26 @@ function HasItem(cells, index: number): boolean
     return _cell.state == STATE_OPEN and _cell.tier ~= nil
 end
 
--- Chebyshev distance from the START RECTANGLE: 0 for a cell inside it, 1 for the ring touching
--- it, and so on outward. Measuring from the rectangle rather than a point is what lets the start
--- area sit anywhere (here, bottom-centre) while ghost rings still ramp outward from it.
-function RingDistance(index: number): number
+-- The GHOST_MAP entry for a cell: the tier its ghost accepts, or 0 for a start cell. Off-board
+-- or missing entries read as 0.
+function MapTier(index: number): number
     local _row, _col = CellCoords(index)
     if not _row then
-        return math.huge
+        return 0
     end
-    -- Distance outside the rectangle on each axis, 0 when the cell is within its span.
-    local _dRow = math.max(START_ROW_MIN - _row, 0, _row - START_ROW_MAX)
-    local _dCol = math.max(START_COL_MIN - _col, 0, _col - START_COL_MAX)
-    return math.max(_dRow, _dCol)
+    local _mapRow = GHOST_MAP[_row]
+    return (_mapRow and _mapRow[_col]) or 0
 end
 
 -- Is this cell part of the initial playable area?
 function IsStartCell(index: number): boolean
-    return RingDistance(index) == 0
+    return MapTier(index) == 0
 end
 
--- The farthest ghost ring on this board (computed once; it only depends on the constants).
-local _maxRing: number? = nil
-function MaxRingDistance(): number
-    if not _maxRing then
-        local _max = 1
-        for i = 1, CELL_COUNT do
-            _max = math.max(_max, RingDistance(i))
-        end
-        _maxRing = _max
-    end
-    return _maxRing or 1
-end
-
--- Base ghost tier for a ghost ring (ring 1 being the first locked ring outside the start area),
--- ramping from tier 1 at ring 1 to the top ghost tier at the farthest ring (see
--- GHOST_RAMP_CURVE). The top ghost tier is MAX_TIER - 1: satisfying a tier-T ghost yields tier
--- T+1, so a ghost can never sit at the top of the ladder.
-function GhostTierForRing(ring: number): number
-    local _topGhostTier = math.max(1, MAX_TIER - 1)
-    if type(ring) ~= "number" or ring <= 1 then
-        return 1
-    end
-    local _span = MaxRingDistance() - 1
-    if _span <= 0 then
-        return _topGhostTier
-    end
-    local _t = math.min(1, (ring - 1) / _span) ^ GHOST_RAMP_CURVE
-    return math.min(_topGhostTier, 1 + math.floor(_t * (_topGhostTier - 1) + 0.5))
-end
-
--- SERVER ONLY (rolls dice). A fresh ghost spec for a cell, tiered by how far out it sits.
-function RandomGhostFor(index: number): Cell
-    -- RingDistance is already 0 inside the start area, so it IS the ghost ring number.
-    local _tier = GhostTierForRing(RingDistance(index))
-    -- Jitter upward sometimes so a ring is not visually uniform, never past the top ghost tier.
-    local _topGhostTier = math.max(1, MAX_TIER - 1)
-    if math.random() < GHOST_TIER_JITTER_CHANCE and _tier < _topGhostTier then
-        _tier = _tier + 1
-    end
+-- The ghost spec for a cell, read from GHOST_MAP. Clamped below the top tier, since satisfying a
+-- tier-T ghost yields T+1.
+function GhostFor(index: number): Cell
+    local _tier = math.max(1, math.min(MapTier(index), MAX_TIER - 1))
     return { state = STATE_GHOST, tier = _tier }
 end
 
@@ -554,9 +459,8 @@ function ResolveDrop(cells, from: number, to: number): DropResult
     return { ok = true, kind = KIND_MERGE, from = from, to = to, tier = _tier + 1 }
 end
 
--- Apply the DETERMINISTIC half of a resolved drop, mutating `cells` in place. The board
--- expansion that follows an unlock is deliberately NOT here: it rolls dice, so it is
--- server-only (see ExpandFrom).
+-- Apply a resolved drop, mutating `cells` in place. The board expansion that follows an unlock
+-- is deliberately NOT here: the server owns it (see ExpandFrom).
 function ApplyDrop(cells, result: DropResult)
     if not cells or not result or not result.ok then
         return
@@ -565,7 +469,7 @@ function ApplyDrop(cells, result: DropResult)
     cells[result.to] = { state = STATE_OPEN, tier = result.tier }
 end
 
--- SERVER ONLY (rolls dice). Any HIDDEN cell touching an OPEN cell becomes a ghost. This is what
+-- SERVER ONLY. Any HIDDEN cell touching an OPEN cell becomes a ghost. This is what
 -- makes new objectives appear every time the board grows -- the frontier is always ghosted,
 -- everything beyond it stays blank. Returns the indices that were ghosted.
 function SeedGhostRing(cells): {number}
@@ -585,12 +489,12 @@ function SeedGhostRing(cells): {number}
         end
     end
     for _, i in ipairs(_toGhost) do
-        cells[i] = RandomGhostFor(i)
+        cells[i] = GhostFor(i)
     end
     return _toGhost
 end
 
--- SERVER ONLY (rolls dice). Grow the board outward from a just-satisfied ghost at `index`: break
+-- SERVER ONLY. Grow the board outward from a just-satisfied ghost at `index`: break
 -- its locked neighbours open (UNLOCK_NEIGHBOURS_OPEN) or just reveal them as ghosts, then re-seed
 -- a fresh ghost ring against the new frontier. Returns the indices that changed (opened, or newly
 -- revealed ghosts), so the client can animate them breaking.
@@ -617,7 +521,7 @@ function ExpandFrom(cells, index: number): {number}
     return _revealed
 end
 
--- SERVER ONLY (rolls dice). A brand-new board: everything hidden, the start rectangle opened,
+-- SERVER ONLY. A brand-new board: everything hidden, GHOST_MAP's start cells opened,
 -- and the first ghost ring seeded around it.
 function NewBoard(): {Cell}
     local _cells = {}
@@ -653,28 +557,6 @@ function RandomEmptyOpenCell(cells): number | nil
     return _empty[math.random(1, #_empty)]
 end
 
--- Is there any legal merge left: two open items of the same (non-top) tier, or an item matching
--- a ghost? A full board with none of these is stuck until the player sells or delivers.
-function HasLegalMerge(cells): boolean
-    local _seen: {[number]: boolean} = {}
-    for i = 1, CELL_COUNT do
-        local _cell = CellAt(cells, i)
-        if _cell.state == STATE_OPEN and _cell.tier and _cell.tier < MAX_TIER then
-            if _seen[_cell.tier] then
-                return true
-            end
-            _seen[_cell.tier] = true
-        end
-    end
-    for i = 1, CELL_COUNT do
-        local _cell = CellAt(cells, i)
-        if _cell.state == STATE_GHOST and _cell.tier and _seen[_cell.tier] then
-            return true
-        end
-    end
-    return false
-end
-
 -- Share of the playable area holding an item, 0..100 (telemetry's board_fill_pct).
 function BoardFillPct(cells): number
     local _open, _filled = 0, 0
@@ -693,21 +575,27 @@ function BoardFillPct(cells): number
     return math.floor(_filled * 100 / _open + 0.5)
 end
 
--- Delivery row for a tier, or nil when that tier cannot be delivered.
-function DeliveryFor(tier: number?)
-    if type(tier) ~= "number" or tier < DELIVER_MIN_TIER then
-        return nil
+-- The multipliers a player who has discovered up to `highestTier` can use, ascending.
+function UnlockedMultipliers(highestTier: number): {number}
+    local _out = {}
+    for _, row in ipairs(SPAWN_MULTIPLIERS) do
+        if highestTier >= row.unlockTier then
+            table.insert(_out, row.mult)
+        end
     end
-    return DELIVERY[tier]
+    return _out
 end
 
-function IsDeliverable(tier: number?): boolean
-    return DeliveryFor(tier) ~= nil
+-- The largest unlocked multiplier.
+function MaxMultiplier(highestTier: number): number
+    local _unlocked = UnlockedMultipliers(highestTier)
+    return _unlocked[#_unlocked] or 1
 end
 
--- Is `mult` one of the offered spawn multipliers? The server checks every spawn request with it.
-function IsSpawnMultiplier(mult): boolean
-    for _, m in ipairs(SPAWN_MULTIPLIERS) do
+-- Is `mult` an offered multiplier, and unlocked at `highestTier`? The server checks every spawn
+-- request with it.
+function IsMultiplierUnlocked(mult, highestTier: number): boolean
+    for _, m in ipairs(UnlockedMultipliers(highestTier)) do
         if m == mult then
             return true
         end
@@ -715,64 +603,58 @@ function IsSpawnMultiplier(mult): boolean
     return false
 end
 
+-- SERVER ONLY (rolls dice). The luck of one spawn at multiplier `mult`: LUCK_NONE, LUCK_LUCKY or
+-- LUCK_LEGENDARY.
+function RollSpawnLuck(mult: number): string
+    local _odds = SPAWN_LUCK[mult]
+    if not _odds then
+        return LUCK_NONE
+    end
+    local _roll = math.random()
+    if _roll < _odds.legendary then
+        return LUCK_LEGENDARY
+    end
+    if _roll < _odds.legendary + _odds.lucky then
+        return LUCK_LUCKY
+    end
+    return LUCK_NONE
+end
+
 -- Tokens one generator tap costs at multiplier `mult`.
 function SpawnCost(mult: number): number
     return SPAWN_COST * mult
 end
 
--- The tier one generator tap spawns at multiplier `mult` (log2 of it, above SPAWN_TIER), plus
--- LUCKY_TIER_BONUS on a lucky roll. Never the top tier, which could only auto-deliver.
-function SpawnTierFor(mult: number, lucky: boolean?): number
+-- The tier one generator tap spawns at multiplier `mult` (log2 of it, above SPAWN_TIER), plus the
+-- LUCK_BONUS of its luck roll. Never the top tier: that is only ever made by merging.
+function SpawnTierFor(mult: number, luck: string?): number
     local _tier = SPAWN_TIER
     local _m = 1
     while _m < mult do
         _m = _m * 2
         _tier = _tier + 1
     end
-    if lucky then
-        _tier = _tier + LUCKY_TIER_BONUS
-    end
+    _tier = _tier + (LUCK_BONUS[luck or LUCK_NONE] or 0)
     return math.min(_tier, math.max(1, MAX_TIER - 1))
 end
 
--- Tokens refunded for selling an item of `tier`.
-function SellRefund(tier: number?): number
-    if type(tier) ~= "number" or tier < SELL_REFUND_MIN_TIER then
-        return 0
+-- A fresh "which offers were bought" list: one false per TOPUP_OFFERS entry.
+function NewOffersBought(): {boolean}
+    local _out = {}
+    for i = 1, #TOPUP_OFFERS do
+        _out[i] = false
     end
-    return SELL_REFUND
+    return _out
 end
 
--- The bonus reward for an outcome id, scaled by a delivery multiplier where it applies. Returns
--- nil for BONUS_NONE. Shared so the HUD's wheel labels agree with what the server pays.
-function BonusReward(id: string, mult: number?)
-    local _base = BONUS_REWARDS[id]
-    if not _base then
-        return nil
-    end
-    local _amount = _base.amount
-    if _base.scales and mult then
-        _amount = math.floor(_base.amount * mult + 0.5)
-    end
-    return { kind = _base.kind, amount = _amount, label = _base.label, icon = _base.icon, id = id }
-end
-
--- SERVER ONLY (rolls dice). The bonus outcome id for delivering `tier`.
-function RollBonus(tier: number): string
-    local _table = if tier >= BONUS_HIGH_MIN_TIER then BONUS_TABLES.high else BONUS_TABLES.low
-    local _total = 0
-    for _, row in ipairs(_table) do
-        _total = _total + row.weight
-    end
-    local _roll = math.random() * _total
-    local _acc = 0
-    for _, row in ipairs(_table) do
-        _acc = _acc + row.weight
-        if _roll < _acc then
-            return row.id
+-- Is any offer still unbought?
+function HasOffersLeft(bought): boolean
+    for i = 1, #TOPUP_OFFERS do
+        if not (bought and bought[i]) then
+            return true
         end
     end
-    return BONUS_NONE
+    return false
 end
 
 -- Short player-facing text for a reward, e.g. "+2 Merge Tokens". An item's own label wins.

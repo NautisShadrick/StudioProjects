@@ -18,22 +18,23 @@
 -- everything it is asked to do.
 --
 -- Spawns launch IMMEDIATELY but land where the SERVER says: the server picks a random free cell
--- (and sometimes rolls a "Lucky!" item a tier higher), so the flight leaves the generator at once
+-- (and sometimes rolls a "Lucky!" or "Legendary!" item higher), so the flight leaves the generator
 -- as the multiplier's tier, aims at the board, and bends onto the real cell -- repainted to the
 -- real tier -- the moment the confirming snapshot names it. The cell is held empty until the
 -- flight lands, so an item never pops in before its flight arrives.
 --
--- The multiplier button (x1/x2/x4/x8) picks what one generator tap spends and spawns: M tokens
--- for the item M tier-1s would merge into. It cycles only through what the wallet can afford,
--- and steps itself down when the wallet no longer covers it.
+-- The multiplier button picks what one generator tap spends and spawns: M tokens for the item M
+-- tier-1s would merge into. Only x1 exists at first; x2 and x4 unlock with items 8 and 10, each
+-- announced by a "Higher Power Boost Available!" bubble. A tap cycles through the unlocked ones
+-- the wallet can afford and flashes "MAX X<n>" on the highest; the button steps itself down when
+-- the wallet no longer covers it.
 --
--- Tapping (not dragging) an item SELECTS it and opens the action strip: Sell always, Deliver
--- for tier 5+. Deliveries, first discoveries and the jackpot queue up as full-screen overlays
+-- First discoveries, the jackpot and the out-of-tokens offer queue up as full-screen overlays
 -- and play one after another; the server has already paid them by the time they show.
 --
 -- Every animation runs on TweenModule. This script is large enough that Luau's ~200 locals per
 -- scope is a real limit, so helpers are grouped into tables (anim, fx, track, drag, spawn,
--- popup, sel), elements added after the first build are looked up into `ui` rather than bound,
+-- popup), elements added after the first build are looked up into `ui` rather than bound,
 -- and class names live in CLASSES rather than each taking a top-level local.
 
 --------------------------------
@@ -76,6 +77,8 @@ local CLASSES = {
     worldTopIcon = "world-top-icon",
     slot = "track-slot",
     slotArt = "track-slot-art",
+    slotSil = "track-slot-sil",
+    silPrefix = "track-sil-",
     slotFound = "track-slot-found",
     slotNext = "track-slot-next",
     slotCrown = "track-slot-crown",
@@ -99,7 +102,6 @@ local CLASSES = {
     glow = "fx-glow",
     coin = "fx-coin",
     chest = "fx-chest",
-    energy = "fx-energy",
     ring = "fx-ring",
     ringGold = "fx-ring-gold",
     sand = "fx-sand",
@@ -108,27 +110,31 @@ local CLASSES = {
     floatText = "fx-float-text",
     floatTextEnergy = "fx-float-text-energy",
     floatTextPoints = "fx-float-text-points",
+    floatTextMax = "fx-float-text-max",
     luckyText = "fx-lucky-text",
+    legendaryText = "fx-legendary-text",
     ticket = "fx-ticket",
     token = "fx-token",
     rewardItem = "reward-icon-item",
     rewardCrown = "reward-icon-crown",
     rewardToken = "reward-icon-token",
     rewardTicket = "reward-icon-ticket",
-    rewardEnergy = "reward-icon-battery",
-    rewardNone = "reward-icon-none",
     -- Every reward-icon-* class, so an element can be cleared before a new icon is applied.
     rewardIcons = {
-        "reward-icon-item", "reward-icon-crown", "reward-icon-token", "reward-icon-token-stack",
-        "reward-icon-ticket", "reward-icon-ticket-stack", "reward-icon-battery",
-        "reward-icon-battery-max", "reward-icon-none", "reward-icon-recolour", "reward-icon-epic",
+        "reward-icon-item", "reward-icon-crown", "reward-icon-token", "reward-icon-ticket",
+        "reward-icon-recolour", "reward-icon-epic",
         "jackpot-icon-hat", "jackpot-icon-coat", "jackpot-icon-boots", "jackpot-icon-cutlass",
     },
-    selected = "cell-selected",
-    deliverable = "cell-deliverable",
-    wheelIcon = "wheel-icon",
-    actionDisabled = "action-button-disabled",
     resetArmed = "reset-button-armed",
+    offer = "topup-offer",
+    offerIcon = "topup-offer-icon",
+    offerAmount = "topup-offer-amount",
+    offerBuy = "topup-offer-buy",
+    offerPrice = "topup-offer-price",
+    offerBought = "topup-offer-bought",
+    ctaButton = "cta-button",
+    ctaFace = "cta-face",
+    ctaLabel = "cta-label",
 }
 
 --------------------------------
@@ -259,12 +265,9 @@ local SIZES = {
     item = 40,          -- .cell-item / .flying-item
     itemTopOffset = -1, -- .cell-item sits 1px above the cell centre (top 2px in a 46px cell)
     revealItem = 124,   -- .reveal-item
-    slotArt = 22,       -- .track-slot-art
+    slotArt = 24,       -- .track-slot-art
     tooltipWidth = 120, -- .track-tooltip
     stage = 230,        -- .stage-fill
-    wheel = 220,        -- .spinner-wheel
-    wheelIcon = 34,     -- .wheel-icon
-    wheelIconRadius = 64,
 }
 
 -- How far the finger must travel before a drag starts rather than reading as a tap.
@@ -295,18 +298,9 @@ local TIMING = {
     hintRepeat = 3.5,
     spawnGlide = 0.16,     -- a flight that arrived before the server named its cell glides there
     spawnTapGap = 0.12,    -- generator taps closer than this are ignored (server throttles too)
-    lucky = 1.3,           -- the "Lucky!" label's whole pop, hold and fade
-    ticketCount = 0.7,
-    spin = 2.8,
-    deliverArm = 0.5,      -- after the wheel stops, before "Tap to Collect" accepts taps
-    actionTimeout = 3,
+    luck = 1.3,            -- the "Lucky!" / "Legendary!" label's whole pop, hold and fade
     resetArm = 3,          -- the armed RESET button waits this long for its confirming tap
 }
-
--- The wheel spins this many full turns before settling, plus up to +-WHEEL_JITTER degrees
--- inside the landing segment so it does not always stop dead centre.
-local WHEEL_TURNS = 4
-local WHEEL_JITTER = 14
 
 -- Toast: fades in while sliding up, holds, then fades out.
 local TOAST_RISE_PX = 24
@@ -320,17 +314,18 @@ local WORLD_TOP_BUTTON_INDEX = 0
 local DEBUG_DRAG = false
 
 local DEFAULT_HINT = "Drag an item onto a matching item to merge it"
+-- Once every item is found the jackpot is paid and nothing more can be earned.
+local JACKPOT_HINT = "You found every item! Keep merging just for fun"
 -- Rejection reasons -> player-facing copy. Reasons the player cannot act on (an out-of-sync
 -- move, a drag of nothing) are deliberately absent and fall through to the default hint.
-local BOARD_FULL_HINT = "Board full! Tap an item and Sell it to make room"
 local REJECT_MESSAGES = {
     no_energy = "Out of Merge Tokens!",
-    board_full = "Board is full! Sell an item to make room",
+    board_full = "Board is full! Merge items to make room",
     mismatch = "Those items don't match",
     max_tier = "That's already the best item!",
     locked = "That sand is still locked",
-    not_deliverable = "Only Treasure Chests and up can be delivered",
     topup_unavailable = "Token packs aren't available yet",
+    offer_bought = "You already bought that pack",
 }
 
 -- Overlay phases. Board input is only accepted in PHASE_IDLE.
@@ -340,8 +335,6 @@ local PHASE_REVEAL_READY = "reveal_ready"
 local PHASE_COLLECTING = "collecting"
 local PHASE_WIN = "win"
 local PHASE_INFO = "info"
-local PHASE_DELIVER = "deliver"
-local PHASE_DELIVER_READY = "deliver_ready"
 local PHASE_TOPUP = "topup"
 
 --------------------------------
@@ -380,8 +373,8 @@ local dragState: any = nil
 -- A legal drop sent to the server and not yet confirmed, or nil.
 -- { from, to, kind, element, rejected, timeout }. The dragged element stays parked on the
 -- target until the confirming snapshot, so nothing flickers for the round trip. The server tags
--- its answer to a move (`moved`), so a spawn, sell or delivery snapshot arriving in between can
--- never be mistaken for it.
+-- its answer to a move (`moved`), so a spawn snapshot arriving in between can never be mistaken
+-- for it.
 local commit: any = nil
 
 -- Spawn flights awaiting their snapshot, oldest first (the server answers in order).
@@ -408,7 +401,6 @@ local layoutRetries: number = 0
 -- Full-screen moments waiting their turn, oldest first. Each is one of:
 --   { kind = "item", tier }        first discovery of an item tier (the top tier then plays
 --                                  the jackpot screen)
---   { kind = "deliver", data }     a delivery (the manager's `delivered` extra)
 --   { kind = "topup" }             the out-of-tokens offer
 local revealQueue: {any} = {}
 -- The item entry currently in the reveal overlay.
@@ -423,20 +415,19 @@ local ui: any = {
     jackpotPending = false,
     -- The small jackpot cards' check marks, popped in when the jackpot is collected.
     prizeChecks = {},
-    wheelAngle = 0,
-    wheelIcons = {},
-    deliverData = nil,
-    boardFullHint = false,
-    -- Index into config.SPAWN_MULTIPLIERS of the selected spawn multiplier, and the item-tier
-    -- class currently painted on the generator's badge.
+    -- Index into the UNLOCKED multipliers (see spawn.unlocked) of the selected one, and the
+    -- item-tier class currently painted on the generator's badge.
     multiplierIndex = 1,
     generatorShellClass = nil,
+    -- The highest multiplier the player has been shown unlocking (nil until the track is seeded),
+    -- and whether the "Higher Power Boost Available!" bubble is waiting for the next button tap.
+    knownMaxMult = nil,
+    boostPending = false,
+    -- Out-of-tokens offer cards, one per config.TOPUP_OFFERS entry: { root, buy, price }.
+    offerCards = {},
     -- The tier the track's reward bubble currently sits over, or nil while it is hidden.
     tooltipTier = nil,
 }
-
--- Tap selection. { index = cell or nil, busy = a deliver/sell is awaiting its snapshot }
-local sel: any = { index = nil, busy = false, busyTimer = nil }
 
 -- Endless ambient tweens (stopped on Hide) and the ones owned by the current overlay.
 local loopTweens: {any} = {}
@@ -736,21 +727,26 @@ function fx.floatText(point: Vector2, text: string, extraClass: string?, layer: 
     end)
 end
 
--- The "Lucky!" stamp over a lucky spawn: slams in tilted and oversized, wobbles upright-ish,
--- drifts up and fades, with a gold ring and a spray of stars behind it.
-function fx.lucky(point: Vector2)
-    fx.ring(point, 64, 0.45, true)
-    fx.burst(point, 8, 44, CLASSES.star, 14, 0.6)
+-- The "Lucky!" / "Legendary!" stamp over a lucky spawn: slams in tilted and oversized, wobbles
+-- upright-ish, drifts up and fades, with a gold ring and a spray of stars behind it. Legendary
+-- (+2 tiers) gets a bigger ring and burst and its own colours.
+function fx.luck(point: Vector2, luck: string)
+    local _legendary = luck == config.LUCK_LEGENDARY
+    fx.ring(point, if _legendary then 84 else 64, 0.45, true)
+    fx.burst(point, if _legendary then 14 else 8, if _legendary then 60 else 44, CLASSES.star, 14, 0.6)
 
     local _label = Label.new()
     _label:AddToClassList(CLASSES.luckyText)
+    if _legendary then
+        _label:AddToClassList(CLASSES.legendaryText)
+    end
     _label.pickingMode = PickingMode.Ignore
-    _label.text = "Lucky!"
+    _label.text = if _legendary then "Legendary!" else "Lucky!"
     -- Centred on the item, lifted so it sits over the item's top edge like a stamp.
     anim.place(_label, point.x - 75, point.y - 22 - 30)
     _fxLayer:Add(_label)
     _label:BringToFront()
-    anim.run(TIMING.lucky, Easing.linear, function(t)
+    anim.run(TIMING.luck, Easing.linear, function(t)
         local _in = clamp(t / 0.22, 0, 1)
         anim.scale(_label, lerp(0.2, 1, anim.outBackStrong(_in)))
         anim.rotate(_label, -14 + math.sin(_in * math.pi * 2) * 8 * (1 - _in))
@@ -855,12 +851,8 @@ local function paintTier(element: VisualElement, tier: number, previousClass: st
     return nil
 end
 
--- The icon class for a reward: its own `icon` override, else one per reward kind. nil (no
--- reward) is the "no bonus" icon.
+-- The icon class for a reward: its own `icon` override, else one per reward kind.
 local function rewardIconClass(reward): string
-    if not reward then
-        return CLASSES.rewardNone
-    end
     if reward.icon then
         return reward.icon
     end
@@ -869,9 +861,6 @@ local function rewardIconClass(reward): string
     end
     if reward.kind == config.REWARD_TICKETS then
         return CLASSES.rewardTicket
-    end
-    if reward.kind == config.REWARD_ENERGY then
-        return CLASSES.rewardEnergy
     end
     return CLASSES.rewardItem
 end
@@ -890,9 +879,6 @@ local function rewardParticleClass(reward): string
     end
     if reward and reward.kind == config.REWARD_TICKETS then
         return CLASSES.ticket
-    end
-    if reward and reward.kind == config.REWARD_ENERGY then
-        return CLASSES.energy
     end
     return CLASSES.chest
 end
@@ -1083,10 +1069,6 @@ local function renderCell(index: number)
         or spawnHolds[index] == true
     setClass(_ui.item, CLASSES.itemLifted, _held)
     setClass(_ui.shadow, CLASSES.itemLifted, _held)
-
-    local _isItem = _cell.state == config.STATE_OPEN and _cell.tier ~= nil and not _held
-    setClass(_ui.highlight, CLASSES.selected, _isItem and sel.index == index)
-    setClass(_ui.tile, CLASSES.deliverable, _isItem and config.IsDeliverable(_cell.tier))
 end
 
 -- Tokens as SHOWN: the server's count, less what the taps still awaiting their snapshot cost,
@@ -1105,9 +1087,16 @@ local function displayedEnergy(): number
     return math.max(0, manager.GetTokens() - _unconfirmed)
 end
 
+-- The multipliers unlocked by what the player has been SHOWN discovering, so x2 arrives with
+-- the item 8 reveal rather than a frame before it. The server's own count is never behind this,
+-- so it always accepts what the button offers.
+function spawn.unlocked(): {number}
+    return config.UnlockedMultipliers(shownHighestTier)
+end
+
 -- The selected spawn multiplier, and what one generator tap costs at it.
 function spawn.multiplier(): number
-    return config.SPAWN_MULTIPLIERS[ui.multiplierIndex] or 1
+    return spawn.unlocked()[ui.multiplierIndex] or 1
 end
 
 function spawn.cost(): number
@@ -1149,6 +1138,8 @@ end
 -- multiplier the wallet no longer covers steps down to the largest one it does, so a tap never
 -- asks for more than the player has.
 function spawn.refreshMultiplier()
+    -- A new event (or a QA reset) can take unlocks away again.
+    ui.multiplierIndex = clamp(ui.multiplierIndex, 1, #spawn.unlocked())
     local _energy = displayedEnergy()
     while ui.multiplierIndex > 1 and _energy < spawn.cost() do
         ui.multiplierIndex = ui.multiplierIndex - 1
@@ -1159,14 +1150,29 @@ function spawn.refreshMultiplier()
         ui.generatorShellClass)
 end
 
--- The multiplier button: step to the next multiplier the wallet can afford, wrapping to x1.
+-- "MAX X<n>" pops off the button: the player is on (or only has) the highest multiplier.
+function spawn.flashMax(mult: number)
+    fx.floatText(fx.point(_fxLayer, ui.multiplierButton), "MAX X" .. tostring(mult), CLASSES.floatTextMax)
+    playSound("HapticsLight")
+end
+
+-- The multiplier button: step to the next unlocked multiplier the wallet can afford, wrapping
+-- to x1. With only x1 unlocked it just flashes "MAX X1".
 function spawn.cycleMultiplier()
     markInteraction()
     if not isOpen or not manager.IsLoaded() or phase ~= PHASE_IDLE then
         return
     end
-    local _next = (ui.multiplierIndex % #config.SPAWN_MULTIPLIERS) + 1
-    local _nextMult = config.SPAWN_MULTIPLIERS[_next]
+    spawn.hideBoost()
+    local _unlocked = spawn.unlocked()
+    local _max = _unlocked[#_unlocked] or 1
+    if #_unlocked <= 1 then
+        anim.pop(ui.multiplierLabel, 1.25, 0.3)
+        spawn.flashMax(_max)
+        return
+    end
+    local _next = (ui.multiplierIndex % #_unlocked) + 1
+    local _nextMult = _unlocked[_next]
     if displayedEnergy() < config.SpawnCost(_nextMult) then
         if ui.multiplierIndex == 1 then
             -- Nothing above x1 is affordable: say why the tap did nothing.
@@ -1184,6 +1190,37 @@ function spawn.cycleMultiplier()
     anim.pop(ui.generatorShell, 1.5, 0.4)
     playSound("ButtonClick")
     playSound("HapticsLight")
+    if spawn.multiplier() == _max then
+        spawn.flashMax(_max)
+    end
+end
+
+-- "Higher Power Boost Available!": pops up over the multiplier button when a reveal that unlocks
+-- a higher multiplier is collected, and stays until the button is next tapped. It is held while
+-- the HUD is closed and shown on the next open.
+function spawn.showBoost()
+    ui.boostPending = true
+    if not isOpen then
+        return
+    end
+    anim.show(ui.boostBubble, true)
+    anim.pop(ui.boostBubble, 0, 0.55)
+    playSound("TilePop")
+end
+
+function spawn.hideBoost()
+    ui.boostPending = false
+    anim.show(ui.boostBubble, false)
+end
+
+-- The shown track just moved forward: announce a newly unlocked multiplier.
+function spawn.checkUnlock()
+    local _max = config.MaxMultiplier(shownHighestTier)
+    if ui.knownMaxMult and _max > ui.knownMaxMult then
+        spawn.showBoost()
+    end
+    ui.knownMaxMult = _max
+    spawn.refreshMultiplier()
 end
 
 local function refreshEnergy(bump: boolean)
@@ -1292,6 +1329,7 @@ end
 -- collected, the bubble hops to the next one. (When animating, the jackpot cards' checks are
 -- left to collectWin, so they land with the prize.)
 function track.refreshTrack(animate: boolean)
+    _hintLabel.text = if shownHighestTier >= config.MAX_TIER then JACKPOT_HINT else DEFAULT_HINT
     for tier, slot in pairs(slotElements) do
         setClass(slot.root, CLASSES.slotFound, tier <= shownHighestTier)
         setClass(slot.root, CLASSES.slotNext, tier == shownHighestTier + 1)
@@ -1338,6 +1376,13 @@ function track.buildTrack()
         _art:AddToClassList(CLASSES.slotArt)
         _art.pickingMode = PickingMode.Ignore
         paintTier(_art, tier, nil)
+        -- The flat silhouette shown until the tier is found. A child of the art so it scales
+        -- with the next-slot pulse.
+        local _sil = VisualElement.new()
+        _sil:AddToClassList(CLASSES.slotSil)
+        _sil:AddToClassList(CLASSES.silPrefix .. tostring(tier))
+        _sil.pickingMode = PickingMode.Ignore
+        _art:Add(_sil)
         if tier == config.MAX_TIER then
             _root:AddToClassList(CLASSES.slotCrown)
         end
@@ -1688,8 +1733,8 @@ function spawn.finishSpawn(entry)
         local _point = cellPoint(entry.target)
         fx.burst(_point, 6, 30, CLASSES.bubble, 8, 0.45, nil, true)
         fx.ring(_point, 48, 0.35, false)
-        if entry.lucky then
-            fx.lucky(_point)
+        if entry.luck and entry.luck ~= config.LUCK_NONE then
+            fx.luck(_point, entry.luck)
             playSound("TilePop")
         end
     end
@@ -1756,10 +1801,10 @@ end
 -- The server named this flight's cell. A flight still in the air bends onto it; one that has
 -- already arrived (at the board's middle) glides the short way over. A flight whose real tier
 -- differs from the one it launched as (a lucky roll) swaps its art for the real one.
-function spawn.confirmSpawn(entry, index: number, lucky: boolean, tier: number?)
+function spawn.confirmSpawn(entry, index: number, luck: string, tier: number?)
     entry.target = index
     entry.confirmed = true
-    entry.lucky = lucky
+    entry.luck = luck
     spawnHolds[index] = true
     renderCell(index)
     if tier and tier ~= entry.tier and entry.element then
@@ -1819,7 +1864,6 @@ function spawn.requestSpawn()
         return
     end
     spawn.lastTapAt = ambientTime
-    sel.clear()
     spawn.pressGenerator()
 
     -- Step the multiplier down first if the wallet no longer covers it, so the only refusal
@@ -1828,13 +1872,16 @@ function spawn.requestSpawn()
     local _mult = spawn.multiplier()
     local _cost = config.SpawnCost(_mult)
     if displayedEnergy() < _cost then
-        -- Still sent to the server (it is cheap), because the server decides whether the
-        -- out-of-tokens offer shows; it answers with a rejection, never a spawn, so no flight
-        -- is launched here.
-        showToast(REJECT_MESSAGES.no_energy)
-        anim.shake(_energyChip, 7, 0.4)
-        playSound("HapticsLight")
-        manager.RequestSpawn(_mult)
+        -- Nothing is sent: the server would only refuse it. While an offer is still for sale the
+        -- tap opens the offers; once every one is bought it just says no.
+        if manager.HasOffersLeft() then
+            popup.enqueue({ kind = "topup" }, 0)
+        else
+            showToast(REJECT_MESSAGES.no_energy)
+            anim.shake(_energyChip, 7, 0.4)
+            anim.wiggle(_generatorButton, 6)
+            playSound("HapticsLight")
+        end
         return
     end
     if not hasSpawnRoom() then
@@ -1868,8 +1915,8 @@ function spawn.requestSpawn()
 end
 
 -- The server's answer to one tap: `indices` holds the cell it landed on, `tier` what landed
--- there; `lucky` marks a roll above the multiplier's tier.
-function spawn.onSpawned(indices, lucky: boolean, tier: number?)
+-- there; `luck` is the Config.LUCK_* it rolled.
+function spawn.onSpawned(indices, luck: string, tier: number?)
     local _first = indices and indices[1]
     if not _first then
         return
@@ -1888,8 +1935,8 @@ function spawn.onSpawned(indices, lucky: boolean, tier: number?)
         Timer.After(0, function()
             if isOpen then
                 popItem(_first, 0.3)
-                if lucky then
-                    fx.lucky(cellPoint(_first))
+                if luck ~= config.LUCK_NONE then
+                    fx.luck(cellPoint(_first), luck)
                 end
             end
         end)
@@ -1899,7 +1946,7 @@ function spawn.onSpawned(indices, lucky: boolean, tier: number?)
         _entry.timeout:Stop()
         _entry.timeout = nil
     end
-    spawn.confirmSpawn(_entry, _first, lucky, tier)
+    spawn.confirmSpawn(_entry, _first, luck, tier)
 end
 
 -- Closing the HUD mid-flight: every flight loses its visuals. Pending taps stay in the queue
@@ -1940,16 +1987,11 @@ local function renderBoard()
         trackSeeded = true
         shownHighestTier = _actual
         track.refreshTrack(false)
+        -- Unlocks already earned are not news.
+        ui.knownMaxMult = config.MaxMultiplier(shownHighestTier)
+        spawn.hideBoost()
+        spawn.refreshMultiplier()
     end
-
-    -- The board-full hint stands until there is room again.
-    if ui.boardFullHint and #config.EmptyOpenCells(manager.GetCells()) > 0 then
-        ui.boardFullHint = false
-    end
-    if not sel.index then
-        _hintLabel.text = if ui.boardFullHint then BOARD_FULL_HINT else DEFAULT_HINT
-    end
-    sel.refresh()
     anim.show(ui.resetButton, manager.CanReset())
 end
 
@@ -1994,6 +2036,9 @@ local function ambientTick()
         anim.scale(_generatorButton, 1 + 0.035 * math.sin(_t * 4.2))
     end
     anim.move(_tooltipBob, 0, -3 * (1 + math.sin(_t * 3.4)))
+    if ui.boostPending then
+        anim.move(ui.boostBob, 0, -3 * (1 + math.sin(_t * 4)))
+    end
     anim.rotate(_energyBolt, 7 * math.sin(_t * 2.2))
 
     local _hover = dragState and dragState.hoverIndex
@@ -2132,18 +2177,6 @@ local function buildGrid()
             _cellElement:RegisterCallback(PointerDownEvent, function()
                 pressedIndex = _index
             end)
-            -- A release on the same cell with no drag in between is a TAP: select the item.
-            -- A drag consumes pressedIndex when it begins, so its release never gets here.
-            _cellElement:RegisterCallback(PointerUpEvent, function()
-                if pressedIndex ~= _index or dragState or commit then
-                    return
-                end
-                pressedIndex = nil
-                if isOpen and manager.IsLoaded() then
-                    markInteraction()
-                    sel.select(_index)
-                end
-            end)
         end
     end
 
@@ -2189,9 +2222,8 @@ function popup.startShowcaseLoops(rays: VisualElement, raysBack: VisualElement?,
 end
 
 -- Paint the reveal overlay's art and copy for a discovered item. The line under the name says
--- what the item is good for: the jackpot for the top tier, its first-discovery reward, a delivery
--- for tier 5+, otherwise how far the player still is from the jackpot. Returns false when there
--- is nothing to show.
+-- what the item is good for: the jackpot for the top tier, its first-discovery reward, otherwise
+-- how far the player still is from the jackpot. Returns false when there is nothing to show.
 function popup.paintReveal(entry): boolean
     local _info = config.TierInfo(entry.tier)
     if not _info then
@@ -2200,7 +2232,6 @@ function popup.paintReveal(entry): boolean
     revealItemClass = paintTier(_revealItem, entry.tier, revealItemClass)
     _revealTitle.text = "NEW ITEM REVEALED!"
     _revealName.text = _info.label
-    local _delivery = config.DeliveryFor(entry.tier)
     -- Everything this collect pays: this tier's rewards plus any a jump skipped past.
     local _rewards = config.DiscoveryRewardsBetween(shownHighestTier + 1, entry.tier)
     ui.revealRewardChips:Clear()
@@ -2212,9 +2243,6 @@ function popup.paintReveal(entry): boolean
         anim.show(_revealRewardIcon, false)
         _revealRewardLabel.text = "Reward:"
         track.fillRewards(ui.revealRewardChips, _rewards, true)
-    elseif _delivery then
-        setRewardIcon(_revealRewardIcon, CLASSES.rewardTicket)
-        _revealRewardLabel.text = "Deliver it for " .. tostring(_delivery.tickets) .. " Tickets!"
     else
         local _left = config.MAX_TIER - entry.tier
         setRewardIcon(_revealRewardIcon, CLASSES.rewardCrown)
@@ -2440,6 +2468,7 @@ function popup.onCollected(entry)
     local _rewards = config.DiscoveryRewardsBetween(shownHighestTier + 1, entry.tier)
     shownHighestTier = math.max(shownHighestTier, entry.tier)
     track.refreshTrack(true)
+    spawn.checkUnlock()
     setBrackets(nil)
     local _slot = slotElements[entry.tier]
     local _target: VisualElement = _slot and _slot.root
@@ -2528,188 +2557,68 @@ function popup.collectReveal()
     end)
 end
 
----------------- deliver: guaranteed tickets + bonus spin ----------------
--- One icon per wheel segment, laid out around the wheel's face as its children so they turn
--- with it. Segment k sits (k - 1) * 45 degrees clockwise from 12 o'clock.
-function popup.buildWheel()
-    local _wheel = ui.spinnerWheel
-    if not _wheel then
-        return
-    end
-    _wheel:Clear()
-    ui.wheelIcons = {}
-    local _count = #config.SPINNER_SEGMENTS
-    for k, id in ipairs(config.SPINNER_SEGMENTS) do
-        local _degrees = (k - 1) * 360 / _count
-        local _rad = math.rad(_degrees)
-        local _icon = VisualElement.new()
-        _icon:AddToClassList(CLASSES.wheelIcon)
-        _icon:AddToClassList(rewardIconClass(config.BonusReward(id, nil)))
-        _icon.pickingMode = PickingMode.Ignore
-        anim.place(_icon,
-            SIZES.wheel / 2 + math.sin(_rad) * SIZES.wheelIconRadius - SIZES.wheelIcon / 2,
-            SIZES.wheel / 2 - math.cos(_rad) * SIZES.wheelIconRadius - SIZES.wheelIcon / 2)
-        anim.rotate(_icon, _degrees)
-        _wheel:Add(_icon)
-        table.insert(ui.wheelIcons, _icon)
-    end
-end
-
-function popup.showDeliver(data)
-    phase = PHASE_DELIVER
-    ui.deliverData = data
-    ui.deliverItemClass = paintTier(ui.deliverItem, data.tier, ui.deliverItemClass)
-    ui.deliverTitle.text = if data.auto then "LEGENDARY DELIVERY!" else "DELIVERED!"
-    ui.deliverTicketsLabel.text = "+0"
-    anim.fade(ui.deliverResult, 0)
-    anim.fade(ui.deliverTap, 0)
-    anim.rotate(ui.spinnerWheel, ui.wheelAngle % 360)
-
-    anim.fade(ui.deliverContent, 1)
-    anim.show(ui.deliverOverlay, true)
-    ui.deliverOverlay:BringToFront()
-    _topLayer:BringToFront()
-    playSound("RewardsCardFlip")
-    playSound("HapticsLight")
-
-    anim.run(0.3, Easing.linear, function(t)
-        anim.fade(ui.deliverScrim, t)
-    end)
-    anim.run(0.45, anim.outBackStrong, function(t)
-        anim.scale(ui.deliverTitle, t)
-        anim.fade(ui.deliverTitle, clamp(t * 2, 0, 1))
-    end, nil, 0.05)
-    anim.run(0.7, anim.outElastic, function(t)
-        anim.scale(ui.deliverItem, t)
-        anim.rotate(ui.deliverItem, (1 - t) * -25)
-    end, nil, 0.15)
-    anim.run(0.5, anim.outBack, function(t)
-        anim.scale(ui.spinnerStage, lerp(0.6, 1, t))
-        anim.fade(ui.spinnerStage, clamp(t * 2, 0, 1))
-    end, nil, 0.25)
-    anim.loop(1.2, true, anim.inOutSine, function(t)
-        anim.scale(ui.spinnerGlow, lerp(0.92, 1.08, t))
-    end, overlayLoops)
-
-    -- Count the guaranteed tickets up, then spin for the bonus.
-    local _countDelay = 0.45
-    anim.run(TIMING.ticketCount, anim.outCubic, function(t)
-        ui.deliverTicketsLabel.text = "+" .. tostring(math.floor(data.tickets * t + 0.5))
-    end, function()
-        ui.deliverTicketsLabel.text = "+" .. tostring(data.tickets)
-        anim.pop(ui.deliverTicketsLabel, 1.4, 0.45)
-        playSound("CoinLandGold")
-    end, _countDelay)
-    Timer.After(_countDelay + TIMING.ticketCount + 0.25, function()
-        popup.spinWheel(data)
-    end)
-end
-
--- Spin to a segment showing the server's outcome. Fast then slowing (ease out), several full
--- turns, landing a little off-centre inside the segment.
-function popup.spinWheel(data)
-    if phase ~= PHASE_DELIVER or ui.deliverData ~= data then
-        return
-    end
-    local _matches = {}
-    for k, id in ipairs(config.SPINNER_SEGMENTS) do
-        if id == data.bonusId then
-            table.insert(_matches, k)
-        end
-    end
-    if #_matches == 0 then
-        table.insert(_matches, 1)
-    end
-    local _segment = _matches[math.random(1, #_matches)]
-    local _count = #config.SPINNER_SEGMENTS
-    local _jitter = (math.random() * 2 - 1) * WHEEL_JITTER
-    -- Rotating the wheel by R moves the segment at angle a to a + R; it sits under the pointer
-    -- when a + R is a whole number of turns.
-    local _desired = (-(_segment - 1) * 360 / _count + _jitter) % 360
-    local _start = ui.wheelAngle
-    local _end = _start + 360 * WHEEL_TURNS + ((_desired - _start) % 360)
-    local _step = 360 / _count
-    local _lastTick = math.floor(_start / _step)
-    playSound("ItemWhoosh")
-    anim.run(TIMING.spin, anim.outCubic, function(t)
-        local _angle = lerp(_start, _end, t)
-        anim.rotate(ui.spinnerWheel, _angle)
-        local _tick = math.floor(_angle / _step)
-        if _tick ~= _lastTick then
-            _lastTick = _tick
-            playSound("HapticsSlider")
-        end
-    end, function()
-        ui.wheelAngle = _end % 360
-        anim.rotate(ui.spinnerWheel, ui.wheelAngle)
-        popup.showBonusResult(data)
-    end)
-end
-
-function popup.showBonusResult(data)
-    if phase ~= PHASE_DELIVER or ui.deliverData ~= data then
-        return
-    end
-    local _bonus = data.bonus
-    setRewardIcon(ui.deliverResultIcon, rewardIconClass(_bonus))
-    ui.deliverResultLabel.text = if _bonus then "+" .. config.RewardText(_bonus) else "No bonus this time"
-    anim.enter(ui.deliverResult, 0, 20, 0.4, 0)
-    local _center = fx.point(_topLayer, ui.spinnerStage)
-    if _bonus then
-        fx.flash(_center, 180, _topLayer)
-        fx.ring(_center, 160, 0.55, true, _topLayer)
-        fx.burst(_center, 14, 120, CLASSES.star, 18, 0.7, _topLayer)
-        fx.coins(_center, 8, rewardParticleClass(_bonus), _topLayer)
-        playSound("CurrencyBurst")
-    else
-        anim.shake(ui.spinnerStage, 5, 0.35)
-        playSound("CardFlip")
-    end
-    Timer.After(TIMING.deliverArm, function()
-        if phase ~= PHASE_DELIVER or ui.deliverData ~= data then
-            return
-        end
-        phase = PHASE_DELIVER_READY
-        anim.run(0.3, Easing.linear, function(t)
-            anim.fade(ui.deliverTap, t)
-        end)
-        anim.loop(0.8, true, anim.inOutSine, function(t)
-            anim.scale(ui.deliverTap, lerp(0.96, 1.06, t))
-        end, overlayLoops)
-    end)
-end
-
-function popup.collectDeliver()
-    if phase ~= PHASE_DELIVER_READY or not ui.deliverData then
-        return
-    end
-    phase = PHASE_COLLECTING
-    local _data = ui.deliverData
-    ui.deliverData = nil
-    anim.stopAll(overlayLoops)
-    playSound("HapticsLight")
-    popup.closeOverlay(ui.deliverOverlay, ui.deliverScrim, ui.deliverContent, 0.3, function()
-        -- Show the payout landing on the board: tickets float up, tokens shower the wallet.
-        if isOpen then
-            local _boardPoint = fx.point(_fxLayer, _boardFrame)
-            fx.floatText(_boardPoint, "+" .. tostring(_data.tickets) .. " Tickets")
-            fx.coins(_boardPoint, 6, CLASSES.ticket)
-            local _bonus = _data.bonus
-            if _bonus and _bonus.kind == config.REWARD_TOKENS then
-                local _chip = fx.point(_fxLayer, _energyChip)
-                fx.coins(_chip, 6, CLASSES.token)
-                fx.floatText(_chip, "+" .. tostring(_bonus.amount), CLASSES.floatTextEnergy)
-                refreshEnergy(true)
-            end
-            playSound("CoinLandGold")
-        end
-        popup.finishMoment()
-    end)
-end
-
 ---------------- top-up: out of Merge Tokens ----------------
+-- One card per config.TOPUP_OFFERS entry: the pack, its amount and its Buy button. Built once;
+-- popup.refreshOffers repaints which ones are already bought.
+function popup.buildOffers()
+    ui.topupOffers:Clear()
+    ui.offerCards = {}
+    for k, offer in ipairs(config.TOPUP_OFFERS) do
+        local _card = VisualElement.new()
+        _card:AddToClassList(CLASSES.offer)
+        _card.pickingMode = PickingMode.Ignore
+        local _icon = VisualElement.new()
+        _icon:AddToClassList(CLASSES.offerIcon)
+        _icon.pickingMode = PickingMode.Ignore
+        local _amount = Label.new()
+        _amount:AddToClassList(CLASSES.offerAmount)
+        _amount.pickingMode = PickingMode.Ignore
+        _amount.text = "+" .. tostring(offer.amount)
+        -- Dynamically created elements are only reliably tappable with pickingMode set in Lua.
+        local _buy = VisualElement.new()
+        _buy:AddToClassList(CLASSES.ctaButton)
+        _buy:AddToClassList(CLASSES.offerBuy)
+        _buy.pickingMode = PickingMode.Position
+        local _face = VisualElement.new()
+        _face:AddToClassList(CLASSES.ctaFace)
+        _face.pickingMode = PickingMode.Ignore
+        local _price = Label.new()
+        _price:AddToClassList(CLASSES.ctaLabel)
+        _price:AddToClassList(CLASSES.offerPrice)
+        _price.pickingMode = PickingMode.Ignore
+        _face:Add(_price)
+        _buy:Add(_face)
+        _card:Add(_icon)
+        _card:Add(_amount)
+        _card:Add(_buy)
+        _buy:RegisterPressCallback(function()
+            popup.buyOffer(k)
+        end)
+        ui.topupOffers:Add(_card)
+        ui.offerCards[k] = { root = _card, buy = _buy, price = _price }
+    end
+end
+
+function popup.refreshOffers()
+    for k, card in pairs(ui.offerCards) do
+        local _bought = manager.IsOfferBought(k)
+        setClass(card.root, CLASSES.offerBought, _bought)
+        card.price.text = if _bought then "Bought" else config.TOPUP_OFFERS[k].priceLabel
+    end
+end
+
+function popup.buyOffer(offerIndex: number)
+    if phase ~= PHASE_TOPUP or manager.IsOfferBought(offerIndex) then
+        return
+    end
+    anim.pop(ui.offerCards[offerIndex].buy, 0.8, 0.35)
+    manager.RequestTopUp(offerIndex)
+    popup.closeTopUp()
+end
+
 function popup.showTopUp()
     phase = PHASE_TOPUP
+    popup.refreshOffers()
     anim.fade(ui.topupContent, 1)
     anim.show(ui.topupOverlay, true)
     ui.topupOverlay:BringToFront()
@@ -2721,9 +2630,14 @@ function popup.showTopUp()
         anim.scale(ui.topupPanel, lerp(0.6, 1, t))
         anim.fade(ui.topupPanel, clamp(t * 2, 0, 1))
     end)
-    anim.loop(0.8, true, anim.inOutSine, function(t)
-        anim.scale(ui.topupBuy, lerp(1, 1.05, t))
-    end, overlayLoops)
+    for k, card in pairs(ui.offerCards) do
+        if not manager.IsOfferBought(k) then
+            local _buy = card.buy
+            anim.loop(0.8, true, anim.inOutSine, function(t)
+                anim.scale(_buy, lerp(1, 1.05, t))
+            end, overlayLoops)
+        end
+    end
 end
 
 function popup.closeTopUp()
@@ -2747,11 +2661,8 @@ function popup.startNextReveal()
     if dragState then
         drag.snapBack()
     end
-    sel.clear()
     local _entry = table.remove(revealQueue, 1)
-    if _entry.kind == "deliver" then
-        popup.showDeliver(_entry.data)
-    elseif _entry.kind == "topup" then
+    if _entry.kind == "topup" then
         popup.showTopUp()
     else
         popup.showReveal(_entry)
@@ -2775,7 +2686,6 @@ function popup.openInfo()
     if dragState then
         drag.snapBack()
     end
-    sel.clear()
     anim.fade(_infoContent, 1)
     anim.show(_infoOverlay, true)
     _infoOverlay:BringToFront()
@@ -2806,12 +2716,10 @@ function popup.abortOverlays()
     anim.stopAll(overlayLoops)
     revealQueue = {}
     revealEntry = nil
-    ui.deliverData = nil
     ui.jackpotPending = false
     anim.show(_revealOverlay, false)
     anim.show(_winOverlay, false)
     anim.show(_infoOverlay, false)
-    anim.show(ui.deliverOverlay, false)
     anim.show(ui.topupOverlay, false)
     _confettiLayer:Clear()
     _topLayer:Clear()
@@ -2821,157 +2729,9 @@ function popup.abortOverlays()
     if trackSeeded then
         shownHighestTier = manager.GetHighestTier()
         track.refreshTrack(false)
+        spawn.checkUnlock()
         -- Discovery tokens held back for an uncollected reveal are shown now.
         refreshEnergy(false)
-    end
-end
-
----------------- selection + action strip ----------------
--- Tap an item to select it; the strip under the board offers Sell (always) and Deliver (tier
--- 5+). Deliver and Sell are sent to the server and the strip locks until its snapshot lands.
-function sel.clear()
-    local _old = sel.index
-    sel.index = nil
-    if _old then
-        renderCell(_old)
-    end
-    sel.refresh()
-end
-
-function sel.select(index: number)
-    if phase ~= PHASE_IDLE or sel.busy or not config.HasItem(manager.GetCells(), index)
-        or spawnHolds[index] then
-        return
-    end
-    if sel.index == index then
-        sel.clear()
-        return
-    end
-    local _old = sel.index
-    sel.index = index
-    if _old then
-        renderCell(_old)
-    end
-    renderCell(index)
-    local _ui = cellElements[index]
-    if _ui then
-        anim.pop(_ui.item, 0.8, 0.4)
-    end
-    playSound("ButtonClick")
-    sel.refresh()
-    anim.enter(ui.actionStrip, 0, 14, 0.25, 0)
-end
-
--- Paint the strip for the selected item, or put the hint back when nothing is selected.
-function sel.refresh()
-    if not ui.actionStrip then
-        return
-    end
-    local _index = sel.index
-    local _cell = _index and config.CellAt(manager.GetCells(), _index)
-    if not _cell or _cell.state ~= config.STATE_OPEN or not _cell.tier then
-        -- The selected item merged, moved or vanished under us.
-        sel.index = nil
-        anim.show(ui.actionStrip, false)
-        anim.show(_hintLabel, true)
-        return
-    end
-    local _info = config.TierInfo(_cell.tier)
-    ui.actionName.text = if _info then _info.label else ""
-    local _refund = config.SellRefund(_cell.tier)
-    ui.sellLabel.text = if _refund > 0 then "Sell +" .. tostring(_refund) else "Sell"
-    local _delivery = config.DeliveryFor(_cell.tier)
-    anim.show(ui.deliverButton, _delivery ~= nil)
-    if _delivery then
-        ui.deliverLabel.text = "Deliver +" .. tostring(_delivery.tickets)
-    end
-    setClass(ui.sellButton, CLASSES.actionDisabled, sel.busy)
-    setClass(ui.deliverButton, CLASSES.actionDisabled, sel.busy)
-    anim.show(_hintLabel, false)
-    anim.show(ui.actionStrip, true)
-end
-
--- Lock the strip until the server answers (or the timeout gives up on it).
-function sel.lock()
-    sel.busy = true
-    if sel.busyTimer then
-        sel.busyTimer:Stop()
-    end
-    sel.busyTimer = Timer.After(TIMING.actionTimeout, function()
-        sel.busyTimer = nil
-        sel.unlock()
-    end)
-    sel.refresh()
-end
-
-function sel.unlock()
-    if sel.busyTimer then
-        sel.busyTimer:Stop()
-        sel.busyTimer = nil
-    end
-    sel.busy = false
-    sel.refresh()
-end
-
-function sel.sell()
-    if phase ~= PHASE_IDLE or sel.busy or not sel.index or commit or dragState then
-        return
-    end
-    markInteraction()
-    anim.pop(ui.sellButton, 0.8, 0.35)
-    sel.lock()
-    manager.RequestSell(sel.index)
-end
-
-function sel.deliver()
-    if phase ~= PHASE_IDLE or sel.busy or not sel.index or commit or dragState then
-        return
-    end
-    local _cell = config.CellAt(manager.GetCells(), sel.index)
-    if not config.IsDeliverable(_cell.tier) then
-        return
-    end
-    markInteraction()
-    anim.pop(ui.deliverButton, 0.8, 0.35)
-    sel.lock()
-    manager.RequestDeliver(sel.index)
-end
-
--- The sold item puffs away where it stood; a refund flies to the wallet.
-function sel.playSold(sold)
-    if not isOpen or not sold then
-        return
-    end
-    local _point = cellPoint(sold.index)
-    fx.burst(_point, 8, 36, CLASSES.sand, 8, 0.45, nil, true)
-    fx.ring(_point, 50, 0.35, false)
-    if (sold.refund or 0) > 0 then
-        local _chip = fx.point(_fxLayer, _energyChip)
-        fx.coins(_point, 4, CLASSES.token)
-        fx.floatText(_chip, "+" .. tostring(sold.refund), CLASSES.floatTextEnergy)
-        refreshEnergy(true)
-        playSound("CoinLandGold")
-    else
-        playSound("CardFlip")
-    end
-end
-
--- Board full: say so, and nudge every item so the eye goes to "pick one to sell".
-function sel.playBoardFull()
-    ui.boardFullHint = true
-    if not isOpen then
-        return
-    end
-    if not sel.index then
-        _hintLabel.text = BOARD_FULL_HINT
-    end
-    showToast(REJECT_MESSAGES.board_full)
-    anim.shake(_boardFrame, 4, 0.35)
-    local _cells = manager.GetCells()
-    for i = 1, config.CELL_COUNT do
-        if config.HasItem(_cells, i) and cellElements[i] then
-            anim.wiggle(cellElements[i].item, 10)
-        end
     end
 end
 
@@ -3007,8 +2767,8 @@ function popup.pressReset()
     manager.RequestReset()
 end
 
--- The server wiped the island. Runs BEFORE the fresh board is painted: drop every drag, flight,
--- overlay and selection, and forget what the tracks were showing so they re-seed from zero.
+-- The server wiped the island. Runs BEFORE the fresh board is painted: drop every drag, flight
+-- and overlay, and forget what the tracks were showing so they re-seed from zero.
 function popup.onReset()
     drag.teardownDrag(false)
     drag.dropCommitNow()
@@ -3024,11 +2784,8 @@ function popup.onReset()
         spawn.cancelSpawn(spawn.flights[i])
     end
     spawnHolds = {}
-    sel.unlock()
-    sel.clear()
     popup.abortOverlays()
     trackSeeded = false
-    ui.boardFullHint = false
     shownHighestTier = 1
     if not isOpen then
         return
@@ -3062,7 +2819,7 @@ function popup.playEntrance()
         anim.scale(_boardFrame, lerp(0.85, 1, t))
         anim.fade(_boardFrame, clamp(t * 2.5, 0, 1))
     end, nil, 0.16)
-    anim.enter(_bottomBar, 0, 70, 0.5, 0.24)
+    anim.enter(_bottomBar, 0, 24, 0.5, 0.24)
     anim.enter(ui.hintArea or _hintLabel, 0, 20, 0.4, 0.34)
     anim.pop(_infoButton, 0, 0.5, 0.3)
     anim.pop(_closeButton, 0, 0.5, 0.36)
@@ -3072,12 +2829,9 @@ end
 -- leading underscore). A missing name is reported once, here, rather than as a nil error later.
 local function bindExtraUi()
     local _names = {
-        "hintArea", "actionStrip", "actionName", "sellButton", "sellLabel", "deliverButton", "deliverLabel",
-        "deliverOverlay", "deliverScrim", "deliverContent", "deliverTitle", "deliverItem",
-        "deliverTicketsLabel", "spinnerStage", "spinnerGlow", "spinnerWheel",
-        "deliverResult", "deliverResultIcon", "deliverResultLabel", "deliverTap",
-        "topupOverlay", "topupScrim", "topupContent", "topupPanel", "topupAmount",
-        "topupBuy", "topupPrice", "topupLater",
+        "hintArea",
+        "topupOverlay", "topupScrim", "topupContent", "topupPanel",
+        "topupOffers", "topupLater", "boostBubble", "boostBob",
         "resetButton", "resetLabel",
         "multiplierButton", "multiplierLabel", "generatorShell",
         "revealRewardChips",
@@ -3147,6 +2901,9 @@ function Show()
     UI:HideWorldControls()
     renderBoard()
     track.refreshTrack(false)
+    if ui.boostPending then
+        spawn.showBoost()
+    end
     popup.playEntrance()
     playSound("ButtonClick")
     anim.loop(1, false, Easing.linear, function()
@@ -3170,7 +2927,6 @@ function Hide()
     drag.teardownDrag(true)
     drag.dropCommitNow()
     spawn.dropFlights()
-    sel.clear()
     popup.disarmReset()
     popup.abortOverlays()
     hideToast()
@@ -3209,9 +2965,8 @@ function self:Start()
     buildGrid()
     track.buildTrack()
     track.buildPrizeCards(_prizeRow, false)
-    popup.buildWheel()
-    ui.topupAmount.text = "+" .. tostring(config.TOPUP_AMOUNT) .. " Merge Tokens"
-    ui.topupPrice.text = config.TOPUP_PRICE_LABEL
+    popup.buildOffers()
+    anim.show(ui.boostBubble, false)
     -- Tier-1 art for the "faded twin" row of the how-to-play panel comes from the USS; nothing
     -- else in the panel is dynamic.
 
@@ -3219,7 +2974,6 @@ function self:Start()
     isOpen = false
     _hudRoot.style.display = DisplayStyle.None
     _hintLabel.text = DEFAULT_HINT
-    anim.show(ui.actionStrip, false)
 
     -- Overlays cover the close button, so it can only be pressed from the board itself.
     _closeButton:RegisterPressCallback(function()
@@ -3247,32 +3001,16 @@ function self:Start()
     ui.multiplierButton:RegisterPressCallback(function()
         spawn.cycleMultiplier()
     end)
-    ui.deliverOverlay:RegisterPressCallback(function()
-        popup.collectDeliver()
-    end)
-    ui.topupBuy:RegisterPressCallback(function()
-        if phase ~= PHASE_TOPUP then
-            return
-        end
-        anim.pop(ui.topupBuy, 0.8, 0.35)
-        manager.RequestTopUp()
-        popup.closeTopUp()
-    end)
     ui.topupLater:RegisterPressCallback(function()
         popup.closeTopUp()
     end)
     ui.resetButton:RegisterPressCallback(function()
         popup.pressReset()
     end)
-    ui.sellButton:RegisterPressCallback(function()
-        sel.sell()
-    end)
-    ui.deliverButton:RegisterPressCallback(function()
-        sel.deliver()
-    end)
-    -- Tapping the wallet while it is empty brings the offer back on demand.
+    -- Tapping the wallet while it is empty brings the offers back on demand, while any is left.
     _energyChip:RegisterPressCallback(function()
-        if phase == PHASE_IDLE and isOpen and displayedEnergy() < config.SPAWN_COST then
+        if phase == PHASE_IDLE and isOpen and displayedEnergy() < config.SPAWN_COST
+            and manager.HasOffersLeft() then
             popup.enqueue({ kind = "topup" }, 0)
         end
     end)
@@ -3293,16 +3031,14 @@ function self:Start()
         if not isOpen or not manager.IsLoaded() or phase ~= PHASE_IDLE then
             return
         end
-        -- A drag already in flight, a drop still awaiting its answer, a sell or delivery still
-        -- awaiting its answer, or a press that never landed on a cell is not a pickup.
-        if dragState or commit or sel.busy or not pressedIndex then
+        -- A drag already in flight, a drop still awaiting its answer, or a press that never
+        -- landed on a cell is not a pickup.
+        if dragState or commit or not pressedIndex then
             return
         end
-        -- Consume it, so one press can only ever start one drag (and the release that ends it
-        -- cannot also read as a tap-to-select).
+        -- Consume it, so one press can only ever start one drag.
         local _index = pressedIndex
         pressedIndex = nil
-        sel.clear()
         drag.beginDrag(_index, gesturePoint(evt))
     end)
 
@@ -3383,14 +3119,13 @@ function self:Start()
         popup.onReset()
     end)
 
-    manager.OnSpawned(function(indices, lucky, tier)
-        spawn.onSpawned(indices, lucky == true, tier)
+    manager.OnSpawned(function(indices, luck, tier)
+        spawn.onSpawned(indices, luck or config.LUCK_NONE, tier)
     end)
 
     manager.OnRejected(function(reason)
         if reason == config.REJECT_NO_ENERGY or reason == config.REJECT_BOARD_FULL then
-            -- The oldest tap still waiting for a cell was refused (a 0-token tap sends no
-            -- flight, so there may be none).
+            -- The oldest tap still waiting for a cell was refused.
             for i, pending in ipairs(pendingSpawns) do
                 if not pending.confirmed then
                     table.remove(pendingSpawns, i)
@@ -3398,12 +3133,9 @@ function self:Start()
                     break
                 end
             end
-        elseif reason == config.REJECT_NO_ITEM or reason == config.REJECT_NOT_DELIVERABLE then
-            sel.unlock()
         end
         local _message = REJECT_MESSAGES[reason]
-        -- The generator already toasted its own local refusals.
-        if _message and isOpen and reason ~= config.REJECT_NO_ENERGY then
+        if _message and isOpen then
             showToast(_message)
         end
     end)
@@ -3428,6 +3160,7 @@ function self:Start()
         if not isOpen then
             shownHighestTier = math.max(shownHighestTier, tier)
             track.refreshTrack(false)
+            spawn.checkUnlock()
             refreshEnergy(false)
             return
         end
@@ -3443,42 +3176,13 @@ function self:Start()
         end
     end)
 
-    manager.OnDelivered(function(data)
-        sel.unlock()
-        sel.clear()
-        if not isOpen or not data then
-            return
-        end
-        if not data.auto and cellElements[data.index] then
-            -- The item lifts off its cell before the overlay takes the screen.
-            local _point = cellPoint(data.index)
-            fx.flash(_point, 110)
-            fx.burst(_point, 10, 50, CLASSES.star, 15, 0.55)
-            playSound("ItemWhoosh")
-        end
-        popup.enqueue({ kind = "deliver", data = data }, if data.auto then TIMING.revealDelay else 0.25)
-    end)
-
-    manager.OnSold(function(sold)
-        sel.unlock()
-        sel.clear()
-        sel.playSold(sold)
-    end)
-
-    manager.OnBoardFull(function()
-        sel.playBoardFull()
-    end)
-
-    manager.OnTopUp(function(showOffer, toppedUp)
+    manager.OnTopUp(function(toppedUp)
         if toppedUp > 0 and isOpen then
             local _chip = fx.point(_fxLayer, _energyChip)
             fx.coins(_chip, 8, CLASSES.token)
             fx.floatText(_chip, "+" .. tostring(toppedUp), CLASSES.floatTextEnergy)
             refreshEnergy(true)
             playSound("CoinLandGold")
-        end
-        if showOffer and isOpen then
-            popup.enqueue({ kind = "topup" }, 0.4)
         end
     end)
 
