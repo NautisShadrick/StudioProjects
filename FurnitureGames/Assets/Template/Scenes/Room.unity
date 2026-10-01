@@ -345,6 +345,7 @@ GameObject:
   - component: {fileID: 731429273}
   - component: {fileID: 731429272}
   - component: {fileID: 731429271}
+  - component: {fileID: 731429274}
   m_Layer: 0
   m_Name: MergeIsland
   m_TagString: Untagged
@@ -370,6 +371,7 @@ MonoBehaviour:
   _uiOutput: 0
   _uiOutputSettings:
     rid: -2
+  _debugFreeTopUp: 0
   references:
     version: 2
     RefIds:
@@ -414,6 +416,33 @@ Transform:
   - {fileID: 538931845}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &731429274
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 731429270}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76f833ab3b0b65113000bfd456a973fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _networkId: 0
+  _script: {fileID: -974389366465450183, guid: cc27337e81d465c48adfbf01ec767329, type: 3}
+  _properties: []
+  _uiOutput: 0
+  _uiOutputSettings:
+    rid: -2
+  _debugCheats: 0
+  _debugWindowClosed: 0
+  _debugCurrencyLatency: 0
+  _debugFailLoad: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
 --- !u!1 &1277134859
 GameObject:
   m_ObjectHideFlags: 0

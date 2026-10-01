@@ -18,8 +18,8 @@
     Every animation is driven from Lua (MergeIslandHUD.lua). The values here are each
     element's resting state; Lua tweens scale/translate/rotate/opacity away from it and back.
 
-    Art: item art comes from the .item-tier-N classes at the bottom of this file. A sprite in the
-    `tierSprites` array on the MergeIslandHUD component overrides its tier's class art.
+    Art: item art comes from the .item-tier-N classes at the bottom of this file. Every art file
+    lives under Assets/MergeIsland/UI/Art, so moving the feature is one path rewrite here.
 */
 :root {
     --font-museo-700: url("project://database/Packages/com.pz.studio/Assets/Fonts/MuseoSansRounded-700 SDF.asset");
@@ -31,12 +31,9 @@
     --art-glow: url("project://database/Assets/MergeIsland/UI/Art/mi_glow.png");
     --art-star: url("project://database/Assets/MergeIsland/UI/Art/mi_star.png");
     --art-crown: url("project://database/Assets/MergeIsland/UI/Art/mi_crown.png");
-    --art-castle: url("project://database/Assets/MergeIsland/UI/Art/mi_sandcastle.png");
-    --art-shell: url("project://database/Assets/MergeIsland/shell.png");
+    --art-shell: url("project://database/Assets/MergeIsland/UI/Art/mi_item_1_shell.png");
     --art-tile-sand: url("project://database/Assets/MergeIsland/UI/Art/mi_tile_sand.png");
     --art-tile-locked: url("project://database/Assets/MergeIsland/UI/Art/mi_tile_locked.png");
-    --icon-gold: url("project://database/Packages/com.pz.studio/Assets/Sprites/Currency/gold_thumbnail.png");
-    --icon-sparkle: url("project://database/Packages/com.pz.studio/Assets/Sprites/CardRewardSparkle.png");
 
     /* Rendered from ArtSource/MergeIsland/*.svg (node render.mjs). */
     --art-generator: url("project://database/Assets/MergeIsland/UI/Art/mi_generator.png");
@@ -45,14 +42,11 @@
     --icon-token-stack: url("project://database/Assets/MergeIsland/UI/Art/mi_token_stack.png");
     --icon-ticket: url("project://database/Assets/MergeIsland/UI/Art/mi_ticket.png");
     --icon-chest: url("project://database/Assets/MergeIsland/UI/Art/mi_track_chest.png");
-    --icon-recolour: url("project://database/Assets/MergeIsland/UI/Art/mi_badge_recolour.png");
-    --icon-epic: url("project://database/Assets/MergeIsland/UI/Art/mi_badge_epic.png");
     --icon-check: url("project://database/Assets/MergeIsland/UI/Art/mi_check.png");
     --jackpot-hat: url("project://database/Assets/MergeIsland/UI/Art/mi_jackpot_hat.png");
     --jackpot-coat: url("project://database/Assets/MergeIsland/UI/Art/mi_jackpot_coat.png");
     --jackpot-boots: url("project://database/Assets/MergeIsland/UI/Art/mi_jackpot_boots.png");
     --jackpot-cutlass: url("project://database/Assets/MergeIsland/UI/Art/mi_jackpot_cutlass.png");
-    --fx-sparkle-art: url("project://database/Assets/MergeIsland/UI/Art/mi_fx_sparkle.png");
     --fx-coin-art: url("project://database/Assets/MergeIsland/UI/Art/mi_fx_coin.png");
 
     /* Wood, parchment and sand. */
@@ -981,28 +975,6 @@
     display: none;
 }
 
-/* ---------------------- world-top entry point --------------------- */
-/* Built in Lua and handed to UI:AddWorldTopButton, so nothing else in the scene needs to know
-   Merge Island exists. */
-
-.world-top-button {
-    width: 38px;
-    height: 38px;
-    border-radius: 12px;
-    background-color: var(--mi-orange);
-    border-width: 2px;
-    border-color: var(--mi-text-light);
-    align-items: center;
-    justify-content: center;
-}
-
-.world-top-icon {
-    width: 28px;
-    height: 28px;
-    background-image: var(--art-shell);
-    -unity-background-scale-mode: scale-to-fit;
-}
-
 /* ------------------------- fx + drag layers ----------------------- */
 
 .fx-layer,
@@ -1035,16 +1007,8 @@
     background-image: var(--art-star);
 }
 
-.fx-sparkle {
-    background-image: var(--icon-sparkle);
-}
-
 .fx-glow {
     background-image: var(--art-glow);
-}
-
-.fx-coin {
-    background-image: var(--icon-gold);
 }
 
 .fx-token {
@@ -1099,11 +1063,6 @@
 .fx-float-text-energy {
     color: #fff3a0;
     font-size: 17px;
-}
-
-.fx-float-text-points {
-    color: #e2c9ff;
-    font-size: 18px;
 }
 
 /* "MAX X<n>" off the multiplier button, in the button's pink. */
@@ -1626,8 +1585,6 @@
 .reward-icon-crown { background-image: var(--art-crown); }
 .reward-icon-token { background-image: var(--icon-token); }
 .reward-icon-ticket { background-image: var(--icon-ticket); }
-.reward-icon-recolour { background-image: var(--icon-recolour); }
-.reward-icon-epic { background-image: var(--icon-epic); }
 .jackpot-icon-hat { background-image: var(--jackpot-hat); }
 .jackpot-icon-coat { background-image: var(--jackpot-coat); }
 .jackpot-icon-boots { background-image: var(--jackpot-boots); }
@@ -1636,14 +1593,13 @@
 /* ------------------------------ items ----------------------------- */
 /* One class per rung of the single linear ladder, declared last so they win the cascade over
    .cell-item's own background. Each carries that tier's art, so the ladder draws with no
-   inspector setup at all. A sprite assigned to a tier in the MergeIslandHUD inspector still
-   wins (Lua sets backgroundImage inline). (tier 5's art file is chat.png: it is the chest.) */
+   inspector setup at all. */
 
-.item-tier-1 { background-image: url("project://database/Assets/MergeIsland/shell.png"); }
-.item-tier-2 { background-image: url("project://database/Assets/MergeIsland/bottle.png"); }
-.item-tier-3 { background-image: url("project://database/Assets/MergeIsland/compass.png"); }
-.item-tier-4 { background-image: url("project://database/Assets/MergeIsland/map.png"); }
-.item-tier-5 { background-image: url("project://database/Assets/MergeIsland/chat.png"); }
+.item-tier-1 { background-image: url("project://database/Assets/MergeIsland/UI/Art/mi_item_1_shell.png"); }
+.item-tier-2 { background-image: url("project://database/Assets/MergeIsland/UI/Art/mi_item_2_bottle.png"); }
+.item-tier-3 { background-image: url("project://database/Assets/MergeIsland/UI/Art/mi_item_3_compass.png"); }
+.item-tier-4 { background-image: url("project://database/Assets/MergeIsland/UI/Art/mi_item_4_map.png"); }
+.item-tier-5 { background-image: url("project://database/Assets/MergeIsland/UI/Art/mi_item_5_chest.png"); }
 .item-tier-6 { background-image: url("project://database/Assets/MergeIsland/UI/Art/mi_item_6_idol.png"); }
 .item-tier-7 { background-image: url("project://database/Assets/MergeIsland/UI/Art/mi_item_7_ship.png"); }
 .item-tier-8 { background-image: url("project://database/Assets/MergeIsland/UI/Art/mi_item_8_lighthouse.png"); }

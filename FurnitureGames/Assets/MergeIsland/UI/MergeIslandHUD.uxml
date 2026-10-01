@@ -126,8 +126,9 @@
       <VisualElement name="_infoButton" class="round-button info-button">
         <Label text="i" class="round-glyph" picking-mode="Ignore"/>
       </VisualElement>
-      <!-- QA: wipes the island (shown only while MergeIslandManager._debugAllowReset is on).
-           First tap arms it ("SURE?"), second tap within a few seconds resets. -->
+      <!-- QA cheat: wipes the island and its discovery track (shown only while the server allows
+           cheats, MergeIslandKit._debugCheats). First tap arms it ("SURE?"), second tap within a
+           few seconds resets. -->
       <VisualElement name="_resetButton" class="reset-button">
         <Label name="_resetLabel" text="RESET" class="reset-label" picking-mode="Ignore"/>
       </VisualElement>
@@ -231,7 +232,8 @@
             <Label text="How to Play" class="info-title" picking-mode="Ignore"/>
             <VisualElement class="info-row" picking-mode="Ignore">
               <VisualElement class="info-icon info-icon-castle" picking-mode="Ignore"/>
-              <Label text="Tap the dig spot to find a shell for 1 Merge Token. Make a Lighthouse to unlock x2 and a Golden Trident for x4: spend 2 or 4 tokens on a better find." class="info-text" picking-mode="Ignore"/>
+              <!-- Text set from MergeIslandConfig.HowToPlayLines, so it follows the rules. -->
+              <Label name="_infoSpawnText" text="" class="info-text" picking-mode="Ignore"/>
             </VisualElement>
             <VisualElement class="info-row" picking-mode="Ignore">
               <VisualElement class="info-icon info-icon-shell" picking-mode="Ignore"/>
@@ -243,7 +245,7 @@
             </VisualElement>
             <VisualElement class="info-row" picking-mode="Ignore">
               <VisualElement class="info-icon info-icon-crown" picking-mode="Ignore"/>
-              <Label text="Find all 12 items to win the Jackpot!" class="info-text" picking-mode="Ignore"/>
+              <Label name="_infoJackpotText" text="" class="info-text" picking-mode="Ignore"/>
             </VisualElement>
             <VisualElement name="_infoOk" class="cta-button info-ok">
               <VisualElement class="cta-face" picking-mode="Ignore">
@@ -255,7 +257,8 @@
       </VisualElement>
 
       <!-- Out of Merge Tokens: the out-of-tokens offers, each buyable once per event. Every Buy
-           button is a PLACEHOLDER (see MergeIslandManager TopUpRequest). -->
+           button sends MergeIslandManager.RequestTopUp; the purchase itself is the kit's
+           (PurchaseManager_GEK -> MergeIslandManager.FulfillTopUp). -->
       <VisualElement name="_topupOverlay" class="overlay">
         <VisualElement name="_topupScrim" class="overlay-scrim" picking-mode="Ignore"/>
         <VisualElement name="_topupContent" class="overlay-content" picking-mode="Ignore">
@@ -263,7 +266,7 @@
             <Label text="Out of Merge Tokens!" class="info-title" picking-mode="Ignore"/>
             <VisualElement class="topup-art" picking-mode="Ignore"/>
             <Label text="Grab a pack and keep digging! Each pack can be bought once." class="topup-sub" picking-mode="Ignore"/>
-            <!-- One card per MergeIslandConfig.TOPUP_OFFERS entry, built in Lua. -->
+            <!-- One card per token-pack reward table entry, built in Lua. -->
             <VisualElement name="_topupOffers" class="topup-offers" picking-mode="Ignore"/>
             <Label name="_topupLater" text="Not now" class="topup-later"/>
           </VisualElement>

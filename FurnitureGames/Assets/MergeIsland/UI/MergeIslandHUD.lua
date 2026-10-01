@@ -15,13 +15,17 @@
 --
 -- Illegal drops never touch the network: the same rule function the server will run is checked
 -- locally first, so a refused drag snaps back instantly. The server still re-validates
--- everything it is asked to do.
+-- everything it is asked to do, and a legal drop animates from the SERVER'S answer to it.
 --
--- Spawns launch IMMEDIATELY but land where the SERVER says: the server picks a random free cell
--- (and sometimes rolls a "Lucky!" or "Legendary!" item higher), so the flight leaves the generator
--- as the multiplier's tier, aims at the board, and bends onto the real cell -- repainted to the
--- real tier -- the moment the confirming snapshot names it. The cell is held empty until the
--- flight lands, so an item never pops in before its flight arrives.
+-- Every spawn and move carries a request id, and the server answers each one by id, accepted or
+-- refused. That is how a reply finds its tap even when the server batches, throttles or refuses
+-- some of them.
+--
+-- Spawns launch IMMEDIATELY but land where the SERVER says: the server pays for the tap, picks a
+-- random free cell (and sometimes rolls a "Lucky!" or "Legendary!" item higher), so the flight
+-- leaves the generator as the multiplier's tier, aims at the board, and bends onto the real cell
+-- -- repainted to the real tier -- the moment the confirming snapshot names it. The cell is held
+-- empty until the flight lands, so an item never pops in before its flight arrives.
 --
 -- The multiplier button picks what one generator tap spends and spawns: M tokens for the item M
 -- tier-1s would merge into. Only x1 exists at first; x2 and x4 unlock with items 8 and 10, each
@@ -30,7 +34,12 @@
 -- the wallet no longer covers it.
 --
 -- First discoveries, the jackpot and the out-of-tokens offer queue up as full-screen overlays
--- and play one after another; the server has already paid them by the time they show.
+-- and play one after another. A reveal shows exactly what the server says it paid. The server
+-- holds that payout until the reveal is collected (ReportPresentationDone), so the platform's
+-- own reward screen never pops over the celebration; closing the HUD releases them all.
+--
+-- The game opens and closes through Open() / Close(). Standalone, the world-top button this
+-- script builds is the way in; in the Game Event Kit the HUD widget opens it instead.
 --
 -- Every animation runs on TweenModule. This script is large enough that Luau's ~200 locals per
 -- scope is a real limit, so helpers are grouped into tables (anim, fx, track, drag, spawn,
@@ -73,15 +82,12 @@ local CLASSES = {
     bracket = "bracket",
     bracketCorners = { "bracket-tl", "bracket-tr", "bracket-bl", "bracket-br" },
     flyingItem = "flying-item",
-    worldTopButton = "world-top-button",
-    worldTopIcon = "world-top-icon",
     slot = "track-slot",
     slotArt = "track-slot-art",
     slotSil = "track-slot-sil",
     silPrefix = "track-sil-",
     slotFound = "track-slot-found",
     slotNext = "track-slot-next",
-    slotCrown = "track-slot-crown",
     tooltipReward = "tooltip-reward",
     tooltipIcon = "tooltip-icon",
     tooltipAmount = "tooltip-amount",
@@ -98,9 +104,7 @@ local CLASSES = {
     winPrizeLabel = "win-prize-label",
     particle = "fx-particle",
     star = "fx-star",
-    sparkle = "fx-sparkle",
     glow = "fx-glow",
-    coin = "fx-coin",
     chest = "fx-chest",
     ring = "fx-ring",
     ringGold = "fx-ring-gold",
@@ -109,7 +113,6 @@ local CLASSES = {
     confettiPrefix = "fx-confetti-",
     floatText = "fx-float-text",
     floatTextEnergy = "fx-float-text-energy",
-    floatTextPoints = "fx-float-text-points",
     floatTextMax = "fx-float-text-max",
     luckyText = "fx-lucky-text",
     legendaryText = "fx-legendary-text",
@@ -119,12 +122,6 @@ local CLASSES = {
     rewardCrown = "reward-icon-crown",
     rewardToken = "reward-icon-token",
     rewardTicket = "reward-icon-ticket",
-    -- Every reward-icon-* class, so an element can be cleared before a new icon is applied.
-    rewardIcons = {
-        "reward-icon-item", "reward-icon-crown", "reward-icon-token", "reward-icon-ticket",
-        "reward-icon-recolour", "reward-icon-epic",
-        "jackpot-icon-hat", "jackpot-icon-coat", "jackpot-icon-boots", "jackpot-icon-cutlass",
-    },
     resetArmed = "reset-button-armed",
     offer = "topup-offer",
     offerIcon = "topup-offer-icon",
@@ -313,21 +310,6 @@ local WORLD_TOP_BUTTON_INDEX = 0
 -- space on a new build. See gesturePoint below.
 local DEBUG_DRAG = false
 
-local DEFAULT_HINT = "Drag an item onto a matching item to merge it"
--- Once every item is found the jackpot is paid and nothing more can be earned.
-local JACKPOT_HINT = "You found every item! Keep merging just for fun"
--- Rejection reasons -> player-facing copy. Reasons the player cannot act on (an out-of-sync
--- move, a drag of nothing) are deliberately absent and fall through to the default hint.
-local REJECT_MESSAGES = {
-    no_energy = "Out of Merge Tokens!",
-    board_full = "Board is full! Merge items to make room",
-    mismatch = "Those items don't match",
-    max_tier = "That's already the best item!",
-    locked = "That sand is still locked",
-    topup_unavailable = "Token packs aren't available yet",
-    offer_bought = "You already bought that pack",
-}
-
 -- Overlay phases. Board input is only accepted in PHASE_IDLE.
 local PHASE_IDLE = "idle"
 local PHASE_REVEAL_IN = "reveal_in"
@@ -342,6 +324,7 @@ local PHASE_TOPUP = "topup"
 --------------------------------
 local manager = require("MergeIslandManager")
 local config = require("MergeIslandConfig")
+local kit = require("MergeIslandKit")
 local TweenModule = require("TweenModule")
 local Tween = TweenModule.Tween
 local Easing = TweenModule.Easing
@@ -371,15 +354,13 @@ local pressedIndex: number | nil = nil
 local dragState: any = nil
 
 -- A legal drop sent to the server and not yet confirmed, or nil.
--- { from, to, kind, element, rejected, timeout }. The dragged element stays parked on the
--- target until the confirming snapshot, so nothing flickers for the round trip. The server tags
--- its answer to a move (`moved`), so a spawn snapshot arriving in between can never be mistaken
--- for it.
+-- { requestId, from, to, kind, element, rejected, timeout }. The dragged element stays parked on
+-- the target until the server's answer for this requestId, so nothing flickers for the round trip.
 local commit: any = nil
 
--- Spawn flights awaiting their snapshot, oldest first (the server answers in order).
--- { target, element, tween, landed, confirmed, timeout }. `target` is nil until the server
--- names the cell; until then the flight aims at the middle of the board.
+-- Spawn flights awaiting their answer, oldest first, each matched to its answer by requestId.
+-- { requestId, cost, tier, target, element, tween, landed, confirmed, timeout }. `target` is nil
+-- until the server names the cell; until then the flight aims at the middle of the board.
 local pendingSpawns: {any} = {}
 -- Cells kept visually empty until a spawn flight lands on them.
 local spawnHolds: {[number]: boolean} = {}
@@ -423,10 +404,24 @@ local ui: any = {
     -- and whether the "Higher Power Boost Available!" bubble is waiting for the next button tap.
     knownMaxMult = nil,
     boostPending = false,
-    -- Out-of-tokens offer cards, one per config.TOPUP_OFFERS entry: { root, buy, price }.
+    -- Out-of-tokens offer cards, one per token-pack table entry: { root, buy, price }.
     offerCards = {},
     -- The tier the track's reward bubble currently sits over, or nil while it is hidden.
     tooltipTier = nil,
+    -- Request ids for spawns and moves; each intent gets the next one and its answer echoes it.
+    nextRequestId = 0,
+    -- Merge Tokens a collected reveal showed landing in the wallet before the server's grant of
+    -- that payout arrives: [payoutId] = coins. Cleared by OnPayoutSettled, whose snapshot balance
+    -- already includes them.
+    credited = {},
+    -- Payouts already granted, so a reveal collected after its fallback grant credits nothing.
+    settledPayouts = {},
+    -- The payout the jackpot screen is holding back until its Collect.
+    winPayoutId = nil,
+    -- The reward-icon class currently on the reveal's single icon, so the next one replaces it.
+    revealIconClass = nil,
+    -- Manager subscriptions, removed on destroy.
+    unsubscribers = {},
 }
 
 -- Endless ambient tweens (stopped on Hide) and the ones owned by the current overlay.
@@ -450,12 +445,9 @@ local worldTopButton: VisualElement = nil
 --------------------------------
 ------  LOCAL FUNCTIONS   ------
 --------------------------------
--- Sound is decoration: a missing or renamed shader must never break gameplay, so every play
--- is protected.
+-- Sound goes through the kit seam (GEK: AudioManager_GEK / the theme's sound set).
 local function playSound(name: string)
-    pcall(function()
-        Sounds[name]:Play()
-    end)
+    kit.PlaySfx(name)
 end
 
 local function lerp(a: number, b: number, t: number): number
@@ -741,7 +733,7 @@ function fx.luck(point: Vector2, luck: string)
         _label:AddToClassList(CLASSES.legendaryText)
     end
     _label.pickingMode = PickingMode.Ignore
-    _label.text = if _legendary then "Legendary!" else "Lucky!"
+    _label.text = config.Text(if _legendary then "luck_legendary" else "luck_lucky")
     -- Centred on the item, lifted so it sits over the item's top edge like a stamp.
     anim.place(_label, point.x - 75, point.y - 22 - 30)
     _fxLayer:Add(_label)
@@ -851,12 +843,13 @@ local function paintTier(element: VisualElement, tier: number, previousClass: st
     return nil
 end
 
--- The icon class for a reward: its own `icon` override, else one per reward kind.
+-- The icon class for a reward: its own `icon` (from the reward table) when it has one, else one
+-- per reward kind.
 local function rewardIconClass(reward): string
     if reward.icon then
         return reward.icon
     end
-    if reward.kind == config.REWARD_TOKENS then
+    if reward.kind == config.REWARD_COINS then
         return CLASSES.rewardToken
     end
     if reward.kind == config.REWARD_TICKETS then
@@ -865,16 +858,18 @@ local function rewardIconClass(reward): string
     return CLASSES.rewardItem
 end
 
+-- The reveal's single icon: swap the class it shows for `className`.
 local function setRewardIcon(element: VisualElement, className: string)
-    for _, name in ipairs(CLASSES.rewardIcons) do
-        element:RemoveFromClassList(name)
+    if ui.revealIconClass then
+        element:RemoveFromClassList(ui.revealIconClass)
     end
     element:AddToClassList(className)
+    ui.revealIconClass = className
 end
 
 -- A particle class matching a reward, for the shower on collect.
 local function rewardParticleClass(reward): string
-    if reward and reward.kind == config.REWARD_TOKENS then
+    if reward and reward.kind == config.REWARD_COINS then
         return CLASSES.token
     end
     if reward and reward.kind == config.REWARD_TICKETS then
@@ -1071,8 +1066,10 @@ local function renderCell(index: number)
     setClass(_ui.shadow, CLASSES.itemLifted, _held)
 end
 
--- Tokens as SHOWN: the server's count, less what the taps still awaiting their snapshot cost,
--- less the discovery rewards not yet collected (they land in the wallet on "Tap to Collect").
+-- Tokens as SHOWN: the server's balance, less what the taps still awaiting their answer cost,
+-- plus the discovery tokens a collected reveal showed landing whose grant has not arrived yet.
+-- (The server holds a discovery's grant until its reveal is collected, so uncollected rewards
+-- are not in the balance to begin with.)
 local function displayedEnergy(): number
     local _unconfirmed = 0
     for _, entry in ipairs(pendingSpawns) do
@@ -1080,11 +1077,11 @@ local function displayedEnergy(): number
             _unconfirmed = _unconfirmed + (entry.cost or config.SPAWN_COST)
         end
     end
-    if trackSeeded then
-        _unconfirmed = _unconfirmed
-            + config.DiscoveryTokensBetween(shownHighestTier + 1, manager.GetHighestTier())
+    local _credited = 0
+    for _, coins in pairs(ui.credited) do
+        _credited = _credited + coins
     end
-    return math.max(0, manager.GetTokens() - _unconfirmed)
+    return math.max(0, manager.GetTokens() - _unconfirmed + _credited)
 end
 
 -- The multipliers unlocked by what the player has been SHOWN discovering, so x2 arrives with
@@ -1123,7 +1120,8 @@ local function hasSpawnRoom(): boolean
 end
 
 local function canSpawnNow(): boolean
-    return manager.IsLoaded() and displayedEnergy() >= spawn.cost() and hasSpawnRoom()
+    return manager.IsLoaded() and manager.IsWindowOpen() and displayedEnergy() >= spawn.cost()
+        and hasSpawnRoom()
 end
 
 -- The button always stays green; only the idle "tap me" pulse stops while a spawn is impossible.
@@ -1145,14 +1143,15 @@ function spawn.refreshMultiplier()
         ui.multiplierIndex = ui.multiplierIndex - 1
     end
     local _mult = spawn.multiplier()
-    ui.multiplierLabel.text = "x" .. tostring(_mult)
+    ui.multiplierLabel.text = config.Text("multiplier", { mult = _mult })
     ui.generatorShellClass = paintTier(ui.generatorShell, config.SpawnTierFor(_mult),
         ui.generatorShellClass)
 end
 
 -- "MAX X<n>" pops off the button: the player is on (or only has) the highest multiplier.
 function spawn.flashMax(mult: number)
-    fx.floatText(fx.point(_fxLayer, ui.multiplierButton), "MAX X" .. tostring(mult), CLASSES.floatTextMax)
+    fx.floatText(fx.point(_fxLayer, ui.multiplierButton), config.Text("multiplier_max", { mult = mult }),
+        CLASSES.floatTextMax)
     playSound("HapticsLight")
 end
 
@@ -1176,8 +1175,7 @@ function spawn.cycleMultiplier()
     if displayedEnergy() < config.SpawnCost(_nextMult) then
         if ui.multiplierIndex == 1 then
             -- Nothing above x1 is affordable: say why the tap did nothing.
-            showToast("Need " .. tostring(config.SpawnCost(_nextMult)) .. " Merge Tokens for x"
-                .. tostring(_nextMult))
+            showToast(config.Text("need_tokens", { cost = config.SpawnCost(_nextMult), mult = _nextMult }))
             anim.shake(ui.multiplierButton, 5, 0.35)
             playSound("HapticsLight")
             return
@@ -1314,14 +1312,21 @@ end
 -- The bubble advertises the NEXT tier that pays a discovery reward (tiers without one are
 -- skipped), and only that one. Returns false when no reward is left on the track.
 function track.paintTooltip(): boolean
-    local _tier = config.NextRewardTier(shownHighestTier)
+    local _discovery = manager.GetDiscoveryTable()
+    local _tier = config.NextRewardTier(_discovery, shownHighestTier)
     ui.tooltipTier = _tier
     if not _tier then
         _tooltipRewards:Clear()
         return false
     end
-    track.fillRewards(_tooltipRewards, config.DiscoveryRewards(_tier), false)
+    track.fillRewards(_tooltipRewards, config.DiscoveryRewards(_discovery, _tier), false)
     return true
+end
+
+-- The jackpot panel shows as won once the server says it was paid AND the top tier has been
+-- shown collected (the checks land with the prize, not before).
+function track.isPrizeShownWon(): boolean
+    return shownHighestTier >= config.MAX_TIER and manager.IsJackpotWon()
 end
 
 -- Repaint the discovery row and the jackpot panel from shownHighestTier. `animate` plays the
@@ -1329,7 +1334,7 @@ end
 -- collected, the bubble hops to the next one. (When animating, the jackpot cards' checks are
 -- left to collectWin, so they land with the prize.)
 function track.refreshTrack(animate: boolean)
-    _hintLabel.text = if shownHighestTier >= config.MAX_TIER then JACKPOT_HINT else DEFAULT_HINT
+    _hintLabel.text = config.Text(if shownHighestTier >= config.MAX_TIER then "hint_jackpot" else "hint_default")
     for tier, slot in pairs(slotElements) do
         setClass(slot.root, CLASSES.slotFound, tier <= shownHighestTier)
         setClass(slot.root, CLASSES.slotNext, tier == shownHighestTier + 1)
@@ -1337,11 +1342,11 @@ function track.refreshTrack(animate: boolean)
     end
 
     if not animate then
-        setClass(_prizePanel, CLASSES.prizeWon, shownHighestTier >= config.MAX_TIER)
+        setClass(_prizePanel, CLASSES.prizeWon, track.isPrizeShownWon())
     end
 
     local _oldTier = ui.tooltipTier
-    local _newTier = config.NextRewardTier(shownHighestTier)
+    local _newTier = config.NextRewardTier(manager.GetDiscoveryTable(), shownHighestTier)
     if animate and _oldTier and _newTier ~= _oldTier then
         -- Hop: shrink away, repaint for (and jump to) the next reward, bounce back in. The
         -- repaint reads shownHighestTier again, in case another collect landed mid-hop.
@@ -1383,9 +1388,6 @@ function track.buildTrack()
         _sil:AddToClassList(CLASSES.silPrefix .. tostring(tier))
         _sil.pickingMode = PickingMode.Ignore
         _art:Add(_sil)
-        if tier == config.MAX_TIER then
-            _root:AddToClassList(CLASSES.slotCrown)
-        end
         _root:Add(_art)
         _trackSlots:Add(_root)
         slotElements[tier] = { root = _root, art = _art }
@@ -1400,7 +1402,7 @@ function track.buildPrizeCards(row: VisualElement, big: boolean): {VisualElement
     if not big then
         ui.prizeChecks = {}
     end
-    for _, reward in ipairs(config.JACKPOT) do
+    for _, reward in ipairs(manager.GetJackpotTable()) do
         local _card = VisualElement.new()
         _card.pickingMode = PickingMode.Ignore
         local _icon = VisualElement.new()
@@ -1646,7 +1648,9 @@ function drag.commitDrop(from: number, to: number, kind: string)
         anim.rotate(_element, _tilt * (1 - t))
     end)
 
+    ui.nextRequestId = ui.nextRequestId + 1
     local _commit = {
+        requestId = ui.nextRequestId,
         from = from,
         to = to,
         kind = kind,
@@ -1664,16 +1668,22 @@ function drag.commitDrop(from: number, to: number, kind: string)
     end)
     commit = _commit
     renderCell(from)
-    manager.RequestMove(from, to)
+    manager.RequestMove(from, to, _commit.requestId)
 end
 
--- Release the parked drop, if this snapshot is its answer. Returns it for playLanding.
-function drag.settleCommit(isMoveAnswer: boolean, rejected: boolean)
-    if not commit or not isMoveAnswer then
+-- Release the parked drop, if `answer` (the snapshot's move answer) is the server's reply to it.
+-- The landing then plays what the SERVER did, not what the drag predicted. Returns it for
+-- playLanding.
+function drag.settleCommit(answer)
+    if not commit or not answer or answer.requestId ~= commit.requestId then
         return nil
     end
     local _settled = commit
-    _settled.rejected = rejected
+    _settled.rejected = answer.rejected ~= nil
+    if not _settled.rejected then
+        _settled.kind = answer.kind or _settled.kind
+        _settled.to = answer.to or _settled.to
+    end
     commit = nil
     if _settled.timeout then
         _settled.timeout:Stop()
@@ -1840,10 +1850,12 @@ function spawn.pressGenerator()
     end)
 end
 
--- `cost` is what the tap spent (held off the shown wallet until its snapshot lands) and `tier`
--- is what the flight launches as.
+-- `cost` is what the tap spent (held off the shown wallet until its answer lands) and `tier`
+-- is what the flight launches as. Each entry takes the next request id.
 function spawn.newEntry(cost: number, tier: number)
+    ui.nextRequestId = ui.nextRequestId + 1
     return {
+        requestId = ui.nextRequestId,
         cost = cost,
         tier = tier,
         target = nil,
@@ -1866,6 +1878,14 @@ function spawn.requestSpawn()
     spawn.lastTapAt = ambientTime
     spawn.pressGenerator()
 
+    -- Outside the schedule window nothing can be spawned (merging what is on the board still can).
+    if not manager.IsWindowOpen() then
+        showToast(config.RejectText(config.REJECT_WINDOW_CLOSED) or "")
+        anim.wiggle(_generatorButton, 6)
+        playSound("HapticsLight")
+        return
+    end
+
     -- Step the multiplier down first if the wallet no longer covers it, so the only refusal
     -- left is an empty wallet.
     spawn.refreshMultiplier()
@@ -1877,7 +1897,7 @@ function spawn.requestSpawn()
         if manager.HasOffersLeft() then
             popup.enqueue({ kind = "topup" }, 0)
         else
-            showToast(REJECT_MESSAGES.no_energy)
+            showToast(config.RejectText(config.REJECT_NO_ENERGY) or "")
             anim.shake(_energyChip, 7, 0.4)
             anim.wiggle(_generatorButton, 6)
             playSound("HapticsLight")
@@ -1885,7 +1905,7 @@ function spawn.requestSpawn()
         return
     end
     if not hasSpawnRoom() then
-        showToast(REJECT_MESSAGES.board_full)
+        showToast(config.RejectText(config.REJECT_BOARD_FULL) or "")
         anim.shake(_boardFrame, 4, 0.35)
         playSound("HapticsLight")
         return
@@ -1906,29 +1926,33 @@ function spawn.requestSpawn()
     end)
 
     refreshEnergy(true)
-    fx.floatText(fx.point(_fxLayer, _energyChip), "-" .. tostring(_cost), CLASSES.floatTextEnergy)
+    fx.floatText(fx.point(_fxLayer, _energyChip), config.Text("spend", { amount = _cost }), CLASSES.floatTextEnergy)
     spawn.launchSpawnFlight(_entry)
     refreshGenerator()
     playSound("ItemWhoosh")
     playSound("HapticsLight")
-    manager.RequestSpawn(_mult)
+    manager.RequestSpawn(_mult, _entry.requestId)
 end
 
--- The server's answer to one tap: `indices` holds the cell it landed on, `tier` what landed
--- there; `luck` is the Config.LUCK_* it rolled.
-function spawn.onSpawned(indices, luck: string, tier: number?)
-    local _first = indices and indices[1]
+-- Take the pending tap with this request id out of the queue, or nil when it is not ours (or its
+-- timeout already gave up on it).
+function spawn.takePending(requestId: number?)
+    for i, pending in ipairs(pendingSpawns) do
+        if pending.requestId == requestId then
+            return table.remove(pendingSpawns, i)
+        end
+    end
+    return nil
+end
+
+-- The server's answer to one tap: the item of `tier` it placed at cell `index`; `luck` is the
+-- Config.LUCK_* it rolled.
+function spawn.onSpawned(requestId: number?, index: number?, luck: string, tier: number?)
+    local _first = index
     if not _first then
         return
     end
-    -- The oldest tap still waiting for a cell. Taps are answered in order.
-    local _entry = nil
-    for i, pending in ipairs(pendingSpawns) do
-        if not pending.confirmed then
-            _entry = table.remove(pendingSpawns, i)
-            break
-        end
-    end
+    local _entry = spawn.takePending(requestId)
     if not _entry then
         -- A spawn we did not launch (e.g. the HUD reopened mid-flight): just pop the items once
         -- the board is painted.
@@ -1947,6 +1971,14 @@ function spawn.onSpawned(indices, luck: string, tier: number?)
         _entry.timeout = nil
     end
     spawn.confirmSpawn(_entry, _first, luck, tier)
+end
+
+-- The server refused the tap `requestId` and spent nothing for it: its flight fades out.
+function spawn.onSpawnRejected(requestId: number?)
+    local _entry = spawn.takePending(requestId)
+    if _entry then
+        spawn.cancelSpawn(_entry)
+    end
 end
 
 -- Closing the HUD mid-flight: every flight loses its visuals. Pending taps stay in the queue
@@ -1968,7 +2000,10 @@ end
 
 ---------------- board ----------------
 local function renderBoard()
+    anim.show(ui.resetButton, manager.CanUseCheats())
     if not manager.IsLoaded() then
+        -- A record that failed to load stays failed for the session: say so instead of spinning.
+        _loadingLabel.text = config.Text(if manager.GetLoadState() == manager.LOAD_FAILED then "load_failed" else "loading")
         _loadingLabel.style.display = DisplayStyle.Flex
         return
     end
@@ -1992,7 +2027,6 @@ local function renderBoard()
         spawn.hideBoost()
         spawn.refreshMultiplier()
     end
-    anim.show(ui.resetButton, manager.CanReset())
 end
 
 local function playHint()
@@ -2230,23 +2264,22 @@ function popup.paintReveal(entry): boolean
         return false
     end
     revealItemClass = paintTier(_revealItem, entry.tier, revealItemClass)
-    _revealTitle.text = "NEW ITEM REVEALED!"
+    _revealTitle.text = config.Text("reveal_title")
     _revealName.text = _info.label
-    -- Everything this collect pays: this tier's rewards plus any a jump skipped past.
-    local _rewards = config.DiscoveryRewardsBetween(shownHighestTier + 1, entry.tier)
+    -- Exactly what the server paid for this discovery (this tier plus any a jump skipped past).
+    local _rewards = entry.paid or {}
     ui.revealRewardChips:Clear()
     anim.show(_revealRewardIcon, true)
     if entry.tier >= config.MAX_TIER then
         setRewardIcon(_revealRewardIcon, CLASSES.rewardCrown)
-        _revealRewardLabel.text = "Jackpot unlocked!"
+        _revealRewardLabel.text = config.Text("reveal_jackpot")
     elseif #_rewards > 0 then
         anim.show(_revealRewardIcon, false)
-        _revealRewardLabel.text = "Reward:"
+        _revealRewardLabel.text = config.Text("reveal_reward")
         track.fillRewards(ui.revealRewardChips, _rewards, true)
     else
-        local _left = config.MAX_TIER - entry.tier
         setRewardIcon(_revealRewardIcon, CLASSES.rewardCrown)
-        _revealRewardLabel.text = tostring(_left) .. " more to the Jackpot!"
+        _revealRewardLabel.text = config.Text("reveal_left", { count = config.MAX_TIER - entry.tier })
     end
     anim.show(_revealReward, true)
     return true
@@ -2350,7 +2383,7 @@ end
 function popup.showWin()
     phase = PHASE_WIN
     local _cards = track.buildPrizeCards(_winPrizeRow, true)
-    _winTitle.text = "You found every item!"
+    _winTitle.text = config.Text("win_title")
     anim.fade(_winContent, 1)
     anim.show(_winOverlay, true)
     _winOverlay:BringToFront()
@@ -2408,6 +2441,9 @@ function popup.collectWin()
     phase = PHASE_COLLECTING
     anim.stopAll(overlayLoops)
     playSound("HapticsLight")
+    -- The jackpot's items are granted now, so the platform's reward screen follows the win.
+    popup.reportShown(ui.winPayoutId)
+    ui.winPayoutId = nil
     popup.closeOverlay(_winOverlay, _winScrim, _winContent, 0.3, function()
         _confettiLayer:Clear()
         popup.finishMoment()
@@ -2430,14 +2466,26 @@ function popup.collectWin()
         fx.ring(_point, 150, 0.5, true)
         fx.burst(_point, 12, 120, CLASSES.star, 18, 0.6)
         fx.coins(_point, 12, CLASSES.chest)
-        fx.floatText(_point, "JACKPOT!")
+        fx.floatText(_point, config.Text("win_burst"))
         playSound("CoinLandGold")
     end)
 end
 
--- Show a collected discovery's rewards landing: tokens shower the wallet (whose count was held
--- back until now, see displayedEnergy), everything else floats up off the item's track slot.
-function popup.payDiscovery(rewards: {any}, slot: VisualElement?)
+-- Tell the server a payout's presentation is over, so it grants it now. Safe with nil.
+function popup.reportShown(payoutId: number?)
+    if payoutId then
+        manager.ReportPresentationDone(payoutId)
+    end
+end
+
+-- Show a collected discovery's rewards landing: tokens shower the wallet, everything else
+-- floats up off the item's track slot. The wallet shows the tokens at once (ui.credited) and
+-- hands over to the server's balance when the grant's snapshot arrives.
+function popup.payDiscovery(rewards: {any}, slot: VisualElement?, payoutId: number?)
+    local _coins = config.CoinsIn(rewards)
+    if payoutId and _coins > 0 and not ui.settledPayouts[payoutId] then
+        ui.credited[payoutId] = _coins
+    end
     if #rewards == 0 or not isOpen then
         refreshEnergy(false)
         return
@@ -2445,15 +2493,15 @@ function popup.payDiscovery(rewards: {any}, slot: VisualElement?)
     local _slotPoint = if slot then fx.point(_fxLayer, slot) else fx.point(_fxLayer, _trackPanel)
     local _lift = 0
     for _, reward in ipairs(rewards) do
-        if reward.kind == config.REWARD_TOKENS then
+        if reward.kind == config.REWARD_COINS then
             local _chip = fx.point(_fxLayer, _energyChip)
             fx.coins(_chip, 6, CLASSES.token)
-            fx.floatText(_chip, "+" .. tostring(reward.amount), CLASSES.floatTextEnergy)
+            fx.floatText(_chip, config.Text("gain", { amount = reward.amount }), CLASSES.floatTextEnergy)
         else
             -- Stacked so two float-ups off the same slot do not overprint.
             local _point = Vector2.new(_slotPoint.x, _slotPoint.y + 30 + _lift)
             fx.coins(_point, 5, rewardParticleClass(reward))
-            fx.floatText(_point, "+" .. config.RewardText(reward))
+            fx.floatText(_point, config.Text("gain", { amount = config.RewardText(reward) }))
             _lift = _lift + 26
         end
     end
@@ -2462,10 +2510,9 @@ function popup.payDiscovery(rewards: {any}, slot: VisualElement?)
 end
 
 -- The collected item has reached its slot: fill it, advance the track, and pay out the fx. The
--- top tier then plays the jackpot screen, if this snapshot won it.
+-- top tier then plays the jackpot screen, if this discovery won it.
 function popup.onCollected(entry)
-    -- Read before the track advances: shownHighestTier is what bounds the uncollected rewards.
-    local _rewards = config.DiscoveryRewardsBetween(shownHighestTier + 1, entry.tier)
+    local _rewards = entry.paid or {}
     shownHighestTier = math.max(shownHighestTier, entry.tier)
     track.refreshTrack(true)
     spawn.checkUnlock()
@@ -2486,22 +2533,27 @@ function popup.onCollected(entry)
     end
     playSound("TilePop")
     playSound("HapticsLight")
-    popup.payDiscovery(_rewards, _target)
+    popup.payDiscovery(_rewards, _target, entry.payoutId)
 
     if entry.tier >= config.MAX_TIER and not ui.jackpotPending then
         -- The top tier without a win screen (the jackpot was already paid): just check it off.
         setClass(_prizePanel, CLASSES.prizeWon, true)
     end
     if entry.tier >= config.MAX_TIER and ui.jackpotPending then
+        -- This payout carries the jackpot items too: hold it until the win screen is collected.
         ui.jackpotPending = false
+        ui.winPayoutId = entry.payoutId
         Timer.After(0.8, function()
             if isOpen then
                 popup.showWin()
             else
+                popup.reportShown(ui.winPayoutId)
+                ui.winPayoutId = nil
                 phase = PHASE_IDLE
             end
         end)
     else
+        popup.reportShown(entry.payoutId)
         Timer.After(0.35, popup.finishMoment)
     end
 end
@@ -2558,12 +2610,12 @@ function popup.collectReveal()
 end
 
 ---------------- top-up: out of Merge Tokens ----------------
--- One card per config.TOPUP_OFFERS entry: the pack, its amount and its Buy button. Built once;
+-- One card per token-pack table entry: the pack, its amount and its Buy button. Built once;
 -- popup.refreshOffers repaints which ones are already bought.
 function popup.buildOffers()
     ui.topupOffers:Clear()
     ui.offerCards = {}
-    for k, offer in ipairs(config.TOPUP_OFFERS) do
+    for k, offer in ipairs(manager.GetTopUpTable()) do
         local _card = VisualElement.new()
         _card:AddToClassList(CLASSES.offer)
         _card.pickingMode = PickingMode.Ignore
@@ -2573,7 +2625,7 @@ function popup.buildOffers()
         local _amount = Label.new()
         _amount:AddToClassList(CLASSES.offerAmount)
         _amount.pickingMode = PickingMode.Ignore
-        _amount.text = "+" .. tostring(offer.amount)
+        _amount.text = config.Text("gain", { amount = offer.amount })
         -- Dynamically created elements are only reliably tappable with pickingMode set in Lua.
         local _buy = VisualElement.new()
         _buy:AddToClassList(CLASSES.ctaButton)
@@ -2603,7 +2655,8 @@ function popup.refreshOffers()
     for k, card in pairs(ui.offerCards) do
         local _bought = manager.IsOfferBought(k)
         setClass(card.root, CLASSES.offerBought, _bought)
-        card.price.text = if _bought then "Bought" else config.TOPUP_OFFERS[k].priceLabel
+        local _offer = manager.GetTopUpTable()[k]
+        card.price.text = if _bought then config.Text("offer_bought") else tostring(_offer and _offer.priceLabel or "")
     end
 end
 
@@ -2711,12 +2764,15 @@ function popup.closeInfo()
 end
 
 -- Tear down every overlay instantly (used when the HUD closes mid-sequence). The displays jump
--- to the truth: the rewards were paid by the server regardless of the animation.
+-- to the truth, and every payout the server is holding for a presentation is released, since
+-- nothing is left to present it.
 function popup.abortOverlays()
     anim.stopAll(overlayLoops)
+    manager.ReportPresentationDone(manager.PAYOUT_ALL)
     revealQueue = {}
     revealEntry = nil
     ui.jackpotPending = false
+    ui.winPayoutId = nil
     anim.show(_revealOverlay, false)
     anim.show(_winOverlay, false)
     anim.show(_infoOverlay, false)
@@ -2730,7 +2786,6 @@ function popup.abortOverlays()
         shownHighestTier = manager.GetHighestTier()
         track.refreshTrack(false)
         spawn.checkUnlock()
-        -- Discovery tokens held back for an uncollected reveal are shown now.
         refreshEnergy(false)
     end
 end
@@ -2743,19 +2798,20 @@ function popup.disarmReset()
         ui.resetTimer = nil
     end
     setClass(ui.resetButton, CLASSES.resetArmed, false)
-    ui.resetLabel.text = "RESET"
+    ui.resetLabel.text = config.Text("reset")
 end
 
--- First tap arms the button; a second tap within TIMING.resetArm asks the server to wipe.
+-- First tap arms the button; a second tap within TIMING.resetArm asks the server to wipe the
+-- island AND its discovery track (a QA cheat; the server refuses it unless cheats are allowed).
 function popup.pressReset()
-    if not isOpen or not manager.CanReset() then
+    if not isOpen or not manager.CanUseCheats() then
         return
     end
     anim.pop(ui.resetButton, 0.8, 0.35)
     if not ui.resetArmed then
         ui.resetArmed = true
         setClass(ui.resetButton, CLASSES.resetArmed, true)
-        ui.resetLabel.text = "SURE?"
+        ui.resetLabel.text = config.Text("reset_confirm")
         playSound("HapticsLight")
         ui.resetTimer = Timer.After(TIMING.resetArm, function()
             ui.resetTimer = nil
@@ -2764,7 +2820,7 @@ function popup.pressReset()
         return
     end
     popup.disarmReset()
-    manager.RequestReset()
+    manager.RequestCheat(manager.CHEAT_RESET_ALL)
 end
 
 -- The server wiped the island. Runs BEFORE the fresh board is painted: drop every drag, flight
@@ -2803,7 +2859,7 @@ function popup.onReset()
             end
         end
         playBreak(_open)
-        showToast("Fresh island!")
+        showToast(config.Text("reset_done"))
         refreshEnergy(true)
     end)
 end
@@ -2835,6 +2891,7 @@ local function bindExtraUi()
         "resetButton", "resetLabel",
         "multiplierButton", "multiplierLabel", "generatorShell",
         "revealRewardChips",
+        "infoSpawnText", "infoJackpotText",
     }
     for _, name in ipairs(_names) do
         local _element = _hudRoot:Q("_" .. name)
@@ -2845,8 +2902,9 @@ local function bindExtraUi()
     end
 end
 
--- Entry point. Building the button here keeps Merge Island drop-in: nothing else in the scene
--- needs to know it exists.
+-- STANDALONE entry point. Building the button here keeps Merge Island drop-in: nothing else in the
+-- scene needs to know it exists. In the Game Event Kit the v2 HUD widget (and the legacy sticker)
+-- open the game through EventUIModule_GEK instead, and this button goes.
 --
 -- It is styled INLINE rather than from MergeIslandHUD.uss: the button is hosted in Highrise's
 -- world-top bar, a different part of the UI tree that this HUD's stylesheet does not reach, so
@@ -2854,7 +2912,6 @@ end
 -- without one it falls back to an "M" glyph, which a Label draws even completely unstyled.
 local function buildWorldTopButton()
     worldTopButton = VisualElement.new()
-    worldTopButton:AddToClassList(CLASSES.worldTopButton)
     worldTopButton.pickingMode = PickingMode.Position
     worldTopButton.style.width = Length.new(38)
     worldTopButton.style.height = Length.new(38)
@@ -2864,7 +2921,6 @@ local function buildWorldTopButton()
     local _texture = tierTexture(1)
     if _texture then
         local _icon = VisualElement.new()
-        _icon:AddToClassList(CLASSES.worldTopIcon)
         _icon.pickingMode = PickingMode.Ignore
         _icon.style.width = Length.new(28)
         _icon.style.height = Length.new(28)
@@ -2953,6 +3009,16 @@ function Toggle()
     end
 end
 
+-- The panel entry points the Game Event Kit calls (EventUIModule_GEK.OpenMergeIslandPanel /
+-- CloseMergeIslandPanel).
+function Open()
+    Show()
+end
+
+function Close()
+    Hide()
+end
+
 --------------------------------
 ------  LIFECYCLE HOOKS   ------
 --------------------------------
@@ -2967,13 +3033,17 @@ function self:Start()
     track.buildPrizeCards(_prizeRow, false)
     popup.buildOffers()
     anim.show(ui.boostBubble, false)
-    -- Tier-1 art for the "faded twin" row of the how-to-play panel comes from the USS; nothing
-    -- else in the panel is dynamic.
+    -- The how-to-play lines that state the economy come from the rules, so they cannot drift.
+    local _howTo = config.HowToPlayLines()
+    ui.infoSpawnText.text = _howTo[1]
+    ui.infoJackpotText.text = _howTo[2]
 
-    -- Start closed; the world-top button is the way in.
+    -- Start closed; Open() (the world-top button, standalone) is the way in.
     isOpen = false
     _hudRoot.style.display = DisplayStyle.None
-    _hintLabel.text = DEFAULT_HINT
+    _hintLabel.text = config.Text("hint_default")
+    _loadingLabel.text = config.Text("loading")
+    ui.resetLabel.text = config.Text("reset")
 
     -- Overlays cover the close button, so it can only be pressed from the board itself.
     _closeButton:RegisterPressCallback(function()
@@ -3007,9 +3077,10 @@ function self:Start()
     ui.resetButton:RegisterPressCallback(function()
         popup.pressReset()
     end)
-    -- Tapping the wallet while it is empty brings the offers back on demand, while any is left.
+    -- Tapping the wallet when it cannot pay for the selected multiplier brings the offers back on
+    -- demand, while any is left.
     _energyChip:RegisterPressCallback(function()
-        if phase == PHASE_IDLE and isOpen and displayedEnergy() < config.SPAWN_COST
+        if phase == PHASE_IDLE and isOpen and displayedEnergy() < spawn.cost()
             and manager.HasOffersLeft() then
             popup.enqueue({ kind = "topup" }, 0)
         end
@@ -3115,49 +3186,46 @@ function self:Start()
 
     -- Spawn and reject listeners fire BEFORE the repaint for the same snapshot, so pending
     -- spawns are settled against the new board.
-    manager.OnReset(function()
+    local _subscriptions = ui.unsubscribers
+    table.insert(_subscriptions, manager.OnReset(function()
         popup.onReset()
-    end)
+    end))
 
-    manager.OnSpawned(function(indices, luck, tier)
-        spawn.onSpawned(indices, luck or config.LUCK_NONE, tier)
-    end)
+    table.insert(_subscriptions, manager.OnSpawned(function(requestId, index, luck, tier)
+        spawn.onSpawned(requestId, index, luck or config.LUCK_NONE, tier)
+    end))
 
-    manager.OnRejected(function(reason)
-        if reason == config.REJECT_NO_ENERGY or reason == config.REJECT_BOARD_FULL then
-            -- The oldest tap still waiting for a cell was refused.
-            for i, pending in ipairs(pendingSpawns) do
-                if not pending.confirmed then
-                    table.remove(pendingSpawns, i)
-                    spawn.cancelSpawn(pending)
-                    break
-                end
-            end
-        end
-        local _message = REJECT_MESSAGES[reason]
+    table.insert(_subscriptions, manager.OnSpawnRejected(function(requestId, _reason)
+        spawn.onSpawnRejected(requestId)
+    end))
+
+    table.insert(_subscriptions, manager.OnRejected(function(reason)
+        local _message = config.RejectText(reason)
         if _message and isOpen then
             showToast(_message)
         end
-    end)
+    end))
 
-    manager.OnBoardChanged(function(isMoveAnswer, rejected)
+    table.insert(_subscriptions, manager.OnBoardChanged(function(moveAnswer)
         -- Release the parked drop BEFORE painting, so its source cell unhides into the new
-        -- board, then animate the result on top of the authoritative repaint.
-        local _settled = drag.settleCommit(isMoveAnswer, rejected)
+        -- board, then animate the server's answer on top of the authoritative repaint.
+        local _settled = drag.settleCommit(moveAnswer)
         renderBoard()
         if _settled and isOpen then
             playLanding(_settled)
         end
-    end)
+    end))
 
-    manager.OnUnlocked(function(_index, openedIndices)
+    table.insert(_subscriptions, manager.OnUnlocked(function(_index, openedIndices)
         if isOpen then
             playBreak(openedIndices)
         end
-    end)
+    end))
 
-    manager.OnDiscovered(function(tier)
+    table.insert(_subscriptions, manager.OnDiscovered(function(tier, paid, payoutId)
         if not isOpen then
+            -- Nobody is watching: nothing to present, so the payout is released at once.
+            popup.reportShown(payoutId)
             shownHighestTier = math.max(shownHighestTier, tier)
             track.refreshTrack(false)
             spawn.checkUnlock()
@@ -3165,26 +3233,40 @@ function self:Start()
             return
         end
         setBrackets(lastLandingIndex)
-        popup.enqueue({ kind = "item", tier = tier }, TIMING.revealDelay)
-    end)
+        popup.enqueue({ kind = "item", tier = tier, paid = paid, payoutId = payoutId }, TIMING.revealDelay)
+    end))
 
     -- Fires right after the top tier's OnDiscovered: its reveal plays the win screen once it is
     -- collected. With the HUD closed there is nothing to celebrate; the panel just shows won.
-    manager.OnJackpot(function()
+    table.insert(_subscriptions, manager.OnJackpot(function()
         if isOpen then
             ui.jackpotPending = true
+        else
+            setClass(_prizePanel, CLASSES.prizeWon, track.isPrizeShownWon())
         end
-    end)
+    end))
 
-    manager.OnTopUp(function(toppedUp)
-        if toppedUp > 0 and isOpen then
+    -- A payout landed: the snapshot's balance now includes it, so drop any early credit.
+    table.insert(_subscriptions, manager.OnPayoutSettled(function(payoutId, toppedUp)
+        ui.settledPayouts[payoutId] = true
+        ui.credited[payoutId] = nil
+        if toppedUp and toppedUp > 0 and isOpen then
             local _chip = fx.point(_fxLayer, _energyChip)
             fx.coins(_chip, 8, CLASSES.token)
-            fx.floatText(_chip, "+" .. tostring(toppedUp), CLASSES.floatTextEnergy)
+            fx.floatText(_chip, config.Text("gain", { amount = toppedUp }), CLASSES.floatTextEnergy)
             refreshEnergy(true)
             playSound("CoinLandGold")
+            return
         end
-    end)
+        refreshEnergy(false)
+    end))
 
     renderBoard()
+end
+
+function self:OnDestroy()
+    for _, unsubscribe in ipairs(ui.unsubscribers) do
+        unsubscribe()
+    end
+    ui.unsubscribers = {}
 end

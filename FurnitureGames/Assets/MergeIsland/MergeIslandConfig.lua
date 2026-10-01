@@ -1,32 +1,34 @@
 --!Type(Module)
 
--- MergeIslandConfig -- the item ladder, economy tables, and the SHARED rules for Merge Island.
+-- MergeIslandConfig -- the item ladder and the SHARED rules for Merge Island.
 --
 -- The item chain is a SINGLE LINEAR LADDER: tier 1 merges into tier 2, up to MAX_TIER. There
 -- is no item "type" dimension, so a cell is fully described by its state and its tier, and two
 -- items match if and only if their tiers match.
 --
--- This module is pure: no state, no networking, no lifecycle hooks. That is the point. The
--- server calls ResolveDrop to validate and apply a move; the client calls the SAME function to
--- decide whether a drag should snap back. One source of truth means the client's optimistic
--- feedback can never disagree with the server's authoritative answer. The same goes for every
--- economy table below: the HUD advertises exactly what the server pays.
+-- This module is pure: no state, no networking, no lifecycle hooks. The server calls
+-- ResolveDrop to validate and apply a move; the client calls the SAME function to decide whether
+-- a drag should snap back, so the client's instant feedback can never disagree with the server.
 --
--- Randomness is deliberately kept OUT of ResolveDrop/ApplyDrop -- they are deterministic, so
--- both sides agree. The functions that roll dice (RandomEmptyOpenCell, RollSpawnLuck) are only
--- ever called by the server. The board layout itself is fixed (see GHOST_MAP).
+-- Randomness is kept OUT of ResolveDrop/ApplyDrop -- they are deterministic, so both sides agree.
+-- The functions that roll dice (RandomEmptyOpenCell, RollSpawnLuck) are only ever called by the
+-- server. The board layout itself is fixed (see GHOST_MAP).
 --
--- Economy (Merge minigame spec v1, north star: Coin Master's Merge Island):
---   * Every generator tap costs 1 Merge Token and spawns a tier-1 item on a random free cell.
---     The spawn multiplier spends M tokens for the item M tier-1s would merge into. Only x1
---     exists at first; making item 8 unlocks x2 and item 10 unlocks x4 (see SPAWN_MULTIPLIERS).
+-- What lives here is kit tier: the rules, the tuning and the ladder's names and art. Everything
+-- tied to the EVENT -- every reward amount, the jackpot set, the token packs -- is a per-event
+-- reward table read through MergeIslandKit.RewardTable (EventSettings in the Game Event Kit), and
+-- the economy helpers below take that table as an argument.
+--
+-- Economy (north star: Coin Master's Merge Island):
+--   * Every generator tap costs SPAWN_COST Merge Tokens and spawns a tier-1 item on a random free
+--     cell. The spawn multiplier spends M tokens for the item M tier-1s would merge into. Only x1
+--     exists at first; the SPAWN_MULTIPLIERS rows unlock the rest.
 --   * A spawn can roll "Lucky!" (+1 tier) or, at x2 and up, "Legendary!" (+2 tiers). See
 --     SPAWN_LUCK.
---   * The first time an item is made it fills its slot on the 12-item discovery track and pays
---     that tier's `rewards` table (tiers 1-3 pay nothing). Filling the whole track wins the
---     JACKPOT set, once per event. After that the player can keep playing for fun but earns
---     nothing more, and the top tier cannot merge any further.
---   * Out of tokens, the dispenser offers TOPUP_OFFERS, each buyable once per event.
+--   * The first time an item is made it fills its slot on the discovery track and pays that
+--     tier's row of the discovery table. Filling the whole track wins the jackpot table, once per
+--     event. After that the player can keep playing for fun but earns nothing more.
+--   * Out of tokens, the dispenser offers the token-pack table, each pack buyable once per event.
 --
 -- NOTE: this module must be attached to a GameObject in the scene to be require-able.
 
@@ -56,24 +58,13 @@ STATE_HIDDEN = 0    -- locked, nothing shown (plain tile)
 STATE_GHOST = 1     -- locked, shows the silhouette of the tier it accepts
 STATE_OPEN = 2      -- unlocked; may or may not hold an item
 
--- Bumped whenever the persisted board SHAPE changes. A save from a different version is
--- discarded rather than half-read, which is what keeps a format change from producing a board
--- that is subtly wrong instead of obviously fresh.
--- v3: start area moved from the board centre to the bottom-centre rectangle.
--- v4: saves carry the discovery progress (highestTier).
--- v5: 5x7 board, 8 tiers, Merge Tokens, Merge Points and the progression track.
--- v6: 7x7 board.
--- v7: 12 tiers; points and the track are gone, saves carry jackpotWon.
--- v8: ghost tiers come from the fixed GHOST_MAP instead of a random ramp.
-SAVE_VERSION = 8
+-- Bumped whenever the persisted BOARD shape changes. A board saved under a different version is
+-- replaced by a fresh one rather than half-read. Only the board: discovery progress, the jackpot
+-- and purchases live in the separate payout ledger (see MergeIslandManager), which a board reset
+-- never touches, so a format change can never let a player earn a reward twice.
+SAVE_VERSION = 9
 
--- Bumping EVENT_ID starts a NEW EVENT for every player on their next load: a fresh board, a
--- fresh token grant and an empty discovery track -- so every event's jackpot can be won once.
-EVENT_ID = "event_003"
-
--- Merge Tokens: the generator's play currency. TOKENS_START stands in for the event's
--- participation-track grant (51 in the spec) until this runs inside the Game Event Kit.
-TOKENS_START = 51
+-- Merge Tokens: the generator's play currency, an event-inventory item (see MergeIslandKit).
 SPAWN_COST = 1
 -- Spawns enter the ladder at the bottom...
 SPAWN_TIER = 1
@@ -102,15 +93,6 @@ SPAWN_LUCK = {
     [4] = { lucky = 0.036, legendary = 0.041 },
 }
 
--- The out-of-tokens offers. Each can be bought ONCE per event; once all are bought, an empty
--- dispenser just shakes. PLACEHOLDER amounts and prices (TODO Charles), and a PLACEHOLDER
--- purchase: see MergeIslandManager's TopUpRequest.
-TOPUP_OFFERS = {
-    { amount = 25, priceLabel = "900 Gold" },
-    { amount = 60, priceLabel = "1,800 Gold" },
-    { amount = 150, priceLabel = "3,900 Gold" },
-}
-
 -- On satisfying a ghost, do its locked neighbours become fully playable (true), or merely get
 -- revealed as new ghosts (false)? Existing ghost neighbours stay ghosts when false.
 UNLOCK_NEIGHBOURS_OPEN = false
@@ -129,19 +111,84 @@ REJECT_NO_ENERGY = "no_energy"
 REJECT_BOARD_FULL = "board_full"
 REJECT_TOPUP_UNAVAILABLE = "topup_unavailable"
 REJECT_OFFER_BOUGHT = "offer_bought"
+-- The records have not loaded yet (or failed to): nothing can be played.
+REJECT_LOADING = "loading"
+-- The feature's schedule window is closed: no new spawns. Moves and merges still work.
+REJECT_WINDOW_CLOSED = "window_closed"
+-- Too many requests too fast; the request was dropped.
+REJECT_RATE_LIMITED = "rate_limited"
+-- A multiplier that is not offered, or not unlocked yet.
+REJECT_MULTIPLIER_LOCKED = "multiplier_locked"
+-- The token debit failed (a backend error or a stale balance); nothing was spent.
+REJECT_DEBIT_FAILED = "debit_failed"
+-- The target cell is held for a spawn that is still being paid for.
+REJECT_RESERVED = "reserved"
+-- A malformed request.
+REJECT_INVALID = "invalid"
 
 -- Drop outcome kinds.
 KIND_MOVE = "move"          -- item relocated to an empty open cell
 KIND_MERGE = "merge"        -- two matching items became one of the next tier
 KIND_UNLOCK = "unlock"      -- a ghost was satisfied: next tier placed AND the board expands
 
--- Reward kinds. Tokens are REAL in this build (they go straight into the player's wallet).
--- Everything else (discovery tickets, the jackpot) is a PLACEHOLDER: the server logs what it
--- would grant (see grantReward in MergeIslandManager) and the HUD displays it. The kind decides
--- the icon and the wording.
-REWARD_TOKENS = "tokens"
+-- Reward kinds: exactly the Game Event Kit's (MinigameUtils_GEK.GrantRewards). Merge Tokens are
+-- "coins", which GrantRewards resolves through the currency it is handed. "tokens" is the kit's
+-- LUCKY tokens, not Merge Tokens.
+REWARD_COINS = "coins"
 REWARD_TICKETS = "tickets"
 REWARD_ITEM = "item"
+REWARD_ENERGY = "energy"
+REWARD_LUCKY_TOKENS = "tokens"
+
+-- The "Find all items to win" panel fits this many jackpot entries.
+MAX_JACKPOT_ENTRIES = 4
+
+-- Every player-facing string the Lua sets, keyed the way the Game Event Kit's localization keys
+-- will be (merge_island_<key>). `{name}` marks a value Text() fills in. Copy that only the UXML
+-- shows still lives in the UXML; the README lists it for the localization pass.
+STRINGS = {
+    hint_default = "Drag an item onto a matching item to merge it",
+    hint_jackpot = "You found every item! Keep merging just for fun",
+    loading = "Loading your island...",
+    load_failed = "Couldn't load your island. Rejoin to try again.",
+    luck_lucky = "Lucky!",
+    luck_legendary = "Legendary!",
+    multiplier = "x{mult}",
+    multiplier_max = "MAX X{mult}",
+    need_tokens = "Need {cost} Merge Tokens for x{mult}",
+    spend = "-{amount}",
+    gain = "+{amount}",
+    reveal_title = "NEW ITEM REVEALED!",
+    reveal_jackpot = "Jackpot unlocked!",
+    reveal_reward = "Reward:",
+    reveal_left = "{count} more to the Jackpot!",
+    win_title = "You found every item!",
+    win_burst = "JACKPOT!",
+    offer_bought = "Bought",
+    reset = "RESET",
+    reset_confirm = "SURE?",
+    reset_done = "Fresh island!",
+    info_spawn = "Tap the dig spot to find a {item} for {cost} Merge Token.",
+    info_unlock = "Make a {item} to unlock x{mult}.",
+    info_spend = "Spend {costs} tokens on a better find.",
+    info_jackpot = "Find all {count} items to win the Jackpot!",
+    reward_item_many = "{amount}x {label}",
+    reward_amount = "{amount} {label}",
+    -- Rejection reasons -> copy. Reasons the player cannot act on are deliberately absent and
+    -- fall through to the default hint.
+    reject = {
+        no_energy = "Out of Merge Tokens!",
+        board_full = "Board is full! Merge items to make room",
+        mismatch = "Those items don't match",
+        max_tier = "That's already the best item!",
+        locked = "That sand is still locked",
+        topup_unavailable = "Token packs aren't available yet",
+        offer_bought = "You already bought that pack",
+        window_closed = "Merge Island is closed right now",
+        debit_failed = "Couldn't spend your tokens. Try again!",
+        loading = "Still loading your island...",
+    },
+}
 
 --------------------------------
 ------  TYPE DEFINITIONS  ------
@@ -171,74 +218,39 @@ export type DropResult = {
 -- because both the server (validation) and the UI (tile art and labels) read it.
 --
 -- `class` is the USS class that carries the tier's art. The ladder IS the discovery track (one
--- slot per row), so adding a tier is one more row here.
---
--- `rewards` is paid ONCE, the first time the tier is made this event, and the HUD's track bubble
--- advertises the next one. Tokens are real; the rest are PLACEHOLDERS (see REWARD_* above), and
--- every amount is a PLACEHOLDER pending the economy spec. A row without `rewards` pays nothing.
+-- slot per row), so adding a tier is one more row here, plus its art and silhouette classes and a
+-- SAVE_VERSION bump. What each tier pays is the discovery reward table, not this list.
 ITEM_TIERS = {
     { label = "Shell", class = "item-tier-1" },
     { label = "Bottle", class = "item-tier-2" },
     { label = "Compass", class = "item-tier-3" },
-    { label = "Treasure Map", class = "item-tier-4", rewards = {
-        { kind = REWARD_TOKENS, amount = 5, label = "Merge Tokens" },
-    } },
-    { label = "Treasure Chest", class = "item-tier-5", rewards = {
-        { kind = REWARD_TOKENS, amount = 5, label = "Merge Tokens" },
-        { kind = REWARD_TICKETS, amount = 50, label = "Tickets" },
-    } },
-    { label = "Golden Idol", class = "item-tier-6", rewards = {
-        { kind = REWARD_TOKENS, amount = 10, label = "Merge Tokens" },
-        { kind = REWARD_TICKETS, amount = 75, label = "Tickets" },
-    } },
-    { label = "Pirate Ship", class = "item-tier-7", rewards = {
-        { kind = REWARD_TOKENS, amount = 10, label = "Merge Tokens" },
-        { kind = REWARD_TICKETS, amount = 125, label = "Tickets" },
-    } },
-    { label = "Lighthouse", class = "item-tier-8", rewards = {
-        { kind = REWARD_TOKENS, amount = 15, label = "Merge Tokens" },
-        { kind = REWARD_TICKETS, amount = 200, label = "Tickets" },
-    } },
-    { label = "Treasure Island", class = "item-tier-9", rewards = {
-        { kind = REWARD_TOKENS, amount = 20, label = "Merge Tokens" },
-        { kind = REWARD_TICKETS, amount = 300, label = "Tickets" },
-    } },
-    { label = "Golden Trident", class = "item-tier-10", rewards = {
-        { kind = REWARD_TOKENS, amount = 20, label = "Merge Tokens" },
-        { kind = REWARD_TICKETS, amount = 500, label = "Tickets" },
-    } },
-    { label = "Jeweled Scepter", class = "item-tier-11", rewards = {
-        { kind = REWARD_TOKENS, amount = 25, label = "Merge Tokens" },
-        { kind = REWARD_TICKETS, amount = 800, label = "Tickets" },
-    } },
-    { label = "Royal Crown", class = "item-tier-12", rewards = {
-        { kind = REWARD_TOKENS, amount = 30, label = "Merge Tokens" },
-        { kind = REWARD_TICKETS, amount = 1200, label = "Tickets" },
-    } },
+    { label = "Treasure Map", class = "item-tier-4" },
+    { label = "Treasure Chest", class = "item-tier-5" },
+    { label = "Golden Idol", class = "item-tier-6" },
+    { label = "Pirate Ship", class = "item-tier-7" },
+    { label = "Lighthouse", class = "item-tier-8" },
+    { label = "Treasure Island", class = "item-tier-9" },
+    { label = "Golden Trident", class = "item-tier-10" },
+    { label = "Jeweled Scepter", class = "item-tier-11" },
+    { label = "Royal Crown", class = "item-tier-12" },
 }
 
 -- The top of the ladder. An item here cannot merge any further, and no ghost may ask for it
 -- (satisfying a tier-T ghost yields T+1, so there would be nothing to produce).
 MAX_TIER = #ITEM_TIERS
 
--- The jackpot: won once per event, the first time the player makes the top tier -- which is
--- also the moment the discovery track fills. PLACEHOLDER set: the server logs it rather than
--- granting it. The HUD's "Find all items to win" panel shows one card per entry, drawn from its
--- `icon` class. Four entries fill the panel; more will not fit.
-JACKPOT = {
-    { kind = REWARD_ITEM, itemId = "merge_jackpot_hat", amount = 1, label = "Captain's Hat",
-      icon = "jackpot-icon-hat" },
-    { kind = REWARD_ITEM, itemId = "merge_jackpot_coat", amount = 1, label = "Captain's Coat",
-      icon = "jackpot-icon-coat" },
-    { kind = REWARD_ITEM, itemId = "merge_jackpot_boots", amount = 1, label = "Captain's Boots",
-      icon = "jackpot-icon-boots" },
-    { kind = REWARD_ITEM, itemId = "merge_jackpot_cutlass", amount = 1, label = "Captain's Cutlass",
-      icon = "jackpot-icon-cutlass" },
-}
-
 --------------------------------
 ------     LOCAL STATE    ------
 --------------------------------
+-- The reward kinds the kit's GrantRewards understands, for validation.
+local REWARD_KINDS: {[string]: boolean} = {
+    [REWARD_COINS] = true,
+    [REWARD_TICKETS] = true,
+    [REWARD_ITEM] = true,
+    [REWARD_ENERGY] = true,
+    [REWARD_LUCKY_TOKENS] = true,
+}
+
 -- Neighbour offsets, resolved once from ADJACENCY_INCLUDES_DIAGONALS.
 local orthogonalOffsets: {{number}} = {
     { -1, 0 }, { 1, 0 }, { 0, -1 }, { 0, 1 },
@@ -319,21 +331,57 @@ function TierInfo(tier: number?)
     return ITEM_TIERS[tier]
 end
 
--- A tier's first-discovery rewards, or an empty list when it pays nothing.
-function DiscoveryRewards(tier: number?): {any}
-    local _info = TierInfo(tier)
-    return (_info and _info.rewards) or {}
+-- Fill a STRINGS template: Text("need_tokens", { cost = 2, mult = 2 }). An unknown key returns
+-- the key itself, so a missing string is visible rather than blank. This is the one call the
+-- localization pass replaces.
+function Text(key: string, vars): string
+    local _template = STRINGS[key]
+    if type(_template) ~= "string" then
+        return tostring(key)
+    end
+    if not vars then
+        return _template
+    end
+    return (string.gsub(_template, "{(%w+)}", function(name)
+        local _value = vars[name]
+        if _value == nil then
+            return "{" .. name .. "}"
+        end
+        return tostring(_value)
+    end))
+end
+
+-- Player-facing copy for a rejection reason, or nil for reasons the player cannot act on.
+function RejectText(reason: string?): string | nil
+    if type(reason) ~= "string" then
+        return nil
+    end
+    return STRINGS.reject[reason]
+end
+
+-- A tier's first-discovery rewards from the discovery table ({ { tier, rewards = {...} } }),
+-- or an empty list when it pays nothing.
+function DiscoveryRewards(discovery, tier: number?): {any}
+    if type(discovery) ~= "table" or type(tier) ~= "number" then
+        return {}
+    end
+    for _, row in ipairs(discovery) do
+        if row.tier == tier then
+            return row.rewards or {}
+        end
+    end
+    return {}
 end
 
 -- Every first-discovery reward for tiers fromTier..toTier, summed per kind (and item/icon), in
 -- ladder order. A multiplied or lucky spawn can jump the track several tiers at once, and each
--- tier it skips over counts as discovered, so each one pays. Shared so the HUD shows exactly
--- what the server pays.
-function DiscoveryRewardsBetween(fromTier: number, toTier: number): {any}
+-- tier it skips over counts as discovered, so each one pays. The server builds a payout from it;
+-- the HUD only uses it to ADVERTISE the next reward, never to say what was paid.
+function DiscoveryRewardsBetween(discovery, fromTier: number, toTier: number): {any}
     local _out = {}
     local _byKey = {}
     for tier = math.max(1, fromTier), math.min(MAX_TIER, toTier) do
-        for _, reward in ipairs(DiscoveryRewards(tier)) do
+        for _, reward in ipairs(DiscoveryRewards(discovery, tier)) do
             local _key = tostring(reward.kind) .. "|" .. tostring(reward.itemId or reward.icon or "")
             local _merged = _byKey[_key]
             if _merged then
@@ -354,25 +402,102 @@ function DiscoveryRewardsBetween(fromTier: number, toTier: number): {any}
     return _out
 end
 
--- The Merge Tokens part of DiscoveryRewardsBetween.
-function DiscoveryTokensBetween(fromTier: number, toTier: number): number
+-- The Merge Tokens ("coins") in a reward list.
+function CoinsIn(rewards): number
     local _total = 0
-    for _, reward in ipairs(DiscoveryRewardsBetween(fromTier, toTier)) do
-        if reward.kind == REWARD_TOKENS then
-            _total = _total + reward.amount
+    for _, reward in ipairs(rewards or {}) do
+        if reward.kind == REWARD_COINS then
+            _total = _total + (tonumber(reward.amount) or 0)
         end
     end
     return _total
 end
 
 -- The lowest tier above `highestTier` that pays a discovery reward, or nil when none is left.
-function NextRewardTier(highestTier: number): number | nil
+function NextRewardTier(discovery, highestTier: number): number | nil
     for tier = math.max(1, highestTier + 1), MAX_TIER do
-        if #DiscoveryRewards(tier) > 0 then
+        if #DiscoveryRewards(discovery, tier) > 0 then
             return tier
         end
     end
     return nil
+end
+
+-- One reward leaf, checked against the kit's GrantRewards contract. Returns an issue or nil.
+local function leafIssue(reward, where: string): string | nil
+    if type(reward) ~= "table" then
+        return where .. ": not a reward row"
+    end
+    if not REWARD_KINDS[reward.kind] then
+        return where .. ": unknown kind '" .. tostring(reward.kind) .. "'"
+    end
+    local _amount = tonumber(reward.amount)
+    if not _amount or _amount < 1 or _amount ~= math.floor(_amount) then
+        return where .. ": amount must be a whole number >= 1"
+    end
+    if reward.kind == REWARD_ITEM and (type(reward.itemId) ~= "string" or reward.itemId == "") then
+        return where .. ": item reward has no itemId"
+    end
+    return nil
+end
+
+-- Every problem with the three per-event tables, as readable lines (empty = all good). The server
+-- grants NOTHING from a table that fails, which is what keeps a bad edit from paying a wrong
+-- amount: a visibly broken feature beats a silently wrong payout.
+function ValidateRewardTables(discovery, jackpot, topups): {string}
+    local _issues = {}
+    local function add(issue)
+        if issue then
+            table.insert(_issues, issue)
+        end
+    end
+
+    if type(discovery) ~= "table" or #discovery == 0 then
+        add("discovery: empty")
+    else
+        local _seen = {}
+        for i, row in ipairs(discovery) do
+            local _where = "discovery[" .. i .. "]"
+            local _tier = type(row) == "table" and tonumber(row.tier) or nil
+            if not _tier or _tier < 1 or _tier > MAX_TIER or _tier ~= math.floor(_tier) then
+                add(_where .. ": tier must be 1.." .. MAX_TIER)
+            elseif _seen[_tier] then
+                add(_where .. ": tier " .. _tier .. " listed twice")
+            else
+                _seen[_tier] = true
+                for k, reward in ipairs(row.rewards or {}) do
+                    add(leafIssue(reward, _where .. ".rewards[" .. k .. "]"))
+                end
+            end
+        end
+    end
+
+    if type(jackpot) ~= "table" or #jackpot == 0 then
+        add("jackpot: empty")
+    elseif #jackpot > MAX_JACKPOT_ENTRIES then
+        add("jackpot: " .. #jackpot .. " entries, the panel fits " .. MAX_JACKPOT_ENTRIES)
+    else
+        for i, reward in ipairs(jackpot) do
+            add(leafIssue(reward, "jackpot[" .. i .. "]"))
+        end
+    end
+
+    -- Token packs may be empty (an event that sells none); each row that exists must be whole.
+    if type(topups) ~= "table" then
+        add("topups: not a list")
+    else
+        for i, offer in ipairs(topups) do
+            local _where = "topups[" .. i .. "]"
+            local _amount = type(offer) == "table" and tonumber(offer.amount) or nil
+            if not _amount or _amount < 1 or _amount ~= math.floor(_amount) then
+                add(_where .. ": amount must be a whole number >= 1")
+            end
+            if type(offer) == "table" and (type(offer.productId) ~= "string" or offer.productId == "") then
+                add(_where .. ": no productId")
+            end
+        end
+    end
+    return _issues
 end
 
 -- Does this cell hold a draggable item?
@@ -638,18 +763,19 @@ function SpawnTierFor(mult: number, luck: string?): number
     return math.min(_tier, math.max(1, MAX_TIER - 1))
 end
 
--- A fresh "which offers were bought" list: one false per TOPUP_OFFERS entry.
-function NewOffersBought(): {boolean}
+-- A "which packs were bought" list read defensively against the token-pack table: one boolean
+-- per pack, anything missing or malformed reads as not bought. Always a fresh copy.
+function ReadOffersBought(topups, value): {boolean}
     local _out = {}
-    for i = 1, #TOPUP_OFFERS do
-        _out[i] = false
+    for i = 1, #(topups or {}) do
+        _out[i] = type(value) == "table" and value[i] == true
     end
     return _out
 end
 
--- Is any offer still unbought?
-function HasOffersLeft(bought): boolean
-    for i = 1, #TOPUP_OFFERS do
+-- Is any pack still unbought?
+function HasOffersLeft(topups, bought): boolean
+    for i = 1, #(topups or {}) do
         if not (bought and bought[i]) then
             return true
         end
@@ -657,7 +783,7 @@ function HasOffersLeft(bought): boolean
     return false
 end
 
--- Short player-facing text for a reward, e.g. "+2 Merge Tokens". An item's own label wins.
+-- Short player-facing text for a reward, e.g. "50 Tickets". An item's own label wins.
 function RewardText(reward): string
     if not reward then
         return ""
@@ -666,9 +792,30 @@ function RewardText(reward): string
     if reward.kind == REWARD_ITEM then
         local _label = reward.label or reward.itemId or "Item"
         if _amount > 1 then
-            return tostring(_amount) .. "x " .. _label
+            return Text("reward_item_many", { amount = _amount, label = _label })
         end
         return _label
     end
-    return tostring(_amount) .. " " .. (reward.label or reward.kind or "")
+    return Text("reward_amount", { amount = _amount, label = reward.label or reward.kind or "" })
+end
+
+-- The How-to-Play lines that state the economy, built from the rules so they cannot drift from
+-- what the game does: { spawn, jackpot }.
+function HowToPlayLines(): {string}
+    local _unlocks = {}
+    local _costs = {}
+    for _, row in ipairs(SPAWN_MULTIPLIERS) do
+        if row.mult > 1 then
+            local _info = TierInfo(row.unlockTier)
+            table.insert(_unlocks, Text("info_unlock", { item = _info and _info.label or "?", mult = row.mult }))
+            table.insert(_costs, tostring(SpawnCost(row.mult)))
+        end
+    end
+    local _first = TierInfo(SPAWN_TIER)
+    local _spawn = Text("info_spawn", { item = _first and string.lower(_first.label) or "item", cost = SPAWN_COST })
+    if #_unlocks > 0 then
+        _spawn = _spawn .. " " .. table.concat(_unlocks, " ") .. " "
+            .. Text("info_spend", { costs = table.concat(_costs, " or ") })
+    end
+    return { _spawn, Text("info_jackpot", { count = MAX_TIER }) }
 end

@@ -27,7 +27,6 @@ namespace Highrise.Lua.Generated
         public override string ScriptGUID => s_scriptGUID;
 
         [SerializeField] public System.Boolean _debugFreeTopUp = false;
-        [SerializeField] public System.Boolean _debugAllowReset = true;
 
         protected override SerializedPropertyValue[] SerializeProperties()
         {
@@ -37,7 +36,6 @@ namespace Highrise.Lua.Generated
             return new SerializedPropertyValue[]
             {
                 CreateSerializedProperty(_script.GetPropertyAt(0), _debugFreeTopUp),
-                CreateSerializedProperty(_script.GetPropertyAt(1), _debugAllowReset),
             };
         }
         
